@@ -70,17 +70,16 @@ void createRoot(Ladder *l, int *perm, int size, int currRow)
         if (perm[largestIndex] > perm[x])
         {
             int col = x - 1;
-            int row = getFirstAvailableRow(l, currRow, col);
-            currRow = row;
+            
             setBar(&(l->bars[l->numBars]), l->numBars + 1, perm[largestIndex], perm[x]);
             l->numBars++;
-            l->ladder[row][col] = l->numBars;
+            l->ladder[currRow][col] = l->numBars;
+            currRow++;
 
-            //col index is 0 or x-1
-            //
+            
         }
     }
-
+   
     int *arr = calloc(size - 1, sizeof(int));
     copyArray(&arr, perm, largestIndex, size);
     createRoot(l, arr, size - 1, currRow);
@@ -121,10 +120,10 @@ char *printBar(Bar b)
 {
     char *s = calloc(1000, sizeof(char));
     char temp[100];
-    sprintf(temp, "%d", b.barNum);
-    strcat(s, "Bar Number: ");
+    sprintf(temp, "%d  ", b.barNum);
+    strcat(s, "Bar Number:");
     strcat(s, temp);
-    sprintf(temp, "%d", b.vals[0]);
+    sprintf(temp, "%d ", b.vals[0]);
     strcat(s, "Values:");
     strcat(s, temp);
     strcat(s, " ");
@@ -143,10 +142,11 @@ void printLadder(Ladder* l)
             int val = l->ladder[i][j];
             if(val == 0)
                 printf("%d ", val);
-            else
+            else 
             {
-                printf(GREEN "%d " COLOR_RESET, val);
+                printf(GREEN "%c " COLOR_RESET, (char)(val+96));
             }
+            
             
         }
         printf("\n");
