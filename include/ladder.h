@@ -13,17 +13,7 @@ typedef struct bar
     //route the bar belongs to
     int routeNum;
 
-    //it's current row
-    int currRow;
-    //it's current collumn
-    int currCol;
-
-    //it's previous row: if it has not been swapped set to currRow
-    int prevRow;
-
-    //it's previous col: if bar has not been swapped set to currCol
-    int prevCol;
-
+    int barNum;
     //it's values = the inversion it uninverts: route number plus some other value < routeNum
     int vals[2];
 
@@ -33,20 +23,30 @@ typedef struct bar
 
 typedef struct ladder
 {
-    Bar** ladder;
+    int** ladder;
     int numRows;
     int numCols;
+    int numBars;
+    Bar* bars;
 } Ladder;
 
 
 //constructor
 //Creates a Ladder*, l, with numCols = size-1, numRows = MAXROWS, and ladder = NULL 
-Ladder* newLadder(int* perm, int size);
+Ladder* newLadder(int size);
 
 void initLadder(Ladder* l);
 
+void createRoot(Ladder* l, int* perm, int size, int currRow);
 
+//Getters
+int getLargestIndex(int* perm, int size);
+
+int getFirstAvailableRow(Ladder* l, int currRow, int col);
 //printer
+
+char* printBar(Bar b);
+void printLadder(Ladder* l);
 //delete
 
 //find turn bar
@@ -54,9 +54,7 @@ void initLadder(Ladder* l);
 
 //Sets a bar in the ladder with rowNum, colNum, routeNum, and valTwo. 
 //bar->vals[0] = routeNum. Therefore valOne is not needed as a param
-void setBar(Ladder* l, int rowNum, int colNum, int routeNum, int valTwo);
-//Sets a dummyBar. Default values are -1 -1 set=false
-void setDummy(Ladder* l, int rowNum, int colNum);
+void setBar(Bar* bar, int barNum, int routeNum, int valTwo);
 
 //right swap
 //Swaps a bar at currRow, currCol to row col
@@ -88,6 +86,8 @@ bool emptyRow(Ladder* l, int row);
 //emptyCell
 //checks if l->ladder[row][col] is set or not
 bool emptyCell(Ladder* l, int row, int col);
+
+bool canBeAddedToRow(Ladder* l, int row, int col);
 
 
 void driver(int* perm, int size);
