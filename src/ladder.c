@@ -60,7 +60,30 @@ void initLadder(Ladder *l)
 void createRoot(Ladder *l, int *perm, int size, int currRow)
 {
     if (size == 1)
+    {
+        for (int i = 1; i < l->numRows; i++)
+        {
+            for (int j = 0; j < l->numCols; j++)
+            {
+                int val = l->ladder[i][j];
+                if (val != 0)
+                {
+                    int count = i - 1;
+                    while (canBeAddedToRow(l, count, j) == true)
+                    {
+                        count--;
+                    }
+                    if (count < i - 1)
+                    {
+                        count++;
+                        l->ladder[count][j] = val;
+                        l->ladder[i][j] = 0;
+                    }
+                }
+            }
+        }
         return;
+    }
 
     int largestIndex = getLargestIndex(perm, size);
 
@@ -70,16 +93,14 @@ void createRoot(Ladder *l, int *perm, int size, int currRow)
         if (perm[largestIndex] > perm[x])
         {
             int col = x - 1;
-            
+
             setBar(&(l->bars[l->numBars]), l->numBars + 1, perm[largestIndex], perm[x]);
             l->numBars++;
             l->ladder[currRow][col] = l->numBars;
             currRow++;
-
-            
         }
     }
-   
+
     int *arr = calloc(size - 1, sizeof(int));
     copyArray(&arr, perm, largestIndex, size);
     createRoot(l, arr, size - 1, currRow);
@@ -105,7 +126,7 @@ int getLargestIndex(int *perm, int size)
 
 int getFirstAvailableRow(Ladder *l, int currRow, int col)
 {
-    foreach(currRow, l->numRows)
+    foreach (currRow, l->numRows)
     {
         if (canBeAddedToRow(l, x, col))
         {
@@ -133,28 +154,26 @@ char *printBar(Bar b)
     return s;
 }
 
-void printLadder(Ladder* l)
+void printLadder(Ladder *l)
 {
-    for(int i = 0; i < 20; i++)
+    for (int i = 0; i < 20; i++)
     {
-        for(int j = 0; j < l->numCols; j++)
+        for (int j = 0; j < l->numCols; j++)
         {
             int val = l->ladder[i][j];
-            if(val == 0)
+            if (val == 0)
                 printf("%d ", val);
-            else 
+            else
             {
-                printf(GREEN "%c " COLOR_RESET, (char)(val+96));
+                printf(GREEN "%c " COLOR_RESET, (char)(val + 96));
             }
-            
-            
         }
         printf("\n");
     }
 
     forall(l->numBars)
     {
-        char* s = printBar(l->bars[x]);
+        char *s = printBar(l->bars[x]);
         printf("%s", s);
         free(s);
     }
