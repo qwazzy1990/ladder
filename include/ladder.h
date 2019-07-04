@@ -27,13 +27,16 @@ typedef struct ladder
     int numRows;
     int numCols;
     int numBars;
-    Bar* bars;
+    int depth;
+    int cleanLevel;
+    Bar** bars;
 } Ladder;
 
 
 //constructor
 //Creates a Ladder*, l, with numCols = size-1, numRows = MAXROWS, and ladder = NULL 
 Ladder* newLadder(int size);
+Bar* newBar( void );
 
 void initLadder(Ladder* l);
 
@@ -43,9 +46,11 @@ void createRoot(Ladder* l, int* perm, int size, int currRow);
 int getLargestIndex(int* perm, int size);
 
 int getFirstAvailableRow(Ladder* l, int currRow, int col);
+
+Bar* getBar(Ladder* l, int n);
 //printer
 
-char* printBar(Bar b);
+char* printBar(Bar* b);
 void printLadder(Ladder* l);
 //delete
 
@@ -59,6 +64,16 @@ void setBar(Bar* bar, int barNum, int routeNum, int valTwo);
 //right swap
 //Swaps a bar at currRow, currCol to row col
 void rightSwap(Ladder* l, int currRow, int currCol, int row, int col);
+void shiftLadderDown(Ladder* l, int dest, int source);
+void makeRowEmpty(Ladder* l, int row);
+
+
+
+int getUpperNeighbor(Ladder* l, int n);
+int getRowIndex(Ladder* l, int n);
+int getColIndex(Ladder* l, int n);
+int getRightNeighbor(Ladder* l, int n);
+int getCleanLevel(Ladder* l, int n);
 
 void leftSwap(Ladder* l, int currRow, int currCol, int row, int col);
 
@@ -86,6 +101,8 @@ bool emptyRow(Ladder* l, int row);
 //emptyCell
 //checks if l->ladder[row][col] is set or not
 bool emptyCell(Ladder* l, int row, int col);
+bool emptyRow(Ladder* l, int row);
+int getDepth(Ladder* l);
 
 bool canBeAddedToRow(Ladder* l, int row, int col);
 

@@ -31,7 +31,15 @@ Ladder *newLadder(int size)
     l->numRows = MAXROWS;
     l->numCols = size - 1;
     l->numBars = 0;
+    l->depth = 0;
     return l;
+}
+
+Bar* newBar( void )
+{
+    new_object(Bar*, b, 1);
+    b->set = true;
+    return b;
 }
 
 void initLadder(Ladder *l)
@@ -54,7 +62,7 @@ void initLadder(Ladder *l)
     }
 
     //Create the array of bars
-    l->bars = calloc(100, sizeof(Bar));
+    l->bars = calloc(100, sizeof(Bar*));
 }
 
 void createRoot(Ladder *l, int *perm, int size, int currRow)
@@ -82,6 +90,8 @@ void createRoot(Ladder *l, int *perm, int size, int currRow)
                 }
             }
         }
+        l->depth = getDepth(l);
+        l->cleanLevel = 1;
         return;
     }
 
@@ -94,8 +104,19 @@ void createRoot(Ladder *l, int *perm, int size, int currRow)
         {
             int col = x - 1;
 
-            setBar(&(l->bars[l->numBars]), l->numBars + 1, perm[largestIndex], perm[x]);
+            //create a bar for the inversion
+            Bar* b = newBar();
+
+            //set it's values
+            setBar(b, l->numBars + 1, perm[largestIndex], perm[x]);
+
+            //put it into the array
+            l->bars[l->numBars] = b;
+
+            //increase number of bars
             l->numBars++;
+
+            //set the value in the table
             l->ladder[currRow][col] = l->numBars;
             currRow++;
         }
@@ -136,19 +157,32 @@ int getFirstAvailableRow(Ladder *l, int currRow, int col)
     return -1;
 }
 
+Bar* getBar(Ladder* l, int n)
+{
+    forall(l->numBars)
+    {
+        Bar* b = l->bars[x];
+        if(b->barNum == n)
+        {
+            return b;
+        }
+    }
+    return NULL;
+}
+
 /*Printers */
-char *printBar(Bar b)
+char *printBar(Bar* b)
 {
     char *s = calloc(1000, sizeof(char));
     char temp[100];
-    sprintf(temp, "%d  ", b.barNum);
+    sprintf(temp, "%d  ", b->barNum);
     strcat(s, "Bar Number:");
     strcat(s, temp);
-    sprintf(temp, "%d ", b.vals[0]);
+    sprintf(temp, "%d ", b->vals[0]);
     strcat(s, "Values:");
     strcat(s, temp);
     strcat(s, " ");
-    sprintf(temp, "%d", b.vals[1]);
+    sprintf(temp, "%d", b->vals[1]);
     strcat(s, temp);
     strcat(s, "\n\n");
     return s;
@@ -156,6 +190,7 @@ char *printBar(Bar b)
 
 void printLadder(Ladder *l)
 {
+    printf("\nDEPTH: %d\n\n", l->depth);
     for (int i = 0; i < 20; i++)
     {
         for (int j = 0; j < l->numCols; j++)
@@ -171,12 +206,12 @@ void printLadder(Ladder *l)
         printf("\n");
     }
 
-    forall(l->numBars)
+    /* forall(l->numBars)
     {
         char *s = printBar(l->bars[x]);
         printf("%s", s);
         free(s);
-    }
+    }*/
 }
 
 /*Setters */
@@ -189,6 +224,127 @@ void setBar(Bar *bar, int barNum, int routeNum, int valTwo)
     bar->vals[1] = valTwo;
 }
 
+void rightSwap(Ladder *l, int currRow, int currCol, int row, int col)
+{
+    if (canBeAddedToRow(l, row, col))
+    {
+        int val = l->ladder[currRow][currCol];
+        l->ladder[row][col] = val;
+        l->ladder[currRow][currCol] = 0;
+    }
+    else
+    {
+        int x = l->depth;
+        int val = l->ladder[currRow][currCol];
+
+        int upperNeighbor = getUpperNeighbor(l, val);
+        int rightNeighbor = getRightNeighbor(l, val);
+        Bar* bUp = getBar(l, upperNeighbor);
+        Bar* bRight = getBar(l, rightNeighbor);
+
+        
+
+        for (int i = x - 1; i > row; i--)
+        {
+            shiftLadderDown(l, x, i);
+            makeRowEmpty(l, i);
+            x--;
+        }
+        row++;
+        currRow++;
+        l->ladder[row][col] = val;
+        l->ladder[currRow][currCol] = 0;
+        /* do the shifting and emptying*/
+    }
+
+    l->depth = getDepth(l);
+}
+
+
+int getRowIndex(Ladder* l, int n)
+{
+    int row = -1;
+    for(int i = 0; i < l->numRows; i++)
+    {
+        for(int j = 0; j < l->numCols; j++)
+        {
+            if(l->ladder[i][j] == n)
+            {
+                row = i;
+            }
+        }
+    }
+    return row;
+}
+
+int getColIndex(Ladder* l, int n)
+{
+    int col = -1;
+    for(int i = 0; i < l->numRows; i++)
+    {
+        for(int j = 0; j < l->numCols; j++)
+        {
+            if(l->ladder[i][j] == n)
+            {
+                col = j;
+            }
+        }
+    }
+    return col;
+}
+int getUpperNeighbor(Ladder* l, int n)
+{
+    int row = getRowIndex(l, n);
+    int col = getColIndex(l, n);
+
+    if(row <= 0)return -1;
+    if(col < 0)return -1;
+
+
+    for(int i = row-1; i >= 0; i--)
+    {
+        if(l->ladder[i][col] != 0)
+        {
+            return l->ladder[i][col];
+        }
+    }
+    return -1;
+}
+
+int getRightNeighbor(Ladder* l, int n)
+{
+    int row = getRowIndex(l, n);
+    int col = getColIndex(l, n);
+    if(row <= 0)return -1;
+    if(col < 0 || col >= l->numCols-1)return -1;
+
+    row--;
+    col++;
+    for(int i = row; i >= 0; i--)
+    {
+        if(l->ladder[i][col] != 0)
+        {
+            return l->ladder[i][col];
+        }
+    }
+    return -1;
+}
+
+void shiftLadderDown(Ladder *l, int dest, int source)
+{
+    forall(l->numCols)
+    {
+        l->ladder[dest][x] = l->ladder[source][x];
+    }
+}
+
+void makeRowEmpty(Ladder *l, int row)
+{
+    forall(l->numCols)
+    {
+        l->ladder[row][x] = 0;
+    }
+}
 void driver(int *perm, int size)
 {
     //create a ladder
@@ -199,8 +355,12 @@ void driver(int *perm, int size)
 
     createRoot(l, perm, size, 0);
 
-    printLadder(l);
+    //printLadder(l);
 
+    int un = getUpperNeighbor(l, 1);
+    printf("%d\n", un);
+    printf("right neigbor %d\n", getRightNeighbor(l, 1));
+    
     //find the turn bar
 
     //call find all children with clean level = 1
@@ -210,7 +370,30 @@ bool emptyCell(Ladder *l, int row, int col)
 {
     if (l->ladder[row][col] == 0)
         return true;
+
+
+
     return false;
+}
+
+bool emptyRow(Ladder *l, int row)
+{
+    forall(l->numCols)
+    {
+        if (l->ladder[row][x] != 0)
+            return false;
+    }
+    return true;
+}
+
+int getDepth(Ladder *l)
+{
+    forall(l->numRows)
+    {
+        if (emptyRow(l, x))
+            return x;
+    }
+    return MAXROWS;
 }
 
 bool canBeAddedToRow(Ladder *l, int row, int col)
