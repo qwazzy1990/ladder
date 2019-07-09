@@ -63,17 +63,33 @@ void setBar(Bar* bar, int barNum, int routeNum, int valTwo);
 
 //right swap
 //Swaps a bar at currRow, currCol to row col
+//row and col are the destination: row is equal to the row of the upper neighbor of the upper neighbor of the
+//current val. Col is equal to the currCol + 1.
+//if the cell is able to be moved into then apply case 1: 
+//else apply case 2
 void rightSwap(Ladder* l, int currRow, int currCol, int row, int col);
+
+void readjustLadder(Ladder* l, int start, int end, int offset);
 void shiftLadderDown(Ladder* l, int dest, int source);
+
+
+void shiftRectangle(Ladder* l, int w, int x, int y, int z, int offset);
+
+void shiftLeftNeighbor(Ladder* l,  int val);
 void makeRowEmpty(Ladder* l, int row);
 
+int getRowToGo(Ladder* l, int val);
 
 
 int getUpperNeighbor(Ladder* l, int n);
+int getRightNeighbor(Ladder* l, int n);
+
 int getRowIndex(Ladder* l, int n);
 int getColIndex(Ladder* l, int n);
-int getRightNeighbor(Ladder* l, int n);
 int getCleanLevel(Ladder* l, int n);
+
+int getStartOfRoute(Ladder* l, int route);
+int getEndOfRoute(Ladder* l, int route);
 
 void leftSwap(Ladder* l, int currRow, int currCol, int row, int col);
 
@@ -102,6 +118,9 @@ bool emptyRow(Ladder* l, int row);
 //checks if l->ladder[row][col] is set or not
 bool emptyCell(Ladder* l, int row, int col);
 bool emptyRow(Ladder* l, int row);
+bool emptyRegion(int startRow, int startCol, int endRow, int endCol);
+
+bool isRightSwappable(Ladder* l, int val);
 int getDepth(Ladder* l);
 
 bool canBeAddedToRow(Ladder* l, int row, int col);

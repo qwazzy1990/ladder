@@ -11,7 +11,7 @@ bool DEBUG2 = false;
 
 int main(int argc, char* argv[])
 {
-    int perm[6] = {5, 6 , 3, 4, 2, 1};
+    int perm[6] = {6, 5, 3, 4, 1, 2};
     int size = sizeof(perm)/sizeof(perm[0]);
     if(DEBUG1)
     {
