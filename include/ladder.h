@@ -69,13 +69,18 @@ void setBar(Bar* bar, int barNum, int routeNum, int valTwo);
 //else apply case 2
 void rightSwap(Ladder* l, int currRow, int currCol, int row, int col);
 
+/*For fixing empty rows */
 void readjustLadder(Ladder* l, int start, int end, int offset);
-void shiftLadderDown(Ladder* l, int dest, int source);
+void shiftLadderDown(Ladder* l, int start, int end);
+void shiftLadderUp(Ladder* l, int start, int end, int offset);
 
-
+/*For shifting rectangular regions of ladder in rightSwap */
 void shiftRectangle(Ladder* l, int w, int x, int y, int z, int offset);
 
-void shiftLeftNeighbor(Ladder* l,  int val);
+/*For shifting the children of a bar in rightSwap */
+void shiftChildren(Ladder* l, int val, int offset);
+int calculateChildOffset(Ladder* l, int leftChild);
+
 void makeRowEmpty(Ladder* l, int row);
 
 int getRowToGo(Ladder* l, int val);
@@ -86,10 +91,18 @@ int getRightNeighbor(Ladder* l, int n);
 
 int getRowIndex(Ladder* l, int n);
 int getColIndex(Ladder* l, int n);
-int getCleanLevel(Ladder* l, int n);
+
+/*Get the clean level of the ladder */
+int getCleanLevel(Ladder* l);
+
+int getFirstTurnBar(Ladder* root);
 
 int getStartOfRoute(Ladder* l, int route);
 int getEndOfRoute(Ladder* l, int route);
+
+
+int getDepth(Ladder* l);
+
 
 void leftSwap(Ladder* l, int currRow, int currCol, int row, int col);
 
@@ -121,10 +134,9 @@ bool emptyRow(Ladder* l, int row);
 bool emptyRegion(int startRow, int startCol, int endRow, int endCol);
 
 bool isRightSwappable(Ladder* l, int val);
-int getDepth(Ladder* l);
 
 bool canBeAddedToRow(Ladder* l, int row, int col);
 
-
+void findAllChildren(Ladder* l, int cleanLevel);
 void driver(int* perm, int size);
 #endif

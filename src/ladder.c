@@ -21,6 +21,14 @@ static void copyArray(int **write, int *read, int largestIndex, int size)
     }
 }
 
+static int compareInts(const void* a, const void* b)
+{
+    int* f = (int*)a;
+    int* g = (int*)b;
+    return((*f) - (*g));
+}
+
+
 void swapVals(int *a, int *b)
 {
     int temp = *a;
@@ -214,13 +222,6 @@ void printLadder(Ladder *l)
         }
         printf("\n");
     }
-
-    /* forall(l->numBars)
-    {
-        char *s = printBar(l->bars[x]);
-        printf("%s", s);
-        free(s);
-    }*/
 }
 
 /*Setters */
@@ -239,17 +240,43 @@ void setBar(Bar *bar, int barNum, int routeNum, int valTwo)
 int getRowToGo(Ladder *l, int val)
 {
     int upNeighbor = getUpperNeighbor(l, val);
+    int rowIndex = -1;
+    //if there is no upper neighbor an error has occurred
     if (upNeighbor == -1)
-        return -1;
-    int upperUpperNeighbor = getUpperNeighbor(l, upNeighbor);
-    if (upperUpperNeighbor == -1)
-        return -1;
+        return rowIndex;
 
-    int rowIndex = getRowIndex(l, upperUpperNeighbor) + 1;
+    else
+    {
+        rowIndex = getRowIndex(l, upNeighbor) - 1;
+    }
+    //get the upper neighbor of the upper neighbor
+    upNeighbor = getUpperNeighbor(l, upNeighbor);
+
+    //if there is no such neighbor, then the value goes one row above it's upper neighbor
+    if (upNeighbor == -1)
+    {
+        return rowIndex;
+    }
+
+    //else the value goes to the row below the upper neighbor of the value's upper neighbor
+    else
+    {
+        rowIndex = getRowIndex(l, upNeighbor) + 1;
+    }
+
     return rowIndex;
 }
 void rightSwap(Ladder *l, int currRow, int currCol, int row, int col)
 {
+    //If the row is < 0 then you need to readjust the ladder accordingly
+    if (row < 0)
+    {
+        int offset = row * (-1);
+        shiftLadderUp(l, (l->depth), 0, offset);
+        printLadder(l);
+        row = 0;
+        currRow++;
+    }
     //The general rule for swapping a bar to the right is that you want to swap it as high as it
     //Can go. The conditions are that the active bar cannot go higher than any bar in the upper right region.
     //Upper left corner of active region = the lowest bar in the collumn the active bar is going to that is
@@ -266,16 +293,23 @@ void rightSwap(Ladder *l, int currRow, int currCol, int row, int col)
     //of the active bar
     //Then shift everything in the lower active region down by 2
 
-    int upArr[2] = {-1, -1};
-    int rightArr[2] = {-1, -1};
+    //get the upperNeigbor
     int upperNeighbor = getUpperNeighbor(l, l->ladder[currRow][currCol]);
+
+    //Get the rightNeighbor
     int rightNeighbor = getRightNeighbor(l, l->ladder[currRow][currCol]);
 
+    //get the row and collumn of the upper neighbor
+    int upArr[2] = {-1, -1};
     upArr[0] = getRowIndex(l, upperNeighbor);
     upArr[1] = getColIndex(l, upperNeighbor);
 
+    //get the row and collumn of the right neighbor
+    int rightArr[2] = {-1, -1};
     rightArr[0] = getRowIndex(l, rightNeighbor);
     rightArr[1] = getColIndex(l, rightNeighbor);
+
+    //if the value can be moved to the row and col
     if (canBeAddedToRow(l, row, col))
     {
         //Check to see if there is another bar in the active region with the same route as the active bar
@@ -284,13 +318,47 @@ void rightSwap(Ladder *l, int currRow, int currCol, int row, int col)
         //its parent bar in the path OR there are cells above it that are empty
         //stop condition is if it hits the clean level
 
+        //swap the upper neighbor and the right neighbor
         swapVals(&(l->ladder[upArr[0]][upArr[1]]), &(l->ladder[rightArr[0]][rightArr[1]]));
 
         int val = l->ladder[currRow][currCol];
         l->ladder[row][col] = val;
         l->ladder[currRow][currCol] = 0;
 
-        shiftLeftNeighbor(l, l->ladder[currRow + 1][currCol - 1]);
+        /*Shift the acnestors of the current value by their respective offsets so the ladder is the correct height */
+
+        int leftChild = -1;
+        int rightChild = -1;
+        int leftOffset = -1;
+        int rightOffset = -1;
+
+        /*If there is a left child of the current value then shift it and all its ancestors up
+        by the correct offset for the left subtree */
+        if (currCol > 0)
+        {
+            leftChild = l->ladder[currRow + 1][currCol - 1];
+            /*Get its offset */
+            leftOffset = calculateChildOffset(l, leftChild);
+        }
+
+        /*If there is a right child of the current value then shift it and all its ancestors up
+        the ladder by the correct offset for the current value's right subtree */
+        if (currCol < l->numCols - 1)
+        {
+            rightChild = l->ladder[currRow + 1][currCol + 1];
+            rightOffset = calculateChildOffset(l, rightChild);
+        }
+
+        /*Call the function on left child*/
+        if (leftOffset != -1 && leftOffset != 0)
+        {
+            shiftChildren(l, leftChild, leftOffset);
+        }
+        /*Call the function on right child */
+        if (rightOffset != -1 && rightOffset != 0)
+        {
+            shiftChildren(l, rightChild, rightOffset);
+        }
     }
     else
     {
@@ -313,8 +381,8 @@ void rightSwap(Ladder *l, int currRow, int currCol, int row, int col)
         //In this case right bar is in the active region, left bar belongs to k-1 where k is the clean level
         //shift every bar <= k-1 down by 2
 
-        /* do the shifting and emptying*/
-
+        
+        /*Swap the right parent of the current value with the current value */
         swapVals(&(l->ladder[rightArr[0]][rightArr[1]]), &(l->ladder[currRow][currCol]));
         //swapVals(&(l->ladder[upArr[0]][upArr[1]]), &(l->ladder[currRow][currCol+1]));
 
@@ -324,8 +392,16 @@ void rightSwap(Ladder *l, int currRow, int currCol, int row, int col)
             lowerBound++;
         }
         lowerBound--;
+
+        /*Create and shift reactangle such that it has a width defined by the currentRow + two rows and the row
+        of the last value in the ladder. It's length is the number of collumns in the ladder
+        Shift every value in this rectangle up the ladder by 2 */
         shiftRectangle(l, currRow + 2, 0, lowerBound, l->numCols, 2);
         //printLadder(l);
+
+        /*Create a reactangle such that its width is defined by the current row and the current row+1
+        It's length is defined by starting at the current value's collumn +1 and ends atthe number of collumns in the ladder 
+        Shift everything in this rectangle up by 2 */
         shiftRectangle(l, currRow, currCol + 1, currRow + 1, l->numCols, 2);
 
         //printLadder(l);
@@ -339,8 +415,6 @@ void rightSwap(Ladder *l, int currRow, int currCol, int row, int col)
     }
 
     l->depth = getDepth(l);
-    printf("End of right swap\n");
-    printLadder(l);
 }
 
 //return the row index of n. -1 if fail
@@ -426,6 +500,36 @@ int getRightNeighbor(Ladder *l, int n)
     return -1;
 }
 
+int getCleanLevel(Ladder* l)
+{
+   
+   
+      /*start at the end of the array and go backwards**/
+      for(int i = 0; i < l->depth; i++)
+      {
+          for(int j = 0; j < l->numCols; j++)
+          {
+              int val = l->ladder[i][j];
+              if(val != 0)
+              {
+                  Bar* b1 = getBar(l, val);
+                  if(b1 == NULL)continue;
+                  int upperNeighbor = getUpperNeighbor(l, val);
+                  Bar* b2 = getBar(l, upperNeighbor);
+                  if(b2 == NULL) continue;
+                  if(b2->routeNum < b1->routeNum)
+                  {
+                      return b1->routeNum+1;
+                  }
+              }
+
+          }
+      }
+      return 1;
+}
+
+
+
 void readjustLadder(Ladder *l, int start, int end, int offset)
 {
     for (int i = start; i <= end; i++)
@@ -439,6 +543,18 @@ void shiftLadderDown(Ladder *l, int dest, int source)
     forall(l->numCols)
     {
         l->ladder[dest][x] = l->ladder[source][x];
+    }
+}
+
+void shiftLadderUp(Ladder *l, int start, int end, int offset)
+{
+    for (int i = start; i >= end; i--)
+    {
+        for (int j = 0; j < l->numCols; j++)
+        {
+            l->ladder[i + offset][j] = l->ladder[i][j];
+        }
+        makeRowEmpty(l, i);
     }
 }
 
@@ -463,25 +579,61 @@ void shiftRectangle(Ladder *l, int w, int x, int y, int z, int offset)
     printLadder(l);
 }
 
-void shiftLeftNeighbor(Ladder *l, int val)
+//val is the child to be shifted
+void shiftChildren(Ladder *l, int val, int offset)
 {
+    printLadder(l);
+    //if there were no more children
     if (val == 0)
         return;
+
+    //get the row and col index of the child
     int rowIndex = getRowIndex(l, val);
     int colIndex = getColIndex(l, val);
 
-    int offset = 0;
-    int temp = rowIndex - 1;
+    //calculate how many rows the child can be shifted
 
-    while (canBeAddedToRow(l, temp, colIndex))
-    {
-        temp--;
-        offset--;
-    }
-
+    //put the child in the right spot in the ladder
     l->ladder[rowIndex + offset][colIndex] = val;
     l->ladder[rowIndex][colIndex] = 0;
-    shiftLeftNeighbor(l, l->ladder[rowIndex + 1][colIndex - 1]);
+
+    //get the left child of the child and shift it
+    if (colIndex > 0)
+    {
+        int leftChild = l->ladder[rowIndex + 1][colIndex - 1];
+
+        shiftChildren(l, leftChild, offset);
+    }
+
+    //get the right child of the child and shitf it
+
+    if (colIndex < l->numCols - 1)
+    {
+        int rightChild = l->ladder[rowIndex + 1][colIndex + 1];
+        if (val == 13)
+        {
+            printf("right child is %d\n", rightChild);
+        }
+        shiftChildren(l, rightChild, offset);
+    }
+}
+
+int calculateChildOffset(Ladder *l, int leftChild)
+{
+    if (leftChild == -1 || leftChild == 0)
+        return -1;
+
+    int rowIndex = getRowIndex(l, leftChild);
+    int colIndex = getColIndex(l, leftChild);
+
+    rowIndex--;
+    int offset = 0;
+    while (canBeAddedToRow(l, rowIndex, colIndex))
+    {
+        offset--;
+        rowIndex--;
+    }
+    return offset;
 }
 
 void makeRowEmpty(Ladder *l, int row)
@@ -503,32 +655,32 @@ void driver(int *perm, int size)
 
     printLadder(l);
 
-    rightSwap(l, 2, 0, 0, 1);
-    //printLadder(l);
-
-    /* rightSwap(l, 5, 1, 2, 2);
+    int turnBar = getFirstTurnBar(l);
+   
+    printf("\nFirst turn bar is %d\n", turnBar);
+    int row = getRowIndex(l, 8);
+    int col = getColIndex(l, 8);
+    rightSwap(l, row, col, getRowToGo(l, 8), col+1);
+    printf("End right swap\n");
+    printLadder(l);
     
+    printf("Clean level is %d\n", getCleanLevel(l));
 
-    rightSwap(l, 6, 2, 3, 3);
-
-    rightSwap(l, 5, 1, getRowIndex(l, l->ladder[5][1]), 2);
-    rightSwap(l, 6, 0, getRowToGo(l, l->ladder[6][0]), 1);
-    rightSwap(l, 11, 3, getRowToGo(l, l->ladder[11][3]), 4);
-    rightSwap(l, 10, 2, getRowToGo(l, l->ladder[10][2]), 3);
-    rightSwap(l, 9, 1, getRowToGo(l, l->ladder[9][1]), 2);*/
-
-    //printLadder(l);
-    //find the turn bar
+    
+    printLadder(l);
 
     //call find all children with clean level = 1
 }
 
 bool isRightSwappable(Ladder *l, int val)
 {
+
+    if (val <= 0)
+        return false;
     int rowIndex = getRowIndex(l, val);
     int colIndex = getColIndex(l, val);
 
-    //if val is as far right as it can go
+    //if val is as far right as it ca go
     if (colIndex >= l->numCols - 1)
         return false;
 
@@ -554,8 +706,6 @@ bool isRightSwappable(Ladder *l, int val)
         return false;
     //count the number of values above and to the right of val
     int rightCount = 0;
-    //count the number of values above val
-    int midCount = 0;
 
     //case if there is a collumn to the left of val
 
@@ -582,11 +732,11 @@ bool isRightSwappable(Ladder *l, int val)
             //if there is no value above val
             if (rCount < 0)
                 return false;
-        }//end while
-    }//endif
+        } //end while
+    }     //endif
 
     //else
-    else 
+    else
     {
         //continue until you find a directlt vlaue above val
         while (l->ladder[rCount][colIndex] == 0)
@@ -605,19 +755,40 @@ bool isRightSwappable(Ladder *l, int val)
             //if there is no value above val
             if (rCount < 0)
                 return false;
-        }//end while
+        } //end while
 
-    }//end else
+    } //end else
 
     //if there is not exactly one value above and to the right of val, then return false
     if (rightCount != 1)
         return false;
 
-
     //If there is exactly one value above and to the right of val and exactly one value directly above val
     //and exactly no values above and to the left of val, then val can be right swapped
     return true;
-}//end func
+
+} //end func
+
+//Gets the firts turn bar, which is
+//The value that is highest on the ladder with the property of being
+//right swappable. If there is no such value then the root
+//is the only ladder generated by the permutation. The entire ladder is monotone and the algorithm
+//will returns
+int getFirstTurnBar(Ladder *root)
+{
+    for (int i = 0; i < root->depth; i++)
+    {
+        for (int j = 0; j < root->numCols; j++)
+        {
+            if (isRightSwappable(root, root->ladder[i][j]))
+            {
+                return root->ladder[i][j];
+            }
+        }
+    }
+    //if there is no firts turn bar. The root is monotone
+    return -1;
+}
 
 bool emptyCell(Ladder *l, int row, int col)
 {
