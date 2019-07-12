@@ -265,7 +265,7 @@ int getRowToGo(Ladder *l, int val)
 
     return rowIndex;
 }
-void rightSwap(Ladder *l, int currRow, int currCol, int row, int col, int *mode)
+void rightSwap(Ladder* l, int currRow, int currCol, int row, int col, int* mode)    //initLadder(clone);(Ladder *l, int currRow, int currCol, int row, int col, int *mode)
 {
     /*If it can't be swapped then return */
     if (isRightSwappable(l, l->ladder[currRow][currCol]) == false)
@@ -862,7 +862,7 @@ void driver(int *perm, int size)
 
     printLadder(l);
 
-    int turnBar = getFirstTurnBar(l);
+    /* int turnBar = getFirstTurnBar(l);
 
     printf("\nFirst turn bar is %d\n", turnBar);
     int row = getRowIndex(l, turnBar);
@@ -879,9 +879,11 @@ void driver(int *perm, int size)
     printLadder(l);
 
     leftSwap(l, getRowIndex(l, turnBar), getColIndex(l, turnBar), getRowIndex(l, getLowerNeighbor(l, turnBar)) + 1, getColIndex(l, turnBar) - 1, mode);
-    printLadder(l);
+    printLadder(l);*/
 
     //call find all children with clean level = 1
+
+    findAllChildren(l, 5);
 }
 
 
