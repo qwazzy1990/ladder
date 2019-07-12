@@ -38,6 +38,8 @@ typedef struct ladder
 Ladder* newLadder(int size);
 Bar* newBar( void );
 
+Ladder* cloneLadder(Ladder * l);
+
 void initLadder(Ladder* l);
 
 void createRoot(Ladder* l, int* perm, int size, int currRow);
@@ -115,7 +117,7 @@ int getEndOfRoute(Ladder* l, int route, int* arr);
 int getDepth(Ladder* l);
 
 
-void leftSwap(Ladder* l, int currRow, int currCol, int row, int col, int mode);
+void leftSwap(Ladder* l, Ladder* clone);
 
 //Finds a row to go to based on the current start row and start col
 void findRowToGo(Ladder* l, int startRow, int startCol);
