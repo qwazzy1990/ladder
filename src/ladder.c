@@ -431,7 +431,7 @@ void rightSwap(Ladder *l, int currRow, int currCol, int row, int col, int *mode)
 Must be adapted to the case in which rightSwap occurred. This will allow the */
 void leftSwap(Ladder *l, int currRow, int currCol, int row, int col, int mode)
 {
-    printf("S@WWWnch\n");
+    printf("SAHHHAgit ch\n");
     //Start with the case in which the value could be placed in the row and col in rightSwap
     //Therefore
 
