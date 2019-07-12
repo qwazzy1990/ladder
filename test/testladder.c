@@ -5,8 +5,8 @@
 #include "ladder.h"
 #include "utilities.h"
 
-bool DEBUG1 = false;
-bool DEBUG2 = true;
+bool DEBUG1 = true;
+bool DEBUG2 = false;
 
 
 int main(int argc, char* argv[])

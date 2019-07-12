@@ -21,13 +21,12 @@ static void copyArray(int **write, int *read, int largestIndex, int size)
     }
 }
 
-static int compareInts(const void* a, const void* b)
+static int compareInts(const void *a, const void *b)
 {
-    int* f = (int*)a;
-    int* g = (int*)b;
-    return((*f) - (*g));
+    int *f = (int *)a;
+    int *g = (int *)b;
+    return ((*f) - (*g));
 }
-
 
 void swapVals(int *a, int *b)
 {
@@ -205,7 +204,7 @@ char *printBar(Bar *b)
 
 void printLadder(Ladder *l)
 {
-    printf("\nDEPTH: %d\n\n", l->depth);
+    printf("\nDEPTH: %d\n\n", l->depth + 1);
     for (int i = 0; i < 20; i++)
     {
         for (int j = 0; j < l->numCols; j++)
@@ -266,17 +265,22 @@ int getRowToGo(Ladder *l, int val)
 
     return rowIndex;
 }
-void rightSwap(Ladder *l, int currRow, int currCol, int row, int col)
+void rightSwap(Ladder *l, int currRow, int currCol, int row, int col, int *mode)
 {
+    /*If it can't be swapped then return */
+    if (isRightSwappable(l, l->ladder[currRow][currCol]) == false)
+        return;
+
     //If the row is < 0 then you need to readjust the ladder accordingly
+
+    /*Case 1 of right swap */
     if (row < 0)
     {
         int offset = row * (-1);
         shiftLadderUp(l, (l->depth), 0, offset);
-        printLadder(l);
         row = 0;
         currRow++;
-    }
+    } //end if
     //The general rule for swapping a bar to the right is that you want to swap it as high as it
     //Can go. The conditions are that the active bar cannot go higher than any bar in the upper right region.
     //Upper left corner of active region = the lowest bar in the collumn the active bar is going to that is
@@ -310,8 +314,11 @@ void rightSwap(Ladder *l, int currRow, int currCol, int row, int col)
     rightArr[1] = getColIndex(l, rightNeighbor);
 
     //if the value can be moved to the row and col
+    /*Case 2 of right swap. Case 1 can only happen if case 2 is possible.
+    Case 2: the value can be added to the row and col */
     if (canBeAddedToRow(l, row, col))
     {
+        *mode = 0;
         //Check to see if there is another bar in the active region with the same route as the active bar
         //in the left collumn of where the active bar is going.
         //If so, continue to move the active bar up as long as it can and is to the bottom right of
@@ -349,19 +356,22 @@ void rightSwap(Ladder *l, int currRow, int currCol, int row, int col)
             rightOffset = calculateChildOffset(l, rightChild);
         }
 
-        /*Call the function on left child*/
-        if (leftOffset != -1 && leftOffset != 0)
-        {
-            shiftChildren(l, leftChild, leftOffset);
-        }
         /*Call the function on right child */
-        if (rightOffset != -1 && rightOffset != 0)
+        if (rightOffset != -1)
         {
             shiftChildren(l, rightChild, rightOffset);
         }
-    }
+        /*Call the function on left child*/
+        if (leftOffset != -1)
+        {
+            shiftChildren(l, leftChild, leftOffset);
+        }
+
+    } //end if
+    /*Case 3: The value cannot be added to the row and col */
     else
     {
+        *mode = 1;
         //case 2: the cell to go to is blocked by clean level bar. If so then shift the bar down until there is
         //an open cell directly below.
         //Each time check if there is a bar directly to the right that is part of clean level k and
@@ -381,7 +391,6 @@ void rightSwap(Ladder *l, int currRow, int currCol, int row, int col)
         //In this case right bar is in the active region, left bar belongs to k-1 where k is the clean level
         //shift every bar <= k-1 down by 2
 
-        
         /*Swap the right parent of the current value with the current value */
         swapVals(&(l->ladder[rightArr[0]][rightArr[1]]), &(l->ladder[currRow][currCol]));
         //swapVals(&(l->ladder[upArr[0]][upArr[1]]), &(l->ladder[currRow][currCol+1]));
@@ -412,9 +421,109 @@ void rightSwap(Ladder *l, int currRow, int currCol, int row, int col)
             int depth = getDepth(l);
             readjustLadder(l, upArr[0] + 1, depth, -1);
         }
-    }
+
+    } //end else
 
     l->depth = getDepth(l);
+}
+
+/*Reverse engineers right swap:
+Must be adapted to the case in which rightSwap occurred. This will allow the */
+void leftSwap(Ladder *l, int currRow, int currCol, int row, int col, int mode)
+{
+    //Start with the case in which the value could be placed in the row and col in rightSwap
+    //Therefore
+
+    /*In this case only the left sub tree of the active bar in its previous state that 
+    we are reverting to could have been swapped. There is no righ subtree that could have been swapped 
+    because it would belonged to the left subtree of a bar in the clean level of the ladder that we are 
+    reverting to */
+    if (mode == 0 && (canBeAddedToRow(l, row, col) == false))
+    {
+        /*Get the active bar */
+        int barVal = l->ladder[currRow][currCol];
+    
+
+        /*Get its lower neighbor */
+        int lowerBar = getLowerNeighbor(l, barVal);
+
+        /*Get its lower left neighbor */
+        int leftBar = getLeftNeighbor(l, barVal);
+
+        /*There can only be a left sub tree that needs to be shifted or there can be no sub tree.
+        There cannot be a right sub tree that needs to be shifted because it would be part of the left sub tree 
+        of a bar >= to the clean level when the ladder is reversed */
+
+
+        int leftOffset = (getRowIndex(l, lowerBar) + 2) - (getRowIndex(l, leftBar) + 1);
+
+        /*The left subtree of the ladder in its orinal state would be the left child of the left neighbor of the 
+        active bar in the ladder in its current state. Therefore this is the subtree that needs to be shifted */
+        int leftChild = getLeftChild(l, leftBar);
+        if (leftChild != 0)
+        {
+            shiftChildrenDown(l, leftChild, leftOffset);
+        }
+
+        
+
+        /*Lastly, put the active bar back in its place before it was swapped to revert to the previous state of the ladder */
+        swapVals(&(l->ladder[currRow][currCol]), &(l->ladder[getRowIndex(l, lowerBar)+1][getColIndex(l, lowerBar)-1]));
+    }
+
+    else if (mode == 0 && (canBeAddedToRow(l, row, col)))
+    {
+        swapVals(&(l->ladder[currRow][currCol]), &(l->ladder[row][col]));
+        l->depth = getDepth(l);
+        return;
+    }
+
+    //else if: This is the case in which the right subtree of the previous state needs to be
+    //restored because it was the right subtree of the upper neighbor of the active bar before it was swapped.
+    //Not the right subtree of the active bar as in case 1. Therefore when reverting to the previous ladder, 
+    //the right subtree needs to be adjusted.
+    else if (mode == 1)
+    {
+        /*Get the current bar */
+        int barVal = l->ladder[currRow][currCol];
+
+        /*Get its lower neighbor */
+        int lowerNeighbor = getLowerNeighbor(l, barVal);
+
+        /*Get its lower left neighbor */
+        int leftNeighbor = getLeftNeighbor(l, barVal);
+
+        /*Get the upper neighbor of the lower left neighbor */
+        int upperNeighbor = getUpperNeighbor(l, leftNeighbor);
+
+        /*Get the lower left neighbor of the upperNeighbor. The row that the lowerNeighbor will be swapped to
+        is the row of the upperLeftNeighbor + 1 */
+        int upperLeftNeighbor = getLeftNeighbor(l, upperNeighbor);
+
+        /*Get the children of the value about to be swapped so they can be shifted back to their right spot */
+
+        int leftChild = getLeftChild(l, lowerNeighbor);
+        int rightChild = getRightChild(l, lowerNeighbor);
+        /*Swap the lower neighbor of active bar with the value at the upper left neighbors lower right child */
+        swapVals(&(l->ladder[getRowIndex(l, lowerNeighbor)][getColIndex(l, lowerNeighbor)]), &(l->ladder[getRowIndex(l, upperLeftNeighbor) + 1][getColIndex(l, upperLeftNeighbor) + 1]));
+
+        /*You need to calculate the offset after the lower neighbor has been swapped to revert to previous state of the
+        ladder */
+        int rightOffset = calculateChildOffset(l, rightChild);
+        int leftOffset = calculateChildOffset(l, leftChild);
+
+        if (rightOffset != -1)
+        {
+            shiftChildren(l, rightChild, rightOffset);
+        }
+        if (leftOffset != -1)
+        {
+            shiftChildren(l, leftChild, leftOffset);
+        }
+
+        /*Lastly, swap the current bar with its lower left neighbor */
+        swapVals(&(l->ladder[currRow][currCol]), &(l->ladder[getRowIndex(l, leftNeighbor)][getColIndex(l, leftNeighbor)]));
+    } //end else if
 }
 
 //return the row index of n. -1 if fail
@@ -500,35 +609,94 @@ int getRightNeighbor(Ladder *l, int n)
     return -1;
 }
 
-int getCleanLevel(Ladder* l)
+/*Gets the lower neighbor of n. The lower neighbor is defined by any value in the ladder
+!= to 0 and in the same collumn as n and with a row index > n's row index and <= the depth of the ladder */
+int getLowerNeighbor(Ladder *l, int n)
 {
-   
-   
-      /*start at the end of the array and go backwards**/
-      for(int i = 0; i < l->depth; i++)
-      {
-          for(int j = 0; j < l->numCols; j++)
-          {
-              int val = l->ladder[i][j];
-              if(val != 0)
-              {
-                  Bar* b1 = getBar(l, val);
-                  if(b1 == NULL)continue;
-                  int upperNeighbor = getUpperNeighbor(l, val);
-                  Bar* b2 = getBar(l, upperNeighbor);
-                  if(b2 == NULL) continue;
-                  if(b2->routeNum < b1->routeNum)
-                  {
-                      return b1->routeNum+1;
-                  }
-              }
-
-          }
-      }
-      return 1;
+    int row = getRowIndex(l, n);
+    int col = getColIndex(l, n);
+    if (row >= l->depth)
+        return -1;
+    if (col < 0)
+        return -1;
+    row++;
+    for (int i = row; i <= l->depth; i++)
+    {
+        if (l->ladder[i][col] != 0)
+        {
+            return l->ladder[i][col];
+        }
+    }
+    return -1;
 }
 
+int getLeftNeighbor(Ladder *l, int n)
+{
+    int row = getRowIndex(l, n);
+    int col = getColIndex(l, n);
 
+    if (row >= l->depth)
+        return -1;
+    if (col <= 0)
+        return -1;
+    row++;
+    col--;
+    for (int i = row; i <= l->depth; i++)
+    {
+        if (l->ladder[i][col] != 0)
+            return l->ladder[i][col];
+    }
+    return -1;
+}
+
+int getLeftChild(Ladder *l, int val)
+{
+    int rowIndex = getRowIndex(l, val) + 1;
+    int colIndex = getColIndex(l, val) - 1;
+    if (colIndex == -1)
+        return -1;
+
+    int child = l->ladder[rowIndex][colIndex];
+    return child;
+}
+
+int getRightChild(Ladder *l, int val)
+{
+    int rowIndex = getRowIndex(l, val) + 1;
+    int colIndex = getColIndex(l, val) + 1;
+    if (colIndex >= l->numCols)
+        return -1;
+    int child = l->ladder[rowIndex][colIndex];
+    return child;
+}
+
+int getCleanLevel(Ladder *l)
+{
+
+    /*start at the end of the array and go backwards**/
+    for (int i = 0; i < l->depth; i++)
+    {
+        for (int j = 0; j < l->numCols; j++)
+        {
+            int val = l->ladder[i][j];
+            if (val != 0)
+            {
+                Bar *b1 = getBar(l, val);
+                if (b1 == NULL)
+                    continue;
+                int upperNeighbor = getUpperNeighbor(l, val);
+                Bar *b2 = getBar(l, upperNeighbor);
+                if (b2 == NULL)
+                    continue;
+                if (b2->routeNum < b1->routeNum)
+                {
+                    return b1->routeNum + 1;
+                }
+            }
+        }
+    }
+    return 1;
+}
 
 void readjustLadder(Ladder *l, int start, int end, int offset)
 {
@@ -573,18 +741,16 @@ void shiftRectangle(Ladder *l, int w, int x, int y, int z, int offset)
                 l->ladder[i][j] = 0;
             }
         }
-        //makeRowEmpty(l, i);
     }
-
-    printLadder(l);
 }
 
 //val is the child to be shifted
 void shiftChildren(Ladder *l, int val, int offset)
 {
-    printLadder(l);
     //if there were no more children
     if (val == 0)
+        return;
+    if (offset == 0)
         return;
 
     //get the row and col index of the child
@@ -597,25 +763,66 @@ void shiftChildren(Ladder *l, int val, int offset)
     l->ladder[rowIndex + offset][colIndex] = val;
     l->ladder[rowIndex][colIndex] = 0;
 
+    if (colIndex < l->numCols - 1)
+    {
+        int rightChild = l->ladder[rowIndex + 1][colIndex + 1];
+        offset = calculateChildOffset(l, rightChild);
+
+        shiftChildren(l, rightChild, offset);
+    }
     //get the left child of the child and shift it
     if (colIndex > 0)
     {
         int leftChild = l->ladder[rowIndex + 1][colIndex - 1];
+        offset = calculateChildOffset(l, leftChild);
 
         shiftChildren(l, leftChild, offset);
     }
 
     //get the right child of the child and shitf it
+}
 
-    if (colIndex < l->numCols - 1)
+/*Only for reversing the ladder in leftSwap */
+void shiftChildrenDown(Ladder *l, int val, int offset)
+{
+    /*If the value is 0 */
+    if (val == 0)
+        return;
+
+    /*Case 1: there are no more children. Val is not as far left/right as possible*/
+    if ((getLeftChild(l, val) == 0) && (getRightChild(l, val) == 0))
     {
-        int rightChild = l->ladder[rowIndex + 1][colIndex + 1];
-        if (val == 13)
-        {
-            printf("right child is %d\n", rightChild);
-        }
-        shiftChildren(l, rightChild, offset);
+        goto Base_Case;
     }
+    /*Case two: there are no children. Val is as far right and left as possible? Random error*/
+    if ((getLeftChild(l, val) == -1) && (getRightChild(l, val) == -1))
+    {
+        goto Base_Case;
+    }
+
+    /*Case three: value is as far left as possible - has no chilren */
+    if ((getLeftChild(l, val) == -1) && (getRightChild(l, val) == 0))
+    {
+        goto Base_Case;
+    }
+    /*Case four: child is as far right as possibl. has no children */
+    if ((getLeftChild(l, val) == 0) && (getRightChild(l, val) == -1))
+    {
+        goto Base_Case;
+    }
+
+    /*Recursively call function on left child and right child. */
+    shiftChildrenDown(l, getLeftChild(l, val), offset);
+    shiftChildren(l, getRightChild(l, val), offset);
+
+Base_Case:
+{
+    int colIndex = getColIndex(l, val);
+    int rowIndex = getRowIndex(l, val);
+    l->ladder[rowIndex + offset][colIndex] = val;
+    l->ladder[rowIndex][colIndex] = 0;
+    return;
+}
 }
 
 int calculateChildOffset(Ladder *l, int leftChild)
@@ -656,17 +863,22 @@ void driver(int *perm, int size)
     printLadder(l);
 
     int turnBar = getFirstTurnBar(l);
-   
+
     printf("\nFirst turn bar is %d\n", turnBar);
-    int row = getRowIndex(l, 8);
-    int col = getColIndex(l, 8);
-    rightSwap(l, row, col, getRowToGo(l, 8), col+1);
+    int row = getRowIndex(l, turnBar);
+    int col = getColIndex(l, turnBar);
+    int mode;
+    rightSwap(l, row, col, getRowToGo(l, turnBar), col + 1, &mode);
     printf("End right swap\n");
     printLadder(l);
-    
-    printf("Clean level is %d\n", getCleanLevel(l));
 
-    
+    row = getRowIndex(l, turnBar);
+    col = getColIndex(l, turnBar);
+    rightSwap(l, row, col, getRowToGo(l, turnBar), col + 1, &mode);
+
+    printLadder(l);
+
+    leftSwap(l, getRowIndex(l, turnBar), getColIndex(l, turnBar), getRowIndex(l, getLowerNeighbor(l, turnBar)) + 1, getColIndex(l, turnBar) - 1, mode);
     printLadder(l);
 
     //call find all children with clean level = 1

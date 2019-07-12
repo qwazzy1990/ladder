@@ -67,7 +67,7 @@ void setBar(Bar* bar, int barNum, int routeNum, int valTwo);
 //current val. Col is equal to the currCol + 1.
 //if the cell is able to be moved into then apply case 1: 
 //else apply case 2
-void rightSwap(Ladder* l, int currRow, int currCol, int row, int col);
+void rightSwap(Ladder* l, int currRow, int currCol, int row, int col, int* mode);
 
 /*For fixing empty rows */
 void readjustLadder(Ladder* l, int start, int end, int offset);
@@ -79,6 +79,8 @@ void shiftRectangle(Ladder* l, int w, int x, int y, int z, int offset);
 
 /*For shifting the children of a bar in rightSwap */
 void shiftChildren(Ladder* l, int val, int offset);
+
+void shiftChildrenDown(Ladder* l, int val, int offset);
 int calculateChildOffset(Ladder* l, int leftChild);
 
 void makeRowEmpty(Ladder* l, int row);
@@ -86,8 +88,16 @@ void makeRowEmpty(Ladder* l, int row);
 int getRowToGo(Ladder* l, int val);
 
 
+/*These two functions are for right swapping */
 int getUpperNeighbor(Ladder* l, int n);
 int getRightNeighbor(Ladder* l, int n);
+
+/*These two functions are for left swapping - reverse engineering */
+int getLowerNeighbor(Ladder* l, int n);
+int getLeftNeighbor(Ladder* l, int n);
+
+int getLeftChild(Ladder* l, int val);
+int getRightChild(Ladder* l, int val);
 
 int getRowIndex(Ladder* l, int n);
 int getColIndex(Ladder* l, int n);
@@ -104,7 +114,7 @@ int getEndOfRoute(Ladder* l, int route);
 int getDepth(Ladder* l);
 
 
-void leftSwap(Ladder* l, int currRow, int currCol, int row, int col);
+void leftSwap(Ladder* l, int currRow, int currCol, int row, int col, int mode);
 
 //Finds a row to go to based on the current start row and start col
 void findRowToGo(Ladder* l, int startRow, int startCol);
@@ -139,4 +149,7 @@ bool canBeAddedToRow(Ladder* l, int row, int col);
 
 void findAllChildren(Ladder* l, int cleanLevel);
 void driver(int* perm, int size);
+
+
+/*Main algorithm: Get all children */
 #endif
