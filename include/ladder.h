@@ -107,8 +107,9 @@ int getCleanLevel(Ladder* l);
 
 int getFirstTurnBar(Ladder* root);
 
-int getStartOfRoute(Ladder* l, int route);
-int getEndOfRoute(Ladder* l, int route);
+int getStartOfRoute(Ladder* l, int route, int* arr);
+
+int getEndOfRoute(Ladder* l, int route, int* arr);
 
 
 int getDepth(Ladder* l);
@@ -152,4 +153,6 @@ void driver(int* perm, int size);
 
 
 /*Main algorithm: Get all children */
+
+void findAllChildren(Ladder* l, int cleanLevel);
 #endif
