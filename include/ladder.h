@@ -107,8 +107,8 @@ int getCleanLevel(Ladder* l);
 
 int getFirstTurnBar(Ladder* root);
 
-int getStartOfRoute(Ladder* l, int route);
-int getEndOfRoute(Ladder* l, int route);
+int getStartOfRoute(Ladder* l, int route, int* arr);
+int getEndOfRoute(Ladder* l, int route, int* arr);
 
 
 int getDepth(Ladder* l);

@@ -884,6 +884,148 @@ void driver(int *perm, int size)
     //call find all children with clean level = 1
 }
 
+
+void findAllChildren(Ladder *l, int cleanLevel)
+{
+
+    printLadder(l);
+
+    /*Only if working with the root ladder */
+    if (cleanLevel == 1)
+    {
+        int turnBar = getFirstTurnBar(l);
+        int row = getRowIndex(l, turnBar);
+        int col = getColIndex(l, turnBar);
+        int mode;
+
+        rightSwap(l, row, col, getRowToGo(l, turnBar), col + 1, &mode);
+        Bar *tbar = getBar(l, turnBar);
+        findAllChildren(l, tbar->routeNum + 2);
+        leftSwap(l, getRowIndex(l, turnBar), getColIndex(l, turnBar), getRowIndex(l, getLowerNeighbor(l, turnBar)) + 1, getColIndex(l, turnBar) - 1, mode);
+        printLadder(l);
+    }
+    else
+    {
+
+        int lowerLevel = cleanLevel - 1;
+
+        int start[2] = {-1, -1};
+        int end[2] = {-1, -1};
+
+        /*Gets the sarting row and collumn of the route */
+        getStartOfRoute(l, lowerLevel, start);
+
+        /*Gets the ending row and collumn of the route */
+        getEndOfRoute(l, lowerLevel, end);
+
+        for (int i = start[0]; i <= end[0]; i++)
+        {
+            for (int j = start[1]; j <= end[1]; j++)
+            {
+                int val = l->ladder[i][j];
+                if (val == 0)
+                    continue;
+                Bar *dirtyBar = getBar(l, val);
+                /*if the bar is part of the dirty level then check or its upper neighbor */
+                if (dirtyBar->routeNum == lowerLevel)
+                {
+                    //get its upward visible neighbor.
+                    //if the upward visisble neighbor is not part of clean level then it cpuld be the active bar
+                    int un = getUpperNeighbor(l, val);
+                    if(un == -1)continue;
+                    dirtyBar = getBar(l, un);
+                    //the dirty bar is the active bar
+                    if (dirtyBar->routeNum < lowerLevel && isRightSwappable(l, un))
+                    {
+                        int mode = 0;
+                        rightSwap(l, getRowIndex(l, un), getColIndex(l, un), getRowToGo(l, un), getColIndex(l, un) + 1, &mode);
+                        findAllChildren(l, cleanLevel);
+                        leftSwap(l, getRowIndex(l, un), getColIndex(l, un), getRowIndex(l, getLowerNeighbor(l, un)) + 1, getColIndex(l, un) - 1, mode);
+                        printf("1: Left swap\n");
+                        printLadder(l);
+                    }
+                }
+            }
+        }
+
+        for (int i = start[0]; i < end[0]; i++)
+        {
+            for (int j = start[1]; j < end[1]; j++)
+            {
+                int val = l->ladder[i][j];
+                if (val == 0)
+                    continue;
+                Bar *dirtyBar = getBar(l, val);
+                if (dirtyBar->routeNum == lowerLevel)
+                {
+                    int un = getLowerNeighbor(l, val);
+                    if(un == -1)continue;
+                    dirtyBar = getBar(l, un);
+                    //the dirty bar is the active bar
+                    if (dirtyBar->routeNum < lowerLevel && isRightSwappable(l, un))
+                    {
+                        int mode = 0;
+                        rightSwap(l, getRowIndex(l, un), getColIndex(l, un), getRowToGo(l, un), getColIndex(l, un) + 1, &mode);
+                        findAllChildren(l, cleanLevel);
+                        leftSwap(l, getRowIndex(l, un), getColIndex(l, un), getRowIndex(l, getLowerNeighbor(l, un)) + 1, getColIndex(l, un) - 1, mode);
+                        printf("2: Left swap\n");
+                        printLadder(l);
+                    }
+                }
+            }
+        }
+    }
+    //for(int i = 0; i < l->MAX)
+    /*Step 1: for each rout >= the clean level you need to swap the bars in that route 
+    But you make the recursive call after the first bar in that region has been swapped*/
+
+    /*Step 2: for each bar at the clean level -1. Do the same thing as step 1 */
+}
+
+int getStartOfRoute(Ladder *l, int routeNum, int *arr)
+{
+    for (int i = 0; i <= l->depth; i++)
+    {
+        for (int j = 0; j < l->numCols; j++)
+        {
+
+            if (l->ladder[i][j] != 0)
+            {
+                int barVal = l->ladder[i][j];
+                Bar *b = getBar(l, barVal);
+                if (b->routeNum == routeNum)
+                {
+                    arr[0] = i;
+                    arr[1] = j;
+                    return 0;
+                }
+            }
+        }
+    }
+    return -1;
+}
+
+int getEndOfRoute(Ladder *l, int routeNum, int *arr)
+{
+    for (int i = 0; i <= l->depth; i++)
+    {
+        for (int j = 0; j < l->numCols; j++)
+        {
+            if (l->ladder[i][j] != 0)
+            {
+                int barVal = l->ladder[i][j];
+                Bar *b = getBar(l, barVal);
+                if (b->routeNum == routeNum)
+                {
+                    arr[0] = i;
+                    arr[1] = j;
+                }
+            }
+        }
+    }
+    return 0;
+}
+
 bool isRightSwappable(Ladder *l, int val)
 {
 
