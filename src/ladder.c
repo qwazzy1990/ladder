@@ -13,6 +13,7 @@ int MAXVAL;
 int ladderCount = 1;
 int I = 0;
 char ladders[10000][10000];
+
 /***STATIC FUNCTIONS */
 static void copyArray(int **write, int *read, int largestIndex, int size)
 {
@@ -238,8 +239,8 @@ char *printBar(Bar *b)
 
 void printLadder(Ladder *l)
 {
-    printf("\nDEPTH: %d\n", l->depth + 1);
-    for (int i = 0; i <= l->depth+1; i++)
+    //printf("\nDEPTH: %d\n", l->depth + 1);
+    for (int i = 0; i <= l->depth + 1; i++)
     {
         for (int j = 0; j < l->numCols; j++)
         {
@@ -250,23 +251,24 @@ void printLadder(Ladder *l)
             {
                 Bar *b = getBar(l, val);
 
-                printf(GREEN "[%d %d] " COLOR_RESET, b->vals[0], b->vals[1]);
+                printf("[%d %d] ", b->vals[0], b->vals[1]);
             }
         }
         printf("\n");
     }
+    printf("\n");
 }
 
-char* ladderToString(void* l)
+char *ladderToString(void *l)
 {
-    Ladder* ll = (Ladder*)l;
-    char* s = calloc(100000, sizeof(char));
+    Ladder *ll = (Ladder *)l;
+    char *s = calloc(100000, sizeof(char));
     int x = 0;
-    for(int i = 0; i < ll->numRows; i++)
+    for (int i = 0; i < ll->numRows; i++)
     {
-        for(int j = 0; j < ll->numCols; j++)
+        for (int j = 0; j < ll->numCols; j++)
         {
-            char c = (char)ll->ladder[i][j]+30;
+            char c = (char)ll->ladder[i][j] + 30;
             s[x] = c;
             x++;
         }
@@ -325,7 +327,7 @@ void rightSwap(Ladder *l, int currRow, int currCol, int row, int col, int *mode)
     //If the row is < 0 then you need to readjust the ladder accordingly
 
     /*Case 1 of right swap */
-    if (row < 0 && canBeAddedToRow(l, 0, col)==true)
+    if (row < 0 && canBeAddedToRow(l, 0, col) == true)
     {
         int offset = row * (-1);
         shiftLadderUp(l, (l->depth), 0, offset);
@@ -378,10 +380,23 @@ void rightSwap(Ladder *l, int currRow, int currCol, int row, int col, int *mode)
 
         //swap the upper neighbor and the right neighbor
         swapVals(&(l->ladder[upArr[0]][upArr[1]]), &(l->ladder[rightArr[0]][rightArr[1]]));
+        if(emptyRow(l, upArr[0]))
+        {
+            readjustLadder(l, upArr[0]+1, l->depth, -1);
+        }
+         if(emptyRow(l, rightArr[0]))
+        {
+            readjustLadder(l, rightArr[0]+1, l->depth, -1);
+        }
 
         int val = l->ladder[currRow][currCol];
         l->ladder[row][col] = val;
         l->ladder[currRow][currCol] = 0;
+        if(emptyRow(l, currRow))
+        {
+            readjustLadder(l, currRow+1, l->depth, -1);
+
+        }
 
         /*Shift the acnestors of the current value by their respective offsets so the ladder is the correct height */
 
@@ -466,15 +481,15 @@ void rightSwap(Ladder *l, int currRow, int currCol, int row, int col, int *mode)
         //shiftRectangle(l, currRow, currCol + 1, currRow + 1, l->numCols, 2);
 
         //printLadder(l);
-        
+
+        shiftChildrenDown(l, getRightChild(l, activeBar), 2);
+
+        swapVals(&(l->ladder[upArr[0]][upArr[1]]), &(l->ladder[currRow + 1][currCol + 1]));
         if (emptyRow(l, upArr[0]))
         {
             int depth = getDepth(l);
             readjustLadder(l, upArr[0] + 1, depth, -1);
         }
-        shiftChildrenDown(l, getRightChild(l, activeBar), 2);
-        
-        swapVals(&(l->ladder[upArr[0]][upArr[1]]), &(l->ladder[currRow + 1][currCol + 1]));
 
     } //end else
 
@@ -832,31 +847,9 @@ void driver(int *perm, int size)
 
     createRoot(l, perm, size, 0);
 
-    printLadder(l);
 
     qsort(perm, size, sizeof(int), compareInts);
-    printf("%d %d %d %d", perm[0], perm[1], perm[2], perm[3]);
     MAXVAL = perm[size - 1];
-    printf("Max val is %d\n", MAXVAL);
-
-    /* int turnBar = getFirstTurnBar(l);
-
-    printf("\nFirst turn bar is %d\n", turnBar);
-    int row = getRowIndex(l, turnBar);
-    int col = getColIndex(l, turnBar);
-    int mode;
-    rightSwap(l, row, col, getRowToGo(l, turnBar), col + 1, &mode);
-    printf("End right swap\n");
-    printLadder(l);
-
-    row = getRowIndex(l, turnBar);
-    col = getColIndex(l, turnBar);
-    rightSwap(l, row, col, getRowToGo(l, turnBar), col + 1, &mode);
-
-    printLadder(l);
-
-    leftSwap(l, getRowIndex(l, turnBar), getColIndex(l, turnBar), getRowIndex(l, getLowerNeighbor(l, turnBar)) + 1, getColIndex(l, turnBar) - 1, mode);
-    printLadder(l);*/
 
     findAllChildren(l, 1);
 
@@ -867,19 +860,20 @@ void findAllChildren(Ladder *l, int cleanLevel)
 {
 
     CLEANLEVEl = cleanLevel;
-    char* s = ladderToString(l);
+    char *s = ladderToString(l);
     //strcpy(ladders[I], s);
-    for(int i = 0; i < I; i++)
+    for (int i = 0; i < I; i++)
     {
-      if(strcmp(ladders[i], s)==0)
-        return;
+        if (strcmp(ladders[i], s) == 0)
+            return;
     }
     strcpy(ladders[I], s);
 
     I++;
-    
+
     //printf("Clean level %d\n", cleanLevel);
-    printf("\nLADDER NUMBER: %d", ladderCount);
+    //printf("\nLADDER NUMBER: %d", ladderCount);
+    printf("Ladder Number:%d\n", ladderCount);
     ladderCount++;
     printLadder(l);
 
@@ -892,7 +886,36 @@ void findAllChildren(Ladder *l, int cleanLevel)
         int end[2] = {-1, -1};
         getStartOfRoute(l, y, start);
         getEndOfRoute(l, y, end);
-        if(start[0] != -1)
+        if (start[0] != -1)
+            for (int i = start[0]; i <= end[0]; i++)
+            {
+                for (int j = start[1]; j <= end[1]; j++)
+                {
+                    int val = l->ladder[i][j];
+                    if (val == 0)
+                        continue;
+                    Bar *b = getBar(l, val);
+                    if (b->routeNum == y)
+                    {
+                        int lowerNeighbor = getLowerNeighbor(l, val);
+                        if (isRightSwappable(l, lowerNeighbor))
+                        {
+                            int mode = 0;
+                            rightSwap(l, getRowIndex(l, lowerNeighbor), getColIndex(l, lowerNeighbor), getRowToGo(l, lowerNeighbor), getColIndex(l, lowerNeighbor) + 1, &mode);
+                            findAllChildren(l, b->routeNum + 1);
+                            leftSwap(l, clone);
+                        }
+                    }
+                }
+            }
+        y--;
+    }
+
+    int start[2] = {-1, -1};
+    int end[2] = {-1, -1};
+    getStartOfRoute(l, cleanLevel - 1, start);
+    getEndOfRoute(l, cleanLevel - 1, end);
+    if (start[0] != -1)
         for (int i = start[0]; i <= end[0]; i++)
         {
             for (int j = start[1]; j <= end[1]; j++)
@@ -908,41 +931,12 @@ void findAllChildren(Ladder *l, int cleanLevel)
                     {
                         int mode = 0;
                         rightSwap(l, getRowIndex(l, lowerNeighbor), getColIndex(l, lowerNeighbor), getRowToGo(l, lowerNeighbor), getColIndex(l, lowerNeighbor) + 1, &mode);
-                        findAllChildren(l, b->routeNum + 1);
+                        findAllChildren(l, cleanLevel);
                         leftSwap(l, clone);
                     }
                 }
             }
         }
-        y--;
-    }
-
-    int start[2] = {-1, -1};
-    int end[2] = {-1, -1};
-    getStartOfRoute(l, cleanLevel - 1, start);
-    getEndOfRoute(l, cleanLevel - 1, end);
-    if(start[0] != -1)
-    for (int i = start[0]; i <= end[0]; i++)
-    {
-        for (int j = start[1]; j <= end[1]; j++)
-        {
-            int val = l->ladder[i][j];
-            if (val == 0)
-                continue;
-            Bar *b = getBar(l, val);
-            if (b->routeNum == y)
-            {
-                int lowerNeighbor = getLowerNeighbor(l, val);
-                if (isRightSwappable(l, lowerNeighbor))
-                {
-                    int mode = 0;
-                    rightSwap(l, getRowIndex(l, lowerNeighbor), getColIndex(l, lowerNeighbor), getRowToGo(l, lowerNeighbor), getColIndex(l, lowerNeighbor) + 1, &mode);
-                    findAllChildren(l, cleanLevel);
-                    leftSwap(l, clone);
-                }
-            }
-        }
-    }
 }
 bool isRightSwappable(Ladder *l, int val)
 {
