@@ -251,7 +251,7 @@ void printLadder(Ladder *l)
             {
                 Bar *b = getBar(l, val);
 
-                printf("[%d %d] ", b->vals[0], b->vals[1]);
+                printf(GREEN "[%d %d] " COLOR_RESET, b->vals[0], b->vals[1]);
             }
         }
         printf("\n");
@@ -307,7 +307,7 @@ int getRowToGo(Ladder *l, int val)
     //if there is no such neighbor, then the value goes one row above it's upper neighbor
     if (upNeighbor == -1)
     {
-        return 0;
+       return 0;
     }
 
     //else the value goes to the row below the upper neighbor of the value's upper neighbor
@@ -380,58 +380,36 @@ void rightSwap(Ladder *l, int currRow, int currCol, int row, int col, int *mode)
 
         //swap the upper neighbor and the right neighbor
         swapVals(&(l->ladder[upArr[0]][upArr[1]]), &(l->ladder[rightArr[0]][rightArr[1]]));
-        if(emptyRow(l, upArr[0]))
+        if (emptyRow(l, upArr[0]))
         {
-            readjustLadder(l, upArr[0]+1, l->depth, -1);
+            readjustLadder(l, upArr[0] + 1, l->depth, -1);
         }
-         if(emptyRow(l, rightArr[0]))
+        if (emptyRow(l, rightArr[0]))
         {
-            readjustLadder(l, rightArr[0]+1, l->depth, -1);
+            readjustLadder(l, rightArr[0] + 1, l->depth, -1);
         }
 
-        int val = l->ladder[currRow][currCol];
-        l->ladder[row][col] = val;
-        l->ladder[currRow][currCol] = 0;
-        if(emptyRow(l, currRow))
-        {
-            readjustLadder(l, currRow+1, l->depth, -1);
-
-        }
+        int activeBar = l->ladder[currRow][currCol];
 
         /*Shift the acnestors of the current value by their respective offsets so the ladder is the correct height */
 
-        int leftChild = -1;
-        int rightChild = -1;
+        int leftChild = getLeftChild(l, activeBar);
+        int rightChild = getRightChild(l, activeBar);
         int leftOffset = -1;
         int rightOffset = -1;
 
+        l->ladder[row][col] = activeBar;
+        l->ladder[currRow][currCol] = 0;
+        if (emptyRow(l, currRow))
+        {
+            readjustLadder(l, currRow + 1, l->depth, -1);
+        }
+
         /*If there is a left child of the current value then shift it and all its ancestors up
         by the correct offset for the left subtree */
-        if (currCol > 0)
-        {
-            leftChild = l->ladder[currRow + 1][currCol - 1];
-            /*Get its offset */
-            leftOffset = calculateChildOffset(l, leftChild);
-        }
 
-        /*If there is a right child of the current value then shift it and all its ancestors up
-        the ladder by the correct offset for the current value's right subtree */
-        if (currCol < l->numCols - 1)
-        {
-            rightChild = l->ladder[currRow + 1][currCol + 1];
-            rightOffset = calculateChildOffset(l, rightChild);
-        }
-
-        /*Call the function on right child */
-        if (rightOffset != -1)
-        {
-            shiftChildren(l, rightChild, rightOffset);
-        }
-        /*Call the function on left child*/
-        if (leftOffset != -1)
-        {
-            shiftChildren(l, leftChild, leftOffset);
-        }
+        leftOffset = calculateChildOffset(l, leftChild);
+        shiftChildren(l, leftChild, leftOffset);
 
     } //end if
     /*Case 3: The value cannot be added to the row and col */
@@ -692,6 +670,7 @@ void readjustLadder(Ladder *l, int start, int end, int offset)
         shiftLadderDown(l, i + offset, i);
         makeRowEmpty(l, i);
     }
+    l->depth = getDepth(l);
 }
 void shiftLadderDown(Ladder *l, int dest, int source)
 {
@@ -735,7 +714,7 @@ void shiftRectangle(Ladder *l, int w, int x, int y, int z, int offset)
 void shiftChildren(Ladder *l, int val, int offset)
 {
     //if there were no more children
-    if (val == 0)
+    if (val == 0 || val == -1)
         return;
     if (offset == 0)
         return;
@@ -846,7 +825,6 @@ void driver(int *perm, int size)
     initLadder(l);
 
     createRoot(l, perm, size, 0);
-
 
     qsort(perm, size, sizeof(int), compareInts);
     MAXVAL = perm[size - 1];
