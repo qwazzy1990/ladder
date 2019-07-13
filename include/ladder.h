@@ -7,7 +7,7 @@
 #include <stdbool.h>
 
 
-#define MAXROWS 1000
+#define MAXROWS 500
 typedef struct bar
 {
     //route the bar belongs to
@@ -54,6 +54,8 @@ Bar* getBar(Ladder* l, int n);
 
 char* printBar(Bar* b);
 void printLadder(Ladder* l);
+
+char* ladderToString(void* l);
 //delete
 
 //find turn bar

@@ -6,6 +6,13 @@
 #include "utilities.h"
 #include "Color.h"
 
+/*Global variables: used for clean level */
+
+int CLEANLEVEl = 1;
+int MAXVAL;
+int ladderCount = 1;
+int I = 0;
+char ladders[10000][10000];
 /***STATIC FUNCTIONS */
 static void copyArray(int **write, int *read, int largestIndex, int size)
 {
@@ -49,12 +56,10 @@ Ladder *newLadder(int size)
     return l;
 }
 
-Ladder* cloneLadder(Ladder * l)
+Ladder *cloneLadder(Ladder *l)
 {
-    new_object(Ladder * , clone, 1);
+    new_object(Ladder *, clone, 1);
 
-    
-    
     clone->numCols = l->numCols;
     clone->numRows = l->numRows;
     clone->numBars = l->numBars;
@@ -62,9 +67,9 @@ Ladder* cloneLadder(Ladder * l)
 
     initLadder(clone);
 
-    for(int i = 0; i < MAXROWS; i++)
+    for (int i = 0; i < MAXROWS; i++)
     {
-        for(int j = 0; j < l->numCols; j++)
+        for (int j = 0; j < l->numCols; j++)
         {
             clone->ladder[i][j] = l->ladder[i][j];
         }
@@ -76,7 +81,6 @@ Ladder* cloneLadder(Ladder * l)
         clone->bars[x] = l->bars[x];
     }
     return clone;
-
 }
 
 Bar *newBar(void)
@@ -253,6 +257,23 @@ void printLadder(Ladder *l)
     }
 }
 
+char* ladderToString(void* l)
+{
+    Ladder* ll = (Ladder*)l;
+    char* s = calloc(100000, sizeof(char));
+    int x = 0;
+    for(int i = 0; i < ll->numRows; i++)
+    {
+        for(int j = 0; j < ll->numCols; j++)
+        {
+            char c = (char)ll->ladder[i][j]+30;
+            s[x] = c;
+            x++;
+        }
+    }
+    return s;
+}
+
 /*Setters */
 void setBar(Bar *bar, int barNum, int routeNum, int valTwo)
 {
@@ -304,7 +325,7 @@ void rightSwap(Ladder *l, int currRow, int currCol, int row, int col, int *mode)
     //If the row is < 0 then you need to readjust the ladder accordingly
 
     /*Case 1 of right swap */
-    if (row < 0)
+    if (row < 0 && canBeAddedToRow(l, 0, col)==true)
     {
         int offset = row * (-1);
         shiftLadderUp(l, (l->depth), 0, offset);
@@ -459,14 +480,14 @@ void rightSwap(Ladder *l, int currRow, int currCol, int row, int col, int *mode)
 
 /*Reverse engineers right swap:
 Must be adapted to the case in which rightSwap occurred. This will allow the */
-void leftSwap(Ladder *l, Ladder* clone)
+void leftSwap(Ladder *l, Ladder *clone)
 {
     l->numBars = clone->numBars;
     l->numCols = clone->numCols;
     l->numRows = clone->numRows;
     l->depth = clone->depth;
-    for(int i = 0; i < MAXROWS; i++)
-        for(int j = 0; j < l->numCols; j++)
+    for (int i = 0; i < MAXROWS; i++)
+        for (int j = 0; j < l->numCols; j++)
             l->ladder[i][j] = clone->ladder[i][j];
 }
 
@@ -595,7 +616,8 @@ int getLeftNeighbor(Ladder *l, int n)
 
 int getLeftChild(Ladder *l, int val)
 {
-    if(val == 0 || val == -1)return -1;
+    if (val == 0 || val == -1)
+        return -1;
     int rowIndex = getRowIndex(l, val) + 1;
     int colIndex = getColIndex(l, val) - 1;
     if (colIndex == -1)
@@ -607,7 +629,8 @@ int getLeftChild(Ladder *l, int val)
 
 int getRightChild(Ladder *l, int val)
 {
-    if(val == 0 || val == -1)return -1;
+    if (val == 0 || val == -1)
+        return -1;
     int rowIndex = getRowIndex(l, val) + 1;
     int colIndex = getColIndex(l, val) + 1;
     if (colIndex >= l->numCols)
@@ -808,6 +831,11 @@ void driver(int *perm, int size)
 
     printLadder(l);
 
+    qsort(perm, size, sizeof(int), compareInts);
+    printf("%d %d %d %d", perm[0], perm[1], perm[2], perm[3]);
+    MAXVAL = perm[size - 1];
+    printf("Max val is %d\n", MAXVAL);
+
     /* int turnBar = getFirstTurnBar(l);
 
     printf("\nFirst turn bar is %d\n", turnBar);
@@ -827,7 +855,7 @@ void driver(int *perm, int size)
     leftSwap(l, getRowIndex(l, turnBar), getColIndex(l, turnBar), getRowIndex(l, getLowerNeighbor(l, turnBar)) + 1, getColIndex(l, turnBar) - 1, mode);
     printLadder(l);*/
 
-    findAllChildren(l, 5);
+    findAllChildren(l, 1);
 
     //call find all children with clean level = 1
 }
@@ -835,39 +863,33 @@ void driver(int *perm, int size)
 void findAllChildren(Ladder *l, int cleanLevel)
 {
 
+    CLEANLEVEl = cleanLevel;
+    char* s = ladderToString(l);
+    //strcpy(ladders[I], s);
+    for(int i = 0; i < I; i++)
+    {
+      if(strcmp(ladders[i], s)==0)
+        return;
+    }
+    strcpy(ladders[I], s);
+
+    I++;
+    
+    //printf("Clean level %d\n", cleanLevel);
+    printf("\nTEST: LADDER NUMBER: %d\n", ladderCount);
+    ladderCount++;
     printLadder(l);
 
-    Ladder* clone = cloneLadder(l);
-    /*Only if working with the root ladder */
-    if (cleanLevel == 1)
+    Ladder *clone = cloneLadder(l);
+
+    int y = MAXVAL;
+    while (y >= cleanLevel)
     {
-        int turnBar = getFirstTurnBar(l);
-        int row = getRowIndex(l, turnBar);
-        int col = getColIndex(l, turnBar);
-        int mode;
-
-        rightSwap(l, row, col, getRowToGo(l, turnBar), col + 1, &mode);
-        Bar *tbar = getBar(l, turnBar);
-        findAllChildren(l, tbar->routeNum + 2);
-        leftSwap(l, clone);
-        //leftSwap(l, getRowIndex(l, turnBar), getColIndex(l, turnBar), getRowIndex(l, getLowerNeighbor(l, turnBar)) + 1, getColIndex(l, turnBar) - 1, mode);
-        printLadder(l);
-    }
-    else
-    {
-
-        int lowerLevel = cleanLevel - 1;
-
         int start[2] = {-1, -1};
         int end[2] = {-1, -1};
-
-        /*Gets the sarting row and collumn of the route */
-        getStartOfRoute(l, lowerLevel, start);
-
-
-        /*Gets the ending row and collumn of the route */
-        getEndOfRoute(l, lowerLevel, end);
-
+        getStartOfRoute(l, y, start);
+        getEndOfRoute(l, y, end);
+        if(start[0] != -1)
         for (int i = start[0]; i <= end[0]; i++)
         {
             for (int j = start[1]; j <= end[1]; j++)
@@ -875,62 +897,49 @@ void findAllChildren(Ladder *l, int cleanLevel)
                 int val = l->ladder[i][j];
                 if (val == 0)
                     continue;
-                Bar *dirtyBar = getBar(l, val);
-                /*if the bar is part of the dirty level then check or its upper neighbor */
-                if (dirtyBar->routeNum == lowerLevel)
+                Bar *b = getBar(l, val);
+                if (b->routeNum == y)
                 {
-                    //get its upward visible neighbor.
-                    //if the upward visisble neighbor is not part of clean level then it cpuld be the active bar
-                    int un = getUpperNeighbor(l, val);
-                    if(un == -1)continue;
-                    dirtyBar = getBar(l, un);
-                    //the dirty bar is the active bar
-                    if (dirtyBar->routeNum < lowerLevel && isRightSwappable(l, un))
+                    int lowerNeighbor = getLowerNeighbor(l, val);
+                    if (isRightSwappable(l, lowerNeighbor))
                     {
                         int mode = 0;
-                        rightSwap(l, getRowIndex(l, un), getColIndex(l, un), getRowToGo(l, un), getColIndex(l, un), &mode);
-                        findAllChildren(l, cleanLevel);
+                        rightSwap(l, getRowIndex(l, lowerNeighbor), getColIndex(l, lowerNeighbor), getRowToGo(l, lowerNeighbor), getColIndex(l, lowerNeighbor) + 1, &mode);
+                        findAllChildren(l, b->routeNum + 1);
                         leftSwap(l, clone);
-                        printf("1: Left swap\n");
-                        printLadder(l);
                     }
                 }
             }
         }
+        y--;
+    }
 
-        for (int i = start[0]; i < end[0]; i++)
+    int start[2] = {-1, -1};
+    int end[2] = {-1, -1};
+    getStartOfRoute(l, cleanLevel - 1, start);
+    getEndOfRoute(l, cleanLevel - 1, end);
+    if(start[0] != -1)
+    for (int i = start[0]; i <= end[0]; i++)
+    {
+        for (int j = start[1]; j <= end[1]; j++)
         {
-            for (int j = start[1]; j < end[1]; j++)
+            int val = l->ladder[i][j];
+            if (val == 0)
+                continue;
+            Bar *b = getBar(l, val);
+            if (b->routeNum == y)
             {
-                int val = l->ladder[i][j];
-                if (val == 0)
-                    continue;
-                Bar *dirtyBar = getBar(l, val);
-                if (dirtyBar->routeNum == lowerLevel)
+                int lowerNeighbor = getLowerNeighbor(l, val);
+                if (isRightSwappable(l, lowerNeighbor))
                 {
-                    int un = getLowerNeighbor(l, val);
-                    if(un == -1)continue;
-                    dirtyBar = getBar(l, un);
-                    //the dirty bar is the active bar
-                    if (dirtyBar->routeNum < lowerLevel && isRightSwappable(l, un))
-                    {
-                        int mode = 0;
-                        rightSwap(l, getRowIndex(l, un), getColIndex(l, un), getRowToGo(l, un), getColIndex(l, un) + 1, &mode);
-                        findAllChildren(l, cleanLevel);
-                        leftSwap(l, clone);
-                        //leftSwap(l, getRowIndex(l, un), getColIndex(l, un), getRowIndex(l, getLowerNeighbor(l, un)) + 1, getColIndex(l, un) - 1, mode);
-                        printf("2: Left swap\n");
-                        printLadder(l);
-                    }
+                    int mode = 0;
+                    rightSwap(l, getRowIndex(l, lowerNeighbor), getColIndex(l, lowerNeighbor), getRowToGo(l, lowerNeighbor), getColIndex(l, lowerNeighbor) + 1, &mode);
+                    findAllChildren(l, cleanLevel);
+                    leftSwap(l, clone);
                 }
             }
         }
     }
-    //for(int i = 0; i < l->MAX)
-    /*Step 1: for each rout >= the clean level you need to swap the bars in that route 
-    But you make the recursive call after the first bar in that region has been swapped*/
-
-    /*Step 2: for each bar at the clean level -1. Do the same thing as step 1 */
 }
 bool isRightSwappable(Ladder *l, int val)
 {
