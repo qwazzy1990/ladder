@@ -238,8 +238,8 @@ char *printBar(Bar *b)
 
 void printLadder(Ladder *l)
 {
-    printf("\nDEPTH: %d\n\n", l->depth + 1);
-    for (int i = 0; i < 20; i++)
+    printf("\nDEPTH: %d\n", l->depth + 1);
+    for (int i = 0; i <= l->depth+1; i++)
     {
         for (int j = 0; j < l->numCols; j++)
         {
@@ -305,7 +305,7 @@ int getRowToGo(Ladder *l, int val)
     //if there is no such neighbor, then the value goes one row above it's upper neighbor
     if (upNeighbor == -1)
     {
-        return rowIndex;
+        return 0;
     }
 
     //else the value goes to the row below the upper neighbor of the value's upper neighbor
@@ -443,35 +443,38 @@ void rightSwap(Ladder *l, int currRow, int currCol, int row, int col, int *mode)
         //shift every bar <= k-1 down by 2
 
         /*Swap the right parent of the current value with the current value */
+        int activeBar = l->ladder[currRow][currCol];
         swapVals(&(l->ladder[rightArr[0]][rightArr[1]]), &(l->ladder[currRow][currCol]));
         //swapVals(&(l->ladder[upArr[0]][upArr[1]]), &(l->ladder[currRow][currCol+1]));
 
-        int lowerBound = currRow;
+        /* int lowerBound = currRow;
         while (emptyRow(l, lowerBound) == false)
         {
             lowerBound++;
         }
-        lowerBound--;
+        lowerBound--;*/
 
         /*Create and shift reactangle such that it has a width defined by the currentRow + two rows and the row
         of the last value in the ladder. It's length is the number of collumns in the ladder
         Shift every value in this rectangle up the ladder by 2 */
-        shiftRectangle(l, currRow + 2, 0, lowerBound, l->numCols, 2);
+        //shiftRectangle(l, currRow + 2, 0, lowerBound, l->numCols, 2);
         //printLadder(l);
 
         /*Create a reactangle such that its width is defined by the current row and the current row+1
         It's length is defined by starting at the current value's collumn +1 and ends atthe number of collumns in the ladder 
         Shift everything in this rectangle up by 2 */
-        shiftRectangle(l, currRow, currCol + 1, currRow + 1, l->numCols, 2);
+        //shiftRectangle(l, currRow, currCol + 1, currRow + 1, l->numCols, 2);
 
         //printLadder(l);
-        swapVals(&(l->ladder[upArr[0]][upArr[1]]), &(l->ladder[currRow + 1][currCol + 1]));
-
+        
         if (emptyRow(l, upArr[0]))
         {
             int depth = getDepth(l);
             readjustLadder(l, upArr[0] + 1, depth, -1);
         }
+        shiftChildrenDown(l, getRightChild(l, activeBar), 2);
+        
+        swapVals(&(l->ladder[upArr[0]][upArr[1]]), &(l->ladder[currRow + 1][currCol + 1]));
 
     } //end else
 
@@ -782,7 +785,7 @@ void shiftChildrenDown(Ladder *l, int val, int offset)
 
     /*Recursively call function on left child and right child. */
     shiftChildrenDown(l, getLeftChild(l, val), offset);
-    shiftChildren(l, getRightChild(l, val), offset);
+    shiftChildrenDown(l, getRightChild(l, val), offset);
 
 Base_Case:
 {
@@ -876,7 +879,7 @@ void findAllChildren(Ladder *l, int cleanLevel)
     I++;
     
     //printf("Clean level %d\n", cleanLevel);
-    printf("\nTEST: LADDER NUMBER: %d\n", ladderCount);
+    printf("\nLADDER NUMBER: %d", ladderCount);
     ladderCount++;
     printLadder(l);
 
