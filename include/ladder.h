@@ -152,11 +152,10 @@ bool isRightSwappable(Ladder* l, int val);
 
 bool canBeAddedToRow(Ladder* l, int row, int col);
 
-void findAllChildren(Ladder* l, int cleanLevel);
+void findAllChildren(Ladder* l, int cleanLevel, int level);
 void driver(int* perm, int size);
 
 
 /*Main algorithm: Get all children */
 
-void findAllChildren(Ladder* l, int cleanLevel);
 #endif

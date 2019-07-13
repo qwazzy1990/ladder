@@ -8,7 +8,6 @@
 
 /*Global variables: used for clean level */
 
-int CLEANLEVEl = 1;
 int MAXVAL;
 int ladderCount = 1;
 int I = 0;
@@ -222,6 +221,8 @@ Bar *getBar(Ladder *l, int n)
 /*Printers */
 char *printBar(Bar *b)
 {
+    if (b == NULL)
+        return NULL;
     char *s = calloc(1000, sizeof(char));
     char temp[100];
     sprintf(temp, "%d  ", b->barNum);
@@ -233,7 +234,7 @@ char *printBar(Bar *b)
     strcat(s, " ");
     sprintf(temp, "%d", b->vals[1]);
     strcat(s, temp);
-    strcat(s, "\n\n");
+    strcat(s, "\n");
     return s;
 }
 
@@ -291,6 +292,7 @@ void setBar(Bar *bar, int barNum, int routeNum, int valTwo)
  */
 int getRowToGo(Ladder *l, int val)
 {
+   
     int upNeighbor = getUpperNeighbor(l, val);
     int rowIndex = -1;
     //if there is no upper neighbor an error has occurred
@@ -303,18 +305,25 @@ int getRowToGo(Ladder *l, int val)
     }
     //get the upper neighbor of the upper neighbor
     upNeighbor = getUpperNeighbor(l, upNeighbor);
-
+    
     //if there is no such neighbor, then the value goes one row above it's upper neighbor
     if (upNeighbor == -1)
     {
-       return 0;
+       
+        while (canBeAddedToRow(l, rowIndex, getColIndex(l, val) + 1))
+            rowIndex--;
+        
+        rowIndex++;
+
     }
 
     //else the value goes to the row below the upper neighbor of the value's upper neighbor
     else
     {
+      
         rowIndex = getRowIndex(l, upNeighbor) + 1;
     }
+
 
     return rowIndex;
 }
@@ -829,21 +838,23 @@ void driver(int *perm, int size)
     qsort(perm, size, sizeof(int), compareInts);
     MAXVAL = perm[size - 1];
 
-    findAllChildren(l, 1);
+    findAllChildren(l, 1, 0);
 
     //call find all children with clean level = 1
 }
 
-void findAllChildren(Ladder *l, int cleanLevel)
+void findAllChildren(Ladder *l, int cleanLevel, int level)
 {
 
-    CLEANLEVEl = cleanLevel;
     char *s = ladderToString(l);
     //strcpy(ladders[I], s);
     for (int i = 0; i < I; i++)
     {
         if (strcmp(ladders[i], s) == 0)
+        {
+            printf("Double Ladder\n");
             return;
+        }
     }
     strcpy(ladders[I], s);
 
@@ -851,7 +862,10 @@ void findAllChildren(Ladder *l, int cleanLevel)
 
     //printf("Clean level %d\n", cleanLevel);
     //printf("\nLADDER NUMBER: %d", ladderCount);
-    printf("Ladder Number:%d\n", ladderCount);
+    printf(RED "Clean Level:%d\n" COLOR_RESET, cleanLevel);
+    printf(YELLOW "Level %d\n" COLOR_RESET, level);
+
+    printf(CYAN "Ladder Number:%d\n" COLOR_RESET, ladderCount);
     ladderCount++;
     printLadder(l);
 
@@ -880,7 +894,7 @@ void findAllChildren(Ladder *l, int cleanLevel)
                         {
                             int mode = 0;
                             rightSwap(l, getRowIndex(l, lowerNeighbor), getColIndex(l, lowerNeighbor), getRowToGo(l, lowerNeighbor), getColIndex(l, lowerNeighbor) + 1, &mode);
-                            findAllChildren(l, b->routeNum + 1);
+                            findAllChildren(l, b->routeNum + 1, level + 1);
                             leftSwap(l, clone);
                         }
                     }
@@ -909,13 +923,14 @@ void findAllChildren(Ladder *l, int cleanLevel)
                     {
                         int mode = 0;
                         rightSwap(l, getRowIndex(l, lowerNeighbor), getColIndex(l, lowerNeighbor), getRowToGo(l, lowerNeighbor), getColIndex(l, lowerNeighbor) + 1, &mode);
-                        findAllChildren(l, cleanLevel);
+                        findAllChildren(l, cleanLevel, level + 1);
                         leftSwap(l, clone);
                     }
                 }
             }
         }
 }
+
 bool isRightSwappable(Ladder *l, int val)
 {
 
