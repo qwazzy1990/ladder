@@ -13,6 +13,8 @@ int ladderCount = 1;
 int I = 0;
 char ladders[10000][10000];
 
+bool DEBUG3 = true;
+
 /***STATIC FUNCTIONS */
 static void copyArray(int **write, int *read, int largestIndex, int size)
 {
@@ -75,7 +77,6 @@ Ladder *cloneLadder(Ladder *l)
         }
     }
 
-    clone->bars = calloc(100, sizeof(Bar));
     forall(l->numBars)
     {
         clone->bars[x] = l->bars[x];
@@ -89,6 +90,49 @@ Bar *newBar(void)
     b->set = true;
     return b;
 }
+
+/**DESTROYERS */
+void destroyBar(void *bar)
+{
+    if (bar == NULL)
+        return;
+    clear(bar);
+}
+
+void destroyLadder(void *l)
+{
+    if (l == NULL)
+        return;
+    Ladder *ll = (Ladder *)l;
+    forall(ll->numRows)
+    {
+        clear(ll->ladder[x]);
+    }
+    clear(ll->ladder);
+
+    forall(100)
+    {
+        destroyBar(ll->bars[x]);
+    }
+    clear(ll->bars);
+    clear(ll);
+}
+
+void destroyClone(void *l)
+{
+    if (l == NULL)
+        return;
+    Ladder *ll = (Ladder *)l;
+    forall(ll->numRows)
+    {
+        clear(ll->ladder[x]);
+    }
+    clear(ll->ladder);
+    clear(ll->bars);
+    clear(ll);
+}
+
+/*END DESTROYERS */
 
 void initLadder(Ladder *l)
 {
@@ -292,7 +336,7 @@ void setBar(Bar *bar, int barNum, int routeNum, int valTwo)
  */
 int getRowToGo(Ladder *l, int val)
 {
-   
+
     int upNeighbor = getUpperNeighbor(l, val);
     int rowIndex = -1;
     //if there is no upper neighbor an error has occurred
@@ -305,25 +349,23 @@ int getRowToGo(Ladder *l, int val)
     }
     //get the upper neighbor of the upper neighbor
     upNeighbor = getUpperNeighbor(l, upNeighbor);
-    
+
     //if there is no such neighbor, then the value goes one row above it's upper neighbor
     if (upNeighbor == -1)
     {
-       
+
         while (canBeAddedToRow(l, rowIndex, getColIndex(l, val) + 1))
             rowIndex--;
-        
-        rowIndex++;
 
+        rowIndex++;
     }
 
     //else the value goes to the row below the upper neighbor of the value's upper neighbor
     else
     {
-      
+
         rowIndex = getRowIndex(l, upNeighbor) + 1;
     }
-
 
     return rowIndex;
 }
@@ -403,9 +445,7 @@ void rightSwap(Ladder *l, int currRow, int currCol, int row, int col, int *mode)
         /*Shift the acnestors of the current value by their respective offsets so the ladder is the correct height */
 
         int leftChild = getLeftChild(l, activeBar);
-        int rightChild = getRightChild(l, activeBar);
         int leftOffset = -1;
-        int rightOffset = -1;
 
         l->ladder[row][col] = activeBar;
         l->ladder[currRow][currCol] = 0;
@@ -579,6 +619,25 @@ int getRightNeighbor(Ladder *l, int n)
     return -1;
 }
 
+int getLeftNeighbor(Ladder *l, int n)
+{
+    int row = getRowIndex(l, n);
+    int col = getColIndex(l, n);
+    if (row <= 0)
+        return -1;
+    if (col <= 0 || col >= l->numCols - 1)
+        return -1;
+
+    row++;
+    col--;
+    for (int i = row; i <= l->depth; i++)
+    {
+        if (l->ladder[i][col] != 0)
+            return l->ladder[i][col];
+    }
+    return -1;
+}
+
 /*Gets the lower neighbor of n. The lower neighbor is defined by any value in the ladder
 != to 0 and in the same collumn as n and with a row index > n's row index and <= the depth of the ladder */
 int getLowerNeighbor(Ladder *l, int n)
@@ -596,25 +655,6 @@ int getLowerNeighbor(Ladder *l, int n)
         {
             return l->ladder[i][col];
         }
-    }
-    return -1;
-}
-
-int getLeftNeighbor(Ladder *l, int n)
-{
-    int row = getRowIndex(l, n);
-    int col = getColIndex(l, n);
-
-    if (row >= l->depth)
-        return -1;
-    if (col <= 0)
-        return -1;
-    row++;
-    col--;
-    for (int i = row; i <= l->depth; i++)
-    {
-        if (l->ladder[i][col] != 0)
-            return l->ladder[i][col];
     }
     return -1;
 }
@@ -698,24 +738,6 @@ void shiftLadderUp(Ladder *l, int start, int end, int offset)
             l->ladder[i + offset][j] = l->ladder[i][j];
         }
         makeRowEmpty(l, i);
-    }
-}
-
-void shiftRectangle(Ladder *l, int w, int x, int y, int z, int offset)
-{
-
-    for (int i = y; i >= w; i--)
-    {
-        for (int j = x; j <= z; j++)
-        {
-            //shift the value at i j by the offset
-            int val = l->ladder[i][j];
-            if (val != 0)
-            {
-                l->ladder[i + offset][j] = val;
-                l->ladder[i][j] = 0;
-            }
-        }
     }
 }
 
@@ -839,24 +861,28 @@ void driver(int *perm, int size)
     MAXVAL = perm[size - 1];
 
     findAllChildren(l, 1, 0);
+    destroyLadder(l);
 
     //call find all children with clean level = 1
 }
 
 void findAllChildren(Ladder *l, int cleanLevel, int level)
 {
-
+    if (l == NULL)
+        return;
     char *s = ladderToString(l);
     //strcpy(ladders[I], s);
     for (int i = 0; i < I; i++)
     {
         if (strcmp(ladders[i], s) == 0)
         {
+            clear(s);
             printf("Double Ladder\n");
             return;
         }
     }
     strcpy(ladders[I], s);
+    clear(s);
 
     I++;
 
@@ -896,6 +922,7 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
                             rightSwap(l, getRowIndex(l, lowerNeighbor), getColIndex(l, lowerNeighbor), getRowToGo(l, lowerNeighbor), getColIndex(l, lowerNeighbor) + 1, &mode);
                             findAllChildren(l, b->routeNum + 1, level + 1);
                             leftSwap(l, clone);
+                            //destroyClone(clone);
                         }
                     }
                 }
@@ -919,16 +946,19 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
                 if (b->routeNum == y)
                 {
                     int lowerNeighbor = getLowerNeighbor(l, val);
-                    if (isRightSwappable(l, lowerNeighbor))
+                    if (isRightSwappable(l, lowerNeighbor) && canBeActiveBar(l, lowerNeighbor, y))
                     {
                         int mode = 0;
                         rightSwap(l, getRowIndex(l, lowerNeighbor), getColIndex(l, lowerNeighbor), getRowToGo(l, lowerNeighbor), getColIndex(l, lowerNeighbor) + 1, &mode);
                         findAllChildren(l, cleanLevel, level + 1);
                         leftSwap(l, clone);
+                        //destroyClone(clone);
                     }
                 }
             }
         }
+
+    destroyClone(clone);
 }
 
 bool isRightSwappable(Ladder *l, int val)
@@ -1092,6 +1122,136 @@ int getEndOfRoute(Ladder *l, int routeNum, int *arr)
     }
     return 0;
 }
+
+bool canBeActiveBar(Ladder *l, int val, int k)
+{
+    //Clone the ladder to not mess up the original ladder
+    Ladder *clone = cloneLadder(l);
+
+    int mode = 0;
+    //rightswap the value in the clone
+    rightSwap(clone, getRowIndex(clone, val), getColIndex(clone, val), getRowToGo(clone, val), getColIndex(clone, val) + 1, &mode);
+
+    int start[2] = {-1, -1};
+    int end[2] = {-1, -1};
+
+    //get the start and end of the route, k, to set the range of traversal
+    getStartOfRoute(clone, k, start);
+    getEndOfRoute(clone, k, end);
+
+    //traverse from the right bottom of the route to the left top of the route
+    //in order to find the rightmost upward visible bar from the route
+    for (int i = end[0]; i >= start[0]; i--)
+    {
+        for (int j = end[1]; j >= start[1]; j--)
+        {
+            //don't waste time checking empty cell
+            if (clone->ladder[i][j] == 0)
+                continue;
+
+            //get the bar assoiated with non empty cell
+            Bar *b = getBar(clone, clone->ladder[i][j]);
+
+            //check the bar's route number and see if it is equal to level k
+            if (b->routeNum == k)
+            {
+                //if it is, then you know that the clone->ladder[i][j] belongs
+                //to route k. Therefore get its upper neighbor
+                int upperNeighbor = getUpperNeighbor(clone, clone->ladder[i][j]);
+                if (upperNeighbor == -1 || upperNeighbor == 0)
+                    continue;
+
+                //If val is the rightmost upward visible bar along route k,
+                //then val is the active bar in the clone. Therefore return true.
+                if (isUpwardVisible(clone, upperNeighbor, k) && upperNeighbor == val)
+                {
+                    destroyClone(clone);
+                    return true;
+                }
+                else if(isUpwardVisible(clone, upperNeighbor, k) && upperNeighbor != val)
+                {
+                    destroyClone(clone);
+                    return false;
+                }
+                else continue;
+            }
+        }
+    }
+    destroyClone(clone);
+    return false;
+}
+
+bool isUpwardVisible(Ladder *l, int val, int route)
+{
+    if (val == -1 || val == 0)
+        return false;
+    int rowIndex = getRowIndex(l, val);
+    int colIndex = getColIndex(l, val);
+
+    int left;
+    int right;
+
+    if (colIndex != 0)
+    {
+        left = colIndex - 1;
+    }
+    else
+    {
+        left = -1;
+    }
+    if (colIndex != l->numCols - 1)
+    {
+        right = colIndex + 1;
+    }
+    else
+    {
+        right = -1;
+    }
+
+    if (left != -1)
+    {
+        for (int i = rowIndex; i < l->depth; i++)
+        {
+            int leftVal = l->ladder[i][left];
+            if (leftVal != 0)
+            {
+                Bar *b = getBar(l, leftVal);
+                if (b->vals[0] != route && b->vals[1] != route)
+                    return false;
+                else break;
+            }
+        }
+    }
+
+    if (right != -1)
+    {
+        for (int i = rowIndex; i < l->depth; i++)
+        {
+            int rightVal = l->ladder[i][right];
+            if (rightVal != 0)
+            {
+                Bar *b = getBar(l, rightVal);
+                if (b->vals[0] != route && b->vals[1] != route)
+                    return false;
+                else break;
+            }
+        }
+    }
+
+    int downNeighbor = getLowerNeighbor(l, val);
+    if (downNeighbor == 0 || downNeighbor == -1)
+    {
+        return false;
+    }
+    Bar *b = getBar(l, downNeighbor);
+
+    if (b->vals[0] != route && b->vals[1] != route)
+        return false;
+
+    return true;
+}
+
+
 bool emptyCell(Ladder *l, int row, int col)
 {
     if (l->ladder[row][col] == 0)
