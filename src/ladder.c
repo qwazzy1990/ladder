@@ -284,7 +284,7 @@ char *printBar(Bar *b)
 
 void printLadder(Ladder *l)
 {
-    //printf("\nDEPTH: %d\n", l->depth + 1);
+    printf("\nTEST: %d\n", l->depth + 1);
     for (int i = 0; i <= l->depth+1; i++)
     {
         for (int j = 0; j < l->numCols; j++)
