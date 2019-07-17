@@ -285,7 +285,7 @@ char *printBar(Bar *b)
 void printLadder(Ladder *l)
 {
     //printf("\nDEPTH: %d\n", l->depth + 1);
-    for (int i = 0; i <= l->depth + 1; i++)
+    for (int i = 0; i <= l->depth+1; i++)
     {
         for (int j = 0; j < l->numCols; j++)
         {
@@ -509,14 +509,11 @@ void rightSwap(Ladder *l, int currRow, int currCol, int row, int col, int *mode)
         of the last value in the ladder. It's length is the number of collumns in the ladder
         Shift every value in this rectangle up the ladder by 2 */
         //shiftRectangle(l, currRow + 2, 0, lowerBound, l->numCols, 2);
-        //printLadder(l);
 
         /*Create a reactangle such that its width is defined by the current row and the current row+1
         It's length is defined by starting at the current value's collumn +1 and ends atthe number of collumns in the ladder 
         Shift everything in this rectangle up by 2 */
         //shiftRectangle(l, currRow, currCol + 1, currRow + 1, l->numCols, 2);
-
-        //printLadder(l);
 
         shiftChildrenDown(l, getRightChild(l, activeBar), 2);
 
@@ -529,7 +526,6 @@ void rightSwap(Ladder *l, int currRow, int currCol, int row, int col, int *mode)
 
     } //end else
 
-    fixLadder(l);
     //l->depth = getDepth(l);
 }
 
@@ -753,8 +749,13 @@ void shiftLadderUp(Ladder *l, int start, int end, int offset)
 
 void fixLadder(Ladder *l)
 {
-    int end = l->depth;
-    for (int i = 1; i < end; i++)
+    int end = l->depth+10;
+    if(ladderCount == 15){
+        printf("FIX LADDER\n");
+        printLadder(l);
+        printf("EDN FIX LADDER\n");
+    }
+    for (int i = 1; i <= end; i++)
     {
         for (int j = l->numCols - 1; j >= 0; j--)
         {
@@ -763,8 +764,8 @@ void fixLadder(Ladder *l)
                 int val = l->ladder[i][j];
                 if (ladderCount == 15)
                 {
-                    Bar* b = getBar(l, val);
-                    char* s = printBar(b);
+                    Bar *b = getBar(l, val);
+                    char *s = printBar(b);
                     print(s);
                     clear(s);
                 }
@@ -776,16 +777,23 @@ void fixLadder(Ladder *l)
                     temp--;
                 }
                 temp++;
+                if(val == 6 && ladderCount == 15)printf("temp is %d\n", temp);
                 l->ladder[i][j] = 0;
 
                 l->ladder[temp][j] = val;
             }
         }
-        if (emptyRow(l, i))
-        {
-            readjustLadder(l, i + 1, l->depth, -1);
-        }
+        l->depth = getDepth(l);
     }
+
+    if(ladderCount == 15)
+    {
+        printf("DONE FIX LADDER\n");
+        printLadder(l);
+        printf("END DONE FIX LADDER\n");
+    }
+    l->depth = getDepth(l);
+    
 }
 
 //val is the child to be shifted
@@ -907,8 +915,7 @@ void driver(int *perm, int size)
     /* if(DEBUG3)
     {
         fixLadder(l);
-    }
-    printLadder(l);*/
+    }*/
 
     qsort(perm, size, sizeof(int), compareInts);
     MAXVAL = perm[size - 1];
@@ -947,8 +954,8 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
     printf(YELLOW "Level %d\n" COLOR_RESET, level);
 
     printf(CYAN "Ladder Number:%d\n" COLOR_RESET, ladderCount);
-    ladderCount++;
     printLadder(l);
+    ladderCount++;
 
     Ladder *clone = cloneLadder(l);
 
