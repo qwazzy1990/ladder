@@ -5,13 +5,13 @@
 #include "ladder.h"
 #include "utilities.h"
 
-bool DEBUG1 = false;
-bool DEBUG2 = true;
+bool DEBUG1 = true;
+bool DEBUG2 = false;
 
 
 int main(int argc, char* argv[])
 {
-    int perm[5] = {5,4,3,2,1};
+    int perm[7] = {7, 5, 3, 4, 6, 2, 1};
     int size = sizeof(perm)/sizeof(perm[0]);
 
     int permTwo[6] = {5,6,3,4,2,1};

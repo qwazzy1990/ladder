@@ -365,6 +365,11 @@ int getRowToGo(Ladder *l, int val)
     {
 
         rowIndex = getRowIndex(l, upNeighbor) + 1;
+        while (canBeAddedToRow(l, rowIndex, getColIndex(l, val) + 1) == false)
+        {
+            rowIndex++;
+        }
+        rowIndex--;
     }
 
     return rowIndex;
@@ -372,6 +377,10 @@ int getRowToGo(Ladder *l, int val)
 void rightSwap(Ladder *l, int currRow, int currCol, int row, int col, int *mode)
 {
     /*If it can't be swapped then return */
+    if (ladderCount == 31)
+    {
+        printf("Row to go is %d\n", row);
+    }
     if (isRightSwappable(l, l->ladder[currRow][currCol]) == false)
         return;
 
@@ -520,7 +529,8 @@ void rightSwap(Ladder *l, int currRow, int currCol, int row, int col, int *mode)
 
     } //end else
 
-    l->depth = getDepth(l);
+    fixLadder(l);
+    //l->depth = getDepth(l);
 }
 
 /*Reverse engineers right swap:
@@ -741,6 +751,43 @@ void shiftLadderUp(Ladder *l, int start, int end, int offset)
     }
 }
 
+void fixLadder(Ladder *l)
+{
+    int end = l->depth;
+    for (int i = 1; i < end; i++)
+    {
+        for (int j = l->numCols - 1; j >= 0; j--)
+        {
+            if (l->ladder[i][j] != 0)
+            {
+                int val = l->ladder[i][j];
+                if (ladderCount == 15)
+                {
+                    Bar* b = getBar(l, val);
+                    char* s = printBar(b);
+                    print(s);
+                    clear(s);
+                }
+
+                int temp = getRowIndex(l, val) - 1;
+
+                while (canBeAddedToRow(l, temp, j))
+                {
+                    temp--;
+                }
+                temp++;
+                l->ladder[i][j] = 0;
+
+                l->ladder[temp][j] = val;
+            }
+        }
+        if (emptyRow(l, i))
+        {
+            readjustLadder(l, i + 1, l->depth, -1);
+        }
+    }
+}
+
 //val is the child to be shifted
 void shiftChildren(Ladder *l, int val, int offset)
 {
@@ -856,6 +903,12 @@ void driver(int *perm, int size)
     initLadder(l);
 
     createRoot(l, perm, size, 0);
+    printLadder(l);
+    /* if(DEBUG3)
+    {
+        fixLadder(l);
+    }
+    printLadder(l);*/
 
     qsort(perm, size, sizeof(int), compareInts);
     MAXVAL = perm[size - 1];
@@ -870,6 +923,8 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
 {
     if (l == NULL)
         return;
+
+    fixLadder(l);
     char *s = ladderToString(l);
     //strcpy(ladders[I], s);
     for (int i = 0; i < I; i++)
@@ -1168,12 +1223,13 @@ bool canBeActiveBar(Ladder *l, int val, int k)
                     destroyClone(clone);
                     return true;
                 }
-                else if(isUpwardVisible(clone, upperNeighbor, k) && upperNeighbor != val)
+                else if (isUpwardVisible(clone, upperNeighbor, k) && upperNeighbor != val)
                 {
                     destroyClone(clone);
                     return false;
                 }
-                else continue;
+                else
+                    continue;
             }
         }
     }
@@ -1218,7 +1274,8 @@ bool isUpwardVisible(Ladder *l, int val, int route)
                 Bar *b = getBar(l, leftVal);
                 if (b->vals[0] != route && b->vals[1] != route)
                     return false;
-                else break;
+                else
+                    break;
             }
         }
     }
@@ -1233,7 +1290,8 @@ bool isUpwardVisible(Ladder *l, int val, int route)
                 Bar *b = getBar(l, rightVal);
                 if (b->vals[0] != route && b->vals[1] != route)
                     return false;
-                else break;
+                else
+                    break;
             }
         }
     }
@@ -1250,7 +1308,6 @@ bool isUpwardVisible(Ladder *l, int val, int route)
 
     return true;
 }
-
 
 bool emptyCell(Ladder *l, int row, int col)
 {

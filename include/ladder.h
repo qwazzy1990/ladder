@@ -115,6 +115,7 @@ void rightSwap(Ladder* l, int currRow, int currCol, int row, int col, int* mode)
 void readjustLadder(Ladder* l, int start, int end, int offset);
 void shiftLadderDown(Ladder* l, int start, int end);
 void shiftLadderUp(Ladder* l, int start, int end, int offset);
+void fixLadder(Ladder * l);
 
 
 
