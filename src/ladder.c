@@ -284,7 +284,7 @@ char *printBar(Bar *b)
 
 void printLadder(Ladder *l)
 {
-    printf("\nTEST: %d\n", l->depth + 1);
+    //printf("\nTEST: %d\n", l->depth + 1);
     for (int i = 0; i <= l->depth+1; i++)
     {
         for (int j = 0; j < l->numCols; j++)
@@ -296,7 +296,7 @@ void printLadder(Ladder *l)
             {
                 Bar *b = getBar(l, val);
 
-                printf(GREEN "[%d %d] " COLOR_RESET, b->vals[0], b->vals[1]);
+                printf( "[%d %d] ", b->vals[0], b->vals[1]);
             }
         }
         printf("\n");
@@ -377,10 +377,6 @@ int getRowToGo(Ladder *l, int val)
 void rightSwap(Ladder *l, int currRow, int currCol, int row, int col, int *mode)
 {
     /*If it can't be swapped then return */
-    if (ladderCount == 31)
-    {
-        printf("Row to go is %d\n", row);
-    }
     if (isRightSwappable(l, l->ladder[currRow][currCol]) == false)
         return;
 
@@ -750,11 +746,6 @@ void shiftLadderUp(Ladder *l, int start, int end, int offset)
 void fixLadder(Ladder *l)
 {
     int end = l->depth+10;
-    if(ladderCount == 15){
-        printf("FIX LADDER\n");
-        printLadder(l);
-        printf("EDN FIX LADDER\n");
-    }
     for (int i = 1; i <= end; i++)
     {
         for (int j = l->numCols - 1; j >= 0; j--)
@@ -777,7 +768,6 @@ void fixLadder(Ladder *l)
                     temp--;
                 }
                 temp++;
-                if(val == 6 && ladderCount == 15)printf("temp is %d\n", temp);
                 l->ladder[i][j] = 0;
 
                 l->ladder[temp][j] = val;
@@ -786,12 +776,6 @@ void fixLadder(Ladder *l)
         l->depth = getDepth(l);
     }
 
-    if(ladderCount == 15)
-    {
-        printf("DONE FIX LADDER\n");
-        printLadder(l);
-        printf("END DONE FIX LADDER\n");
-    }
     l->depth = getDepth(l);
     
 }
@@ -939,7 +923,6 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
         if (strcmp(ladders[i], s) == 0)
         {
             clear(s);
-            printf("Double Ladder\n");
             return;
         }
     }
@@ -950,10 +933,10 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
 
     //printf("Clean level %d\n", cleanLevel);
     //printf("\nLADDER NUMBER: %d", ladderCount);
-    printf(RED "Clean Level:%d\n" COLOR_RESET, cleanLevel);
-    printf(YELLOW "Level %d\n" COLOR_RESET, level);
+    printf( "Clean Level:%d\n" , cleanLevel);
+    printf( "Level %d\n" , level);
 
-    printf(CYAN "Ladder Number:%d\n" COLOR_RESET, ladderCount);
+    printf( "Ladder Number:%d\n", ladderCount);
     printLadder(l);
     ladderCount++;
 

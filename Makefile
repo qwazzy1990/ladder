@@ -27,7 +27,7 @@ makeladder: BIN INCLUDE SRC OBJ TEST LIB
 	$(CC) $(CFLAGS) -Iinclude src/ladder.c src/utilities.c test/testladder.c -o bin/ladder
 
 runladder: makeladder
-	./bin/ladder
+	./bin/ladder > bin/mine.txt
 
 clean: 
 	if [ -d "bin" ]; then rm -rf ./bin/; fi;
