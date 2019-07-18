@@ -109,7 +109,7 @@ void setBar(Bar* bar, int barNum, int routeNum, int valTwo);
 //current val. Col is equal to the currCol + 1.
 //if the cell is able to be moved into then apply case 1: 
 //else apply case 2
-void rightSwap(Ladder* l, int currRow, int currCol, int row, int col, int* mode);
+void rightSwap(Ladder* l, int val);
 
 /*For fixing empty rows */
 void readjustLadder(Ladder* l, int start, int end, int offset);
