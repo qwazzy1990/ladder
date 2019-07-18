@@ -285,7 +285,7 @@ char *printBar(Bar *b)
 void printLadder(Ladder *l)
 {
     //printf("\nDEPTH: %d\n", l->depth + 1);
-    for (int i = 0; i <=20; i++)
+    for (int i = 0; i <=l->depth+1; i++)
     {
         for (int j = 0; j < l->numCols; j++)
         {
@@ -402,7 +402,7 @@ void rightSwap(Ladder *l, int val)
     swapVals(&(l->ladder[currArr[0]][currArr[1]]), &(l->ladder[rightArr[0]][rightArr[1]]));
 
 
-    //fixLadder(l);
+    fixLadder(l);
 
 
     
@@ -673,8 +673,8 @@ void shiftLadderUp(Ladder *l, int start, int end, int offset)
 
 void fixLadder(Ladder *l)
 {
-    int end = l->depth;
-    for (int i = 1; i < end; i++)
+    int end = l->depth + 10;
+    for (int i = 1; i <= end; i++)
     {
         for (int j = l->numCols - 1; j >= 0; j--)
         {
@@ -703,6 +703,8 @@ void fixLadder(Ladder *l)
         }
        
     }
+
+    l->depth = getDepth(l);
 }
 
 //val is the child to be shifted
