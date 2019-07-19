@@ -2,28 +2,50 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <ctype.h>
 #include "ladder.h"
 #include "utilities.h"
+#include "Color.h"
 
 bool DEBUG1 = true;
-bool DEBUG2 = false;
 
+void getInput(int **perm, char *s);
+int memSize = 1;
+int numDig = 0;
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
-    int perm[4] = {4,3,2,1};
-    int size = sizeof(perm)/sizeof(perm[0]);
+    char *s = calloc(1000, sizeof(char));
+    int *perm = NULL;
 
-    int permTwo[5] = {5,4,3,2,1};
-    int sizeTwo = sizeof(permTwo)/sizeof(int);
-    if(DEBUG1)
+    printf("Enter a permutation\n");
+    fgets(s, 1000, stdin);
+    getInput(&perm, s);
+        clear(s);
+
+    printf("Input Permutation:\n");
+    forall(numDig)
     {
-        driver(perm, size);
+        printf(GREEN " %d " COLOR_RESET, perm[x]);
     }
-    if(DEBUG2)
+    printf("\n");
+
+    driver(perm, numDig);
+
+    free(perm);
+}
+
+void getInput(int **perm, char *s)
+{
+    *perm = calloc(memSize, sizeof(int));
+    forall(strlen(s))
     {
-        driver(permTwo, sizeTwo);
+        if (isdigit(s[x]))
+        {
+            (*perm)[numDig] = s[x] - 0x30;
+            numDig++;
+            memSize++;
+            *perm = (int *)realloc(*perm, memSize * sizeof(int));
+        }
     }
-
-
 }
