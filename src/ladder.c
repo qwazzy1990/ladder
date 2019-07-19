@@ -58,6 +58,7 @@ Ladder *newLadder(int size)
     return l;
 }
 
+/*Creates a clone of ladder l, used for reverse engineering a right swap */
 Ladder *cloneLadder(Ladder *l)
 {
     new_object(Ladder *, clone, 1);
@@ -91,7 +92,7 @@ Bar *newBar(void)
     return b;
 }
 
-/**DESTROYERS */
+/**DESTROYERS Free memory*/
 void destroyBar(void *bar)
 {
     if (bar == NULL)
@@ -159,30 +160,15 @@ void initLadder(Ladder *l)
 
 void createRoot(Ladder *l, int *perm, int size, int currRow)
 {
+    /**
+     * Base case: fix the completed root ladder and return
+     */
     if (size == 1)
     {
-        for (int i = 1; i < l->numRows; i++)
-        {
-            for (int j = 0; j < l->numCols; j++)
-            {
-                int val = l->ladder[i][j];
-                if (val != 0)
-                {
-                    int count = i - 1;
-                    while (canBeAddedToRow(l, count, j) == true)
-                    {
-                        count--;
-                    }
-                    if (count < i - 1)
-                    {
-                        count++;
-                        l->ladder[count][j] = val;
-                        l->ladder[i][j] = 0;
-                    }
-                }
-            }
-        }
+        /*Fix the ladder by shifting every value as high as it can go */
+        //printf("l->depth is %d\n", l->depth);
         l->depth = getDepth(l);
+        fixLadder(l);
         l->cleanLevel = 1;
         return;
     }
@@ -191,7 +177,7 @@ void createRoot(Ladder *l, int *perm, int size, int currRow)
 
     foreach (largestIndex, size)
     {
-        //if an inversion is found
+        //if an inversion is found based on the largest value in the array, create a bar in the ladder
         if (perm[largestIndex] > perm[x])
         {
             int col = x - 1;
@@ -215,12 +201,15 @@ void createRoot(Ladder *l, int *perm, int size, int currRow)
     }
 
     int *arr = calloc(size - 1, sizeof(int));
+    /*Copy everything from the previous array into arr except the largest value. */
     copyArray(&arr, perm, largestIndex, size);
+    /*Call create root, this time the next largest value will be used to generate bars */
     createRoot(l, arr, size - 1, currRow);
     free(arr);
 }
 
 /**GETTERS */
+/*Returns the index that contains the largest value in perm */
 int getLargestIndex(int *perm, int size)
 {
     int largestVal = -1;
@@ -237,17 +226,7 @@ int getLargestIndex(int *perm, int size)
     return largestIndex;
 }
 
-int getFirstAvailableRow(Ladder *l, int currRow, int col)
-{
-    foreach (currRow, l->numRows)
-    {
-        if (canBeAddedToRow(l, x, col))
-        {
-            return x;
-        }
-    }
-    return -1;
-}
+
 
 Bar *getBar(Ladder *l, int n)
 {
@@ -263,7 +242,7 @@ Bar *getBar(Ladder *l, int n)
 }
 
 /*Printers */
-char *printBar(Bar *b)
+/* char *printBar(Bar *b)
 {
     if (b == NULL)
         return NULL;
@@ -280,7 +259,7 @@ char *printBar(Bar *b)
     strcat(s, temp);
     strcat(s, "\n");
     return s;
-}
+}*/
 
 void printLadder(Ladder *l)
 {
@@ -331,49 +310,17 @@ void setBar(Bar *bar, int barNum, int routeNum, int valTwo)
     bar->vals[1] = valTwo;
 }
 
-/**Gets the upper neighbor of the upper neigbor of the current value
- * Sets the rowToGo to the row of the upper neighbors, upper nieghbor+1
+/**
+ * Used to generate the next ladder in the set of ladders.
+ * A right swap of val can occurr iff val has exactly 1 right neighbor, exactly 0 left neighbors
+ * and exactly 1 upper neighbor. 
+ * Swapping is done as follows. 
+ * Let val = a, val's right neighbor be = to b and val's upper neighbor be c.
+ * Before swap: a is the left child of b, and b is the right child of c. And b may or may not have 
+ * a right sub-tree attached to it.
+ * After swap: b is the left child of a, and c is the right child of b, and the previous right subtree of b
+ * is now the right subtree of c
  */
-int getRowToGo(Ladder *l, int val)
-{
-
-    int upNeighbor = getUpperNeighbor(l, val);
-    int rowIndex = -1;
-    //if there is no upper neighbor an error has occurred
-    if (upNeighbor == -1)
-        return rowIndex;
-
-    else
-    {
-        rowIndex = getRowIndex(l, upNeighbor) - 1;
-    }
-    //get the upper neighbor of the upper neighbor
-    upNeighbor = getUpperNeighbor(l, upNeighbor);
-
-    //if there is no such neighbor, then the value goes one row above it's upper neighbor
-    if (upNeighbor == -1)
-    {
-
-        while (canBeAddedToRow(l, rowIndex, getColIndex(l, val) + 1))
-            rowIndex--;
-
-        rowIndex++;
-    }
-
-    //else the value goes to the row below the upper neighbor of the value's upper neighbor
-    else
-    {
-
-        rowIndex = getRowIndex(l, upNeighbor) + 1;
-        while (canBeAddedToRow(l, rowIndex, getColIndex(l, val) + 1) == false)
-        {
-            rowIndex++;
-        }
-        rowIndex--;
-    }
-
-    return rowIndex;
-}
 void rightSwap(Ladder *l, int val)
 {
     
@@ -404,57 +351,11 @@ void rightSwap(Ladder *l, int val)
 
     fixLadder(l);
 
-
-    
-        //case 2: the cell to go to is blocked by clean level bar. If so then shift the bar down until there is
-        //an open cell directly below.
-        //Each time check if there is a bar directly to the right that is part of clean level k and
-        //a bar directly to the left that is part of level k-1.
-        //Each time check that row for a bar to the right that is not
-        //part of the clean level.
-
-        //If there is nothing to the left or right and there is no bar to the right not part of the clean level
-        //then stop
-        //else if there is a bar directly to the left and right then shift the left paths down by 2. then
-        //shift the active bar down one more row
-        //Remember to readjust the ladder for empty rows.
-
-        //End point is the lower
-
-        //Case to the cell to go to is open but there are unopen cells to the left and right.
-        //In this case right bar is in the active region, left bar belongs to k-1 where k is the clean level
-        //shift every bar <= k-1 down by 2
-
-        /*Swap the right parent of the current value with the current value */
-        //swapVals(&(l->ladder[upArr[0]][upArr[1]]), &(l->ladder[currRow][currCol+1]));
-
-        /* int lowerBound = currRow;
-        while (emptyRow(l, lowerBound) == false)
-        {
-            lowerBound++;
-        }
-        lowerBound--;*/
-
-        /*Create and shift reactangle such that it has a width defined by the currentRow + two rows and the row
-        of the last value in the ladder. It's length is the number of collumns in the ladder
-        Shift every value in this rectangle up the ladder by 2 */
-        //shiftRectangle(l, currRow + 2, 0, lowerBound, l->numCols, 2);
-        //printLadder(l);
-
-        /*Create a reactangle such that its width is defined by the current row and the current row+1
-        It's length is defined by starting at the current value's collumn +1 and ends atthe number of collumns in the ladder 
-        Shift everything in this rectangle up by 2 */
-        //shiftRectangle(l, currRow, currCol + 1, currRow + 1, l->numCols, 2);
-
-        //printLadder(l);
-
-
-
-    //l->depth = getDepth(l);
 }
 
 /*Reverse engineers right swap:
-Must be adapted to the case in which rightSwap occurred. This will allow the */
+Copy the clone, which is the same as l before l underwent a right swap, back to the main ladder, l,
+in order to reverse engineer the right swap*/
 void leftSwap(Ladder *l, Ladder *clone)
 {
     l->numBars = clone->numBars;
@@ -549,24 +450,6 @@ int getRightNeighbor(Ladder *l, int n)
     return -1;
 }
 
-int getLeftNeighbor(Ladder *l, int n)
-{
-    int row = getRowIndex(l, n);
-    int col = getColIndex(l, n);
-    if (row <= 0)
-        return -1;
-    if (col <= 0 || col >= l->numCols - 1)
-        return -1;
-
-    row++;
-    col--;
-    for (int i = row; i <= l->depth; i++)
-    {
-        if (l->ladder[i][col] != 0)
-            return l->ladder[i][col];
-    }
-    return -1;
-}
 
 /*Gets the lower neighbor of n. The lower neighbor is defined by any value in the ladder
 != to 0 and in the same collumn as n and with a row index > n's row index and <= the depth of the ladder */
@@ -589,6 +472,11 @@ int getLowerNeighbor(Ladder *l, int n)
     return -1;
 }
 
+/*
+    Returns the left child of val. Left child is defined as the value in the cell
+    in the ladder at val's row+1 and val's col-1.
+    Return -1 if no such value exist
+ */
 int getLeftChild(Ladder *l, int val)
 {
     if (val == 0 || val == -1)
@@ -601,7 +489,11 @@ int getLeftChild(Ladder *l, int val)
     int child = l->ladder[rowIndex][colIndex];
     return child;
 }
-
+/*
+    Returns the right child of val. Right child is defined as the value in the cell
+    in the ladder at val's row+1 and val's col+1.
+    Return -1 if no such value exist
+ */
 int getRightChild(Ladder *l, int val)
 {
     if (val == 0 || val == -1)
@@ -614,136 +506,49 @@ int getRightChild(Ladder *l, int val)
     return child;
 }
 
-int getCleanLevel(Ladder *l)
-{
 
-    /*start at the end of the array and go backwards**/
-    for (int i = 0; i < l->depth; i++)
-    {
-        for (int j = 0; j < l->numCols; j++)
-        {
-            int val = l->ladder[i][j];
-            if (val != 0)
-            {
-                Bar *b1 = getBar(l, val);
-                if (b1 == NULL)
-                    continue;
-                int upperNeighbor = getUpperNeighbor(l, val);
-                Bar *b2 = getBar(l, upperNeighbor);
-                if (b2 == NULL)
-                    continue;
-                if (b2->routeNum < b1->routeNum)
-                {
-                    return b1->routeNum + 1;
-                }
-            }
-        }
-    }
-    return 1;
-}
 
-void readjustLadder(Ladder *l, int start, int end, int offset)
-{
-    for (int i = start; i <= end; i++)
-    {
-        shiftLadderDown(l, i + offset, i);
-        makeRowEmpty(l, i);
-    }
-    l->depth = getDepth(l);
-}
-void shiftLadderDown(Ladder *l, int dest, int source)
-{
-    forall(l->numCols)
-    {
-        l->ladder[dest][x] = l->ladder[source][x];
-    }
-}
-
-void shiftLadderUp(Ladder *l, int start, int end, int offset)
-{
-    for (int i = start; i >= end; i--)
-    {
-        for (int j = 0; j < l->numCols; j++)
-        {
-            l->ladder[i + offset][j] = l->ladder[i][j];
-        }
-        makeRowEmpty(l, i);
-    }
-}
-
+/**
+ * Readjusts the ladder to ensure that each value in the ladder is as high up
+ * the ladder as possible.
+ */
 void fixLadder(Ladder *l)
 {
     int end = l->depth + 10;
+    //Start iterating from row 0
     for (int i = 1; i <= end; i++)
     {
+        //Start iterating inner loop from right to left.
+        //Ensures there is no error in the readjustment.
         for (int j = l->numCols - 1; j >= 0; j--)
         {
             if (l->ladder[i][j] != 0)
             {
                 int val = l->ladder[i][j];
-                if (ladderCount == 15)
-                {
-                    Bar* b = getBar(l, val);
-                    char* s = printBar(b);
-                    print(s);
-                    clear(s);
-                }
 
                 int temp = getRowIndex(l, val) - 1;
 
+                /**When a value is non-0, find how high it can go */
                 while (canBeAddedToRow(l, temp, j))
                 {
                     temp--;
-                }
+                }//end while
                 temp++;
+
                 l->ladder[i][j] = 0;
 
                 l->ladder[temp][j] = val;
-            }
-        }
+            }//end if
+
+        }//end for
        
-    }
+    }//end for
 
+    //recalculate the depth
     l->depth = getDepth(l);
-}
+}//end func
 
-//val is the child to be shifted
-void shiftChildren(Ladder *l, int val, int offset)
-{
-    //if there were no more children
-    if (val == 0 || val == -1)
-        return;
-    if (offset == 0)
-        return;
 
-    //get the row and col index of the child
-    int rowIndex = getRowIndex(l, val);
-    int colIndex = getColIndex(l, val);
-
-    //calculate how many rows the child can be shifted
-
-    //put the child in the right spot in the ladder
-    l->ladder[rowIndex + offset][colIndex] = val;
-    l->ladder[rowIndex][colIndex] = 0;
-
-    if (colIndex < l->numCols - 1)
-    {
-        int rightChild = l->ladder[rowIndex + 1][colIndex + 1];
-        offset = calculateChildOffset(l, rightChild);
-
-        shiftChildren(l, rightChild, offset);
-    }
-    //get the left child of the child and shift it
-    if (colIndex > 0)
-    {
-        int leftChild = l->ladder[rowIndex + 1][colIndex - 1];
-        offset = calculateChildOffset(l, leftChild);
-
-        shiftChildren(l, leftChild, offset);
-    }
-
-    //get the right child of the child and shitf it
-}
 
 /*Only for reversing the ladder in leftSwap */
 void shiftChildrenDown(Ladder *l, int val, int offset)
@@ -788,31 +593,8 @@ Base_Case:
 }
 }
 
-int calculateChildOffset(Ladder *l, int leftChild)
-{
-    if (leftChild == -1 || leftChild == 0)
-        return -1;
 
-    int rowIndex = getRowIndex(l, leftChild);
-    int colIndex = getColIndex(l, leftChild);
 
-    rowIndex--;
-    int offset = 0;
-    while (canBeAddedToRow(l, rowIndex, colIndex))
-    {
-        offset--;
-        rowIndex--;
-    }
-    return offset;
-}
-
-void makeRowEmpty(Ladder *l, int row)
-{
-    forall(l->numCols)
-    {
-        l->ladder[row][x] = 0;
-    }
-}
 void driver(int *perm, int size)
 {
     //create a ladder
@@ -821,21 +603,21 @@ void driver(int *perm, int size)
     //initialize it
     initLadder(l);
 
+    //Generate root.
     createRoot(l, perm, size, 0);
-    printLadder(l);
-    /* if(DEBUG3)
-    {
-        fixLadder(l);
-    }
-    printLadder(l);*/
 
     qsort(perm, size, sizeof(int), compareInts);
+    //Initialzie MAXVAL to be the largest value in the permutation.
+    //This ensures that in findAllChildren, when  the value of the cleanlevel
+    ///parameter is greater than any value in the array, there won't be a route 
+    //to be traversed. And the algorithm will go to case 2
     MAXVAL = perm[size - 1];
 
+    //Call find all children with clean level 1 because l is currently the root.
+    //The only ladder in the set with a clean level of 1.
     findAllChildren(l, 1, 0);
     destroyLadder(l);
 
-    //call find all children with clean level = 1
 }
 
 void findAllChildren(Ladder *l, int cleanLevel, int level)
@@ -843,7 +625,7 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
     if (l == NULL)
         return;
 
-    char *s = ladderToString(l);
+    /* char *s = ladderToString(l);
     //strcpy(ladders[I], s);
     for (int i = 0; i < I; i++)
     {
@@ -857,7 +639,7 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
     strcpy(ladders[I], s);
     clear(s);
 
-    I++;
+    I++;*/
 
     //printf("Clean level %d\n", cleanLevel);
     //printf("\nLADDER NUMBER: %d", ladderCount);
@@ -1031,27 +813,8 @@ bool isRightSwappable(Ladder *l, int val)
 
 } //end func
 
-//Gets the firts turn bar, which is
-//The value that is highest on the ladder with the property of being
-//right swappable. If there is no such value then the root
-//is the only ladder generated by the permutation. The entire ladder is monotone and the algorithm
-//will returns
-int getFirstTurnBar(Ladder *root)
-{
-    for (int i = 0; i < root->depth; i++)
-    {
-        for (int j = 0; j < root->numCols; j++)
-        {
-            if (isRightSwappable(root, root->ladder[i][j]))
-            {
-                return root->ladder[i][j];
-            }
-        }
-    }
-    //if there is no firts turn bar. The root is monotone
-    return -1;
-}
 
+/*Gets the first row and collumn of the route number in the ladder. */
 int getStartOfRoute(Ladder *l, int routeNum, int *arr)
 {
     for (int i = 0; i <= l->depth; i++)
@@ -1062,6 +825,7 @@ int getStartOfRoute(Ladder *l, int routeNum, int *arr)
             if (l->ladder[i][j] != 0)
             {
                 int barVal = l->ladder[i][j];
+                //check the route number the barVal belongs to
                 Bar *b = getBar(l, barVal);
                 if (b->routeNum == routeNum)
                 {
@@ -1075,6 +839,7 @@ int getStartOfRoute(Ladder *l, int routeNum, int *arr)
     return -1;
 }
 
+/*Gets the last row and collumn of routeNum in l. Sets the values to arr */
 int getEndOfRoute(Ladder *l, int routeNum, int *arr)
 {
     for (int i = 0; i <= l->depth; i++)
@@ -1096,6 +861,13 @@ int getEndOfRoute(Ladder *l, int routeNum, int *arr)
     return 0;
 }
 
+/*
+    Checks whether or not val can be the active bar.
+    The active bar is defined as the rightmost bar that 
+    is upward visible from route k. Upward visible means that, given val's collumn, N,
+    in the ladder, val's left endpoint val's right endpoint are the lowest
+    endpoints of any bar in the ladder that exist in collumn N-1, N and N+1 
+ */
 bool canBeActiveBar(Ladder *l, int val, int k)
 {
     //Clone the ladder to not mess up the original ladder
@@ -1155,33 +927,41 @@ bool canBeActiveBar(Ladder *l, int val, int k)
     return false;
 }
 
+
+/* 
+    Checks if val is upwardVisible from route.
+    Upward visible means that, given val's collumn, N,
+    in the ladder, val's left endpoint val's right endpoint are the lowest
+    endpoints of any bar in the ladder that exist in collumn N-1, N and N+1 */
 bool isUpwardVisible(Ladder *l, int val, int route)
 {
     if (val == -1 || val == 0)
         return false;
+
+    /*Get the row and collumn index of val */
     int rowIndex = getRowIndex(l, val);
     int colIndex = getColIndex(l, val);
 
-    int left;
+    /*Get the collumn to the left of val's column. */
+
+    int left = colIndex-1;
+    
+    
     int right;
 
-    if (colIndex != 0)
-    {
-        left = colIndex - 1;
-    }
-    else
-    {
-        left = -1;
-    }
+    /*Get the collumn to the right of colIndex */
     if (colIndex != l->numCols - 1)
     {
         right = colIndex + 1;
     }
+    /*If no such collumn, set to -1 */
     else
     {
         right = -1;
     }
 
+    /*If there is a collumn to the left, check to see if there is a bar below val and above the route
+    in said collumn */
     if (left != -1)
     {
         for (int i = rowIndex; i < l->depth; i++)
@@ -1190,6 +970,8 @@ bool isUpwardVisible(Ladder *l, int val, int route)
             if (leftVal != 0)
             {
                 Bar *b = getBar(l, leftVal);
+                /*If the bar below the rowIndex of val does not belong to the route, 
+                then val cannot be upward visible from the route */
                 if (b->vals[0] != route && b->vals[1] != route)
                     return false;
                 else
@@ -1198,6 +980,8 @@ bool isUpwardVisible(Ladder *l, int val, int route)
         }
     }
 
+    /*If there is a collumn to the right, check to see if there is a bar below val and above
+    the route in said collumn */
     if (right != -1)
     {
         for (int i = rowIndex; i < l->depth; i++)
@@ -1206,6 +990,8 @@ bool isUpwardVisible(Ladder *l, int val, int route)
             if (rightVal != 0)
             {
                 Bar *b = getBar(l, rightVal);
+                /*If the bar below the rowIndex of val does not belong to the route, 
+                then val cannot be upward visible from the route */
                 if (b->vals[0] != route && b->vals[1] != route)
                     return false;
                 else
@@ -1214,18 +1000,22 @@ bool isUpwardVisible(Ladder *l, int val, int route)
         }
     }
 
+    /*Get the downward neighbor of val. That is the bar below val in the same collumn as val */
     int downNeighbor = getLowerNeighbor(l, val);
+    /*If there is no such neighbor return false */
     if (downNeighbor == 0 || downNeighbor == -1)
     {
         return false;
     }
     Bar *b = getBar(l, downNeighbor);
 
+    /*If the neighbor is not part of the route then return false */
     if (b->vals[0] != route && b->vals[1] != route)
         return false;
 
     return true;
 }
+
 
 bool emptyCell(Ladder *l, int row, int col)
 {
@@ -1245,6 +1035,9 @@ bool emptyRow(Ladder *l, int row)
     return true;
 }
 
+/*Gets the heigh of the ladder. Should be called get height, but
+too lazy to change name. Just remember the variable depth in the ladder is
+really its height */
 int getDepth(Ladder *l)
 {
     for (int i = MAXROWS - 1; i >= 0; i--)
@@ -1255,30 +1048,54 @@ int getDepth(Ladder *l)
     return MAXROWS;
 }
 
+/*
+Checks if a value can be added at l->[row][col].
+
+A value can be added to l->[row][col] iff
+
+
+Case 1: col = 0 then a value can be added iff
+l->[row][col] = 0 and l->[row][col+1] = 0
+
+Case 2: col = l->numCols-1 then a value can be added iff
+l->[row][col-1] = 0 and l->[row][col] = 0
+
+Case 3: col > 0 and < l-numCols-1 then a value can be added iff
+l->[row][col-1] = 0 and l->[row][col] = 0 and l->[row][col+1] = 0
+ */
 bool canBeAddedToRow(Ladder *l, int row, int col)
 {
     if (row < 0 || col < 0)
         return false;
+    
+    
     int leftCol;
     int rightCol;
+
+    /*Then set the leftCol to 0. Avoid writing more code this way */
     if (col == 0)
     {
         leftCol = 0;
     }
+    /*Else set it to col-1 */
     else
     {
         leftCol = col - 1;
     }
 
+    /*If the col is as far right as possible, then set the right to col in order
+    to avoid writing more code */
     if (col == l->numCols - 1)
     {
         rightCol = col;
     }
+    /*Else set it to col +1 */
     else
     {
         rightCol = col + 1;
     }
 
+    /*If all three are empty then return true. Keep in mind that left or right could be = to col */
     if ((emptyCell(l, row, leftCol)) && (emptyCell(l, row, col)) && (emptyCell(l, row, rightCol)))
     {
         return true;

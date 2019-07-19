@@ -72,11 +72,6 @@ void destroyClone(void * clone);
  */
 int getLargestIndex(int* perm, int size);
 
-/**
- * Gets the row >= 0 such that the row is the min 
- * of all empty rows in the ladder.
- */
-int getFirstAvailableRow(Ladder* l, int currRow, int col);
 
 /*
     Returns a bar associated with the value 'n' in the ladder of
@@ -112,18 +107,8 @@ void setBar(Bar* bar, int barNum, int routeNum, int valTwo);
 void rightSwap(Ladder* l, int val);
 
 /*For fixing empty rows */
-void readjustLadder(Ladder* l, int start, int end, int offset);
-void shiftLadderDown(Ladder* l, int start, int end);
-void shiftLadderUp(Ladder* l, int start, int end, int offset);
 void fixLadder(Ladder * l);
 
-
-
-/*For shifting the children of val in rightSwap
-This function shifts the children up the ladder. I.e. given
-child, ch, if ch's row is 'x' in state 1, then ch's row will be
-x-n after shiftChildren is applied. */
-void shiftChildren(Ladder* l, int val, int offset);
 
 /*
     For shifting the children of val in rightSwap.
@@ -133,25 +118,17 @@ void shiftChildren(Ladder* l, int val, int offset);
  */
 void shiftChildrenDown(Ladder* l, int val, int offset);
 
-/**
- * Calculates the offset, or the amount of rows, the child is allowed
- * to shift.
- */
-int calculateChildOffset(Ladder* l, int leftChild);
 
-void makeRowEmpty(Ladder* l, int row);
 
-int getRowToGo(Ladder* l, int val);
+
 
 
 /*These two functions are for right swapping */
 int getUpperNeighbor(Ladder* l, int n);
 int getRightNeighbor(Ladder* l, int n);
-int getLeftNeighbor(Ladder* l, int n);
 
 /*These two functions are for left swapping - reverse engineering */
 int getLowerNeighbor(Ladder* l, int n);
-int getLeftNeighbor(Ladder* l, int n);
 
 /*These functions return the left and right child of val.
 They are required for readjusting the ladder when a right swap
@@ -162,23 +139,9 @@ int getRightChild(Ladder* l, int val);
 int getRowIndex(Ladder* l, int n);
 int getColIndex(Ladder* l, int n);
 
-/*Get the clean level of the ladder.
-Clean level is defined as the route in the ladder such 
-that there is no bar above said route that belongs to a route of lesser value.
-For example, if the clean level is 3, then every bar above route 3 will be part of route 4, 5, 6, ...
-and every bar below route 3 will be part of route 2,1,0,-1.... However, because 3 is the clean level, the
-value before 3 will not be clean. I.e. 2 is the "dirty" level. This means that route 2 has a bar above it belonging
-to route 1 and/or 0 and/or -1.... */
-int getCleanLevel(Ladder* l);
 
-/**
- * A turnbar is defined as a value, turn-value, in the root->ladder such that 
- * the value has exactly two neighbors. One neighbor exists in the same collum as turn-value
- * and is "above" turn-value. I.e. neighbor-1 has a row index < turn-value's row index.
- * The other neighbor is in turn value's collumn +1 and has a row index < turn value's row index
- * but greater than neighbor 1's row index.
- */
-int getFirstTurnBar(Ladder* root);
+
+
 
 int getStartOfRoute(Ladder* l, int route, int* arr);
 
@@ -190,8 +153,7 @@ int getDepth(Ladder* l);
 
 void leftSwap(Ladder* l, Ladder* clone);
 
-//Finds a row to go to based on the current start row and start col
-void findRowToGo(Ladder* l, int startRow, int startCol);
+
 //left swap
     //find row to go
 
