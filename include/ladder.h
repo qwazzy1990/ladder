@@ -17,6 +17,7 @@ typedef struct bar
     //it's values = the inversion it uninverts: route number plus some other value < routeNum
     int vals[2];
 
+    int numSwaps;
     //if the bar is set in the ladde. Default ladder is a dummy ladder
     bool set;
 } Bar;
@@ -199,4 +200,21 @@ void driver(int* perm, int size);
 
 
 /*Main algorithm: Get all children */
+
+
+
+/**The following functions pertain to answering the following reasearch questions
+ * Q1: Given a permutation, can you determine the number of ladders in its set of efficient ladder lotteries.
+ * Hypothesis: The number of ladders in the set is equal to the number of degenerative subsequences of size 3. 
+ * A degenerative subequence of size 3 is defined as follows. Assume N is the largest value, N-X is the second largest 
+ * value and N-Y is the third largest/smallest value in the degenerative subsequence. Assume X < Y. Then a degenerative subsequence means that N is to
+ * the left of N-X which is to the left of N-Y in the permutation.
+ */
+
+int countDegenerativeSubsequences(int * perm, int size);
+
+
+/*Displays the number of times each bar was swapped. */
+
+void displaySwapCount(Ladder * l);
 #endif

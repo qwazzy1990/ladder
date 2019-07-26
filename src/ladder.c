@@ -89,6 +89,7 @@ Bar *newBar(void)
 {
     new_object(Bar *, b, 1);
     b->set = true;
+    b->numSwaps = 0;
     return b;
 }
 
@@ -166,7 +167,15 @@ void createRoot(Ladder *l, int *perm, int size, int currRow)
     if (size == 1)
     {
         /*Fix the ladder by shifting every value as high as it can go */
-        //printf("l->depth is %d\n", l->depth);
+        if (l->numBars == 0)
+        {
+            forall(l->numCols)
+            {
+                printf("[0 0] ");
+            }
+            printf("\n");
+            return;
+        }
         l->depth = getDepth(l);
         fixLadder(l);
         l->cleanLevel = 1;
@@ -226,7 +235,6 @@ int getLargestIndex(int *perm, int size)
     return largestIndex;
 }
 
-
 Bar *getBar(Ladder *l, int n)
 {
     forall(l->numBars)
@@ -241,7 +249,7 @@ Bar *getBar(Ladder *l, int n)
 }
 
 /*Printers */
-/* char *printBar(Bar *b)
+char *printBar(Bar *b)
 {
     if (b == NULL)
         return NULL;
@@ -254,16 +262,18 @@ Bar *getBar(Ladder *l, int n)
     strcat(s, "Values:");
     strcat(s, temp);
     strcat(s, " ");
-    sprintf(temp, "%d", b->vals[1]);
+    sprintf(temp, "%d\n", b->vals[1]);
+    strcat(s, temp);
+    sprintf(temp, "%d", b->numSwaps);
+    strcat(s, "Number of times the bar was swapped:");
     strcat(s, temp);
     strcat(s, "\n");
     return s;
-}*/
+}
 
 void printLadder(Ladder *l)
 {
-    //printf("\nDEPTH: %d\n", l->depth + 1);
-    for (int i = 0; i <=l->depth+1; i++)
+    for (int i = 0; i <= l->depth + 1; i++)
     {
         for (int j = 0; j < l->numCols; j++)
         {
@@ -322,7 +332,7 @@ void setBar(Bar *bar, int barNum, int routeNum, int valTwo)
  */
 void rightSwap(Ladder *l, int val)
 {
-    
+
     int upperNeighbor = getUpperNeighbor(l, val);
 
     //Get the rightNeighbor
@@ -344,12 +354,10 @@ void rightSwap(Ladder *l, int val)
 
     shiftChildrenDown(l, getRightChild(l, rightNeighbor), 2);
 
-    swapVals(&(l->ladder[upArr[0]][upArr[1]]), &(l->ladder[currArr[0]+1][currArr[1]+1]));
+    swapVals(&(l->ladder[upArr[0]][upArr[1]]), &(l->ladder[currArr[0] + 1][currArr[1] + 1]));
     swapVals(&(l->ladder[currArr[0]][currArr[1]]), &(l->ladder[rightArr[0]][rightArr[1]]));
 
-
     fixLadder(l);
-
 }
 
 /*Reverse engineers right swap:
@@ -504,8 +512,6 @@ int getRightChild(Ladder *l, int val)
     return child;
 }
 
-
-
 /**
  * Readjusts the ladder to ensure that each value in the ladder is as high up
  * the ladder as possible.
@@ -530,23 +536,21 @@ void fixLadder(Ladder *l)
                 while (canBeAddedToRow(l, temp, j))
                 {
                     temp--;
-                }//end while
+                } //end while
                 temp++;
 
                 l->ladder[i][j] = 0;
 
                 l->ladder[temp][j] = val;
-            }//end if
+            } //end if
 
-        }//end for
-       
-    }//end for
+        } //end for
+
+    } //end for
 
     //recalculate the depth
     l->depth = getDepth(l);
-}//end func
-
-
+} //end func
 
 /*Only for reversing the ladder in leftSwap */
 void shiftChildrenDown(Ladder *l, int val, int offset)
@@ -591,10 +595,13 @@ Base_Case:
 }
 }
 
-
-
 void driver(int *perm, int size)
 {
+    if (size <= 0)
+    {
+        printf("Enter a permutation\n");
+        return;
+    }
     //create a ladder
     Ladder *l = newLadder(size);
 
@@ -603,44 +610,35 @@ void driver(int *perm, int size)
 
     //Generate root.
     createRoot(l, perm, size, 0);
-
-    qsort(perm, size, sizeof(int), compareInts);
+    int *arr = calloc(size, sizeof(int));
+    forall(size)
+    {
+        arr[x] = perm[x];
+    }
+    qsort(arr, size, sizeof(int), compareInts);
     //Initialzie MAXVAL to be the largest value in the permutation.
     //This ensures that in findAllChildren, when  the value of the cleanlevel
-    ///parameter is greater than any value in the array, there won't be a route 
+    ///parameter is greater than any value in the array, there won't be a route
     //to be traversed. And the algorithm will go to case 2
-    MAXVAL = perm[size - 1];
+    MAXVAL = arr[size - 1];
+    free(arr);
 
     //Call find all children with clean level 1 because l is currently the root.
     //The only ladder in the set with a clean level of 1.
     findAllChildren(l, 1, 0);
-    destroyLadder(l);
+    printf("The number of degenerative subsequences is %d\n", countDegenerativeSubsequences(perm, size));
+    displaySwapCount(l);
 
+    destroyLadder(l);
 }
 
 void findAllChildren(Ladder *l, int cleanLevel, int level)
 {
     if (l == NULL)
         return;
+    if (l->numBars == 0)
+        return;
 
-    /* char *s = ladderToString(l);
-    //strcpy(ladders[I], s);
-    for (int i = 0; i < I; i++)
-    {
-        if (strcmp(ladders[i], s) == 0)
-        {
-            clear(s);
-            printf("Double Ladder\n");
-            return;
-        }
-    }
-    strcpy(ladders[I], s);
-    clear(s);
-
-    I++;*/
-
-    //printf("Clean level %d\n", cleanLevel);
-    //printf("\nLADDER NUMBER: %d", ladderCount);
     printf(RED "Clean Level:%d\n" COLOR_RESET, cleanLevel);
     printf(YELLOW "Level %d\n" COLOR_RESET, level);
 
@@ -651,13 +649,20 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
     Ladder *clone = cloneLadder(l);
 
     int y = MAXVAL;
+
+    /*While each route ,y, >= to the clean level, find a bar that can be right swappable */
     while (y >= cleanLevel)
     {
+        /*Get the start and end of route y*/
         int start[2] = {-1, -1};
         int end[2] = {-1, -1};
         getStartOfRoute(l, y, start);
         getEndOfRoute(l, y, end);
+
+        /*If the route exists then */
         if (start[0] != -1)
+
+            /*Begin at the start of the route and go to the end */
             for (int i = start[0]; i <= end[0]; i++)
             {
                 for (int j = start[1]; j <= end[1]; j++)
@@ -665,31 +670,52 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
                     int val = l->ladder[i][j];
                     if (val == 0)
                         continue;
+
+                    /*Get the bar and check f it's route number is equal to y*/
                     Bar *b = getBar(l, val);
                     if (b->routeNum == y)
                     {
+                        /*Get the lower neighbor of the value. Check if it can be righ swapped */
                         int lowerNeighbor = getLowerNeighbor(l, val);
+
                         if (isRightSwappable(l, lowerNeighbor))
                         {
-                            //FIX ME
+                            /*for debugging */
+                            Bar *bb = getBar(l, lowerNeighbor);
+                            bb->numSwaps++;
+                            char *s = printBar(bb);
+                            print(s);
+                            clear(s);
+                            /*Swap the bar*/
                             rightSwap(l, lowerNeighbor);
+                            /*Recursive call with clean level = to b->routeNum+1*/
                             findAllChildren(l, b->routeNum + 1, level + 1);
+                            /*Reset to previous state, before right swap */
                             leftSwap(l, clone);
-                            //destroyClone(clone);
-                        }
-                    }
-                }
-            }
+                        }//end if
+                    }//end if
+                }//end for
+            }//end for
+        
         y--;
-    }
+    }//End while
 
+    //For when there is no such route >= the clean level in the ladder.
+    //Only occurs when the parameter, cleanLevel, = MAX val of permutation + 1.
+    //The cleanLevel of the permutation will never be > MAX val +1
+    //Get the start and end of the route = to the MAX val of the cleanLevel
     int start[2] = {-1, -1};
     int end[2] = {-1, -1};
     getStartOfRoute(l, cleanLevel - 1, start);
     getEndOfRoute(l, cleanLevel - 1, end);
     if (start[0] != -1)
+        //If there is no such route, y, >= to the clean level then for
+        //i = start of route of cleanLevel-1 to end of route of cleanLevel -1 do
+        //same thing as previous double for loops
+        //for
         for (int i = start[0]; i <= end[0]; i++)
         {
+            //for
             for (int j = start[1]; j <= end[1]; j++)
             {
                 int val = l->ladder[i][j];
@@ -699,13 +725,18 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
                 if (b->routeNum == y)
                 {
                     int lowerNeighbor = getLowerNeighbor(l, val);
+
+                    //The lowerNeighbor has to be rightSwappable and be an active bar.
                     if (isRightSwappable(l, lowerNeighbor) && canBeActiveBar(l, lowerNeighbor, y))
                     {
-                        //FIX ME
+                        Bar *bb = getBar(l, lowerNeighbor);
+                        bb->numSwaps++;
+                        char *s = printBar(bb);
+                        print(s);
+                        clear(s);
                         rightSwap(l, lowerNeighbor);
                         findAllChildren(l, cleanLevel, level + 1);
                         leftSwap(l, clone);
-                        //destroyClone(clone);
                     }
                 }
             }
@@ -810,7 +841,6 @@ bool isRightSwappable(Ladder *l, int val)
     return true;
 
 } //end func
-
 
 /*Gets the first row and collumn of the route number in the ladder. */
 int getStartOfRoute(Ladder *l, int routeNum, int *arr)
@@ -925,7 +955,6 @@ bool canBeActiveBar(Ladder *l, int val, int k)
     return false;
 }
 
-
 /* 
     Checks if val is upwardVisible from route.
     Upward visible means that, given val's collumn, N,
@@ -942,9 +971,8 @@ bool isUpwardVisible(Ladder *l, int val, int route)
 
     /*Get the collumn to the left of val's column. */
 
-    int left = colIndex-1;
-    
-    
+    int left = colIndex - 1;
+
     int right;
 
     /*Get the collumn to the right of colIndex */
@@ -1014,7 +1042,6 @@ bool isUpwardVisible(Ladder *l, int val, int route)
     return true;
 }
 
-
 bool emptyCell(Ladder *l, int row, int col)
 {
     if (l->ladder[row][col] == 0)
@@ -1065,8 +1092,7 @@ bool canBeAddedToRow(Ladder *l, int row, int col)
 {
     if (row < 0 || col < 0)
         return false;
-    
-    
+
     int leftCol;
     int rightCol;
 
@@ -1099,4 +1125,40 @@ bool canBeAddedToRow(Ladder *l, int row, int col)
         return true;
     }
     return false;
+}
+
+/**The following functions pertain to answering the following reasearch questions
+ * Q1: Given a permutation, can you determine the number of ladders in its set of efficient ladder lotteries.
+ * Hypothesis: The number of ladders in the set is equal to one more than the number of degenerative subsequences of size 3. 
+ * A degenerative subequence of size 3 is defined as follows. Assume N is the largest value, N-X is the second largest 
+ * value and N-Y is the third largest/smallest value in the degenerative subsequence. Assume X < Y. Then a degenerative subsequence means that N is to
+ * the left of N-X which is to the left of N-Y in the permutation. If there are 2 degenerative subsequences then there are
+ * three ladders in the set
+ */
+
+int countDegenerativeSubsequences(int *perm, int size)
+{
+    int count = 0;
+    for (int i = 0; i < size - 2; i++)
+    {
+        for (int j = i + 1; j < size - 1; j++)
+        {
+            for (int k = j + 1; k < size; k++)
+            {
+                if (perm[i] > perm[j] && perm[j] > perm[k])
+                    count++;
+            }
+        }
+    }
+    return count;
+}
+
+void displaySwapCount(Ladder *l)
+{
+    forall(l->numBars)
+    {
+        char *s = printBar(l->bars[x]);
+        print(s);
+        clear(s);
+    }
 }

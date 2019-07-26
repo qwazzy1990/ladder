@@ -1,0 +1,7 @@
+Q1: What is the upper limit for the number of heights for a given permutation and it's root ladder?
+Q2: What is the gray code for generating ladder lotteries for the permutation of a sequence of {1, 2, ...,n}
+Q3: How many ladder lotteries are there for a given number of inversions? If two permutations have the same number
+of inversions do they have the same number of ladder lotteries? 
+
+
+SVG for the graphics.
