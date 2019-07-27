@@ -10,8 +10,6 @@
 
 int MAXVAL;
 int ladderCount = 1;
-int I = 0;
-char ladders[10000][10000];
 
 bool DEBUG3 = true;
 
@@ -640,9 +638,10 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
         return;
 
     printf(RED "Clean Level:%d\n" COLOR_RESET, cleanLevel);
-    printf(YELLOW "Level %d\n" COLOR_RESET, level);
+    printf(YELLOW "Depth:%d\n" COLOR_RESET, level);
 
     printf(CYAN "Ladder Number:%d\n" COLOR_RESET, ladderCount);
+    printf(MAGENTA "Height:%d\n" COLOR_RESET, l->depth+1);
     ladderCount++;
     printLadder(l);
 

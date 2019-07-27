@@ -5,3 +5,20 @@ of inversions do they have the same number of ladder lotteries?
 
 
 SVG for the graphics.
+
+
+The number of ladders for a given permutation is equal to the number of times each bar is swapped + 1.
+A bar is swapped iff a bar is the bottom bar of a degenerative triadic sub-pattern. The number of times the 
+bar is swapped is still unknown. A bar is part of at least 1 degenerative triadic sub-pattern if said bar represents
+an inversion which is part of a degenerative triadic subsequence in the original permutation. 
+A degenerative triadic subsequence is defined as follows. Given exactly three values, a , b and c, in a permutation of 
+size N, such that a > b > c, value a is to the left of value b in the permutation, 
+and value b is to the left of value c in the permutation.
+
+
+The number of heights, given a number of inversions, for a given ladder, is determined by the position of the bars.
+The bars are determined by the inversions. If there is only 1 inversion then there is only 1 height created with
+exactly 1 inversion created by exactly 2 elements. If the number of inversions is equal to 2, then the number of
+elements responsible for these inversions is either 3 or 4. If the number is 3, then the number of heights required
+is 2 since the bars have to be adjascent to each other in the ladder. If the number is 4, then only 2 
+heights are reuired because the bars cannot be adjascent to each other. 

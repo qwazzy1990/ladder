@@ -18,6 +18,8 @@ typedef struct bar
     int vals[2];
 
     int numSwaps;
+
+    
     //if the bar is set in the ladde. Default ladder is a dummy ladder
     bool set;
 } Bar;
