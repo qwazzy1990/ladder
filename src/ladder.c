@@ -88,6 +88,11 @@ Bar *newBar(void)
     new_object(Bar *, b, 1);
     b->set = true;
     b->numSwaps = 0;
+    forall(10)
+    {
+        b->routesCrossed[x] = -1;
+        b->numberOfTimesCrossed[x] = 0;
+    }
     return b;
 }
 
@@ -266,6 +271,18 @@ char *printBar(Bar *b)
     strcat(s, "Number of times the bar was swapped:");
     strcat(s, temp);
     strcat(s, "\n");
+    strcat(s, "Routes Crossed:\n");
+    int x = 0;
+    while (b->routesCrossed[x] != -1)
+    {
+        sprintf(temp, "%d ", b->routesCrossed[x]);
+        strcat(s, temp);
+        sprintf(temp, "%d", b->numberOfTimesCrossed[x]);
+        strcat(s, "Crossed ");
+        strcat(s, temp);
+        strcat(s, " times\n");
+        x++;
+    }
     return s;
 }
 
@@ -315,6 +332,42 @@ void setBar(Bar *bar, int barNum, int routeNum, int valTwo)
     bar->routeNum = routeNum;
     bar->vals[0] = routeNum;
     bar->vals[1] = valTwo;
+}
+
+void setRoutesCrossed(Ladder *l, int *perm, int size)
+{
+    for (int i = 0; i < l->numRows; i++)
+        for (int j = 0; j < l->numCols; j++)
+        {
+            if (l->ladder[i][j] != 0)
+            {
+                Bar *b = getBar(l, l->ladder[i][j]);
+                int count = 0;
+                for (int k = size-1; k >= 0; k--)
+                {
+                    if (perm[k] > b->routeNum)
+                    {
+                        b->routesCrossed[count] = perm[k];
+                        count++;
+                    }
+                }
+                char *s = printBar(b);
+                print(s);
+                clear(s);
+            }
+        }
+}
+
+void setTimesCrossed(Bar *b, int levelCrossed)
+{
+    int x = 0;
+    while (b->routesCrossed[x] != -1)
+    {
+        if (b->routesCrossed[x] == levelCrossed)
+            b->numberOfTimesCrossed[x]++;
+
+        x++;
+    }
 }
 
 /**
@@ -605,7 +658,7 @@ void driver(int *perm, int size)
 
     //initialize it
     initLadder(l);
-
+    
     //Generate root.
     createRoot(l, perm, size, 0);
     int *arr = calloc(size, sizeof(int));
@@ -613,7 +666,10 @@ void driver(int *perm, int size)
     {
         arr[x] = perm[x];
     }
+    
     qsort(arr, size, sizeof(int), compareInts);
+    
+    setRoutesCrossed(l, arr, size);
     //Initialzie MAXVAL to be the largest value in the permutation.
     //This ensures that in findAllChildren, when  the value of the cleanlevel
     ///parameter is greater than any value in the array, there won't be a route
@@ -641,7 +697,7 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
     printf(YELLOW "Depth:%d\n" COLOR_RESET, level);
 
     printf(CYAN "Ladder Number:%d\n" COLOR_RESET, ladderCount);
-    printf(MAGENTA "Height:%d\n" COLOR_RESET, l->depth+1);
+    printf(MAGENTA "Height:%d\n" COLOR_RESET, l->depth + 1);
     ladderCount++;
     printLadder(l);
 
@@ -682,22 +738,20 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
                             /*for debugging */
                             Bar *bb = getBar(l, lowerNeighbor);
                             bb->numSwaps++;
-                            char *s = printBar(bb);
-                            print(s);
-                            clear(s);
+                            setTimesCrossed(bb, y);
                             /*Swap the bar*/
                             rightSwap(l, lowerNeighbor);
                             /*Recursive call with clean level = to b->routeNum+1*/
                             findAllChildren(l, b->routeNum + 1, level + 1);
                             /*Reset to previous state, before right swap */
                             leftSwap(l, clone);
-                        }//end if
-                    }//end if
-                }//end for
-            }//end for
-        
+                        } //end if
+                    }     //end if
+                }         //end for
+            }             //end for
+
         y--;
-    }//End while
+    } //End while
 
     //For when there is no such route >= the clean level in the ladder.
     //Only occurs when the parameter, cleanLevel, = MAX val of permutation + 1.
@@ -730,9 +784,8 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
                     {
                         Bar *bb = getBar(l, lowerNeighbor);
                         bb->numSwaps++;
-                        char *s = printBar(bb);
-                        print(s);
-                        clear(s);
+                        setTimesCrossed(bb, y);
+
                         rightSwap(l, lowerNeighbor);
                         findAllChildren(l, cleanLevel, level + 1);
                         leftSwap(l, clone);

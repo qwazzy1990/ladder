@@ -22,3 +22,137 @@ exactly 1 inversion created by exactly 2 elements. If the number of inversions i
 elements responsible for these inversions is either 3 or 4. If the number is 3, then the number of heights required
 is 2 since the bars have to be adjascent to each other in the ladder. If the number is 4, then only 2 
 heights are reuired because the bars cannot be adjascent to each other. 
+
+
+
+
+
+Key Point: The number of times a bar crosses a given route N is the same for every permutation of the degenerative case.
+For example, given 4 degenerative permutations, 7654321, 654321, 54321, 4321, the bar [2 1] crosses the route 3 once, regardless 
+of the permutation.
+
+
+Given permutation 7654321
+Number of ladders 24698
+Details of each bar: 
+
+
+[6 5]: Crossed route 7 1628 times
+[6 4]: Crossed route 7 1567 times 
+[6 3]: Crossed route 7 1554 times 
+[6 2]: Crossed route 7 1567 times 
+[6 1]: Crossed route 7 1628 times 
+
+[5 4]: Crossed route 7 1558 times
+       Crossed route 6 85 times.
+       Total number of times swapped 1643 
+
+[5 3]: Crossed route 7 1625
+        Crossed route 6 84 times
+        Total number of times swapped 1709
+
+[5 2]: Crossed route 7 1634 times
+        Crossed route 6 84 times
+        Total number of times swapped 1718
+
+[5 1]: Crossed route 7 1567
+        Crossed route 6 85 times 
+        Total number of times swapped 1652
+
+[4 3]: Crossed 7 1530
+        Crossed 6 84
+        Crossed 5 9
+        Total number of times swapped 1623
+
+[4 2]: Crossed 7 1625
+       Crossed 6 87
+       Crossed 5 9
+       Total number of times swapped 1721
+
+[4 1]: Crossed 7 1554
+        Crossed 6: 84
+        Crossed 5: 9
+        Total: 1647
+
+[3 2]: Crossed 7 - 1558
+        Crossed 6 - 84
+        Crossed 5 - 9
+        Crossed 4 - 2
+        Total - 1653
+
+[3 1]   Crossed 7 - 1567
+        Crossed 6 - 84
+        Crossed 5 - 9
+        Crossed 4 - 2
+        Total - 1662
+
+[2 1]:  Crossed 7 - 1628
+        Crossed 6 - 85
+        Crossed 5 - 9
+        Crossed 4 - 2
+        Crossed 3 - 1
+
+
+
+
+
+Given permutation 654321
+Number of ladders 908
+Details of each bar: 
+
+
+[5 4]: 
+       Crossed route 6 85 times.
+       Total number of times swapped 85 
+
+[5 3]: 
+        Crossed route 6 84 times
+        Total number of times swapped 84
+
+[5 2]: 
+        Crossed route 6 84 times
+        Total number of times swapped 84
+
+[5 1]: 
+        Crossed route 6 85 times 
+        Total number of times swapped 85
+
+[4 3]: 
+        Crossed 6 84
+        Crossed 5 9
+        Total number of times swapped 93
+
+[4 2]: 
+       Crossed 6 87
+       Crossed 5 9
+       Total number of times swapped 96
+
+[4 1]: 
+        Crossed 6: 84
+        Crossed 5: 9
+        Total: 93
+
+[3 2]: 
+        Crossed 6 - 84
+        Crossed 5 - 9
+        Crossed 4 - 2
+        Total - 95
+
+[3 1]   
+        Crossed 6 - 84
+        Crossed 5 - 9
+        Crossed 4 - 2
+        Total - 95
+
+[2 1]:  
+        Crossed 6 - 85
+        Crossed 5 - 9
+        Crossed 4 - 2
+        Crossed 3 - 1
+        Total 97
+
+Given 54321
+Number of ladders 54321
+Details of each bar
+
+[4 3]

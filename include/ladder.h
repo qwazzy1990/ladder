@@ -22,6 +22,12 @@ typedef struct bar
     
     //if the bar is set in the ladde. Default ladder is a dummy ladder
     bool set;
+
+    // the route numbers the bars can cross
+    int routesCrossed[10];
+
+    //The number of times the bar crosses that route
+    int numberOfTimesCrossed[10];
 } Bar;
 
 typedef struct ladder
@@ -100,6 +106,10 @@ char* ladderToString(void* l);
 //Sets a bar in the ladder with rowNum, colNum, routeNum, and valTwo. 
 //bar->vals[0] = routeNum. Therefore valOne is not needed as a param
 void setBar(Bar* bar, int barNum, int routeNum, int valTwo);
+
+void setRoutesCrossed(Ladder* l, int* perm, int size);
+
+void setTimesCrossed(Bar* b, int levelCrossed);
 
 //right swap
 //Swaps a bar at currRow, currCol to row col
