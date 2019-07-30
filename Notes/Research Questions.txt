@@ -33,7 +33,7 @@ of the permutation.
 
 
 Given permutation 7654321
-Number of ladders 24698
+Number of ladders 24,698
 Details of each bar: 
 
 
@@ -153,6 +153,88 @@ Details of each bar:
 
 Given 54321
 Number of ladders 54321
+Total number of ladders = 62
 Details of each bar
 
-[4 3]
+[4 3] Route 5 - 9
+
+[4 2] Route 5 - 9
+
+[4 1] Route 5 - 9
+
+[3 2] Route 4 - 2
+      Route 5 - 9
+      Total 11
+
+[3 1] Route 4 - 2
+        Route 5 - 9
+        Total 11
+
+[2 1]Route 3 - 1
+        Route 4 - 2
+        Route 5 - 9
+
+
+
+Given 4321
+Total 8 
+
+[3 2] - Route 4 - 2
+
+[3 1] Route 4 - 2
+
+[2 1] Route 3 - 1
+        Route 4 - 2
+
+
+With the degenerative case, 2 bars share the same height in  the root ladder iff the sum of the values that create the bar sum 
+to the same value. I.E. given permutation 54321 
+[5 2] and [4 3]  share the same height, 
+[4 2] and [5 1] share the same hieght and
+[3 2] and [4 1] share the same height.
+
+In the degenerative case,  the degenerative traidic subpatterns in the root
+ladder are defined as follows. Given 3 elements of the permutation the combination
+of the 3 choose 2 elements from the 3 elements must sum to N, N-1, N-2 where N is the top bar of the degenerative
+triadic pattern, N-1 is the right bar of the degenerative triadic pattern and N-2 is the 
+bottom bar (bar to be swapped) in the degenerative triadic pattern.
+
+
+
+Given 4321 and 54321 it must be noted that the ladders in 4321 are all ancestors of ladders in 54321. 
+They are ancestors of ladders in 54321 because they are basically the ancestor of every possible way
+of each bar crossing route 5 in 54321 given their state in 4321. Basically ladder 1 in 4321 is a sub-ladder
+of ladder 9 in 54321. Ladder 9 is ladder 1 plus all the possible ways that every bar can cross route 5 given
+the permutation 54321 and the state of ladder 9 in 54321 which is defined as the state of ladder 1 in 4321.
+
+The question then is, given that you know the state of the sub ladder, SL, of ladder L where the
+sub-ladder is generated from  permutation 4321 and the ladder, L, is generated from 54321, can you then
+determine how many ways to cross route 5 in ladder L. 
+
+L1 of 4321 = L9 of 54321
+L2 of 4321 = L16 54321
+L3 of 4321 = L25 of 54321
+L4 of 4321 = L32 of 54321
+L5 of 4321 = L39 of 54321
+L6 of 4321 = L48 of 54321
+L7 of 4321 = L55 of 54321
+
+
+
+
+Given permutation 43521 - total = 11 - 10 Swaps + root
+
+[4 3] - 0 Not a bottom bar of a degenerative triadic subsequence
+[4 2] - 0 Not a bottom bar of a degenerative triadic subsequence
+[4 1] - 0 Not a bottom bar of a degenerative triadic subsequence
+
+[3 2] - crosses 4 only: crosses route 4 two times. Once when [2 1] is below R3 and once when [2 1] is above R 4
+[3 1] crosses 4 only: corsses 4 two times.
+
+[2 1] - Crosses 5 three times. Once when neither [3 2] nor [3 1] has crossed R4, once when both [3 2] and [3 1]
+        have crossed R4 and once when only [3 2] has crossed R4.
+        - Crosses 4 two times. Once when [3 2] and [3 1] have both crossed R 4 and once when neither [3 2] nor [3 1]
+        has crossed R 4.
+        -Crosses R 3 one time.
+
+
