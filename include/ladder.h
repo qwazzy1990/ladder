@@ -28,6 +28,9 @@ typedef struct bar
 
     //The number of times the bar crosses that route
     int numberOfTimesCrossed[10];
+
+    //currentlySwapped
+    bool isSwapped;
 } Bar;
 
 typedef struct ladder
@@ -92,12 +95,7 @@ Bar* getBar(Ladder* l, int n);
 char* printBar(Bar* b);
 void printLadder(Ladder* l);
 
-/*
-    Used for hashing a string representation 
-    of a ladder to check if said ladder has been
-    generated already or not.
- */
-char* ladderToString(void* l);
+
 //delete
 
 //find turn bar
@@ -229,4 +227,6 @@ int countDegenerativeSubsequences(int * perm, int size);
 /*Displays the number of times each bar was swapped. */
 
 void displaySwapCount(Ladder * l);
+
+
 #endif

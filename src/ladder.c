@@ -307,22 +307,7 @@ void printLadder(Ladder *l)
     printf("\n");
 }
 
-char *ladderToString(void *l)
-{
-    Ladder *ll = (Ladder *)l;
-    char *s = calloc(100000, sizeof(char));
-    int x = 0;
-    for (int i = 0; i < ll->numRows; i++)
-    {
-        for (int j = 0; j < ll->numCols; j++)
-        {
-            char c = (char)ll->ladder[i][j] + 30;
-            s[x] = c;
-            x++;
-        }
-    }
-    return s;
-}
+
 
 /*Setters */
 void setBar(Bar *bar, int barNum, int routeNum, int valTwo)
@@ -343,7 +328,7 @@ void setRoutesCrossed(Ladder *l, int *perm, int size)
             {
                 Bar *b = getBar(l, l->ladder[i][j]);
                 int count = 0;
-                for (int k = size-1; k >= 0; k--)
+                for (int k = size - 1; k >= 0; k--)
                 {
                     if (perm[k] > b->routeNum)
                     {
@@ -351,9 +336,6 @@ void setRoutesCrossed(Ladder *l, int *perm, int size)
                         count++;
                     }
                 }
-                char *s = printBar(b);
-                print(s);
-                clear(s);
             }
         }
 }
@@ -658,7 +640,7 @@ void driver(int *perm, int size)
 
     //initialize it
     initLadder(l);
-    
+
     //Generate root.
     createRoot(l, perm, size, 0);
     int *arr = calloc(size, sizeof(int));
@@ -666,9 +648,9 @@ void driver(int *perm, int size)
     {
         arr[x] = perm[x];
     }
-    
+
     qsort(arr, size, sizeof(int), compareInts);
-    
+
     setRoutesCrossed(l, arr, size);
     //Initialzie MAXVAL to be the largest value in the permutation.
     //This ensures that in findAllChildren, when  the value of the cleanlevel
@@ -700,6 +682,7 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
     printf(MAGENTA "Height:%d\n" COLOR_RESET, l->depth + 1);
     ladderCount++;
     printLadder(l);
+    //printArray(b, l->numBars);
 
     Ladder *clone = cloneLadder(l);
 
@@ -741,6 +724,8 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
                             setTimesCrossed(bb, y);
                             /*Swap the bar*/
                             rightSwap(l, lowerNeighbor);
+                            //clear(bars);
+
                             /*Recursive call with clean level = to b->routeNum+1*/
                             findAllChildren(l, b->routeNum + 1, level + 1);
                             /*Reset to previous state, before right swap */
@@ -787,13 +772,13 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
                         setTimesCrossed(bb, y);
 
                         rightSwap(l, lowerNeighbor);
+
                         findAllChildren(l, cleanLevel, level + 1);
                         leftSwap(l, clone);
                     }
                 }
             }
         }
-
     destroyClone(clone);
 }
 

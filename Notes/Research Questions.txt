@@ -222,7 +222,7 @@ L7 of 4321 = L55 of 54321
 
 
 
-Given permutation 43521 - total = 11 - 10 Swaps + root
+Given permutation 43521 - total : 11 = 10 Swaps + root
 
 [4 3] - 0 Not a bottom bar of a degenerative triadic subsequence
 [4 2] - 0 Not a bottom bar of a degenerative triadic subsequence
