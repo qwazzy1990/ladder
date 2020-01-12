@@ -24,7 +24,7 @@ LIB:
 ladder: makeladder runladder
 
 makeladder: BIN INCLUDE SRC OBJ TEST LIB
-	$(CC) $(CFLAGS) -Iinclude src/ladder.c src/utilities.c test/testladder.c -o bin/ladder
+	$(CC) $(CFLAGS) -Iinclude src/ladder.c src/utilities.c test/testladder.c src/Sjt.c -o bin/ladder
 
 runladder: makeladder
 	./bin/ladder

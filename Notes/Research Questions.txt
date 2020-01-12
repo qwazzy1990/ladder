@@ -1,5 +1,5 @@
 Q1: What is the upper limit for the number of heights for a given permutation and it's root ladder?
-Q2: What is the gray code for generating ladder lotteries for the permutation of a sequence of {1, 2, ...,n}
+Q2: What is the gray code for generating the root ladder lotter for the permutations
 Q3: How many ladder lotteries are there for a given number of inversions? If two permutations have the same number
 of inversions do they have the same number of ladder lotteries? 
 
@@ -238,3 +238,16 @@ Given permutation 43521 - total : 11 = 10 Swaps + root
         -Crosses R 3 one time.
 
 
+
+If there are 2 degenerative subsequences such that the middle inversion of the each triadic seuqence is 
+the same inversion, then what happens is the resulting bar has a left child and then a left grand child. Therefore, 
+it is not always the case that the left child of a bar is the bottom bar of a degenerative triadic subsequence, 
+it could be the grand child, great grand child, etc, of a middle bar of another degenerative triadic subsequence.
+
+In the case of 6 2 4 1 3 5 we can see that [6 1] is the second bar of the degenerative triadic subsequence of 
+ 6 2 1 and 6 4 1. Therefore, the bottom bars [2 1] and [4 1] are in the left subtree starting from bar [6 1].
+ However, the left child of [6 1] is [4 1] and the left child of [4 1] is [2 1] despite the fact that 
+ 4 2 1 is not a degeneratie traidic subsequence in the permutation. Therefore, the only logical reason [2 1] is 
+ the left child of [4 1] is because [2 1] is the bottom inversion of 6 2 1, but 4 1 is the bottom inversion of
+6 4 1. Since the bar [6 1] has two bottom bars associated with it, [4 1] will be the child and [2 1] will be the 
+grandchild.

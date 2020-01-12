@@ -682,7 +682,6 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
     printf(MAGENTA "Height:%d\n" COLOR_RESET, l->depth + 1);
     ladderCount++;
     printLadder(l);
-    //printArray(b, l->numBars);
 
     Ladder *clone = cloneLadder(l);
 
@@ -731,9 +730,9 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
                             /*Reset to previous state, before right swap */
                             leftSwap(l, clone);
                         } //end if
-                    }     //end if
-                }         //end for
-            }             //end for
+                    }  //end if
+                } //end for
+            } //end for
 
         y--;
     } //End while
