@@ -17,4 +17,9 @@ void printPerms(int** perms, int n);
 
 int fact(int n);
 
+
+//Failed sjt algorithm, still interesting algorithm for generating all perms
+void sjt(int *perm, int count, int max, int size, bool flag);
+
+
 #endif

@@ -307,7 +307,15 @@ void printLadder(Ladder *l)
     printf("\n");
 }
 
-
+//prints the permutation
+void printPerm(int *perm, int size)
+{
+    forall(size)
+    {
+        printf("%d     ", perm[x]);
+    }
+    printf("\n");
+}
 
 /*Setters */
 void setBar(Bar *bar, int barNum, int routeNum, int valTwo)

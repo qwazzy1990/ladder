@@ -94,6 +94,7 @@ Bar* getBar(Ladder* l, int n);
 
 char* printBar(Bar* b);
 void printLadder(Ladder* l);
+void printPerm(int *perm, int size);
 
 
 //delete

@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "Sjt.h"
+#include "ladder.h"
+#include "utilities.h"
 
 int searchArr(int *a, int n, int mobile)
 {
@@ -131,4 +133,81 @@ void printPerms(int** perms, int n)
         printf("   %d\n", i + 2);
         count++;
     }
+}
+
+
+
+void sjt(int *perm, int count, int max, int size, bool flag)
+{
+    printf("max is %d size is %d\n", max, size);
+    printPerm(perm, size);
+    Ladder *ll = newLadder(size);
+    printf("Ladder Number = %d\n", count + 1);
+
+    initLadder(ll);
+    createRoot(ll, perm, size, 0);
+    printLadder(ll);
+    destroyLadder(ll);
+
+    if (count >= max)
+        return;
+    if (flag == true)
+    {
+        forall(size - 1)
+        {
+            int temp = perm[x];
+            perm[x] = perm[x + 1];
+            perm[x + 1] = temp;
+            printPerm(perm, size);
+            count++;
+            printf("Ladder number = %d\n", count + 1);
+            Ladder *ll = newLadder(size);
+            initLadder(ll);
+            createRoot(ll, perm, size, 0);
+            printLadder(ll);
+            destroyLadder(ll);
+
+            if (count == max)
+                return;
+        }
+        int temp = perm[0];
+        perm[0] = perm[1];
+        perm[1] = temp;
+        count++;
+        flag = false;
+        sjt(perm, count, max, size, flag);
+        return;
+    }
+    if (flag == false)
+    {
+        for (int i = size - 1; i > 0; i--)
+        {
+            int temp = perm[i];
+            perm[i] = perm[i - 1];
+            perm[i - 1] = temp;
+            printPerm(perm, size);
+            count++;
+
+            printf("Ladder number = %d\n", count + 1);
+
+            Ladder *ll = newLadder(size);
+            initLadder(ll);
+            createRoot(ll, perm, size, 0);
+            printLadder(ll);
+            destroyLadder(ll);
+
+            if (count == max)
+                return;
+        }
+        int temp = perm[size - 1];
+        perm[size - 1] = perm[size - 2];
+        perm[size - 2] = temp;
+        count++;
+        // if (count >= max)
+        //     return;
+        flag = true;
+        sjt(perm, count, max, size, flag);
+        return;
+    }
+  
 }

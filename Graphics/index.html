@@ -23,7 +23,16 @@
     <link href="style.css" rel="stylesheet" type="text/css">
     <link href="homepage.css" rel="stylesheet" type="text/css">
 
+    <script> 
+        $(document).ready(function(){
 
+            $('.jumbotron').append('graphic.html');
+            $('.jumbotron').load('graphics.html', function(){
+                alert("load was performed");
+            });
+        
+        });
+    </script>
 
 
 </head>
@@ -32,21 +41,10 @@
 <body>
     <h1>My first SVG</h1>
     <div class="jumbotron">
-        <svg width="200" height="800" class="SVG" id="graphic">
-        </svg>
-
 
     </div>
 
-    <script> 
-        $(document).ready(function(){
-
-            $('#graphic').load('graphics.html', function(){
-                alert("load was performed");
-            });
-        
-        });
-    </script>
+    
    
 </body>
 

@@ -7,18 +7,19 @@
 #include "utilities.h"
 #include "Color.h"
 #include "Sjt.h"
+#include "svg.h"
+
 
 bool DEBUG1 = false;
 bool DEBUG2 = false;
 bool DEBUG7 = false;
 bool DEBUG8 = true;
-void getInput(int **perm, char *s);
 int memSize = 1;
 int numDig = 0;
 
-void sjt(int *perm, int count, int max, int size, bool flag);
-void printPerm(int *perm, int size);
 int factorial(int n);
+void getInput(int **perm, char *s);
+
 int main(int argc, char *argv[])
 {
     if (DEBUG1)
@@ -89,13 +90,25 @@ int main(int argc, char *argv[])
             free(perms[i]);
 
         free(perms);
+
+        printf("<line x1=\"20\" y1=\"0\" x2=\"20\" y2=\"200\" style=\"stroke:rgb(255,0,0);stroke-width:2\"/><line x1=\"20\" y1=\"20\" x2=\"60\" y2=\"20\" style=\"stroke:rgb(255,0,0);stroke-width:2\"/>");
+
     }
 
     if(DEBUG8)
     {
-        printf("<line x1=\"20\" y1=\"0\" x2=\"20\" y2=\"200\" style=\"stroke:rgb(255,0,0);stroke-width:2\"/><line x1=\"20\" y1=\"20\" x2=\"60\" y2=\"20\" style=\"stroke:rgb(255,0,0);stroke-width:2\"/>");
+        int perm[4] = {1, 2, 3, 4};
+        Ladder* l = newLadder(4);
+        initLadder(l);
+        createRoot(l, perm, 4, 0);
+        char* s = htmlBody(l, perm);
+        printf("%s", s);
+        free(s);
+        destroyLadder(l);
     }
 }
+
+
 
 int factorial(int n)
 {
@@ -120,88 +133,4 @@ void getInput(int **perm, char *s)
             *perm = (int *)realloc(*perm, memSize * sizeof(int));
         }
     }
-}
-
-void printPerm(int *perm, int size)
-{
-    forall(size)
-    {
-        printf("%d     ", perm[x]);
-    }
-    printf("\n");
-}
-
-void sjt(int *perm, int count, int max, int size, bool flag)
-{
-    printf("max is %d size is %d\n", max, size);
-    printPerm(perm, size);
-    Ladder *ll = newLadder(size);
-    printf("Ladder Number = %d\n", count + 1);
-
-    initLadder(ll);
-    createRoot(ll, perm, size, 0);
-    printLadder(ll);
-    destroyLadder(ll);
-
-    if (count >= max)
-        return;
-    if (flag == true)
-    {
-        forall(size - 1)
-        {
-            int temp = perm[x];
-            perm[x] = perm[x + 1];
-            perm[x + 1] = temp;
-            printPerm(perm, size);
-            count++;
-            printf("Ladder number = %d\n", count + 1);
-            Ladder *ll = newLadder(size);
-            initLadder(ll);
-            createRoot(ll, perm, size, 0);
-            printLadder(ll);
-            destroyLadder(ll);
-
-            if (count == max)
-                return;
-        }
-        int temp = perm[0];
-        perm[0] = perm[1];
-        perm[1] = temp;
-        count++;
-        flag = false;
-        sjt(perm, count, max, size, flag);
-        return;
-    }
-    if (flag == false)
-    {
-        for (int i = size - 1; i > 0; i--)
-        {
-            int temp = perm[i];
-            perm[i] = perm[i - 1];
-            perm[i - 1] = temp;
-            printPerm(perm, size);
-            count++;
-
-            printf("Ladder number = %d\n", count + 1);
-
-            Ladder *ll = newLadder(size);
-            initLadder(ll);
-            createRoot(ll, perm, size, 0);
-            printLadder(ll);
-            destroyLadder(ll);
-
-            if (count == max)
-                return;
-        }
-        int temp = perm[size - 1];
-        perm[size - 1] = perm[size - 2];
-        perm[size - 2] = temp;
-        count++;
-        // if (count >= max)
-        //     return;
-        flag = true;
-        sjt(perm, count, max, size, flag);
-        return;
-    }
-  
 }
