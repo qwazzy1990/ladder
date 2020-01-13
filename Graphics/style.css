@@ -1,0 +1,27 @@
+/* The style for the body */
+body, html {
+    background: white;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    /* remove auto margin in the bod */
+    margin : 0px;
+    padding : 0px;
+    
+}
+
+
+.jumbotron
+{
+    background:black;
+    display: inline-block;
+    left:50%;
+    position: relative;
+    height: 400px;
+    width: 400px;
+}
+
+.SVG
+{
+    position: relative;
+    left:25%;
+}

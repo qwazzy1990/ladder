@@ -10,8 +10,8 @@
 
 bool DEBUG1 = false;
 bool DEBUG2 = false;
-bool DEBUG7 = true;
-
+bool DEBUG7 = false;
+bool DEBUG8 = true;
 void getInput(int **perm, char *s);
 int memSize = 1;
 int numDig = 0;
@@ -89,6 +89,11 @@ int main(int argc, char *argv[])
             free(perms[i]);
 
         free(perms);
+    }
+
+    if(DEBUG8)
+    {
+        printf("<line x1=\"20\" y1=\"0\" x2=\"20\" y2=\"200\" style=\"stroke:rgb(255,0,0);stroke-width:2\"/><line x1=\"20\" y1=\"20\" x2=\"60\" y2=\"20\" style=\"stroke:rgb(255,0,0);stroke-width:2\"/>");
     }
 }
 
@@ -198,4 +203,5 @@ void sjt(int *perm, int count, int max, int size, bool flag)
         sjt(perm, count, max, size, flag);
         return;
     }
+  
 }
