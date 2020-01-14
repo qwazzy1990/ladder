@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "LinkedListAPI.h"
 
 
 #define MAXROWS 500
@@ -49,6 +50,7 @@ typedef struct ladder
 //Creates a Ladder*, l, with numCols = size-1, numRows = MAXROWS, and ladder = NULL 
 Ladder* newLadder(int size);
 Bar* newBar( void );
+Bar* cloneBar(Bar* b);
 
 /*
     Clones a ladder, l, and returns its clone.
@@ -95,6 +97,7 @@ Bar* getBar(Ladder* l, int n);
 char* printBar(Bar* b);
 void printLadder(Ladder* l);
 void printPerm(int *perm, int size);
+char* ladderToString(void * data);
 
 
 //delete
@@ -206,8 +209,8 @@ bool canBeActiveBar(Ladder* l, int val, int k);
 
 bool isUpwardVisible(Ladder * l, int val, int route);
 
-void findAllChildren(Ladder* l, int cleanLevel, int level);
-void driver(int* perm, int size);
+void findAllChildren(List* list, Ladder* l, int cleanLevel, int level);
+void driver(List* list, int* perm, int size);
 
 
 /*Main algorithm: Get all children */

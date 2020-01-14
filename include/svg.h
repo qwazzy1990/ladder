@@ -19,7 +19,9 @@ char* ladderToSvg(Ladder* l, int* perm);
 
 char* htmlHeader( void );
 
-char* htmlBody(Ladder* l, int* perm);
+char* htmlLadder(Ladder* l, int yHeight);
+
+char* htmlBody(List* list);
 
 
 #endif

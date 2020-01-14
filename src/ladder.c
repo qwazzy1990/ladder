@@ -5,6 +5,7 @@
 #include "ladder.h"
 #include "utilities.h"
 #include "Color.h"
+#include "LinkedListAPI.h"
 
 /*Global variables: used for clean level */
 
@@ -12,6 +13,7 @@ int MAXVAL;
 int ladderCount = 1;
 
 bool DEBUG3 = true;
+bool PRINT = false;
 
 /***STATIC FUNCTIONS */
 static void copyArray(int **write, int *read, int largestIndex, int size)
@@ -78,7 +80,7 @@ Ladder *cloneLadder(Ladder *l)
 
     forall(l->numBars)
     {
-        clone->bars[x] = l->bars[x];
+        clone->bars[x] = cloneBar(l->bars[x]);
     }
     return clone;
 }
@@ -94,6 +96,25 @@ Bar *newBar(void)
         b->numberOfTimesCrossed[x] = 0;
     }
     return b;
+}
+
+Bar* cloneBar(Bar* b)
+{
+    new_object(Bar*, bb, 1);
+    bb->set = b->set;
+    bb->numSwaps = b->numSwaps;
+    bb->vals[0] = b->vals[0];
+    bb->vals[1] = b->vals[1];
+    bb->routeNum = b->routeNum;
+    bb->barNum = b->barNum;
+    bb->isSwapped = b->isSwapped;
+    forall(10)
+    {
+        bb->routesCrossed[x] = b->routesCrossed[x];
+        bb->numberOfTimesCrossed[x] = b->numberOfTimesCrossed[x];
+    }
+    return bb;
+
 }
 
 /**DESTROYERS Free memory*/
@@ -133,6 +154,7 @@ void destroyClone(void *l)
         clear(ll->ladder[x]);
     }
     clear(ll->ladder);
+    forall(100)destroyBar(ll->bars[x]);
     clear(ll->bars);
     clear(ll);
 }
@@ -174,9 +196,11 @@ void createRoot(Ladder *l, int *perm, int size, int currRow)
         {
             forall(l->numCols)
             {
-                printf("[0 0] ");
+                if(PRINT)
+                    printf("[0 0] ");
             }
-            printf("\n");
+            if(PRINT)
+                printf("\n");
             return;
         }
         l->depth = getDepth(l);
@@ -307,14 +331,53 @@ void printLadder(Ladder *l)
     printf("\n");
 }
 
+char *ladderToString(void *data)
+{
+    Ladder *l = (Ladder *)data;
+    int memSize = 1050;
+
+    char *s = calloc(memSize, sizeof(char));
+    for (int i = 0; i <= l->depth + 1; i++)
+    {
+        memSize += memSize;
+        s = realloc(s, memSize * sizeof(char));
+        for (int j = 0; j < l->numCols; j++)
+        {
+            int val = l->ladder[i][j];
+            if (val == 0)
+                strcat(s, "[0 0] ");
+            else
+            {
+                Bar *b = getBar(l, val);
+                char *temp = calloc(50, sizeof(char));
+                sprintf(temp, "%d", b->vals[0]);
+                strcat(s, "[");
+                strcat(s, temp);
+                strcat(s, " ");
+                free(temp);
+                temp = calloc(50, sizeof(char));
+                sprintf(temp, "%d", b->vals[1]);
+                strcat(s, temp);
+                free(temp);
+                strcat(s, "] ");
+            }
+        }
+        strcat(s, "\n");
+    }
+    strcat(s, "\n");
+    return s;
+}
+
 //prints the permutation
 void printPerm(int *perm, int size)
 {
     forall(size)
     {
-        printf("%d     ", perm[x]);
+        if(PRINT)
+            printf("%d     ", perm[x]);
     }
-    printf("\n");
+    if(PRINT)
+        printf("\n");
 }
 
 /*Setters */
@@ -636,7 +699,7 @@ Base_Case:
 }
 }
 
-void driver(int *perm, int size)
+void driver(List *list, int *perm, int size)
 {
     if (size <= 0)
     {
@@ -669,29 +732,39 @@ void driver(int *perm, int size)
 
     //Call find all children with clean level 1 because l is currently the root.
     //The only ladder in the set with a clean level of 1.
-    findAllChildren(l, 1, 0);
+    findAllChildren(list, l, 1, 0);
+    if(PRINT)
     printf("The number of degenerative subsequences is %d\n", countDegenerativeSubsequences(perm, size));
     displaySwapCount(l);
+
+    char* s = toString(list);
+    if(PRINT)
+    printf("%s\n", s);
+    free(s);
 
     destroyLadder(l);
 }
 
-void findAllChildren(Ladder *l, int cleanLevel, int level)
+void findAllChildren(List *list, Ladder *l, int cleanLevel, int level)
 {
     if (l == NULL)
         return;
     if (l->numBars == 0)
         return;
 
-    printf(RED "Clean Level:%d\n" COLOR_RESET, cleanLevel);
-    printf(YELLOW "Depth:%d\n" COLOR_RESET, level);
+    if(PRINT){
+        printf(RED "Clean Level:%d\n" COLOR_RESET, cleanLevel);
+        printf(YELLOW "Depth:%d\n" COLOR_RESET, level);
 
-    printf(CYAN "Ladder Number:%d\n" COLOR_RESET, ladderCount);
-    printf(MAGENTA "Height:%d\n" COLOR_RESET, l->depth + 1);
+        printf(CYAN "Ladder Number:%d\n" COLOR_RESET, ladderCount);
+        printf(MAGENTA "Height:%d\n" COLOR_RESET, l->depth + 1);
+    }
     ladderCount++;
-    printLadder(l);
+    if(PRINT)
+        printLadder(l);
 
     Ladder *clone = cloneLadder(l);
+    insertBack(list, cloneLadder(l));
 
     int y = MAXVAL;
 
@@ -734,13 +807,13 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
                             //clear(bars);
 
                             /*Recursive call with clean level = to b->routeNum+1*/
-                            findAllChildren(l, b->routeNum + 1, level + 1);
+                            findAllChildren(list, l, b->routeNum + 1, level + 1);
                             /*Reset to previous state, before right swap */
                             leftSwap(l, clone);
                         } //end if
-                    }  //end if
-                } //end for
-            } //end for
+                    }     //end if
+                }         //end for
+            }             //end for
 
         y--;
     } //End while
@@ -780,7 +853,7 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
 
                         rightSwap(l, lowerNeighbor);
 
-                        findAllChildren(l, cleanLevel, level + 1);
+                        findAllChildren(list, l, cleanLevel, level + 1);
                         leftSwap(l, clone);
                     }
                 }
@@ -1202,6 +1275,7 @@ void displaySwapCount(Ladder *l)
     forall(l->numBars)
     {
         char *s = printBar(l->bars[x]);
+        if(PRINT)
         print(s);
         clear(s);
     }

@@ -27,7 +27,7 @@
         $(document).ready(function(){
 
             $('.jumbotron').append('graphic.html');
-            $('.jumbotron').load('graphics.html', function(){
+            $('#bod').load('graphics.html', function(){
                 alert("load was performed");
             });
         
@@ -38,10 +38,10 @@
 </head>
 <!-- Graphics for the ladders. -->
 
-<body>
+<body id="bod">
     <h1>My first SVG</h1>
     <div class="jumbotron">
-
+ 
     </div>
 
     

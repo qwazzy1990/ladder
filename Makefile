@@ -30,4 +30,5 @@ runladder: makeladder
 	./bin/ladder > Graphics/graphics.html
 
 clean: 
-	if [ -d "bin" ]; then rm -rf ./bin/; fi;
+	if [ -d "bin" ]; then rm -rf ./bin/; fi; \
+	rm Graphics/graphics.html

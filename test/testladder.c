@@ -8,7 +8,7 @@
 #include "Color.h"
 #include "Sjt.h"
 #include "svg.h"
-
+#include "LinkedListAPI.h"
 
 bool DEBUG1 = false;
 bool DEBUG2 = false;
@@ -39,7 +39,11 @@ int main(int argc, char *argv[])
         }
         printf("\n");
 
-        driver(perm, numDig);
+        List *list = initializeList(ladderToString, destroyLadder, dummy_compare);
+
+        driver(list, perm, numDig);
+
+        freeList(list);
 
         free(perm);
     }
@@ -92,23 +96,26 @@ int main(int argc, char *argv[])
         free(perms);
 
         printf("<line x1=\"20\" y1=\"0\" x2=\"20\" y2=\"200\" style=\"stroke:rgb(255,0,0);stroke-width:2\"/><line x1=\"20\" y1=\"20\" x2=\"60\" y2=\"20\" style=\"stroke:rgb(255,0,0);stroke-width:2\"/>");
-
     }
 
-    if(DEBUG8)
+    if (DEBUG8)
     {
-        int perm[4] = {1, 2, 3, 4};
-        Ladder* l = newLadder(4);
-        initLadder(l);
-        createRoot(l, perm, 4, 0);
-        char* s = htmlBody(l, perm);
-        printf("%s", s);
-        free(s);
-        destroyLadder(l);
+        char *s = calloc(1000, sizeof(char));
+        int *perm = NULL;
+        fgets(s, 1000, stdin);
+        getInput(&perm, s);
+        clear(s);
+        List *list = initializeList(ladderToString, destroyLadder, dummy_compare);
+
+        driver(list, perm, numDig);
+
+        s = htmlBody(list);
+        printf("%s\n", s);
+        freeList(list);
+
+        free(perm);
     }
 }
-
-
 
 int factorial(int n)
 {
