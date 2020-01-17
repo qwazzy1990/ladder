@@ -24,10 +24,10 @@ LIB:
 ladder: makeladder runladder
 
 makeladder: BIN INCLUDE SRC OBJ TEST LIB
-	$(CC) $(CFLAGS) -Iinclude src/*.c test/testladder.c -o bin/ladder
+	$(CC) $(CFLAGS) -Iinclude src/*.c test/SjtMain.c -o bin/sjtladder
 
 runladder: makeladder
-	./bin/ladder
+	./bin/sjtladder
 
 clean: 
-	if [ -d "bin" ]; then rm -rf ./bin/; fi; \
+	if [ -d "bin" ]; then rm -rf ./bin/; fi;

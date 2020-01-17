@@ -24,6 +24,7 @@ char* htmlLadder(Ladder* l, int yStart)
     int memSize = 1000;
     int cols = 20;
     int* gaps = calloc(l->numCols+1, sizeof(int));
+
     forall(l->numCols+1)
     {
         memSize += 1000;
@@ -48,7 +49,7 @@ char* htmlLadder(Ladder* l, int yStart)
         free(temp);
         strcat(s, "\" ");
         temp = calloc(50, sizeof(char));
-        sprintf(temp,"%d", yStart + 50);
+        sprintf(temp,"%d", yStart + 100);
         strcat(s, "y2=\"");
         strcat(s, temp);
         strcat(s, "\" ");
@@ -118,11 +119,20 @@ char* htmlBody(List* list)
     strcat(s, head);
     free(head);
     strcat(s, "<body>");
-    strcat(s, "<svg height=\"1000\" width=\"1000\">");
     ListIterator itr = createIterator(list);
     Ladder* l = NULL;
     int i = 0;
+    char* temp = calloc(100, sizeof(char));
+    sprintf(temp, "%d", list->length*300);
     printf("Number of ladders is %d\n", list->length);
+    strcat(s, "<svg height=");
+    strcat(s, temp);
+    strcat(s, "\" ");
+    strcat(s, "width=");
+    strcat(s, temp);
+    strcat(s, "\">");
+    free(temp);
+
     while((l = nextElement(&itr))!= NULL)
     {
         char* temp = htmlLadder(l, i);
@@ -133,6 +143,7 @@ char* htmlBody(List* list)
         i+= 110;
     }
     strcat(s, "</svg>");
+
     strcat(s, "</body>");
     return s;
 

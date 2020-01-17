@@ -1,6 +1,8 @@
 CC = gcc
 CFLAGS = -std=c11 -Wall -g -pedantic
 
+
+
 all: ladder
 
 BIN:
@@ -21,13 +23,15 @@ TEST:
 LIB:
 	if [ ! -d "lib" ]; then mkdir lib; fi;
 
+
 ladder: makeladder runladder
 
 makeladder: BIN INCLUDE SRC OBJ TEST LIB
-	$(CC) $(CFLAGS) -Iinclude src/*.c test/testladder.c -o bin/ladder
+	$(CC) $(CFLAGS) -Iinclude src/*.c test/SvgMain.c -o bin/svg
 
 runladder: makeladder
-	./bin/ladder
+	./bin/svg > Graphics/graphics.html
 
 clean: 
 	if [ -d "bin" ]; then rm -rf ./bin/; fi; \
+	rm Graphics/graphics.html

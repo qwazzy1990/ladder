@@ -373,10 +373,8 @@ void printPerm(int *perm, int size)
 {
     forall(size)
     {
-        if(PRINT)
             printf("%d     ", perm[x]);
     }
-    if(PRINT)
         printf("\n");
 }
 
@@ -1280,3 +1278,15 @@ void displaySwapCount(Ladder *l)
         clear(s);
     }
 }
+
+int factorial(int n)
+{
+    int result = 1;
+    for (int i = n; i >= 1; i--)
+    {
+        result = result * i;
+    }
+    printf("Result is %d\n", result);
+    return result;
+}
+

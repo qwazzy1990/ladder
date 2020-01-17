@@ -232,5 +232,7 @@ int countDegenerativeSubsequences(int * perm, int size);
 
 void displaySwapCount(Ladder * l);
 
+int factorial(int n);
+void getInput(int **perm, char *s);
 
 #endif
