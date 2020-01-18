@@ -1286,7 +1286,6 @@ int factorial(int n)
     {
         result = result * i;
     }
-    printf("Result is %d\n", result);
     return result;
 }
 

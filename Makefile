@@ -21,13 +21,19 @@ TEST:
 LIB:
 	if [ ! -d "lib" ]; then mkdir lib; fi;
 
-ladder: makeladder runladder
+ladder: makeladder
 
 makeladder: BIN INCLUDE SRC OBJ TEST LIB
-	$(CC) $(CFLAGS) -Iinclude src/*.c test/testladder.c -o bin/ladder
+	$(CC) $(CFLAGS) -Iinclude src/*.c test/testladder.c -o bin/ladder; cd bin; ./ladder
+	
 
-runladder: makeladder
-	./bin/ladder
+runfive: makeladder
+	./bin/ladder > bin/ladderfive.txt
 
+runsix:
+	./bin/ladder > bin/laddersix.txt
+
+runseven:
+	./bin/ladder > bin/ladderseven.txt
 clean: 
 	if [ -d "bin" ]; then rm -rf ./bin/; fi; \

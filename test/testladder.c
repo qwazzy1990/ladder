@@ -50,10 +50,19 @@ int main(int argc, char *argv[])
         int n = 0;
         printf("Enter a number between 1 and 9\n");
         scanf("%d", &n);
-        int **perms = calloc(fact(n) * fact(n), sizeof(int));
+        new_object(int**, perms, fact(n)*2);
+        bool* direction = calloc(n, sizeof(bool));
+        int* arr = calloc(n, sizeof(arr));
+        int* perm = calloc(n, sizeof(int));
+        forall(n)
+        {
+            direction[x] = RIGHT;
+            arr[x] = 0;
+            perm[x] = x+1;
+        }
 
        
-        genPermsSJT(perms, n);
+        genPermsSJTReverse(perms, perm, n, arr, direction);
        
        
         for (int i = 0; i < fact(n); i++)
