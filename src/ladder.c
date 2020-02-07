@@ -13,7 +13,7 @@ int MAXVAL;
 int ladderCount = 1;
 
 bool DEBUG3 = true;
-bool PRINT = false;
+bool PRINT = true;
 
 /***STATIC FUNCTIONS */
 static void copyArray(int **write, int *read, int largestIndex, int size)
@@ -98,9 +98,9 @@ Bar *newBar(void)
     return b;
 }
 
-Bar* cloneBar(Bar* b)
+Bar *cloneBar(Bar *b)
 {
-    new_object(Bar*, bb, 1);
+    new_object(Bar *, bb, 1);
     bb->set = b->set;
     bb->numSwaps = b->numSwaps;
     bb->vals[0] = b->vals[0];
@@ -114,7 +114,6 @@ Bar* cloneBar(Bar* b)
         bb->numberOfTimesCrossed[x] = b->numberOfTimesCrossed[x];
     }
     return bb;
-
 }
 
 /**DESTROYERS Free memory*/
@@ -154,7 +153,7 @@ void destroyClone(void *l)
         clear(ll->ladder[x]);
     }
     clear(ll->ladder);
-    forall(100)destroyBar(ll->bars[x]);
+    forall(100) destroyBar(ll->bars[x]);
     clear(ll->bars);
     clear(ll);
 }
@@ -196,10 +195,10 @@ void createRoot(Ladder *l, int *perm, int size, int currRow)
         {
             forall(l->numCols)
             {
-                if(PRINT)
+                if (PRINT)
                     printf("[0 0] ");
             }
-            if(PRINT)
+            if (PRINT)
                 printf("\n");
             return;
         }
@@ -373,9 +372,9 @@ void printPerm(int *perm, int size)
 {
     forall(size)
     {
-            printf("%d     ", perm[x]);
+        printf("%d     ", perm[x]);
     }
-        printf("\n");
+    printf("\n");
 }
 
 /*Setters */
@@ -697,7 +696,7 @@ Base_Case:
 }
 }
 
-void driver(List *list, int *perm, int size)
+void driver(int *perm, int size)
 {
     if (size <= 0)
     {
@@ -730,27 +729,23 @@ void driver(List *list, int *perm, int size)
 
     //Call find all children with clean level 1 because l is currently the root.
     //The only ladder in the set with a clean level of 1.
-    findAllChildren(list, l, 1, 0);
-    if(PRINT)
-    printf("The number of degenerative subsequences is %d\n", countDegenerativeSubsequences(perm, size));
+    findAllChildren(l, 1, 0);
+    if (PRINT)
+        printf("The number of degenerative subsequences is %d\n", countDegenerativeSubsequences(perm, size));
     displaySwapCount(l);
-
-    char* s = toString(list);
-    if(PRINT)
-    printf("%s\n", s);
-    free(s);
 
     destroyLadder(l);
 }
 
-void findAllChildren(List *list, Ladder *l, int cleanLevel, int level)
+void findAllChildren(Ladder *l, int cleanLevel, int level)
 {
     if (l == NULL)
         return;
     if (l->numBars == 0)
         return;
 
-    if(PRINT){
+    if (PRINT)
+    {
         printf(RED "Clean Level:%d\n" COLOR_RESET, cleanLevel);
         printf(YELLOW "Depth:%d\n" COLOR_RESET, level);
 
@@ -758,11 +753,10 @@ void findAllChildren(List *list, Ladder *l, int cleanLevel, int level)
         printf(MAGENTA "Height:%d\n" COLOR_RESET, l->depth + 1);
     }
     ladderCount++;
-    if(PRINT)
+    if (PRINT)
         printLadder(l);
 
     Ladder *clone = cloneLadder(l);
-    insertBack(list, cloneLadder(l));
 
     int y = MAXVAL;
 
@@ -805,7 +799,7 @@ void findAllChildren(List *list, Ladder *l, int cleanLevel, int level)
                             //clear(bars);
 
                             /*Recursive call with clean level = to b->routeNum+1*/
-                            findAllChildren(list, l, b->routeNum + 1, level + 1);
+                            findAllChildren(l, b->routeNum + 1, level + 1);
                             /*Reset to previous state, before right swap */
                             leftSwap(l, clone);
                         } //end if
@@ -851,7 +845,7 @@ void findAllChildren(List *list, Ladder *l, int cleanLevel, int level)
 
                         rightSwap(l, lowerNeighbor);
 
-                        findAllChildren(list, l, cleanLevel, level + 1);
+                        findAllChildren(l, cleanLevel, level + 1);
                         leftSwap(l, clone);
                     }
                 }
@@ -1273,8 +1267,8 @@ void displaySwapCount(Ladder *l)
     forall(l->numBars)
     {
         char *s = printBar(l->bars[x]);
-        if(PRINT)
-        print(s);
+        if (PRINT)
+            print(s);
         clear(s);
     }
 }
@@ -1286,6 +1280,72 @@ int factorial(int n)
     {
         result = result * i;
     }
+    printf("Result is %d\n", result);
     return result;
 }
 
+//Functions for Degenerative Triadic Subsequences
+
+void setDTSs(DTSA* dts, int *perm, int numDts, int size)
+{
+    dts->dts = calloc(numDts, sizeof(DTS*));
+    forall(numDts)
+    {
+        dts->dts[x] = calloc(1, sizeof(DTS));
+        dts->dts[x]->num = 0;
+        dts->dts[x]->isRotated = false;
+    }
+    int count = 0;
+    int x = 0;
+
+    for (int i = 0; i < size - 2; i++)
+    {
+        for (int j = i + 1; j < size - 1; j++)
+        {
+            for (int k = j + 1; k < size; k++)
+            {
+                if (perm[i] > perm[j] && perm[j] > perm[k])
+                {
+                    dts->dts[x]->top[0] = perm[i];
+                    dts->dts[x]->top[1] = perm[j];
+                    dts->dts[x]->mid[0] = perm[i];
+                    dts->dts[x]->mid[1] = perm[k];
+                    dts->dts[x]->lower[0] = perm[j];
+                    dts->dts[x]->lower[1] = perm[k];
+                    dts->dts[x]->isRotated = false;
+                    dts->dts[x]->num = count + 1;
+                    count++;
+                    printf("%d\n", x);
+                    printDTS(dts->dts[x]);
+                    x++;
+                }
+            }
+        }
+    }
+}
+void rotateDTS(DTSA* dts, int l1, int l2, int m1, int m2, int t1, int t2, int numDts)
+{
+
+    forall(numDts)
+    {
+        if (dts->dts[x]->lower[0] == l1 && dts->dts[x]->lower[1] == l2 && dts->dts[x]->mid[0] == m1 && dts->dts[x]->mid[1] == m2 && dts->dts[x]->top[0] == t1 && dts->dts[x]->top[1] == t2)
+        {
+            dts->dts[x]->isRotated = !(dts->dts[x]->isRotated);
+        }
+    }
+}
+
+void printDTS(DTS *d)
+{
+    printf("T1 %d T2 %d M1 %d M2 %d L1 %d L2 %d Number %d Rotated %d\n", d->top[0], d->top[1], d->mid[0], d->mid[1], d->lower[0], d->lower[1], d->num, d->isRotated);
+}
+
+void freeDts(DTSA* dts, int n)
+{
+    forall(n)
+    {
+        free(dts->dts[x]);
+    }
+    free(dts->dts);
+    free(dts);
+}   

@@ -11,8 +11,9 @@
 #include "LinkedListAPI.h"
 
 bool DEBUG1 = false;
-bool DEBUG7 = true;
+bool DEBUG7 = false;
 bool DEBUG8 = false;
+bool DEBUG9 = true;
 int memSize = 1;
 int numDig = 0;
 
@@ -37,52 +38,53 @@ int main(int argc, char *argv[])
         }
         printf("\n");
 
-        List *list = initializeList(ladderToString, destroyLadder, dummy_compare);
+       
+        driver(perm, numDig);
 
-        driver(list, perm, numDig);
-
-        freeList(list);
 
         free(perm);
     }
     if (DEBUG7)
     {
         int n = 0;
-        printf("Enter a number between 1 and 9\n");
         scanf("%d", &n);
-        new_object(int**, perms, fact(n)*2);
-        bool* direction = calloc(n, sizeof(bool));
-        int* arr = calloc(n, sizeof(arr));
-        int* perm = calloc(n, sizeof(int));
+        int **perms = calloc(fact(n) * fact(n), sizeof(int));
+        int * perm = calloc(n, sizeof(int));
+        int* arr = calloc(n, sizeof(int));
+        bool* direction = calloc(n, sizeof(int));
         forall(n)
         {
-            direction[x] = RIGHT;
-            arr[x] = 0;
             perm[x] = x+1;
+            arr[x] = 0;
+            direction[x] = false;
         }
 
+
+        forall(fact(n)*2)
+            perms[x] = calloc(n, sizeof(int));
        
-        genPermsSJTReverse(perms, perm, n, arr, direction);
+        genPermsSJT(perms, perm, n, arr, direction);
        
        
-        for (int i = 0; i < fact(n); i++)
+        for(int i = 0; i < fact(n); i++)
         {
             printf("    %d\n", i + 1);
 
             printPerm(perms[i], n);
             Ladder *l = newLadder(n);
             initLadder(l);
-            printf("rows %d, cols %d, height %d\n", l->numRows, l->numCols, l->depth);
             createRoot(l, perms[i], n, 0);
-            printf("rows %d, cols %d, height %d\n", l->numRows, l->numCols, l->depth);
 
             printLadder(l);
             destroyLadder(l);
         }
-        for (int i = 0; i < fact(n); i++)
+        for (int i = 0; i < fact(n)*2; i++)
             free(perms[i]);
 
         free(perms);
+        free(perm);
+        free(arr);
+        free(direction);
 
     }
     if(DEBUG8)
@@ -103,7 +105,25 @@ int main(int argc, char *argv[])
         free(direction);
     }
 
-   
+   if(DEBUG9)
+   {
+       int* perm = calloc(4, sizeof(int));
+       forall(4){
+        perm[x] = 4-x;
+       }
+
+        int n = countDegenerativeSubsequences(perm, 4);
+        new_object(DTSA*, dts, n);
+        setDTSs(dts, perm, n, 4);
+        forall(n)
+        {
+            
+
+        }
+        freeDts(dts, n);
+        free(perm);
+     
+   }
 }
 
 void getInput(int **perm, char *s)

@@ -1,0 +1,6 @@
+
+
+Papers I still need to read:
+   1) Reconfiguring Optimal Ladder Lotteries Horiyama, Wasa, Yamanaka
+   2) Efficient enumeration of all ladders with k-bars Yamanaka Nanako
+   3) K. Yamanaka and S. Nakano. Enumeration, counting, and random generation of ladder lotteries

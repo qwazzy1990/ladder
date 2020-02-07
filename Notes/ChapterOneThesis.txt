@@ -1,0 +1,31 @@
+within the figure env have a label which loooks like \label{fig:name}
+
+when referencing the figure go ~\ref{fig:name}
+
+first define the term, then use it. Order is permutation, inversion, ladder lottery. Give an example of a permutation with an inversion. 
+
+Refer to the section where I say if and only if the number of bars = the number of inversions - if and only if
+
+Use set notation to define the opt
+
+\usepackage{margin} indents text 
+
+put the sorting section in the correct place with an image
+
+
+wiring diagram goes into the lit review
+
+
+Intro contains:
+ladder lotteries, 
+optimal ladder lotteries,
+thesis,
+
+background/lit review: Chapter 2: 2.1 and on is my lit review
+
+
+
+The gray code for adding and removing the bars without labels. Reverse SJT
+
+
+Look at special cases where

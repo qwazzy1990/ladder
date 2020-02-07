@@ -12,12 +12,16 @@
 #include "svg.h"
 #include "LinkedListAPI.h"
 
-bool DEBUG1 = false;
-bool DEBUG2 = true;
+<<<<<<< HEAD
+bool _DEBUG1 = false;
+bool _DEBUG2 = true;
+bool _DEBUG3 = false;
+
 int main()
 {
 
-    if (DEBUG1)
+    //gray code for generating ladders based on sjt
+    if (_DEBUG1)
     {
         int n = 4;
         Ladder *l = newLadder(n);
@@ -40,28 +44,105 @@ int main()
 
         destroyLadder(l);
         free(reservedRows);
+
+
     }
-    if(DEBUG2)
+
+    //gray code for generating permutations based on sjt. Permutations used to generate ladders
+    if(_DEBUG2)
     {
-        int n = 4;
+        int n = 0;
+        scanf("%d", &n);
+        new_object(int**, perms, fact(n)*2);
         bool* direction = calloc(n, sizeof(bool));
         int* arr = calloc(n, sizeof(arr));
         int* perm = calloc(n, sizeof(int));
-        new_object(int**, perms, fact(n)*2);
-
         forall(n)
         {
             direction[x] = RIGHT;
             arr[x] = 0;
             perm[x] = x+1;
         }
-      
+
+        forall(fact(n)*2)
+            perms[x] = calloc(n, sizeof(int));
+       
         genPermsSJTReverse(perms, perm, n, arr, direction);
+       
+       
+        for(int i = 0; i < fact(n); i++)
+        {
+            printf("    %d\n", i + 1);
+
+            printPerm(perms[i], n);
+            Ladder *l = newLadder(n);
+            initLadder(l);
+            createRoot(l, perms[i], n, 0);
+
+            printLadder(l);
+            destroyLadder(l);
+        }
+        for (int i = 0; i < fact(n)*2; i++)
+            free(perms[i]);
+
+        free(perms);
+        free(perm);
         free(arr);
         free(direction);
-        free(perm);
+
 
     }
+
+    if(_DEBUG3)
+    {
+        int n = 0;
+        scanf("%d", &n);
+        new_object(int**, perms, fact(n)*2);
+        bool* direction = calloc(n, sizeof(bool));
+        int* arr = calloc(n, sizeof(arr));
+        int* perm = calloc(n, sizeof(int));
+        forall(n)
+        {
+            direction[x] = LEFT;
+            arr[x] = 0;
+            perm[x] = x+1;
+        }
+        forall(fact(n)*2)
+            perms[x] = calloc(n, sizeof(int));
+
+        genPermsSJT(perms, perm, n, arr, direction);
+        for(int i = 0; i < fact(n); i++)
+        {
+            printf("    %d\n", i + 1);
+
+            printPerm(perms[i], n);
+            Ladder *l = newLadder(n);
+            initLadder(l);
+            createRoot(l, perms[i], n, 0);
+
+            printLadder(l);
+            destroyLadder(l);
+        }
+        for (int i = 0; i < fact(n)*2; i++)
+            free(perms[i]);
+
+        free(perms);
+        free(perm);
+        free(arr);
+        free(direction);
+
+    }
+=======
+int main()
+{
+
+   // Ladder* l = newLadder(5);
+   // initLadder(l);
+
+    int* reservedRows = calloc(5, sizeof(int));
+    reserveRows(reservedRows, 5);
+    free(reservedRows);
+>>>>>>> parent of bf5667a... Need to generate the ladders using the reverse SJT algorithm
 
     return 0;
 }

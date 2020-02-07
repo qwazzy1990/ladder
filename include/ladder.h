@@ -34,6 +34,22 @@ typedef struct bar
     bool isSwapped;
 } Bar;
 
+
+typedef struct DegenerativeTriadicSubsequence{
+
+    int lower[2];
+    int mid[2];
+    int top[2];
+
+    bool isRotated;
+    int num;
+} DTS;
+
+typedef struct DegenerativeTriadicSubSequenceArray
+{
+    int amnt;
+    DTS** dts;
+}DTSA;
 typedef struct ladder
 {
     int** ladder;
@@ -209,8 +225,8 @@ bool canBeActiveBar(Ladder* l, int val, int k);
 
 bool isUpwardVisible(Ladder * l, int val, int route);
 
-void findAllChildren(List* list, Ladder* l, int cleanLevel, int level);
-void driver(List* list, int* perm, int size);
+void findAllChildren( Ladder* l, int cleanLevel, int level);
+void driver(int* perm, int size);
 
 
 /*Main algorithm: Get all children */
@@ -235,4 +251,17 @@ void displaySwapCount(Ladder * l);
 int factorial(int n);
 void getInput(int **perm, char *s);
 
+
+
+///DTS Functions
+
+
+void rotateDTS(DTSA* dts, int l1, int l2, int m1, int m2, int t1, int t2, int numDts);
+
+
+void setDTSs(DTSA* dts, int* perm, int numDts, int n);
+
+void printDTS(DTS* d);
+
+void freeDts(DTSA* dts, int n);
 #endif

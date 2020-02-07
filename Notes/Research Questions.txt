@@ -251,3 +251,10 @@ In the case of 6 2 4 1 3 5 we can see that [6 1] is the second bar of the degene
  the left child of [4 1] is because [2 1] is the bottom inversion of 6 2 1, but 4 1 is the bottom inversion of
 6 4 1. Since the bar [6 1] has two bottom bars associated with it, [4 1] will be the child and [2 1] will be the 
 grandchild.
+
+
+
+###  Number of DTS's ###
+Given pi = degen(N)
+The number of DTS's is:
+N(N^2 - 3N -2)/6

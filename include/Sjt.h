@@ -9,30 +9,28 @@
 #include <stdbool.h>
 #include "ladder.h"
 
+
 #define LEFT false
 #define RIGHT true
+
+
 int searchArr(int* a, int n, int mobile);
 
 int getMobile(int* a, bool* dir, int n);
 
 void printOnePerm(int** perms, int *a, bool *dir, int n, int count);
 
-void genPermsSJT(int** perms, int n);
-
+void genPermsSJT(int** perms, int * perm, int n, int* arr, bool* direction);
+void adjustPerm(int** perms, int* perm, int n, int* arr, bool* direction);
+void copyPerm(int *dest, int *src, int n);
+void adjustPermReverse(int **perms, int *perm, int n, int *arr, bool *direction);
 int fact(int n);
 
+int _getIndex(int *perm, int n, int val);
+void _swap(int *v1, int *v2);
 
 //Failed sjt algorithm, still interesting algorithm for generating all perms
 void sjt(int *perm, int count, int max, int size, bool flag);
-
-void genPermsSJTReverse(int** perms, int* perm, int n, int *arr, bool *direction);
-
-void adjustPerm(int* perm, int n, int* arr, bool* direction);
-
-void _swap(int* v1, int* v2);
-
-int _getIndex(int* perm, int n, int val);
-
 
 void sjtLadder(Ladder* l, int n, int* arr, bool* direction);
 //adds or removes a bar belonging to level 1 <= level <= n-1
@@ -50,18 +48,4 @@ bool hasLeftNeighbor(Ladder* l, int row, int col);
 //checks if there is a neighbor to the left of the current row 
 //and col
 bool hasRightNeighbor(Ladder* l, int row, int col);
-
-
-//checks if there is an upper neighbor of the place where the current bar will go
-bool hasUpperNeighbor(Ladder* l, int n, int row, int col, int upperBound);
-
-
-//checks if there is a lower neighbor of the palce where the current bar will go
-bool hasLowerNeighbor(Ladder* l, int n, int row, int col, int loweBound);
-
-
-//inserts  a bar at the row within the range of reserved rows based on the val.
-//the column is there
-void insertAt(Ladder* l, int val, int* reserved, int col);
-
 #endif

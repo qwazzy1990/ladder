@@ -29,5 +29,26 @@ makeladder: BIN INCLUDE SRC OBJ TEST LIB
 runladder: makeladder
 	./bin/sjtladder
 
+runfive: makeladder
+	./bin/sjtladder > assets/sjtfive.txt
+
+runsix: makeladder
+	./bin/sjtladder > assets/sjtsix.txt
+
+runseven: makeladder
+	./bin/sjtladder > assets/sjtseven.txt
+
+sjt: runfive runsix runseven 
+
+
+runfivereverse: makeladder 
+	./bin/sjtladder > assets/sjtfivereverse.txt
+
+runsixreverse: makeladder 
+	./bin/sjtladder > assets/sjtsixreverse.txt
+
+runsevenreverse: makeladder 
+	./bin/sjtladder > assets/sjtsevenreverse.txt
+
 clean: 
 	if [ -d "bin" ]; then rm -rf ./bin/; fi;
