@@ -225,7 +225,7 @@ bool canBeActiveBar(Ladder* l, int val, int k);
 
 bool isUpwardVisible(Ladder * l, int val, int route);
 
-void findAllChildren( Ladder* l, int cleanLevel, int level);
+void findAllChildren( Ladder* l, int cleanLevel, int level, DTSA* dts);
 void driver(int* perm, int size);
 
 
@@ -262,6 +262,9 @@ void rotateDTS(DTSA* dts, int l1, int l2, int m1, int m2, int t1, int t2, int nu
 void setDTSs(DTSA* dts, int* perm, int numDts, int n);
 
 void printDTS(DTS* d);
+void printDTSA(DTSA* dts);
+
+void printDtsAsBinString(DTSA* dts);
 
 void freeDts(DTSA* dts, int n);
 #endif

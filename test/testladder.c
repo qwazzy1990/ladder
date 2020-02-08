@@ -10,10 +10,10 @@
 #include "svg.h"
 #include "LinkedListAPI.h"
 
-bool DEBUG1 = false;
+bool DEBUG1 = true;
 bool DEBUG7 = false;
 bool DEBUG8 = false;
-bool DEBUG9 = true;
+bool DEBUG9 = false;
 int memSize = 1;
 int numDig = 0;
 
@@ -115,11 +115,7 @@ int main(int argc, char *argv[])
         int n = countDegenerativeSubsequences(perm, 4);
         new_object(DTSA*, dts, n);
         setDTSs(dts, perm, n, 4);
-        forall(n)
-        {
-            
-
-        }
+        
         freeDts(dts, n);
         free(perm);
      

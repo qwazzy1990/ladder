@@ -727,9 +727,12 @@ void driver(int *perm, int size)
     MAXVAL = arr[size - 1];
     free(arr);
 
+    new_object(DTSA *, dts, 1);
+    setDTSs(dts, perm, countDegenerativeSubsequences(perm, size), size);
+
     //Call find all children with clean level 1 because l is currently the root.
     //The only ladder in the set with a clean level of 1.
-    findAllChildren(l, 1, 0);
+    findAllChildren(l, 1, 0, dts);
     if (PRINT)
         printf("The number of degenerative subsequences is %d\n", countDegenerativeSubsequences(perm, size));
     displaySwapCount(l);
@@ -737,12 +740,14 @@ void driver(int *perm, int size)
     destroyLadder(l);
 }
 
-void findAllChildren(Ladder *l, int cleanLevel, int level)
+void findAllChildren(Ladder *l, int cleanLevel, int level, DTSA *dts)
 {
     if (l == NULL)
         return;
     if (l->numBars == 0)
         return;
+
+    if(PRINT)printDtsAsBinString(dts);
 
     if (PRINT)
     {
@@ -794,12 +799,29 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
                             Bar *bb = getBar(l, lowerNeighbor);
                             bb->numSwaps++;
                             setTimesCrossed(bb, y);
+                            int up = getUpperNeighbor(l, bb->barNum);
+                            int right = getRightNeighbor(l, bb->barNum);
+                            Bar *upBar = getBar(l, up);
+                            Bar *rightBar = getBar(l, right);
+                            char *s = printBar(bb);
+                            char *ss = printBar(upBar);
+                            char *sss = printBar(rightBar);
+                            print(s);
+                            print(ss);
+                            print(sss);
+                            free(s);
+                            free(ss);
+                            free(sss);
                             /*Swap the bar*/
                             rightSwap(l, lowerNeighbor);
+                            rotateDTS(dts, bb->vals[0], bb->vals[1], rightBar->vals[0], rightBar->vals[1], upBar->vals[0], upBar->vals[1], dts->amnt);
+
                             //clear(bars);
 
                             /*Recursive call with clean level = to b->routeNum+1*/
-                            findAllChildren(l, b->routeNum + 1, level + 1);
+                            findAllChildren(l, b->routeNum + 1, level + 1, dts);
+                            rotateDTS(dts, bb->vals[0], bb->vals[1], rightBar->vals[0], rightBar->vals[1], upBar->vals[0], upBar->vals[1], dts->amnt);
+
                             /*Reset to previous state, before right swap */
                             leftSwap(l, clone);
                         } //end if
@@ -842,10 +864,26 @@ void findAllChildren(Ladder *l, int cleanLevel, int level)
                         Bar *bb = getBar(l, lowerNeighbor);
                         bb->numSwaps++;
                         setTimesCrossed(bb, y);
+                        int up = getUpperNeighbor(l, bb->barNum);
+                        int right = getRightNeighbor(l, bb->barNum);
+                        Bar *upBar = getBar(l, up);
+                        Bar *rightBar = getBar(l, right);
+                        char *s = printBar(bb);
+                        char *ss = printBar(upBar);
+                        char *sss = printBar(rightBar);
+                        print(s);
+                        print(ss);
+                        print(sss);
+                        free(s);
+                        free(ss);
+                        free(sss);
 
                         rightSwap(l, lowerNeighbor);
+                        rotateDTS(dts, bb->vals[0], bb->vals[1], rightBar->vals[0], rightBar->vals[1], upBar->vals[0], upBar->vals[1], dts->amnt);
 
-                        findAllChildren(l, cleanLevel, level + 1);
+                        findAllChildren(l, cleanLevel, level + 1, dts);
+                        rotateDTS(dts, bb->vals[0], bb->vals[1], rightBar->vals[0], rightBar->vals[1], upBar->vals[0], upBar->vals[1], dts->amnt);
+
                         leftSwap(l, clone);
                     }
                 }
@@ -1286,9 +1324,10 @@ int factorial(int n)
 
 //Functions for Degenerative Triadic Subsequences
 
-void setDTSs(DTSA* dts, int *perm, int numDts, int size)
+void setDTSs(DTSA *dts, int *perm, int numDts, int size)
 {
-    dts->dts = calloc(numDts, sizeof(DTS*));
+    dts->dts = calloc(numDts, sizeof(DTS *));
+    dts->amnt = numDts;
     forall(numDts)
     {
         dts->dts[x] = calloc(1, sizeof(DTS));
@@ -1315,7 +1354,6 @@ void setDTSs(DTSA* dts, int *perm, int numDts, int size)
                     dts->dts[x]->isRotated = false;
                     dts->dts[x]->num = count + 1;
                     count++;
-                    printf("%d\n", x);
                     printDTS(dts->dts[x]);
                     x++;
                 }
@@ -1323,7 +1361,7 @@ void setDTSs(DTSA* dts, int *perm, int numDts, int size)
         }
     }
 }
-void rotateDTS(DTSA* dts, int l1, int l2, int m1, int m2, int t1, int t2, int numDts)
+void rotateDTS(DTSA *dts, int l1, int l2, int m1, int m2, int t1, int t2, int numDts)
 {
 
     forall(numDts)
@@ -1334,13 +1372,42 @@ void rotateDTS(DTSA* dts, int l1, int l2, int m1, int m2, int t1, int t2, int nu
         }
     }
 }
+void printDTSA(DTSA* dts)
+{
+    printf("----Inside print DTSA----Amount is %d----\n", dts->amnt);
+    forall(dts->amnt)
+    {
+        printDTS(dts->dts[x]);
+    }
+}
 
 void printDTS(DTS *d)
 {
     printf("T1 %d T2 %d M1 %d M2 %d L1 %d L2 %d Number %d Rotated %d\n", d->top[0], d->top[1], d->mid[0], d->mid[1], d->lower[0], d->lower[1], d->num, d->isRotated);
 }
 
-void freeDts(DTSA* dts, int n)
+void printDtsAsBinString(DTSA* dts)
+{
+    forall(dts->amnt)
+    {
+        printf("[%d,%d,%d]  ", dts->dts[x]->top[0], dts->dts[x]->top[1], dts->dts[x]->lower[1]);
+    }
+    printf("\n");
+    forall(dts->amnt)
+    {
+        if(dts->dts[x]->isRotated)
+        {
+            printf("   1     ");
+        }
+        else 
+        {
+            printf("   0     ");
+        }
+    }
+    printf("\n");
+}
+
+void freeDts(DTSA *dts, int n)
 {
     forall(n)
     {
@@ -1348,4 +1415,4 @@ void freeDts(DTSA* dts, int n)
     }
     free(dts->dts);
     free(dts);
-}   
+}
