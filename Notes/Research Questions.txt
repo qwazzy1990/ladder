@@ -258,3 +258,38 @@ grandchild.
 Given pi = degen(N)
 The number of DTS's is:
 N(N^2 - 3N -2)/6
+
+
+
+What exactly is a ladder lottery and why do permutations without decreasing subsequences of length 3 have 
+only one ladder lottery?        
+        A ladder lottery is a heirarchy of parallelized  of adjascent transpositions of inversions where the maximal number of
+        inversions that can be uninverted by an adjascent transposition at a given level of the heirarchy become uninverted. 
+        Basically it means perform the maximal number of adjascent transpositions on inversions as possible in parallel, and then 
+        continue doing so until the permutation is sorted.
+
+        within a permutation such that the permutation is sorted after all the adjascent transpositions of 
+        inversions have been completed. 
+
+        The reason permutations withoyt DSS only have one ladder lottery is because there is only one way to perform  parallelized 
+        adjascent transpositions on inversions. Meaning there is only one way to perform parallel adjascent transpositions on the inversions
+        in the permutation.
+
+        When a ladder has a DSSs3 then there is a common element shared between two overlapping adjascent inversions. This presents two choices
+        as to which adjascent inversion can be uninvert first. The two adjascent transpositions cannot be uninverted in parallel because
+        uninverting the one inversion makes the elements of second inversion no longer adjascent, seeing as the shared element of the second inversion
+        got misplaced when the first adjascent inversion was uninverted. 
+        However, permutations with DSS3s have more than one heirarchy of parallelized adjascent transpositions on inversions because 
+        either the smallest of the three  inversions can be transposed before the largest, or the largest can be transposed before the 
+        smallest, but neither can be transposed at the same time because they share an element. I.e. if  A B form an inversion and B C form and inversion
+        and A > B > C then elemeny B is adjascent to both A and B in the original permutation, resulting in two 
+        overlapping inversions in the original permutation. and at the same time there 
+        are two adjascent transpositions formed with B, thus if uninverting transposition B C then A C cannot be uninverted at the same time
+        since A and B are no longer adjascent in the OG perm, yet they still form an inversion in og PI 
+        and vice versa, thus there is a choice as to whether to choose to uninvert the larger of the two inversions 
+        formed with B or the smaller of the two inversions that is formed with B. Therefore there are two ladder lotteries for this.
+
+
+
+Cases for DSS3s:
+        If there are two DSS3s such that 

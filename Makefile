@@ -28,6 +28,6 @@ makeladder: BIN INCLUDE SRC OBJ TEST LIB
 
 
 runladder: makeladder
-	./bin/ladder
+	cd bin; ./ladder ../assets/degenFive.txt
 clean: 
 	if [ -d "bin" ]; then rm -rf ./bin/; fi; \

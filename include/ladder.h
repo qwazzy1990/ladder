@@ -267,4 +267,9 @@ void printDTSA(DTSA* dts);
 void printDtsAsBinString(DTSA* dts);
 
 void freeDts(DTSA* dts, int n);
+
+//Functions for solving the ladder with the min height
+
+void genMinLadders(int* perm, int numDig, List* minLadders);
+
 #endif

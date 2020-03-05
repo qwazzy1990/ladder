@@ -6,6 +6,7 @@
 #include "utilities.h"
 #include "Color.h"
 #include "LinkedListAPI.h"
+#include <ctype.h>
 
 /*Global variables: used for clean level */
 
@@ -15,6 +16,8 @@ int ladderCount = 1;
 bool DEBUG3 = true;
 bool PRINT = true;
 
+
+Ladder* minLadder = NULL;
 /***STATIC FUNCTIONS */
 static void copyArray(int **write, int *read, int largestIndex, int size)
 {
@@ -512,8 +515,7 @@ int getColIndex(Ladder *l, int n)
 
 //Gets the upper neighbor of value n where the upper
 //neighbor, v, is defined as a value > 0 in the ladder with
-//v's collumn value = to n's collumn value
-//and v's row value x, where 0 <= x < n's row value
+//v's collumn value = to n's collumn value/and v's row value x, where 0 <= x < n's row value
 int getUpperNeighbor(Ladder *l, int n)
 {
     int row = getRowIndex(l, n);
@@ -738,6 +740,12 @@ void driver(int *perm, int size)
     displaySwapCount(l);
 
     destroyLadder(l);
+	if(PRINT)
+	{
+		printf("min ladder is :\n");
+		printLadder(minLadder);
+	}
+	destroyLadder(minLadder);
 }
 
 void findAllChildren(Ladder *l, int cleanLevel, int level, DTSA *dts)
@@ -747,7 +755,17 @@ void findAllChildren(Ladder *l, int cleanLevel, int level, DTSA *dts)
     if (l->numBars == 0)
         return;
 
-    if(PRINT)printDtsAsBinString(dts);
+    printDtsAsBinString(dts);
+
+    if(minLadder == NULL)
+    {
+	minLadder = cloneLadder(l);
+    }
+    if(l->depth <= minLadder->depth)
+    {
+	    destroyLadder(minLadder);
+	    minLadder = cloneLadder(l);
+    }
 
     if (PRINT)
     {
@@ -778,7 +796,7 @@ void findAllChildren(Ladder *l, int cleanLevel, int level, DTSA *dts)
         if (start[0] != -1)
 
             /*Begin at the start of the route and go to the end */
-            for (int i = start[0]; i <= end[0]; i++)
+            for (int i = end[0]; i >= start[0]; i--)
             {
                 for (int j = start[1]; j <= end[1]; j++)
                 {
@@ -803,15 +821,7 @@ void findAllChildren(Ladder *l, int cleanLevel, int level, DTSA *dts)
                             int right = getRightNeighbor(l, bb->barNum);
                             Bar *upBar = getBar(l, up);
                             Bar *rightBar = getBar(l, right);
-                            char *s = printBar(bb);
-                            char *ss = printBar(upBar);
-                            char *sss = printBar(rightBar);
-                            print(s);
-                            print(ss);
-                            print(sss);
-                            free(s);
-                            free(ss);
-                            free(sss);
+                            
                             /*Swap the bar*/
                             rightSwap(l, lowerNeighbor);
                             rotateDTS(dts, bb->vals[0], bb->vals[1], rightBar->vals[0], rightBar->vals[1], upBar->vals[0], upBar->vals[1], dts->amnt);
@@ -845,7 +855,7 @@ void findAllChildren(Ladder *l, int cleanLevel, int level, DTSA *dts)
         //i = start of route of cleanLevel-1 to end of route of cleanLevel -1 do
         //same thing as previous double for loops
         //for
-        for (int i = start[0]; i <= end[0]; i++)
+        for (int i = end[0]; i >= start[0]; i--)
         {
             //for
             for (int j = start[1]; j <= end[1]; j++)
@@ -868,16 +878,7 @@ void findAllChildren(Ladder *l, int cleanLevel, int level, DTSA *dts)
                         int right = getRightNeighbor(l, bb->barNum);
                         Bar *upBar = getBar(l, up);
                         Bar *rightBar = getBar(l, right);
-                        char *s = printBar(bb);
-                        char *ss = printBar(upBar);
-                        char *sss = printBar(rightBar);
-                        print(s);
-                        print(ss);
-                        print(sss);
-                        free(s);
-                        free(ss);
-                        free(sss);
-
+                        
                         rightSwap(l, lowerNeighbor);
                         rotateDTS(dts, bb->vals[0], bb->vals[1], rightBar->vals[0], rightBar->vals[1], upBar->vals[0], upBar->vals[1], dts->amnt);
 
@@ -1388,6 +1389,7 @@ void printDTS(DTS *d)
 
 void printDtsAsBinString(DTSA* dts)
 {
+    if(ladderCount == 1)
     forall(dts->amnt)
     {
         printf("[%d,%d,%d]  ", dts->dts[x]->top[0], dts->dts[x]->top[1], dts->dts[x]->lower[1]);
@@ -1397,13 +1399,14 @@ void printDtsAsBinString(DTSA* dts)
     {
         if(dts->dts[x]->isRotated)
         {
-            printf("   1     ");
+            printf(GREEN "   1     " COLOR_RESET);
         }
         else 
         {
             printf("   0     ");
         }
     }
+    printf("%d\n", ladderCount);
     printf("\n");
 }
 
@@ -1415,4 +1418,9 @@ void freeDts(DTSA *dts, int n)
     }
     free(dts->dts);
     free(dts);
+}
+
+void genMinLadders(int* perm, int numDig, List* minLadders)
+{
+    //fix me
 }
