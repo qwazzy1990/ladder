@@ -10,24 +10,17 @@
 #include "svg.h"
 #include "LinkedListAPI.h"
 
-bool DEBUG1 = false;
+bool DEBUG1 = true;
 bool DEBUG7 = false;
 bool DEBUG8 = false;
 bool DEBUG9 = false;
-bool DEBUG10 = true;
+bool DEBUG10 = false;
 int memSize = 1;
 int numDig = 0;
 
 void getInput(int **perm, char *s);
 
-static void freeTwoD(void* d)
-{
-    char** dd = (char**)d;
-    for(int i = 0; i < 100; i++)
-        free(dd[i]);
-    
-    free(dd);
-}
+
 
 int main(int argc, char *argv[])
 {
@@ -49,8 +42,7 @@ int main(int argc, char *argv[])
         printf("\n");
 
        
-        driver(perm, numDig);
-
+        genMinLadders(perm, numDig);
 
         free(perm);
     }
@@ -133,18 +125,7 @@ int main(int argc, char *argv[])
 
    if(DEBUG10)
    {
-       List* list = initializeList(dummy_print, freeTwoD, dummy_compare);
-       readMinLadders(argv[1], list);
-       forall(getLength(list))
-       {
-           char** temp = getFromBack(list);
-           for(int i = 0; i < 100; i++)
-           {
-               if(strlen(temp[i])==0)break;
-               else printf("%s\n", temp[i]);
-           }
-       }
-       freeList(list);
+       //List* list = initializeList(dummy_print, freeTwoD, dummy_compare);
 
    }
 }

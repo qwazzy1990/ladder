@@ -32,6 +32,8 @@ typedef struct bar
 
     //currentlySwapped
     bool isSwapped;
+
+
 } Bar;
 
 
@@ -58,6 +60,7 @@ typedef struct ladder
     int numBars;
     int depth;
     int cleanLevel;
+    int ladderNumber;
     Bar** bars;
 } Ladder;
 
@@ -270,6 +273,6 @@ void freeDts(DTSA* dts, int n);
 
 //Functions for solving the ladder with the min height
 
-void genMinLadders(int* perm, int numDig, List* minLadders);
+void genMinLadders(int* perm, int numDig);
 
 #endif

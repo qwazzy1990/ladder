@@ -16,8 +16,12 @@ int ladderCount = 1;
 bool DEBUG3 = true;
 bool PRINT = true;
 
+bool MIN = true;
+int CURMIN = 1000000;
 
-Ladder* minLadder = NULL;
+
+List *minLadders;
+
 /***STATIC FUNCTIONS */
 static void copyArray(int **write, int *read, int largestIndex, int size)
 {
@@ -58,6 +62,7 @@ Ladder *newLadder(int size)
     l->numCols = size - 1;
     l->numBars = 0;
     l->depth = 0;
+    l->ladderNumber = -1;
     return l;
 }
 
@@ -740,12 +745,6 @@ void driver(int *perm, int size)
     displaySwapCount(l);
 
     destroyLadder(l);
-	if(PRINT)
-	{
-		printf("min ladder is :\n");
-		printLadder(minLadder);
-	}
-	destroyLadder(minLadder);
 }
 
 void findAllChildren(Ladder *l, int cleanLevel, int level, DTSA *dts)
@@ -757,14 +756,31 @@ void findAllChildren(Ladder *l, int cleanLevel, int level, DTSA *dts)
 
     printDtsAsBinString(dts);
 
-    if(minLadder == NULL)
+    if (MIN)
     {
-	minLadder = cloneLadder(l);
-    }
-    if(l->depth <= minLadder->depth)
-    {
-	    destroyLadder(minLadder);
-	    minLadder = cloneLadder(l);
+        if (l->depth < CURMIN)
+        {
+            //clone the ladder
+            Ladder *clone = cloneLadder(l);
+            clone->ladderNumber = ladderCount;
+            //clear the list
+            clearList(minLadders);
+            insertBack(minLadders, clone);
+            //add it to the list
+            CURMIN = clone->depth;
+            //set CURMIN to l->depth
+        }
+        else if (l->depth == CURMIN)
+        {
+            Ladder *clone = cloneLadder(l);
+            clone->ladderNumber = ladderCount;
+            insertBack(minLadders, clone);
+        }
+        else 
+        {
+
+        }
+       
     }
 
     if (PRINT)
@@ -821,7 +837,7 @@ void findAllChildren(Ladder *l, int cleanLevel, int level, DTSA *dts)
                             int right = getRightNeighbor(l, bb->barNum);
                             Bar *upBar = getBar(l, up);
                             Bar *rightBar = getBar(l, right);
-                            
+
                             /*Swap the bar*/
                             rightSwap(l, lowerNeighbor);
                             rotateDTS(dts, bb->vals[0], bb->vals[1], rightBar->vals[0], rightBar->vals[1], upBar->vals[0], upBar->vals[1], dts->amnt);
@@ -878,7 +894,7 @@ void findAllChildren(Ladder *l, int cleanLevel, int level, DTSA *dts)
                         int right = getRightNeighbor(l, bb->barNum);
                         Bar *upBar = getBar(l, up);
                         Bar *rightBar = getBar(l, right);
-                        
+
                         rightSwap(l, lowerNeighbor);
                         rotateDTS(dts, bb->vals[0], bb->vals[1], rightBar->vals[0], rightBar->vals[1], upBar->vals[0], upBar->vals[1], dts->amnt);
 
@@ -1373,7 +1389,7 @@ void rotateDTS(DTSA *dts, int l1, int l2, int m1, int m2, int t1, int t2, int nu
         }
     }
 }
-void printDTSA(DTSA* dts)
+void printDTSA(DTSA *dts)
 {
     printf("----Inside print DTSA----Amount is %d----\n", dts->amnt);
     forall(dts->amnt)
@@ -1387,21 +1403,21 @@ void printDTS(DTS *d)
     printf("T1 %d T2 %d M1 %d M2 %d L1 %d L2 %d Number %d Rotated %d\n", d->top[0], d->top[1], d->mid[0], d->mid[1], d->lower[0], d->lower[1], d->num, d->isRotated);
 }
 
-void printDtsAsBinString(DTSA* dts)
+void printDtsAsBinString(DTSA *dts)
 {
-    if(ladderCount == 1)
-    forall(dts->amnt)
-    {
-        printf("[%d,%d,%d]  ", dts->dts[x]->top[0], dts->dts[x]->top[1], dts->dts[x]->lower[1]);
-    }
+    if (ladderCount == 1)
+        forall(dts->amnt)
+        {
+            printf("[%d,%d,%d]  ", dts->dts[x]->top[0], dts->dts[x]->top[1], dts->dts[x]->lower[1]);
+        }
     printf("\n");
     forall(dts->amnt)
     {
-        if(dts->dts[x]->isRotated)
+        if (dts->dts[x]->isRotated)
         {
             printf(GREEN "   1     " COLOR_RESET);
         }
-        else 
+        else
         {
             printf("   0     ");
         }
@@ -1420,7 +1436,20 @@ void freeDts(DTSA *dts, int n)
     free(dts);
 }
 
-void genMinLadders(int* perm, int numDig, List* minLadders)
+void genMinLadders(int *perm, int numDig)
 {
-    //fix me
+    minLadders = initializeList(dummy_print, destroyLadder, dummy_compare);
+    MIN = true;
+    driver(perm, numDig);
+    for (Node *n = minLadders->head; n != NULL; n = n->next)
+    {
+        Ladder *minLadder = n->data;
+        printf(CYAN "Ladder Number:%d\n" COLOR_RESET, minLadder->ladderNumber);
+        printf(MAGENTA "Height:%d\n" COLOR_RESET, minLadder->depth + 1);
+        printLadder(minLadder);
+    }
+
+    freeList(minLadders);
+
+    MIN = false;
 }
