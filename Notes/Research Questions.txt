@@ -257,7 +257,7 @@ grandchild.
 ###  Number of DTS's ###
 Given pi = degen(N)
 The number of DTS's is:
-N(N^2 - 3N -2)/6
+N^3 - 3N^2 + 2N/6
 
 
 

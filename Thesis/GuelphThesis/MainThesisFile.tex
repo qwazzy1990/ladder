@@ -1,0 +1,116 @@
+%--------------------------------------------------------------------------------------------------------------------------
+%  YOU MUST PUT THE FILES "gthesis.cls" and  "gct11.clo" IN SAME DIRECTORY
+%
+%  The content of your thesis goes in "body.tex"
+%  Bibtex file in "mybib.bib"
+%  If there is an appendix place it in "appendix.tex"
+%---------------------------------------------------------------------------------------------------------------------------
+
+\documentclass[11pt,draft]{gthesis}
+
+%---- ADD PACKAGES ------
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{latexsym}
+\usepackage{graphics}
+\usepackage{color}
+\usepackage{url}
+\usepackage{lineno}
+\usepackage{verbatim}
+
+
+%--- ADD YOUR MACROS ------
+\newtheorem{theorem}{Theorem}[section]          % Numbers theorems bysection.
+\newtheorem{proposition}[theorem]{Proposition}  % Numbers a proposition by a theorem number.
+\newtheorem{lemma}[theorem]{Lemma}             % Numbers a lemma by a theorem number.
+\newtheorem{corollary}[theorem]{Corollary}        % Numbers a corollary by a theorem number.
+\newtheorem{example}[theorem]{Example}         % Numbers an example by a theorem number.
+\newtheorem{examples}[theorem]{Examples}     % Numbers a list of examples by a theorem number.
+\newtheorem{remark}[theorem]{Remark}            % Numbers remark by a theorem number.
+\newtheorem{remarks}[theorem]{Remarks}         % Numbers a list of remarks by a theorem number.
+\newtheorem{conjecture}[theorem]{Conjecture}   % Numbers a conjecture by a theorem number.
+\newtheorem{definition}[theorem]{Definition}       % Numbers a definition by a theorem number.
+
+\newenvironment{proof}{{\em Proof.}}{\hspace*{\fill}$\Box$\par\vspace{4mm}}
+
+
+%------------------------------------------------------------------------------------------------------------------------------------i
+\begin{document}
+
+%--- TITLE PAGE   --------------------------
+\title{Title of Thesis with all Formula,  \\ Symbols, or Greek Letters Written out in Words }
+
+\author{123}
+
+\type{Thesis}   
+
+\degree{Master of Pokemon, Poke master}     % Change degree/field to PHD if appropriate
+\field{Computer Science}  	
+
+%\degree{Doctor of Philosophy} 	
+%\field{Computational Sciences}  
+
+
+\advisorLabel{Advisor}		% set to Advisors if multiple
+\advisor{Dr. Sherlock Holmes}
+\advisorS{}	        		% if there is a co-advisor, add here
+
+\degreemonth{July}
+\degreeyear{2099}
+
+\maketitle
+
+%--- ABSTRACT  --------------------------
+% Recommended word limit is 150 for Masters and 350 for doctoral.
+% Try to abide.
+
+\begin{abstract}
+
+Present your abstract here.  This template is just an example of an outline to consider for your thesis.  It is a good idea to double-check with the current University's thesis requirements
+here:  
+
+\medskip
+
+\small
+\centering
+ \url{https://www.uoguelph.ca/graduatestudies/current-students/preparation-your-thesis}
+
+\end{abstract}
+
+%============FRONT MATTER=============================
+\begin{frontmatter}
+
+%--- ACKNOWLEDGEMENTS  ------
+
+\begin{acknowledgements}
+
+Present your acknowledgements here.
+
+\end{acknowledgements}
+
+
+%--- TABLE OF CONTENTS AND LIST OF FIGURES  ------
+
+\tableofcontents
+\listoftables
+\listoffigures
+
+\end{frontmatter}
+%======================================================
+
+%--- MAIN BODY OF THESIS  ------
+\dsp
+\include{body}
+
+%--- BIBLIOGRAPHY  ------
+\ssp
+  \bibliographystyle{abbrv}
+  \bibliography{mybib}
+\dsp
+
+%--- APPENDIX  ------
+
+\appendix
+\include{Appendix}
+
+\end{document} 

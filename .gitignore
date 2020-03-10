@@ -1,1 +1,9 @@
 assets/**
+Thesis/GuelphThesis/*.exe
+Thesis/GuelphThesis/*.aux
+Thesis/GuelphThesis/*.log
+Thesis/GuelphThesis/*.clo
+Thesis/GuelphThesis/*.cls
+Thesis/GuelphThesis/*.lof
+Thesis/GuelphThesis/*.lot
+Thesis/GuelphThesis/*.toc
