@@ -1,31 +1,44 @@
+
+
+
+
 %----------------  INTRODUCTION with THESIS STATEMENT ----------------------
 \chapter{Introduction}
 \label{chapter:intro}
+\input{intro}
 
-This chapter introduces your thesis, giving a very broad introduction to the area with real world applications
-and examples that your parents and grandparents would understand.  Then narrow to your specific research focus.
 
 \section{Thesis Statement}  
-
-The most important section in the introduction contains the thesis statement.  The \emph{thesis statement} is a refined and succinct set of arguments that define what you will demonstrate or prove in the thesis -- it is your position. It is the \emph{crux} of your research.  In some cases, the thesis statement is a single sentence.  In other cases, it is up to a paragraph.  In the early draft stages, the thesis statement establishes a focus, a basis on which to include or exclude information. For the reader of the finished work, the thesis anticipates the remainder of the author's discussion. 
-
-Following your thesis statement, you should give a clear listing of the actual contributions of the thesis.   This will also include reference to  any publications that have resulted from the work.
-
+This thesis presents solutions to three problems surrounding ladder lotteries.
+The problems that this thesis presents solutions to are firstly the counting problem, secondly the minimial height problem and thirdly 
+the problem of creating a Gray Code for generating canonical ladders within different sets
+of ladder lotteries. 
 \section{Overview of Thesis}  
 
-Often the final section of the introduction will outline what is contained in the remainder of the thesis.  In Chapter \ref{chapter:background}, a literature review is presented.  In Chapter \ref{chapter:methodology}, the main results are provided including the methodology and implementation.  Then in Chapter \ref{chapter:evaluation} we analyze the resulting algorithms and demonstrate that they are better then the previous known algorithms.  The thesis concludes in Chapter \ref{chapter:summary} with a summary and directions for future research.
-
+This thesis is broken down into several sections. Firstly, an introuduction to ladder
+lotteries, and how they pertain to computer science will be presented. This will be followed by a literature 
+review of ladder lotteries in which discussions of solved problems will be 
+provided, along with the commonalities between ladder lotteries and 
+other mathematical objects. Following the literature review, the methodology
+used to conduct the research will be discussed. This section will focus 
+primarily on the algorithms used to generate the data for this reasearch. 
+Following the methodology section, the findings of the research will be discussed and analyzed. In this section
+there will be proofs and formulas for certain propositions made about ladder 
+lotteries. This section will be the bulk of the findings for this thesis.
+Following the results section, a summary of future work will be provided. In this section, an 
+of the failures and successes of this research will be analyzed. There will also be commentary on 
+open (unsolved) problems related to ladder lotteries and a 
+discussion of how research on ladder lotteries could be used in other fields.
+Finally a conlcusion that summarizes the thesis will be provided.
 
 %----------------  BACKGROUND and LITERATURE REVIEW ----------------------
 \chapter{Background}
 \label{chapter:background}
+\input{background} 
 
-  This section often includes a literature review as well as all the necessary background definitions and notation required in the remainder of the thesis.  This section will likely form the bulk of your citations.  
-  
+
 \section{Literature Review}
-
-Gary and Jonhson~\cite{Garey} wrote one of the most famous books on complexity theory.  Avery~\cite{Avery} wrote a nice article on score sequences.
-
+\input{LiteratureReview}
 
 %----------------  METHODOLOGY and IMPLEMENTATION ----------------------
 \chapter{Methodology and Implementation}  

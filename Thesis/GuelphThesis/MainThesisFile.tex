@@ -17,6 +17,12 @@
 \usepackage{url}
 \usepackage{lineno}
 \usepackage{verbatim}
+\usepackage{tikz}
+\usepackage[absolute,overlay]{textpos}
+%%for images
+\usepackage{graphicx}
+\usepackage{caption} % for \captionof
+
 
 
 %--- ADD YOUR MACROS ------
@@ -33,6 +39,15 @@
 
 \newenvironment{proof}{{\em Proof.}}{\hspace*{\fill}$\Box$\par\vspace{4mm}}
 
+%%tree 
+\tikzset{
+  treenode/.style = {shape=rectangle, rounded corners,
+                     draw, align=center,
+                     top color=white, bottom color=blue!20},
+  root/.style     = {treenode, font=\small, bottom color=red!30},
+  env/.style      = {treenode, font=\ttfamily\small},
+  dummy/.style    = {circle,draw}
+}
 
 %------------------------------------------------------------------------------------------------------------------------------------i
 \begin{document}
@@ -40,7 +55,7 @@
 %--- TITLE PAGE   --------------------------
 \title{Title of Thesis with all Formula,  \\ Symbols, or Greek Letters Written out in Words }
 
-\author{123}
+\author{Patrick Di Salvo}
 
 \type{Thesis}   
 
