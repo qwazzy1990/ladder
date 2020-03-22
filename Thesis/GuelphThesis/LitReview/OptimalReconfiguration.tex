@@ -1,0 +1,39 @@
+\section{Optimal Reconfiguration of Optimal Ladder Lotteries}
+In \textbf{Optimal Reconfiguration of Optimal Ladder Lotteries},
+the authors provide a polyminomial solution to the 
+minimal reconfiguration problem. The problem states that given 
+two ladder is $OptL\{\pi\}$, $L_{i}$ and  $L_{m}$, what is the minimal number of 
+local swap operations to perform that will transition from $L_{i}$ to $L_{m}$.
+The authors do so based on the local swap operations previously 
+discuessed along with some other concepts. The first of these concepts 
+is termed the \emph{reverse triple}. Basically, a reverse triple is a relation
+between two arbitrary ladders, $L_{i}, L_{m}$, such that if a bar is right swapped 
+in $L_{i}$ or $L_{m}$ and the bar forms a reverse triple between $L_{i}$ and $L_{m}$ 
+then the bar must be left swapped in $L_{m}$ or $L_{i}$. Or if it 
+is left swapped in $L_{i}$ or $L_{m}$ and the bar forms a reverse triple 
+between $L_{i}$ and $L_{m}$ then the bar must be right swapped in $L_{m}$ or $L_{i}$.
+Essentially, a reverse triple means that if a bar is right or left swapped in one 
+ladder, then it must be the opposite in another ladder for bar to create a 
+reverse triple between the two ladders.   
+The second of the concepts is the \emph{improving triple}. The improving triple is 
+essentially a bar that can be left/right rotated such that the 
+result of the rotation the bar removes a reverse triple between two arbitrary
+ladders $L_{i}$ and $L_{m}$. The solution tor transition from 
+$L_{i}$ to $L_{m}$ with the minimal length reconfiguration sequence 
+is achieved by applying improving triple to the reverse triples between 
+$L_{i}$ and $L_{m}$. That is to say, the length of the reconfiguration sequence 
+is equal to the number of reverse triples between $L_{i}$ and  $L_{m}$\par
+The second contribution of this paper is that it provides a closed form 
+upper bound for the minimal length reconfiguration sequence for any permutation 
+of size $N$. That is to say, given any permutation, $\pi$, of size $N$ what is the maximum 
+length of a minimal reconfiguration sequence between two ladders in $OptL\{\pi\}$.
+The authors prove that it is $OptL\{\pi_{N, N-1, \dots, 1}\}$ that contains the 
+upper bound for the minimal length reconfiguration sequence between two ladders $L_{i}$ and 
+$L_{m}$. Moreover, it is only the root ladder and terminating ladder in 
+$OptL\{\pi_{N, N-1, \dots, 1}\}$ whose minimal reconfiguration sequence is equal to 
+the upper bound. That upper bound is $N{(N-1) \choose 2}$. This is because 
+the number of reverse triples between the root ladder and the terminating ladder 
+in $OptL\{\pi_{N, N-1, \dots, 1}\}$ is equal to $N{(N-1) \choose 2}$. Thus, in 
+order to reconfigure the root to the terminating ladder, or vice versa, each 
+reverse triple between them must be improved.
+
