@@ -57,7 +57,7 @@ belongs to $\mathcal{O}(n^{2})$.\par
         \end{tikzpicture}
     \end{center}
    
-    \caption{The route encoding for the following ladder lottery is 11\underline{00}01\underline{00}11\underline{00}01\underline{00}0000}
+  \caption{The route encoding for the following ladder lottery is 11\underline{00}01\underline{00}11\underline{00}01\underline{00}0000}
 
 \end{figure}
 
@@ -82,7 +82,9 @@ $LC_{L_{2.5}}=11\underline{0}010\underline{0}110\underline{0}010\underline{0}0\u
 In order to reconstruct $L_{k}$ from $LC_{L_{k}}$, or in other words decode
 $LC_{L_{k}}$ it is important to recognize that the first line only has left endpoints attached to it. Since left 
 end points are encoded as a $1$ then it is guarenteed that the first $0$ 
-represents the end of line $1$. It is also important to note that for any 
+represents the end of line $1$. Secondly, the last/$Nth$ bar 
+has only right end points attached to it.  Therefore $lc_{n}$ will only have $0s$. Therefore, $lc_{n}$
+does not require a terminating $0$. Thirdly, for any 
 line $i+1$, if line $i+1$ has a $0$ then there must be a corresponding $1$
 in line $i$. That is to say, if the right end point of a bar is on line 
 $i+1$ then that same bar must have a left endpoint on line $i$. To decode 
@@ -96,8 +98,7 @@ of a bar in line $i$ with a right end point in line $i+1$. The last $0$
 represents the end of line $i+1$. For the $1s$ in $lc_{i+1}$ draw a left 
 end point on line $i+1$ relative to where the $1$ occured to its left and 
 right neigbor in $lc_{i+1}$. For an example of a full decoding of $LC_{L_{(4,2,3,1)}}$
-please refer to Fig. 2.6.
-
+please refer to Fig. 2.6.\pagebreak
 \begin{figure}[!htp]
     \begin{center}
         \begin{tikzpicture}
@@ -146,5 +147,128 @@ please refer to Fig. 2.6.
       
 
     \end{center}
-    \caption{$LC_{L_{(4,2,3,1)}}=lc_{1}=11\underline{0},lc_{2}=0110\underline{0},lc_{3}=010\underline{0},lc_{4}=0\underline{0}$}
+    \caption{$LC_{L_{(4,2,3,1)}}=lc_{1}=11\underline{0},lc_{2}=0110\underline{0},lc_{3}=010\underline{0},lc_{4}=0$}
 \end{figure}
+
+Since each bar is encoded as two bits, and there are $N-1$ bits as terminating bits; 
+one for each line in $L$, then the number of bits required is $N + 2B -1$, where $N$
+is the number of lines and $B$ is the number of bars. Encoding and decoding can be 
+done in $\mathcal{O}(n+b)$ time. Clearly the line-based encoding 
+trumps the route-based encoding in both time and space complexity.
+
+\subsection{Improved Line-Based Encoding}
+Although the line-based encoding is better than the route based 
+encoding, it can still be further optimized. The authors provide 
+three improvements to the line-based encoding. These three improvements
+can be combined to really help imrpove the line based encoding's 
+space efficiency. 
+\subsubsection{Imrpovement 1}
+Since the $Nth$ line has only right endpoints attached to it, 
+then it actually does not need to be encoded. Right endpoints 
+are denoted as $0$ and left endpoints are encoded as $1$, therefore the number of right endpoints 
+for line $N$ is equal to the number of $1s$ in $lc_{n-1}$.
+Thus, there is no need for $lc_{n}$.
+\subsubsection{Improvement 2}
+Improvement Two is based off of the fact that given any two bars,
+$x,y$ let $l_{x}$ denote the left endpoint of bar $x$, let 
+$l_{y}$ denote the left endoint of bar $y$, let $r_{x}$ denote 
+the right end point of bar $x$ and let $r_{y}$ denote the right 
+end point of bar $y$. Let line $i$ be the line of $l_{x}$ and $l_{y}$
+and let line $i+1$ be the line of $r_{x}$ and $r_{y}$.
+\begin{theorem}
+There are three possible cases for the 
+placement of $x$ and $y$ in the ladder. The first case is that there 
+is at least one other bar, $z$, with a right end point, $r_{z}$ between $l_{x}$
+and $l_{y}$. The second case is that there is at least one other bar 
+$z$, with a left end point, $l_{z}$, between $r_{x}$ and $r_{y}$. The third case 
+is that there is at least one bar, $z$, with a right end point, 
+$r_{z}$, betwen $l_{x}$ and $l_{y}$ and there is at least one other bar, 
+$z\prime$ with a left end point, $l_{z\prime}$, between $r_{x}$ and $r_{y}$. For an example of all 
+three cases refer to Fig 2.7.\par
+\end{theorem}
+
+%%figure demonstrating the three cases for bar positions
+\begin{figure}[!htp]
+       
+            %%first case
+            \begin{minipage}{.3\textwidth}
+                \begin{flushleft}
+                \begin{tikzpicture}
+                    \draw(0, 0) to (0, 4);
+                    \draw(2, 0) to (2, 4);
+                    \draw(-2, 0) to (-2, 4);
+                    \draw(-2, 2) to (0, 2);
+                        \node at (-0.5, 2.3){$r_{z}$};
+                    \draw(0, 3) to (2, 3);
+                        \node at (0.5, 3.3){$l_{x}$};
+                    \draw(0, 1) to (2, 1);
+                        \node at (0.5, 1.3){$l_{y}$};
+                \end{tikzpicture}
+            \end{flushleft}
+
+            \end{minipage}
+             \begin{minipage}{.3\textwidth}
+                \begin{center}
+
+                \begin{tikzpicture}
+                
+                 \draw(0, 0) to (0, 4);
+                 \draw(2, 0) to (2, 4);
+                 \draw(-2, 0) to (-2, 4);
+                    \draw(-2, 3) to (0, 3);
+                        \node at (-0.5, 3.3){$r_{x}$};
+                    \draw(0, 2) to (2, 2);
+                        \node at (0.5, 2.3){$l_{z}$};
+                    \draw(-2, 1) to (0, 1);
+                        \node at (-0.5, 1.3){$r_{y}$};
+                
+                   
+                
+                \end{tikzpicture}
+                \end{center}
+            \end{minipage}
+             \begin{minipage}{.3\textwidth}
+                \begin{center}
+
+                \begin{tikzpicture}
+                
+                 \draw(0, 0) to (0, 4);
+                 \draw(1.5, 0) to (1.5, 4);
+                 \draw(-1.5, 0) to (-1.5, 4);
+                 \draw(3, 0) to (3, 4);
+                    \draw(0, 3) to (1.5, 3);
+                        \node at (0.3, 3.3){$l_{x}$};
+                        \node at (1.2, 3.3){$r_{x}$};
+                     \draw(-1.5, 2) to (0, 2);
+                        \node at (-0.5, 2.3){$r_{z}$};
+                    \draw(0, 1) to (1.5, 1);
+                        \node at (0.3, 1.3){$l_{y}$};
+                         \node at (1.2, 1.3){$r_{y}$};
+                     \draw(1.5, 2) to (3, 2);
+                        \node at (2.5, 2.3){$l_{x\prime}$};
+                
+                   
+                
+                \end{tikzpicture}
+                \end{center}
+            \end{minipage}
+        
+
+    \caption{Three examples of the three cases for the placement 
+    of bars $x$ and $y$ in a ladder-lottery}
+\end{figure}
+\begin{proof}
+    Suppose that none of the above cases hold. Let $L_{\pi}$ be an 
+    optimal ladder-lottery with bars $x$ and 
+    bar $y$. If none of the cases hold then $x$ and $y$ are directly above/below each other without 
+    the enpoint of some third bar $z$ between $l_{x}$ and $l_{y}$ or between $r_{x}$ and $r_{y}$.
+    Let $x$ be the bar for the inversion of two elements $p$ and $q$ in $\pi$. 
+    As $p$ and $q$ travel through the ladder they will cross each other at bar $x$; 
+    thus uninverting them. Since bar $y$ is directly below bar $x$, then $p$ and $q$ will cross 
+    bar $y$ thus re-inverting them. Therefore, there will need to be a third 
+    bar that uninverts $p$ and $q$ a second time. Since this third bar is 
+    redundant, $L_{\pi}$ is non-optimal which is a contradiction. Let $x$ be a bar for two 
+    elements in $\pi$, $p$ and $q$ such that $p$ and $q$ do not form an inversion. Then $x$ 
+    will invert $p$ and $q$ and $y$ will uninvert them. Thus making both $x$ and $y$ redundant
+    bars which is also a contradiction. Therefore one of the above cases must hold.
+\end{proof}
