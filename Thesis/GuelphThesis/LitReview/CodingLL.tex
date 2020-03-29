@@ -167,7 +167,8 @@ Since the $Nth$ line has only right endpoints attached to it,
 then it actually does not need to be encoded. Right endpoints 
 are denoted as $0$ and left endpoints are encoded as $1$, therefore the number of right endpoints 
 for line $N$ is equal to the number of $1s$ in $lc_{n-1}$.
-Thus, there is no need for $lc_{n}$.
+Thus, there is no need for $lc_{n}$. The encoding with improvment 
+one for the ladder in Fig. 2.6 is $11\underline{0}0110\underline{0}010$.
 \subsubsection{Improvement 2}
 Improvement Two is based off of the fact that given any two bars,
 $x,y$ let $l_{x}$ denote the left endpoint of bar $x$, let 
@@ -177,14 +178,15 @@ end point of bar $y$. Let line $i$ be the line of $l_{x}$ and $l_{y}$
 and let line $i+1$ be the line of $r_{x}$ and $r_{y}$.
 \begin{theorem}
 There are three possible cases for the 
-placement of $x$ and $y$ in the ladder. The first case is that there 
+placement of $x$ and $y$ in some 
+arbitrary ladder from $OptL\{\pi\}$. The first case is that there 
 is at least one other bar, $z$, with a right end point, $r_{z}$ between $l_{x}$
-and $l_{y}$. The second case is that there is at least one other bar 
-$z$, with a left end point, $l_{z}$, between $r_{x}$ and $r_{y}$. The third case 
-is that there is at least one bar, $z$, with a right end point, 
-$r_{z}$, betwen $l_{x}$ and $l_{y}$ and there is at least one other bar, 
-$z\prime$ with a left end point, $l_{z\prime}$, between $r_{x}$ and $r_{y}$. For an example of all 
-three cases refer to Fig 2.7.\par
+and $l_{y}$ on line $i$. The second case is that there is at least one other bar 
+$z$, with a left end point, $l_{z}$, between $r_{x}$ and $r_{y}$ on line $i+1$. 
+The third case is that there is at least one bar, $z$, with a right end point, 
+$r_{z}$, betwen $l_{x}$ and $l_{y}$ on line $i$ and there is at least one other bar, 
+$z\prime$ with a left end point, $l_{z\prime}$, between $r_{x}$ and $r_{y}$ on line $i+1$. 
+For an example of all three cases refer to Fig 2.7.\par
 \end{theorem}
 
 %%figure demonstrating the three cases for bar positions
@@ -195,13 +197,16 @@ three cases refer to Fig 2.7.\par
                 \begin{flushleft}
                 \begin{tikzpicture}
                     \draw(0, 0) to (0, 4);
-                    \draw(2, 0) to (2, 4);
-                    \draw(-2, 0) to (-2, 4);
-                    \draw(-2, 2) to (0, 2);
+                        \node at (0, 4.3){$i$};
+                    \draw(1.5, 0) to (1.5, 4);
+                        \node at (1.5, 4.3){$i+1$};
+                    \draw(-1.5, 0) to (-1.5, 4);
+                        \node at (-1.5, 4.3){$i-1$};
+                    \draw(-1.5, 2) to (0, 2);
                         \node at (-0.5, 2.3){$r_{z}$};
-                    \draw(0, 3) to (2, 3);
+                    \draw(0, 3) to (1.5, 3);
                         \node at (0.5, 3.3){$l_{x}$};
-                    \draw(0, 1) to (2, 1);
+                    \draw(0, 1) to (1.5, 1);
                         \node at (0.5, 1.3){$l_{y}$};
                 \end{tikzpicture}
             \end{flushleft}
@@ -213,13 +218,16 @@ three cases refer to Fig 2.7.\par
                 \begin{tikzpicture}
                 
                  \draw(0, 0) to (0, 4);
-                 \draw(2, 0) to (2, 4);
-                 \draw(-2, 0) to (-2, 4);
-                    \draw(-2, 3) to (0, 3);
+                    \node at (0, 4.3){$i$};
+                 \draw(1.5, 0) to (1.5, 4);
+                    \node at (1.5, 4.3){$i+1$};
+                 \draw(-1.5, 0) to (-1.5, 4);
+                    \node at (-1.5, 4.3){$i-1$};
+                    \draw(-1.5, 3) to (0, 3);
                         \node at (-0.5, 3.3){$r_{x}$};
-                    \draw(0, 2) to (2, 2);
+                    \draw(0, 2) to (1.5, 2);
                         \node at (0.5, 2.3){$l_{z}$};
-                    \draw(-2, 1) to (0, 1);
+                    \draw(-1.5, 1) to (0, 1);
                         \node at (-0.5, 1.3){$r_{y}$};
                 
                    
@@ -233,9 +241,13 @@ three cases refer to Fig 2.7.\par
                 \begin{tikzpicture}
                 
                  \draw(0, 0) to (0, 4);
+                    \node at (0, 4.3){$i$};
                  \draw(1.5, 0) to (1.5, 4);
+                    \node at (1.5, 4.3){$i+1$};
                  \draw(-1.5, 0) to (-1.5, 4);
+                    \node at (-1.5, 4.3){$i-1$};
                  \draw(3, 0) to (3, 4);
+                    \node at (3, 4.3){$i+2$};
                     \draw(0, 3) to (1.5, 3);
                         \node at (0.3, 3.3){$l_{x}$};
                         \node at (1.2, 3.3){$r_{x}$};
@@ -245,7 +257,7 @@ three cases refer to Fig 2.7.\par
                         \node at (0.3, 1.3){$l_{y}$};
                          \node at (1.2, 1.3){$r_{y}$};
                      \draw(1.5, 2) to (3, 2);
-                        \node at (2.5, 2.3){$l_{x\prime}$};
+                        \node at (1.8, 2.3){$l_{z\prime}$};
                 
                    
                 
@@ -272,3 +284,76 @@ three cases refer to Fig 2.7.\par
     will invert $p$ and $q$ and $y$ will uninvert them. Thus making both $x$ and $y$ redundant
     bars which is also a contradiction. Therefore one of the above cases must hold.
 \end{proof}
+Knowing that one of the three above cases must hold is beneficial for improving the 
+line-based encoding. If $l_{x}$ and $l_{y}$ on line $i$ have no $r_{z}$ between them, 
+then there must be at least one $l_{z\prime}$ between $r_{x}$ and $r_{y}$ on line $i+1$.
+Since a left endpoint is encoded as a $1$ and a right endpoint is encoded as a $0$, 
+a $1$ can be omitted for the encoding of line $i+1$ if $l_{x}$ and $l_{y}$ have no $r_{z}$
+between them on line $i$. That is to say, if there is not a $0$ between 
+the two  $1s$ for $l_{x}$, $l_{y}$ in $lc_{i}$, it is implied that there is at least one $1$ between 
+the two $0s$ for $r_{x}$, $r_{y}$ on $lc_{i+1}$. Hence, one of the $1s$ in $lc_{i+1}$ can be omitted. 
+The line encoding with improvement two for the ladder in Fig 2.6 is $11\underline{0}010\underline{0}00\underline{0}0$.
+\subsubsection{Imrpovement 3}
+Improvement three is based off of saving some bits for right 
+end points/$0s$ in $lc_{n-1}$. Since line $n$ has no left end points,
+then then there must be some right endpoints between any two 
+consecutive bars connecting lines $n-1$ and line $n$. If you 
+refer to Fig. 2.7, then the only configuration for lines $n-2, n-1, n$
+is the middle configuration. Knowing this, then 
+given two bars, $x$ and $y$ with $l_{x}$/$l_{y}$ on line 
+$n-1$ and $r_{x}$/$r_{y}$ on line $n$, there must be at least 
+one bar, $z$, with its $r_{z}$ between $l_{x}$ and $l_{y}$
+on line $n-1$. Thus, for every $1$ in $lc_{n-1}$ except the 
+last $1$ in $lc_{n-1}$, a $0$ must immidediately proceed any $1$
+in $lc_{n-1}$. Since this $0$ is implied, it can be removed from $lc_{n-1}$. 
+For an example of improvement three with its line encoding for $lc_{n-1}$ please refer to Fig. 2.8.\pagebreak
+\begin{figure}[!htp]
+    \centering
+    \begin{tikzpicture}
+        \draw(0, -0.5) to (0, 4);
+            \node at (0, 4.3){$n-2$};
+            \draw(0, 3) to (1.5, 3);
+                \node at (1.2, 3.2){$0$};
+            \draw(0, 2.5) to (1.5, 2.5);
+                \node at (1.2, 2.7){$0$};
+            \draw(0, 1.5) to (1.5, 1.5);
+                \node at (1.2, 1.7){$0$};
+            \draw(0, 0.6) to (1.5, 0.6);
+                 \node at (1.2, 0.8){$0$};
+            \draw(0, -0.25) to (1.5, -0.25);
+                \node at (1.2, -0.05){$0$};
+        \draw(1.5, -0.5) to (1.5, 4);
+            \node at (1.5, 4.3){$n-1$};
+            \draw(1.5, 3.5) to (3, 3.5);
+                \node at (1.8, 3.7){$1$};
+                \node at (2.7, 3.7){$0$};
+            \draw(1.5, 2) to (3, 2);
+                \node at (1.8, 2.2){$1$};
+                \node at (2.7, 2.2){$0$};
+            \draw(1.5, 1) to (3, 1);
+                \node at (1.8, 1.2){$1$};
+                \node at (2.7, 1.2){$0$};
+            \draw(1.5, 0.25) to (3, 0.25);
+                \node at (1.8, 0.45){$\textcolor{red}{\textbf{1}}$};
+                \node at (2.7, 0.45){$0$};
+
+        \draw(3, -0.5) to (3, 4);
+            \node at (3, 4.3){$n$};
+    \end{tikzpicture}
+    \caption{The line coding for $lc_{n-1}$ with imrpovement three is $101110\underline{0}$.
+    As always, \underline{0} denotes the end of the line encoding. The red, bold $1$ represents 
+    the last left end point in $lc_{n-1}$, therefore the proceeding $0$ must be 
+    included in $lc_{n-1}$. For every other $1$ in $lc_{n-1}$, a $0$ is omitted following 
+    said $1$.}
+\end{figure}
+\subsubsection{Combining All Three}
+The combination of all three improvements can be done independently. 
+Let $IC_{L}$ be the \emph{improved line-based encoding} for some ladder $L$.
+Recall that $LC_{L}$ denotes the line-based encoding for some ladder $L$.
+$LC_{L}$ for the ladder in Fig. 2.5 is $11\underline{0}010\underline{0}110\underline{0}010\underline{0}0$.
+By applying imrpovement one, we get $11\underline{0}010\underline{0}110\underline{0}010\underline{0}$. 
+Notice how the last $0$ from $LC_{L}$ was removed because it represented $lc_{n}$.
+By applying imrpovement two to improvememt one we get $11\underline{0}00\underline{0}110\underline{0}00\underline{0}$.
+Notice how the third and sixth $1$ were removed because they are implied by 
+the successive $0s$. By applying improvement three to the result of improvement 
+two we get 
