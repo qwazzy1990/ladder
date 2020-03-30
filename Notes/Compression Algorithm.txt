@@ -1,0 +1,13 @@
+My own compression algorithm for a ladder is based off of the heights of the ladder.
+Based off of the idea that a bar's height can be moved up or down so long as 
+there is no endpoint of some other bar between it and a bar below it.
+
+Equivelent heights are a set of possible heights belonging to a bar 
+such that a bar can occupy any of the heights and the ladder will not change. 
+
+There is a height for bar x such that the number of lines for this height is at most 2* the number of bars 
+at that height. All bars should be moved to this height. 
+
+A bar can be moved in order to fulfill the above condition unless the bars are extreme.That is to say, 
+two bars share a height, are more than one column apart and belong to the route of N and 2. 
+This is because they  have nothing left in their height set to move up or down to. 
