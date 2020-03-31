@@ -11,3 +11,44 @@ at that height. All bars should be moved to this height.
 A bar can be moved in order to fulfill the above condition unless the bars are extreme.That is to say, 
 two bars share a height, are more than one column apart and belong to the route of N and 2. 
 This is because they  have nothing left in their height set to move up or down to. 
+
+1 bit to denote whether ther is a right child. If there is no right child of the last bar 
+on a height , h1, then there will a left child or the bar will be at the last height or an isolated bar.
+
+The child of a bar at h1 will be the start of the chain of bars at height h2(the height of the child).
+The start in either the left or right direction
+
+
+Updated:
+ Let hc(n) indicate the height code for some height 'n'
+ For each hc(n)
+ Let bit 1 indicate the direction. 0 = go left to right. 1 = go right to left.
+ Let bit 2 indicate which child to stop at. Child is defined as a terminating bar of height n that is also the left or right child 
+ of some terminating bar at height n-1. 
+ Let intermediate bits = 1 indicating bars on height n. The number of indermediate 1s in hc(n) = the number of bars at height 
+ n because each height has at least 1 bar.
+ Let the last bit =0 indicating the termination of hc(n).
+
+ Special note: for coding the last height, it is possible for the bars to be more than two colums apart and it is impossible 
+ to readjust the ladder to fix this problem. Therefore there needs to be a calculation to figure it out. Use k bits to indicate the 
+ columns between the most extreme bars at the last level. Put a 1 if there is bar at that column, else put a 0 in the position.
+
+ 7 3 4 2 1 6 5
+ |-| |-| | | |
+ | |-| | | | |
+ |-| |-| | | |
+ | | | |-| |-|
+ | | |-| |-| |
+ | |-| | | | |
+ |-| | | | |-|
+
+ HC(L)= hc(1)=110
+        hc(2)= 010
+        hc(3) = 0110
+        hc(4) = 1110
+        hc(5) = 1010
+        hc(6) = 000
+        hc(7) = 10 0 0 0 0
+                   _ _ _ _ 
+
+11001001101110101000010 0 0 0 0
