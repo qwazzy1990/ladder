@@ -10,17 +10,17 @@ The authors' algorithm is based on several key concepts, the most
 important of which is the \emph{local swap operation}. This is the 
 minimal change operation that transitions from one ladder in $OptL\{\pi\}$ to the 
 next ladder. The local swap operation is essentially a 180 degree rotation
-of three bars in the ladder, all at different levels in the ladder, such that the bottom
+of three bars in the ladder, such that the bottom
 bar is rotated to the top, the middle bar stays in the middle and the top bar
 is rotated to the bottom. If the bars undergo a 180 degree rotation to the right, 
 then this is known as a \emph{right swap operation} and 
 if the bars udergo a 180 degree rotation to the left then this 
 is known as a \emph{left swap operation}. To go to the next ladder in the set, 
 the current ladder, $L_{i}$ udergoes a right swap operation 
-to get toe ladder $L_{i+1}$. See figure --ref-- for an exmaple of a 
-local swap operation.The \emph{route} of an element is the sequence of bars in the ladder, from top left to 
-bottom right, that an element must cross in order to reach its correct position in 
-the identity permutation. Note that each bar has two elements that cross it, 
+to get to ladder $L_{i+1}$. See Fig. 2.2 for an exmaple of a 
+local swap operation.The \emph{route} of an element is the sequence of bars in the ladder that an element must cross in order to reach its correct position in 
+the identity permutation. The sequence is ordered from top left to bottom right.
+Note that each bar has two elements that cross it, 
 therefore the bar belongs to the route of the greater of the two elements. 
 It is important to note that when a right swap operation occurs, 
 two of the three bars belong to the route of a greter element and one bar belongs
@@ -32,7 +32,7 @@ If there is no such element, then the clean level is the maximum element in $\pi
 The \emph{root ladder} is the only ladder in  the set with a clean level of 1; in 
 other words, the root ladder is the only ladder in which no bars have undergone 
 a right swap operation. The root ladder is unique to $OptL\{\pi\}$. To see the root ladder 
-of $OptL\{(4,5,6,3,1,2)\}$ please refer to figure ~\ref{root}. Since none of
+of $OptL\{(4,5,6,3,1,2)\}$ please refer to figure Fig. 2.3. Since none of
 the bars in the root ladder have undergone a right swap operation, it is the only 
 ladder in $OptL\{\pi\}$ that has a clean level of $1$. The root ladder is
 also the original decendant ladder in the set. Insofar as the enumeration algorithm 
@@ -41,7 +41,7 @@ ladder must have at least one right swap operation. Since the root ladder has
 no right swap operations, then it must be the decendant of every other ladder.\par 
 The algorithm for generating $OptL\{\pi\}$ in the paper was the backbone 
 of the research for this thesis. However, the algorithm in this paper had some 
-issues. These issues presented several issues during the research for this thesis.
+issues. These issues presented several challenges during the research for this thesis.
 The first issue in the paper is that the authors do not provide an algorithm for
 generating the root ladder in $OptL\{\pi\}$. Seeing as every other in the set 
 is derived from the root ladder, it is essential to build the root ladder without
