@@ -1,0 +1,6 @@
+
+
+compile:
+	pdflatex MainThesisFile.tex
+
+

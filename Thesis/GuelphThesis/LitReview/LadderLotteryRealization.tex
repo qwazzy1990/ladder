@@ -1,10 +1,10 @@
 
 
-\subsection{Ladder-Lottery Realization}
+\section{Ladder-Lottery Realization}
 
 In their paper \textbf{Ladder-Lottery Realization} the authors provide 
 a rather interesting puzzle in regards to ladder lotteries. The puzzle 
-is known as the ladder-lottery realization problem. In order to understand
+is known as the ladder-lottery realization problem \cite{A3}. In order to understand
 the problem, one must know what a \emph{multi-set} is. A \emph{multi-set}
 is a set in which an element appears more than once. The exponent 
 above the element indicates the number of times it appears in the set.
@@ -15,7 +15,7 @@ The ladder-lottery realization puzzle asks, given an arbitrary starting permutat
 and a multi-set of bars, 
 is there a \emph{non-optimal} ladder lottery for the arbitrary permutation
 that uses every bar in the multi-set the number 
-of times it appears in the  multi-set. 
+of times it appears in the  multi-set \cite{A3}. 
 For an example of an affirmative solution to the ladder lottery realization problem, see Fig. 2.4.
 
 
@@ -84,7 +84,7 @@ For an example of an affirmative solution to the ladder lottery realization prob
 \pagebreak
 The authors prove that the ladder-lottery realization problem in NP-Hard
 by reducing the ladder-lottery realization to the One-In-Three 3SAT, 
-which has already been proven to be NP-Hard. The One-In-Three 3SAT 
+which has already been proven to be NP-Hard \cite{A3}. The One-In-Three 3SAT 
 problem is a problem such that given a set of variables $(X)$, a collection 
 of \emph{disjuntcive clauses} $(C)$ which are disjunctive expressions over 
 literals of $X$. Each clause in $C$ 
@@ -95,19 +95,19 @@ the question is whether it is possible for each clause to have exactly one
 true literal. The answer in this case is yes. If $p=T$, $r=T$, $q=F$, $s=F$
  and $t=T$ then all the clauses in $C$ have exactly one true literal. 
  The authors reduce the ladder lottery-realization problem to the
-One-In-Three 3SAT problem by devising four gadgets. The result of 
+One-In-Three 3SAT problem by devising four gadgets \cite{A3}. The result of 
 the reduction is that the arbitrary starting permutation is equivelent 
 to a derivation of the intial set of variables, $X$, in the One-In-Three 3SAT 
 problem and the multi-set of bars is equivelent to a 
 derivation of the intial set of clauses, $C$, in the One-In-Three 
-3SAT problem.\par 
+3SAT problem cite{A3}.\par 
 The authors note that there are two cases in which the ladder-lottery
 realization problem can be solved in polynomial time. These cases 
 include the follwing. First, if every bar in the multi-set appears
 exactly once and every bar corresponds to an inversion, 
 then an affirmative solution to the ladder-lottery realization 
-instance can be demonstrated in polynomial time. 
+instance can be demonstrated in polynomial time \cite{A3}. 
 Second, if there is an inversion in the perumutation and its bar appears in the multi-set an even 
 number of times, then a negative solution to
 the ladder-lottery realization instance
-can be solved in polynomial time.\par
+can be solved in polynomial time \cite{A3}.\par

@@ -42,7 +42,9 @@ int main(int argc, char *argv[])
         printf("\n");
 
        
-        genMinLadders(perm, numDig);
+        //genMinLadders(perm, numDig);
+        //saveAllLadders(perm, numDig);
+        encodingDriver(perm, numDig, 1);
 
         free(perm);
     }

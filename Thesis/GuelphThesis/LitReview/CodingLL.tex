@@ -2,28 +2,28 @@
 \subsection{Overview}
 In this paper, the authors provide three methods to encode ladder-lotteries as 
 binary strings. Coding discrete objects as binary strings is an appealing theme because 
-it allows for compact represntation of them for a computer.
+it allows for compact represntation of them for a computer \cite{A5}.
 \subsection{Route Based Encoding}
 The first method is termed \emph{route based encoding method} in 
 which each route of an element in the permutation has a binary encoding. Let $L_{k}$
-be a ladder lottery for some arbitrary permutation $\pi=(p_{1},\dots,p_{N})$. The route 
+be a ladder lottery for some arbitrary permutation $\pi=(p_{1},\dots,p_{n})$. The route 
 of element $p_{i}$ is encoded by keeping in mind $p_{i}$ crosses bars in its route 
 going left zero or more times and crosses bars in its route going right zero or 
-more times. The maximum number of bars $p_{i}$ can have is $N-1$, therefore the 
-upper bound for the number of left/right crossings for $p_{i}$ is $N-1$. 
+more times \cite{A5}. The maximum number of bars $p_{i}$ can have is $n-1$, therefore the 
+upper bound for the number of left/right crossings for $p_{i}$ is $n-1$ \cite{A5}. 
 Let a left crossing be denoted with a $'0'$ and let a right crossing be denoted 
 with a $'1'$. Let $C_{pi}$ be the route encoding for the $i^{th}$ element 
 in $\pi$. To construct $C_{pi}$,  append $0$ and $1$ to each other representing 
 the left and right crossings of $p_{i}$ from the top left 
-to bottom right of the ladder. If the number of crossings for $p_{i}$ 
-is less than $N-1$, append $0s$ to the encoding of the route of $p_{i}$ until
-the encoding is of length $N-1$. Let $LC_{L}$ be the route encoding for 
+to bottom right of the ladder \cite{A5}. If the number of crossings for $p_{i}$ 
+is less than $n-1$, append $0s$ to the encoding of the route of $p_{i}$ until
+the encoding is of length $n-1$ \cite{A5}. Let $LC_{L}$ be the route encoding for 
 some arbitrary ladder in $OptL\{\pi\}$ is $C_{p_{1}}, C_{p_{2}, \dots C_{p_{N}}}$.
 For an example of the route encoding for the root ladder of $(3,2,5,4,1)$ refer to 
 Fig. 2.5. In Fig 2.5 you will see that $C_{p_{1}}$ is 11\underline{00}. Underlined 
 $0s$ are the $0s$ added to ensure the length of $C_{p_{1}}$ is $N-1$.
-Since the length of $C_{pi}$ is $N-1$ and the number of elements in $\pi$ is $N$
-then the length of $LC_{L}=N(N-1)$. Hence the number of bits needed for $LC_{L}$ 
+Since the length of $C_{pi}$ is $n-1$ and the number of elements in $\pi$ is $n$
+then the length of $LC_{L}=n(n-1)$. Hence the number of bits needed for $LC_{L}$ 
 belongs to $\mathcal{O}(n^{2})$.\par 
 \begin{figure}[!htp]
     \begin{center}
@@ -65,24 +65,24 @@ belongs to $\mathcal{O}(n^{2})$.\par
 The second method is termed \emph{line based encoding} which focuses 
 on encoding the lines of the ladder-lottery. Each line is represented 
 as a sequence of endpoints of bars. Let $L$ be an optimal ladder-lottery 
-with $N$ lines and $B$ bars, then for some arbitrary line $i$ there 
+with $n$ lines and $b$ bars, then for some arbitrary line $i$ there 
 are zero or more right/left endpoints of bars that 
-come into contact with line $i$. Let $1$ denote a left end point that 
+come into contact with line $i$ \cite{A5}. Let $lc_{i}$ denote the line based encoding for line $i$.
+Let $1$ denote a left end point that 
 comes into contact with line $i$ and let $0$ denote a right 
 end point that comes into contact with line $i$. Finally, append a $0$
 to line $i$ to denote the end of the line. Then line $i$ can be 
 encoded, from top to bottom, as a sequence of $1s$ and $0s$ that 
-terminates in a $0$. Let $lc_{i}$ be 
-the line encoding for line $i$. Given the ladder in Fig. 2.5, 
+terminates in a $0$.  Given the ladder in Fig. 2.5, 
 $lc_{3}$ is $001\underline{0}$. The \underline{0} denotes 
 the end of the line. Let $LC_{L}$ be the line encoding for 
 some arbitrary ladder, then $LC_{L}=lc_{1}, lc_{2}, \dots lc_{n}$.
 Let $L_{2.5}$ refer to the ladder in Fig. 2.5, then 
 $LC_{L_{2.5}}=11\underline{0}010\underline{0}110\underline{0}010\underline{0}0\underline{0}$\par 
 In order to reconstruct $L_{k}$ from $LC_{L_{k}}$, or in other words decode
-$LC_{L_{k}}$ it is important to recognize that the first line only has left endpoints attached to it. Since left 
-end points are encoded as a $1$ then it is guarenteed that the first $0$ 
-represents the end of line $1$. Secondly, the last/$Nth$ bar 
+$LC_{L_{k}}$ it is important to recognize that the first line only has left endpoints attached to it
+\cite{A5}. Since left end points are encoded as a $1$ then it is guarenteed that the first $0$ 
+represents the end of line $1$. Secondly, the last/$nth$ bar 
 has only right end points attached to it.  Therefore $lc_{n}$ will only have $0s$. Therefore, $lc_{n}$
 does not require a terminating $0$. Thirdly, for any 
 line $i+1$, if line $i+1$ has a $0$ then there must be a corresponding $1$
@@ -161,13 +161,13 @@ Although the line-based encoding is better than the route based
 encoding, it can still be further optimized. The authors provide 
 three improvements to the line-based encoding. These three improvements
 can be combined to really help imrpove the line based encoding's 
-space efficiency. 
+space efficiency \cite{A5}. 
 \subsubsection{Imrpovement 1}
-Since the $Nth$ line has only right endpoints attached to it, 
+Since the $nth$ line has only right endpoints attached to it, 
 then it actually does not need to be encoded. Right endpoints 
 are denoted as $0$ and left endpoints are encoded as $1$, therefore the number of right endpoints 
-for line $N$ is equal to the number of $1s$ in $lc_{n-1}$.
-Thus, there is no need for $lc_{n}$. The encoding with improvment 
+for line $n$ is equal to the number of $1s$ in $lc_{n-1}$.
+Thus, there is no need for $lc_{n}$ \cite{A5}. The encoding with improvment 
 one for the ladder in Fig. 2.6 is $11\underline{0}0110\underline{0}010$.
 \subsubsection{Improvement 2}
 Improvement Two is based off of the fact that given any two bars,
@@ -185,7 +185,7 @@ and $l_{y}$ on line $i$. The second case is that there is at least one other bar
 $z$, with a left end point, $l_{z}$, between $r_{x}$ and $r_{y}$ on line $i+1$. 
 The third case is that there is at least one bar, $z$, with a right end point, 
 $r_{z}$, betwen $l_{x}$ and $l_{y}$ on line $i$ and there is at least one other bar, 
-$z\prime$ with a left end point, $l_{z\prime}$, between $r_{x}$ and $r_{y}$ on line $i+1$. 
+$z\prime$ with a left end point, $l_{z\prime}$, between $r_{x}$ and $r_{y}$ on line $i+1$ \cite{A5}. 
 For an example of all three cases refer to Fig 2.7.\par
 \end{theorem}
 
@@ -289,7 +289,7 @@ line-based encoding. If $l_{x}$ and $l_{y}$ on line $i$ have no $r_{z}$ between 
 then there must be at least one $l_{z\prime}$ between $r_{x}$ and $r_{y}$ on line $i+1$.
 Since a left endpoint is encoded as a $1$ and a right endpoint is encoded as a $0$, 
 a $1$ can be omitted for the encoding of line $i+1$ if $l_{x}$ and $l_{y}$ have no $r_{z}$
-between them on line $i$. That is to say, if there is not a $0$ between 
+between them on line $i$ \cite{A5}. That is to say, if there is not a $0$ between 
 the two  $1s$ for $l_{x}$, $l_{y}$ in $lc_{i}$, it is implied that there is at least one $1$ between 
 the two $0s$ for $r_{x}$, $r_{y}$ on $lc_{i+1}$. Hence, one of the $1s$ in $lc_{i+1}$ can be omitted. 
 The line encoding with improvement two for the ladder in Fig 2.6 is $11\underline{0}010\underline{0}00\underline{0}0$.
@@ -299,13 +299,13 @@ end points/$0s$ in $lc_{n-1}$. Since line $n$ has no left end points,
 then then there must be some right endpoints between any two 
 consecutive bars connecting lines $n-1$ and line $n$. If you 
 refer to Fig. 2.7, then the only configuration for lines $n-2, n-1, n$
-is the middle configuration. Knowing this, then 
+is the middle configuration \cite{A5}. Knowing this, then 
 given two bars, $x$ and $y$ with $l_{x}$/$l_{y}$ on line 
 $n-1$ and $r_{x}$/$r_{y}$ on line $n$, there must be at least 
 one bar, $z$, with its $r_{z}$ between $l_{x}$ and $l_{y}$
 on line $n-1$. Thus, for every $1$ in $lc_{n-1}$ except the 
 last $1$ in $lc_{n-1}$, a $0$ must immidediately proceed any $1$
-in $lc_{n-1}$. Since this $0$ is implied, it can be removed from $lc_{n-1}$. 
+in $lc_{n-1}$. Since this $0$ is implied, it can be removed from $lc_{n-1}$ \cite{A5}. 
 For an example of improvement three with its line encoding for $lc_{n-1}$ please refer to Fig. 2.8.\pagebreak
 \begin{figure}[!htp]
     \centering

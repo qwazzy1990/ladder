@@ -275,4 +275,21 @@ void freeDts(DTSA* dts, int n);
 
 void genMinLadders(int* perm, int numDig);
 
+
+
+
+//Encoding ladders section
+char* ilEncode(Ladder* l);
+
+
+//for height based encoding
+char* heightEncoding(Ladder* l);
+
+bool adjustHeight(Ladder* l, int startRow, int row, int col);
+void encodingDriver(int* perm, int numDig, int mode);
+
+
+
+void saveAllLadders(int* perm, int numDig);
+
 #endif

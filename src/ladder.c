@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 #include <stdbool.h>
 #include "ladder.h"
 #include "utilities.h"
@@ -16,11 +17,13 @@ int ladderCount = 1;
 bool DEBUG3 = true;
 bool PRINT = true;
 
-bool MIN = true;
+bool MIN = false;
+bool SAVEALL = false;
 int CURMIN = 1000000;
 
 
 List *minLadders;
+List* allLadders;
 
 /***STATIC FUNCTIONS */
 static void copyArray(int **write, int *read, int largestIndex, int size)
@@ -75,6 +78,7 @@ Ladder *cloneLadder(Ladder *l)
     clone->numRows = l->numRows;
     clone->numBars = l->numBars;
     clone->depth = l->depth;
+    clone->ladderNumber = l->ladderNumber;
 
     initLadder(clone);
 
@@ -319,6 +323,9 @@ char *printBar(Bar *b)
 
 void printLadder(Ladder *l)
 {
+    
+    printf(CYAN "Ladder Number:%d\n" COLOR_RESET, l->ladderNumber);
+    printf(MAGENTA "Height:%d\n" COLOR_RESET, l->depth + 1);
     for (int i = 0; i <= l->depth + 1; i++)
     {
         for (int j = 0; j < l->numCols; j++)
@@ -755,7 +762,7 @@ void findAllChildren(Ladder *l, int cleanLevel, int level, DTSA *dts)
         return;
 
     printDtsAsBinString(dts);
-
+    l->ladderNumber = ladderCount;
     if (MIN)
     {
         if (l->depth < CURMIN)
@@ -770,31 +777,31 @@ void findAllChildren(Ladder *l, int cleanLevel, int level, DTSA *dts)
             CURMIN = clone->depth;
             //set CURMIN to l->depth
         }
-        else if (l->depth == CURMIN)
+        if (l->depth == CURMIN)
         {
             Ladder *clone = cloneLadder(l);
             clone->ladderNumber = ladderCount;
             insertBack(minLadders, clone);
         }
-        else 
-        {
-
-        }
        
     }
-
+    if(SAVEALL)
+    {
+        Ladder* clone = cloneLadder(l);
+        //clone->ladderNumber = ladderCount;
+        insertBack(allLadders, clone);
+    }
     if (PRINT)
     {
         printf(RED "Clean Level:%d\n" COLOR_RESET, cleanLevel);
         printf(YELLOW "Depth:%d\n" COLOR_RESET, level);
-
-        printf(CYAN "Ladder Number:%d\n" COLOR_RESET, ladderCount);
-        printf(MAGENTA "Height:%d\n" COLOR_RESET, l->depth + 1);
-    }
-    ladderCount++;
-    if (PRINT)
         printLadder(l);
 
+    }
+   
+       
+
+    ladderCount++;
     Ladder *clone = cloneLadder(l);
 
     int y = MAXVAL;
@@ -1452,4 +1459,116 @@ void genMinLadders(int *perm, int numDig)
     freeList(minLadders);
 
     MIN = false;
+}
+
+/****ENCODING LADDERS SECTION****/
+
+
+
+
+void saveAllLadders(int* perm, int numDig)
+{
+    allLadders = initializeList(dummy_print, destroyClone, dummy_compare);
+    SAVEALL = true;
+    driver(perm, numDig);
+    //freeList(allLadders);
+
+}
+
+void encodingDriver(int* perm, int numDig, int mode)
+{
+    saveAllLadders(perm, numDig);
+    srand(time(NULL));
+    int r = rand();
+    r = r % allLadders->length;
+    r = 10;
+    Ladder* encode = (Ladder*)allLadders->head->data;
+    Node* temp = allLadders->head;
+
+    forall(r)
+    {
+
+        if(x == r-1)
+        {
+             encode = temp->data;
+             break;
+        }
+        temp = temp->next;
+    }
+    printLadder(encode);
+    if(mode == 0){
+        ilEncode(encode);
+        //gen a random number b/w 0 and len(allladders)
+    }//call the ilencoding
+
+    else{
+        printf("%d\n", adjustHeight(encode,1, 2, 0));
+        printLadder(encode);
+        adjustHeight(encode,0,1, 1);
+        printLadder(encode);
+    } //call height encoding
+    freeList(allLadders);
+}
+
+char* ilEncode(Ladder* l)
+{
+    printLadder(l);
+    new_object(char*, final, 100);
+    new_object(char*, first, l->depth+3);
+    new_object(char*, second, l->depth+3);
+    bool flag = false;
+    forall(l->depth+2){
+        first[x] = 'x';
+        second[x] = 'x';
+    }
+
+    for(int i = 0; i < l->numCols; i++)
+    {
+        for(int j = 0; j <= l->depth; j++)
+        {
+            if(i == 0 && l->ladder[j][i] > 0)
+            {
+                printf("%d\n", l->ladder[j][i]);
+                first[j] = '1';
+                second[j] = '0';
+            }
+        }
+        first[l->depth+1] = '0';
+        first[l->depth+2] = '\0';
+       if(i == 0)
+       {
+           printf("%s\n", first);
+       }
+    }
+}
+
+
+
+//For height based encoding
+
+
+bool adjustHeight(Ladder* l, int startRow, int row, int col)
+{
+    printf("entering function\n");
+    if(l->ladder[row][col] != 0 || row > l->depth)return false;
+    int leftCol = col-2;
+    int rightCol = col+2;
+    if(leftCol >= 0 && l->ladder[row][leftCol] != 0)
+    {
+        int temp = l->ladder[row][col];
+        l->ladder[row][col] = l->ladder[row][leftCol];
+        l->ladder[row][leftCol] = temp;
+        return true;
+    }
+    if(rightCol < l->numCols && l->ladder[row][rightCol] != 0)
+    {
+        print("Found the match on right side. ");
+        int temp = l->ladder[row][col];
+        l->ladder[row][col] = l->ladder[startRow][col];
+        l->ladder[startRow][col] = temp;
+        printLadder(l);
+        return true;
+    }
+    return adjustHeight(l, startRow, row+1, col);
+
 }
