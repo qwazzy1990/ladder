@@ -8,13 +8,19 @@
 #include "Color.h"
 #include "Sjt.h"
 #include "svg.h"
+#include "Zaks.h"
+#include "Heaps.h"
 #include "LinkedListAPI.h"
+#include "ehr.h"
+#include "lexicographic.h"
+#include "GrayCode.h"
 
-bool DEBUG1 = true;
+bool DEBUG1 = false;
 bool DEBUG7 = false;
 bool DEBUG8 = false;
 bool DEBUG9 = false;
 bool DEBUG10 = false;
+bool DEBUG11 = true;
 int memSize = 1;
 int numDig = 0;
 
@@ -127,8 +133,21 @@ int main(int argc, char *argv[])
 
    if(DEBUG10)
    {
+       int n = 4;
        //List* list = initializeList(dummy_print, freeTwoD, dummy_compare);
+        new_object(int**, perms, 50);
+        forall(50)perms[x] = NULL;
+        new_object(int*, perm, n);
+        forall(n)perm[x] = x+1;
+        orderedPerms(perms, perm, factorial(n), 1, n);
+        forall(24)printPerm(perms[x], 4);
+        //genLaddersFromPerms(perms, 4);
 
+   }
+   if(DEBUG11)
+   {
+       int n = 4;
+       grayCodeDriver(n);
    }
 }
 

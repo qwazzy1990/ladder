@@ -7,6 +7,7 @@
 #include "Sjt.h"
 #include "ladder.h"
 #include "utilities.h"
+#include "Zaks.h"
 
 
 int globalCount = 0;
@@ -110,8 +111,9 @@ int fact(int n)
 void genPermsSJT(int **perms, int *perm, int n, int *arr, bool *direction)
 {
 
-    copyPerm(perms[globalCount], perm, n);
-
+    //printPerm(perm, n);
+    if(perms[0] == NULL)
+        appendPerm(perms, perm, n);
 
     if (globalCount == factorial(n))
         return;
@@ -136,8 +138,7 @@ void genPermsSJT(int **perms, int *perm, int n, int *arr, bool *direction)
             p--;
             q--;
             globalCount++;
-            copyPerm(perms[globalCount], perm, n);
-
+            appendPerm(perms, perm, n);
             arr[n - 1] += 1;
         }
         else
@@ -147,10 +148,10 @@ void genPermsSJT(int **perms, int *perm, int n, int *arr, bool *direction)
             p++;
             q++;
             globalCount++;
-            copyPerm(perms[globalCount], perm, n);
-
+            appendPerm(perms, perm, n);
             arr[n - 1] += 1;
         }
+        //printPerm(perm, n);
     }
 
     direction[n - 1] = !(direction[n - 1]);
@@ -169,14 +170,14 @@ void adjustPerm(int **perms, int *perm, int n, int *arr, bool *direction)
         //n-1 times
         if (arr[i] < i)
         {
+           
             index = _getIndex(perm, n+1, i + 1);
 
             if (direction[i] == LEFT)
             {
                 
                 _swap(&(perm[index - 1]), &(perm[index]));
-                copyPerm(perms[globalCount], perm, n + 1);
-                
+                appendPerm(perms, perm, n+1);
                 //add a bar to the ladder of level i+1
                 //increment arr[i]
                 arr[i] += 1;
@@ -184,11 +185,13 @@ void adjustPerm(int **perms, int *perm, int n, int *arr, bool *direction)
             else
             {
                 _swap(&(perm[index]), &(perm[index + 1]));
-                copyPerm(perms[globalCount], perm, n + 1);
+                
+                appendPerm(perms, perm, n+1);
                 //add a bar to the ladder of level i+1
                 //increment arr[i]
                 arr[i] += 1;
             }
+            //printPerm(perm, n+1);
             return;
         }
         //else set it to 0
@@ -205,7 +208,6 @@ void adjustPerm(int **perms, int *perm, int n, int *arr, bool *direction)
 
 void sjt(int *perm, int count, int max, int size, bool flag)
 {
-    printPerm(perm, size);
     Ladder *ll = newLadder(size);
     printf("Ladder Number = %d\n", count + 1);
 
@@ -287,9 +289,8 @@ void copyPerm(int *dest, int *src, int n)
 //generates the permutations using the reverse of the sjt algorithm
 void genPermsSJTReverse(int **perms, int *perm, int n, int *arr, bool *direction)
 {
-
-    copyPerm(perms[globalCount], perm, n);
-
+   
+    appendPerm(perms, perm, n);
     //if the globalCount n! return
     if (globalCount == factorial(n))
         return;
@@ -321,8 +322,7 @@ void genPermsSJTReverse(int **perms, int *perm, int n, int *arr, bool *direction
             _swap(&(perm[p]), &(perm[q]));
             globalCount++;
 
-            copyPerm(perms[globalCount], perm, n);
-
+            appendPerm(perms, perm, n);
             p++;
             q++;
         }
@@ -330,8 +330,7 @@ void genPermsSJTReverse(int **perms, int *perm, int n, int *arr, bool *direction
         {
             _swap(&(perm[q]), &(perm[p]));
             globalCount++;
-            copyPerm(perms[globalCount], perm, n);
-
+            appendPerm(perms, perm, n);
 
             p--;
             q--;
@@ -369,8 +368,7 @@ void adjustPermReverse(int **perms, int *perm, int n, int *arr, bool *direction)
                 _swap(&(perm[index]), &(perm[index - 1]));
                 arr[i] += 1;
             }
-            copyPerm(perms[globalCount], perm, n + 1);
-
+            appendPerm(perms, perm, n+1);
             return;
         }
         else

@@ -345,6 +345,14 @@ void printLadder(Ladder *l)
     printf("\n");
 }
 
+void printAllLadders(List* ladders)
+{
+    for(Node* h = ladders->head; h != NULL; h = h->next)
+    {
+        printLadder((Ladder*)h->data);
+    }
+}
+
 char *ladderToString(void *data)
 {
     Ladder *l = (Ladder *)data;
@@ -1342,7 +1350,6 @@ int factorial(int n)
     {
         result = result * i;
     }
-    printf("Result is %d\n", result);
     return result;
 }
 

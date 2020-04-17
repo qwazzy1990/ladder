@@ -119,6 +119,10 @@ void printPerm(int *perm, int size);
 char* ladderToString(void * data);
 
 
+void printAllLadders(List* ladders);
+
+
+
 //delete
 
 //find turn bar
@@ -291,5 +295,6 @@ void encodingDriver(int* perm, int numDig, int mode);
 
 
 void saveAllLadders(int* perm, int numDig);
+
 
 #endif
