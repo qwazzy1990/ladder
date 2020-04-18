@@ -31,18 +31,27 @@ void grayCodeDriver(int n)
     List *sjtLadders = genCanonicalLadders(sjtPerms, n);
 
     List *heapsLadders = genCanonicalLadders(heapsPerms, n);
-    ;
     List *zaksLadders = genCanonicalLadders(zaksPerms, n);
-    ;
     List *lexLadders = genCanonicalLadders(lexPerms, n);
 
-    // printAllLadders(sjtLadders);
+    printAllLadders(sjtLadders);
+    getSwapDifferentials(sjtLadders);
+    
 
     // printAllLadders(heapsLadders);
     //printAllLadders(zaksLadders);
     //printAllLadders(lexLadders);
 
-    getMinChangeDifferential(heapsLadders);
+    //get the list of minimal changes between each ladder for each algorithm
+    List* sjtDiff = getMinChangeDifferential(sjtLadders);
+   
+    List* heapDiff = getMinChangeDifferential(heapsLadders);
+    List* zaksDiff = getMinChangeDifferential(zaksLadders);
+    List* lexDiff = getMinChangeDifferential(lexLadders);
+
+    printf("Sjt: %f  Heap: %f  Zaks: %f  Lex: %f\n", calculateAverageAmntOfDiff(sjtDiff), calculateAverageAmntOfDiff(heapDiff), calculateAverageAmntOfDiff(zaksDiff), calculateAverageAmntOfDiff(lexDiff) );
+
+
 
     //freeMem
     forall(factorial(n))
@@ -227,7 +236,6 @@ int calMinChangeDifferential(Bar **firstBars, Bar **secondBars, int lenOne, int 
         //reset the flag
         flag = false;
     }
-    printf("---%d---\n", numDiff);
     return numDiff;
 }
 
@@ -238,19 +246,110 @@ List *getMinChangeDifferential(List *ladders)
     List *differentials = initializeList(dummy_print, free, dummy_compare);
     forall(ladders->length - 1)
     {
+        //get the two consecutive ladders
         Ladder *l1 = curr->data;
         Ladder *l2 = next->data;
+
+        //calculate the avg diff between them
         int diff = calMinChangeDifferential(l1->bars, l2->bars, l1->numBars, l2->numBars);
+
+        //add diff to list
         int* dd = calloc(1, sizeof(int));
         *dd = diff;
         insertBack(differentials, dd);
+       
         curr = next;
         next = next->next;
     }
-    for (Node *h = differentials->head; h != NULL; h = h->next)
-    {
-        int *d = h->data;
-        printf("%d\n", *d);
-    }
+  
     return differentials;
 }
+
+//function returns the average amount of minimal change 
+//for a set of canonical ladders generated from 
+//a gray code for permutations
+double calculateAverageAmntOfDiff(List* differentials)
+{
+    double avgDiff = 0.0;
+    int sum = 0;
+    int denom = differentials->length;
+
+    //calculate the numerator
+    for(Node* h = differentials->head; h!=NULL; h = h->next)
+    {
+        int* a = h->data;
+        sum += *a;
+    }
+    //calc average
+    avgDiff = (double)sum/(double)denom;
+   
+    return avgDiff;
+
+}
+
+
+
+//Assume that a minimal change unit is relocation of a bar.
+int calSwapDifferential(Ladder* l1, Ladder* l2)
+{
+    Bar** b1 = l1->bars;
+    Bar** b2 = l2->bars;
+    int lenOne = l1->numBars;
+    int lenTwo = l2->numBars;
+
+    int numSwaps = 0;
+    for(int i=0; i < lenOne; i++)
+    {
+        Bar* b = b1[i];
+        for(int j = 0; j < lenTwo; j++)
+        {
+            Bar* bb = b2[j];
+            if(b->vals[0] == bb->vals[0] && b->vals[1] == bb->vals[1])
+            {
+                //get the columns of the bars
+                int numOne = b->barNum;
+                int numTwo = bb->barNum;
+                
+                int c1 = getColIndex(l1, numOne);
+                
+                int c2 = getColIndex(l2, numTwo);
+
+                //if the columns of the same bar between two consecutive ladders differs then the bar was swapped.
+                //if the bar was swapped, then it was swapped with another bar meaning that numSwaps is 
+                //to be cut in half
+                if(c1 != c2)numSwaps++;       
+                
+
+            }
+        }        
+    }
+    return numSwaps/2;
+}
+
+
+List* getSwapDifferentials(List* ladders)
+{
+    Node *curr = ladders->head;
+    Node *next = ladders->head->next;
+    List *differentials = initializeList(dummy_print, free, dummy_compare);
+    forall(ladders->length - 1)
+    {
+        //get the two consecutive ladders
+        Ladder *l1 = curr->data;
+        Ladder *l2 = next->data;
+
+        //calculate the avg diff between them
+        int diff = calSwapDifferential(l1, l2);
+
+        //add diff to list
+        int* dd = calloc(1, sizeof(int));
+        *dd = diff;
+        insertBack(differentials, dd);
+       
+        curr = next;
+        next = next->next;
+    }
+  
+    return differentials;
+}
+
