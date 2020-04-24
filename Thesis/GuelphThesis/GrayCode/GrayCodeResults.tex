@@ -2,34 +2,73 @@
 
 The results for the two basic operations are listed in the tables below. There are two separate tables, one 
 for the root ladder as the canonical representative, the other for the optimal ladder as the canonical representative.
-The results for $N=6$ are listed. The average number of swaps and the average number of insertions or deletions are 
+The results for $N=[3 \dots 6]$ are listed. The average number of swaps and the average number of insertions or deletions are 
 recorded for each algorithm.
 
 %%first table
-\begin{tabular}{ |p{3cm}||p{3cm}|p{3cm}|p{3cm}}
+\begin{tabular}{ |p{3cm}||p{3cm}|p{3cm}|p{3cm}|}
  \hline
  \multicolumn{4}{|c|}{Root Ladder} \\
  \hline
- Gray Code& Operatin One &Operation Two& N\\
+ Gray Code& Operation One &Operation Two& N\\
  \hline
  SJT  & 1.000000 &0.200000 & 3\\
  HEAPS & 1.800000 & 0.000000 & 3 \\
  ZAKS & 1.8000000 & 0.2000000 &  3\\
  LEX & 1.400000 & 0.2000000 &  3\\
+ \hline
 
- SJT  & 1.000000 &0.200000 & 3\\
- HEAPS & 1.800000 & 0.000000 & 3 \\
- ZAKS & 1.8000000 & 0.2000000 &  3\\
- LEX & 1.400000 & 0.2000000 &  3\\
+ SJT  & 1.000000 &0.173913 & 4\\
+ HEAPS & 1.956522 & 0.086957 & 4 \\
+ ZAKS & 2.347826 & 0.521739 &  4\\
+ LEX & 1.739130 & 0.565217 &  4\\
+ \hline
  
- SJT  & 1.000000 &0.200000 & 3\\
- HEAPS & 1.800000 & 0.000000 & 3 \\
- ZAKS & 1.8000000 & 0.2000000 &  3\\
- LEX & 1.400000 & 0.2000000 &  3\\
+ SJT  & 1.000000 &0.134454& 5\\
+ HEAPS & 2.126050 & 0.067229 & 5 \\
+ ZAKS & 2.605042 & 0.941176 &  5\\
+ LEX & 1.915966 & 1.033613 &  5\\
+ \hline
  
+ SJT  & 1.000000 &0.105702 & 6\\
+ HEAPS & 2.146036 & 0.059805 & 6\\
+ ZAKS & 2.691238 & 1.401947 &  6\\
+ LEX & 1.979138 & 1.545202&  6\\
+ \hline
+\end{tabular}\pagebreak
+
+%%Second Table
+
+
+
+%%first table
+\begin{tabular}{ |p{3cm}||p{3cm}|p{3cm}|p{3cm}|}
+ \hline
+ \multicolumn{4}{|c|}{optimal Ladder} \\
+ \hline
+ Gray Code& Operation One &Operation Two& N\\
+ \hline
  SJT  & 1.000000 &0.200000 & 3\\
  HEAPS & 1.800000 & 0.000000 & 3 \\
- ZAKS & 1.8000000 & 0.2000000 &  3\\
- LEX & 1.400000 & 0.2000000 &  3\\
+ ZAKS & 1.8000000 & 0.000000 &  3\\
+ LEX & 1.400000 & 0.0000000 &  3\\
+ \hline
+
+ SJT  & 1.000000 &0.173913 & 4\\
+ HEAPS & 1.956522 & 0.043478 & 4 \\
+ ZAKS & 2.347826 & 0.000000&  4\\
+ LEX & 1.739130 & 0.043478 &  4\\
+ \hline
+ 
+ SJT  & 1.000000 &0.134454& 5\\
+ HEAPS & 2.126050 & 0.058824 & 5 \\
+ ZAKS & 2.605042 & 0.000000 &  5\\
+ LEX & 1.915966 & 0.058824 &  5\\
+ \hline
+ 
+ SJT  & 1.000000 &0.109875 & 6\\
+ HEAPS & 2.146036 & 0.054242 & 6\\
+ ZAKS & 2.691238 & 0.000000 &  6\\
+ LEX & 1.979138 & 0.063978&  6\\
  \hline
 \end{tabular}

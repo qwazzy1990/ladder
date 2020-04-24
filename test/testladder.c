@@ -140,9 +140,9 @@ int main(int argc, char *argv[])
     }
     if (DEBUG11)
     {
-        int n = 7;
+        int n = 4;
 
-        runGrayCode(n);
+        grayCodeDriver(n);
     }
 }
 
