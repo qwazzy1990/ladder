@@ -15,14 +15,14 @@
 void grayCodeDriver(int n);
 
 //sub drivers
-int** sjtGrayCodeDriver(int n);
-int** heapsGrayCodeDriver(int n);
-int** zaksGrayCodeDriver(int n);
-int** lexGrayCodeDriver(int n);
+List* sjtGrayCodeDriver(int n);
+List* heapsGrayCodeDriver(int n);
+List* zaksGrayCodeDriver(int n);
+List* lexGrayCodeDriver(int n);
 
 
 //List Drivers
-List* genCanonicalLadders(int** perm, int n);
+List* genCanonicalLadders(List* perm, int n);
 
 //calculate the difference of minimal change, insert or delete
 int calMinChangeDifferential(Bar** firstBars, Bar** secondBars, int lenOne, int lenTwo);
@@ -36,4 +36,12 @@ List* getSwapDifferentials(List* ladders);
 //calculates the avergage amount of insertion/deletions OR the average amount of swaps per algoritm
 double calculateAverageAmntOfDiff(List* differentials);
 
+void printDiff(List* sjt, List* heaps, List* zaks, List* lex, int mode);
+
+void runGrayCode( int upperLimit );
+
+void saveLaddersOfAllPerms(List* metaList, List* allPerms, int n);
+
+Ladder* getCanonicalLadder(Ladder* currLadder, List* candiateLadders, int* currDiff);
+List* canonicalList(List* metaList);
 #endif

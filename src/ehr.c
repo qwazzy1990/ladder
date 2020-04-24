@@ -12,10 +12,10 @@ void ehr(int** perms, int* perm, int n, int size)
     if(n == 2)
     {
         printPerm(perm, size);
-        appendPerm(perms, perm, size);
+        //appendPerm(perms, perm, size);
         swap(&(perm[0]), &(perm[1]), swapInts);
         printPerm(perm, size);
-        appendPerm(perms, perm, size);
+       // appendPerm(perms, perm, size);
         return;
     }
     forall(n)

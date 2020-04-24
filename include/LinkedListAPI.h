@@ -108,7 +108,7 @@ void insertBack(List* list, void* toBeAdded);
 *@pre 'List' type must exist and be used in order to keep track of the linked list.
 *@param list - a pointer to the List struct
 **/
-void freeList(List* list);
+void freeList(void* list);
 
 /** Clears the contents linked list, freeing all memory associated with these contents.  The list itself is not freed.
 * uses the supplied function pointer to release allocated memory for the data

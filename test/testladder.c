@@ -26,10 +26,46 @@ int numDig = 0;
 
 void getInput(int **perm, char *s);
 
+void testDriverSJT(int n);
 
+static bool allUnique(List *l, int nn)
+{
+    int count = 0;
+    int cc = 0;
+    for (Node *h = l->head; h != NULL; h = h->next)
+    {
+        for (Node *n = h->next; n != NULL; n = n->next)
+        {
+            //if(n == NULL)return true;
+            int *p1 = h->data;
+            int *p2 = n->data;
+            forall(nn)
+            {
+                if (p1[x] == p2[x])
+                {
+                    count++;
+                }
+            }
+            if(count == nn)
+            {
+                printf("perms at %d %d\n", cc, cc+1);
+                printf("%p %p\n", (void*)h, (void*)n);
+                printPerm(p1, nn);
+                printPerm(p2, nn);
+                return false;
+            }
+            count = 0;
+           
+        }
+        cc++;
+        
+    }
+    return true;
+}
 
 int main(int argc, char *argv[])
 {
+    PRINT = false;
     if (DEBUG1)
     {
         char *s = calloc(1000, sizeof(char));
@@ -47,7 +83,6 @@ int main(int argc, char *argv[])
         }
         printf("\n");
 
-       
         //genMinLadders(perm, numDig);
         //saveAllLadders(perm, numDig);
         encodingDriver(perm, numDig, 1);
@@ -56,58 +91,18 @@ int main(int argc, char *argv[])
     }
     if (DEBUG7)
     {
-        int n = 0;
-        scanf("%d", &n);
-        int **perms = calloc(fact(n) * fact(n), sizeof(int));
-        int * perm = calloc(n, sizeof(int));
-        int* arr = calloc(n, sizeof(int));
-        bool* direction = calloc(n, sizeof(int));
-        forall(n)
-        {
-            perm[x] = x+1;
-            arr[x] = 0;
-            direction[x] = false;
-        }
-
-
-        forall(fact(n)*2)
-            perms[x] = calloc(n, sizeof(int));
-       
-        genPermsSJT(perms, perm, n, arr, direction);
-       
-       
-        for(int i = 0; i < fact(n); i++)
-        {
-            printf("    %d\n", i + 1);
-
-            printPerm(perms[i], n);
-            Ladder *l = newLadder(n);
-            initLadder(l);
-            createRoot(l, perms[i], n, 0);
-
-            printLadder(l);
-            destroyLadder(l);
-        }
-        for (int i = 0; i < fact(n)*2; i++)
-            free(perms[i]);
-
-        free(perms);
-        free(perm);
-        free(arr);
-        free(direction);
-
     }
-    if(DEBUG8)
+    if (DEBUG8)
     {
         int n = 5;
-        bool* direction = calloc(n, sizeof(bool));
-        int* arr = calloc(n, sizeof(arr));
+        bool *direction = calloc(n, sizeof(bool));
+        int *arr = calloc(n, sizeof(arr));
         forall(n)
         {
             direction[x] = true;
             arr[x] = 0;
         }
-        Ladder* l = newLadder(n);
+        Ladder *l = newLadder(n);
         initLadder(l);
         sjtLadder(l, n, arr, direction);
         destroyLadder(l);
@@ -115,40 +110,40 @@ int main(int argc, char *argv[])
         free(direction);
     }
 
-   if(DEBUG9)
-   {
-       int* perm = calloc(4, sizeof(int));
-       forall(4){
-        perm[x] = 4-x;
-       }
+    if (DEBUG9)
+    {
+        int *perm = calloc(4, sizeof(int));
+        forall(4)
+        {
+            perm[x] = 4 - x;
+        }
 
         int n = countDegenerativeSubsequences(perm, 4);
-        new_object(DTSA*, dts, n);
+        new_object(DTSA *, dts, n);
         setDTSs(dts, perm, n, 4);
-        
+
         freeDts(dts, n);
         free(perm);
-     
-   }
+    }
 
-   if(DEBUG10)
-   {
-       int n = 4;
-       //List* list = initializeList(dummy_print, freeTwoD, dummy_compare);
-        new_object(int**, perms, 50);
-        forall(50)perms[x] = NULL;
-        new_object(int*, perm, n);
-        forall(n)perm[x] = x+1;
-        orderedPerms(perms, perm, factorial(n), 1, n);
-        forall(24)printPerm(perms[x], 4);
-        //genLaddersFromPerms(perms, 4);
+    if (DEBUG10)
+    {
+        int n = 4;
+        List *l = initializeList(dummy_print, free, dummy_compare);
+        new_object(int *, perm, 4);
+        forall(n) perm[x] = x + 1;
 
-   }
-   if(DEBUG11)
-   {
-       int n = 4;
-       grayCodeDriver(n);
-   }
+        heaps(l, perm, n, n - 1);
+        printAllPerms(l, n);
+        freeList(l);
+        free(perm);
+    }
+    if (DEBUG11)
+    {
+        int n = 7;
+
+        runGrayCode(n);
+    }
 }
 
 void getInput(int **perm, char *s)

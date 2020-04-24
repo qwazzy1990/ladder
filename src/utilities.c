@@ -162,3 +162,13 @@ void print(void* p)
     if(strlen(pr)==0)printf("\nEMPTY ARGUMENT\n");
     printf("\n%s\n", pr);
 }
+
+int* copyIntArr(int* a, int n)
+{
+    int * c = calloc(n, sizeof(int));
+    forall(n)
+    {
+        c[x]=a[x];
+    }
+    return c;
+}

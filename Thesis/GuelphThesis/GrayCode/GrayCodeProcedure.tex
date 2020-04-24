@@ -1,0 +1,261 @@
+\subsection{Procedure}
+Thus far, the problem has been introduced and the basic 
+operations have been defined. Recall that there are two basic 
+operations; insertion/deletion of a bar or swapping of two bars.
+However, there has yet to be discussion regarding the four modified 
+Gray Code algorithms used to generate the data. In the procedure section 
+we look at the pseudo code for each of the algorithms and explain what 
+each of the algorithms are doing. In each of these algorithms, only the root 
+ladder is created. The algorithms can be modified by applying  the logic to 
+a permutation then calling the enumeration algorithm which will generate $OptL\{\pi_{N}\}$.
+This will allow the greedy approach to be applied for selecting the canonical representative.
+
+
+%%section SJT
+\subsubsection{Steinhaus-Johnson-Trotter}\pagebreak
+
+
+\begin{algorithm}
+  \begin{algorithmic}[1]
+    \Function{modifiedSjt}{n, ladder, arr, direction}
+
+      %%base case
+      \If{$globalCount = n!$}
+        \State return
+      \EndIf
+
+      %%initial case
+      \If{$globalCount = 1$}
+        \State $ladder \gets Idendity ladder$
+      \EndIf
+
+     
+      \State $dir \gets direction[n-1]$
+
+      %%swap the nth element n-1 times
+      \For{$i \gets 0$,$i < n-1$, $i \gets i+1$}
+        
+        \State $arr[n-1] \gets arr[n-1]+1$
+        \If{$dir = left$}
+          \State add or remove a bar in column to the left
+          \Else
+            \State add or remove a bar in column to the right
+        \EndIf
+        \If{$ladder$ has degenerative triadic bar pattern from $basicOpOne$}
+          \State swap the bars in the ladder
+         \EndIf
+        \State $globalCount \gets globalCount+1$
+
+      \EndFor
+      \State $direction[n-1] \gets !direction[n-1]$
+      \State $HELPERSJT(n-1, ladder, arr, direction)$
+      \State $MODIFIEDSJT(n,  ladder, arr, direction)$
+
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
+%%helper algorithm
+\begin{algorithm}
+  \begin{algorithmic}[1]
+    \Function{helpersjt}{n, ladder, arr, direction}
+      \For{$i \gets n-1$, $i \geq 0$, $i\ gets i-1$}
+        \If{$arr[i] < i$}
+          \If{$dir[i] = LEFT$}
+            \State add or remove a bar in column to the left 
+          \Else
+            \State add or remove a bar in column to the right
+          \EndIf
+          \State $arr[i]\gets arr[i+1]$
+          \State return
+        \Else 
+          \State $arr[i] \gets 0$
+          \State $direction[i] \gets !direction[i]$
+        \EndIf
+      \EndFor
+      \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
+The principles that act as the foundation for the modified SJT algorithm following. $N$ represents the length of the array that the ladder 
+corresponds to. $arr$ represents the elements from $1$ to $N-1$ and is 
+used to keep track of how many times a bar corresponding to one of their routes 
+has been added or removed. $dir$ represents the current direction for 
+each element from $1 \dots N$. The direction is switched when each element has had a 
+bar added or removed from its route $N-1$ times going in one direction. 
+Insert or remove a bar belonging to the route of the $Nth$ element going 
+from left to right or right to left. Once the first or last column has had a bar 
+belonging to the $Nth$ element added or removed, switch the direction for the $Nth$
+element then remove or add a bar corresponding to the 
+$N-Rth$ element where $R>1$. It is this stage in which $HELPERSJT$ is called. When a bar 
+is added or removed from the $N-Rth$ element, the array at the position representing 
+that element is increased by one. If the array at that index representing the element 
+equals $N-R$ then reset it to zero and move onto the next element less than $N-R$. This step can be found 
+on line(s) 3 and 10 in $HELPERSJT$. Once the $N-Rth$ element has had a bar added or removed from the first or last column, 
+continue with $MODIFIEDSJT$ until $globalCount=n!$. The algorithm requires $O(1)$ time for the insertion or 
+deletion of a bar. The procedure is done $n!$ times. Swapping two bars takes $O(1)$ time. The procedure is done 
+$(n-1)!$ times.\pagebreak
+
+
+
+%%Section: Heaps
+\subsubsection{Heap's Algorithm}
+
+\begin{algorithm}
+  \begin{algorithmic}[1]
+    \Function{modifiedHeaps}{Ladder, index, permuation}
+      \If{$index=0$}
+        \State return
+      \EndIf
+      \For{$i\gets 0, i<index, i\gets i+1$}
+        
+        $MODIFIEDHEAPS(Ladder, index-1)$
+        \If{$index$ is even}
+          \State $swap(perm[0], perm[index])$
+        \Else 
+          \State $swap(perm[i], perm[index])$
+          
+        \EndIf
+        \State $Ladder \gets Root_{permuation}$
+      \EndFor
+      \If{$index > 1$}
+        \State $MODIFIEDHEAPS(Ladder, index-1)$
+      \EndIf
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+The principles that act as the foundation for the modified Heap's algorithm 
+are the following. Initially begin with the Idendity ladder, when the index is 
+even insert swap the element in $\pi$ at zero with the element and index-1. Then create the 
+corresponding root ladder. Otherwise swap the value at the counter with the value at the 
+index and create the corresponding root ladder. The time complexity for swapping two elements 
+is $O(1)$. This is done $n!$ times. Add this to the cost of creating the root ladder which is 
+$n^{3}$.\pagebreak
+
+
+
+%%Section Zaks
+\subsubsection{Zaks Algorithm}
+%%main driver
+\begin{algorithm}
+  \begin{algorithmic}[1]
+    \Function{modifiedZaks}{permutation, ladder, suffixVector, n, index}
+      \If{$GlobalCount = n!$}
+        \State return
+      \EndIf
+        \State $endIndx \gets n-1$
+        \State $startIndx \gets n-suffixVector[index]$
+        \State reverse $permutation's$ suffix starting from $startIndx$ to $endIndx$
+        \State $ladder \gets Root_{permutation}$.
+        \State $index \gets index+1$
+        \State$MODIFIEDZAKS(permutation, ladder, suffixVector, n, index+1)$ 
+
+
+    \EndFunction
+  
+  
+  \end{algorithmic}
+
+\end{algorithm}
+
+
+%%helpe function
+\begin{algorithm}
+  \begin{algorithmic}[1]
+    \Function{createsuffix}{suffixVector, n}
+      \If{$n = 2$}
+        \State append 2 to $suffixVector$
+        \State return
+      \EndIf
+
+        $CREATESUFFIX(suffixVector, n-1)$
+        
+        $temp \gets$ suffixVector
+        \For{$i \gets 0$, $i < n-1$, $i \gets i+1$}
+
+          \State append $n$ to $suffixVector$
+          \State append $temp$ to $suffixVector$
+        \EndFor
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}\pagebreak
+
+The principles that act as the foundation for the modified Zaks 
+algorithm are the following. First, the suffix vector is created. 
+The suffix vector is created with the following recurrence relation.
+\begin{center}
+  $S_{2} = 2$\newline
+  $S_{N} = (S_{N-1},N)^{n-1}N-1, n>2$\newline
+\end{center}
+
+\begin{example}
+  \begin{center}
+
+
+  $N=2$\newline
+  $S_{2} = 2$\newline
+  $(1,2), (2,1)$\newline
+
+  $N=3$\newline
+  $S_{3} = 23232$\newline 
+  $(1,2,3), (1,3,2), (2,3,1), (2,1,3), (3,1,2), (3,2,1)$\newline
+  \end{center}
+\end{example}
+The suffix vector represents the suffix of the permutation that is to 
+be reversed. The procedure begings with the Idendity permuation of 
+size $N$. If $N$ is $2$ then reverse the only two elements in $\pi$.
+Else reverse the suffix of size $N-1$ $(N-1)!$ times, with $1$ being unmoved.
+Then reverse the entire permutation, putting element $1$ at the end of the permuation.
+Repeat these steps, now with element $2$ as the prefix, thus leaving element 
+$2$ unmoved for the next round of $(N-1)!$ reversals. Repeat the process 
+$N!$ which results in the reverse permuation.\par 
+Once the suffix vector is created, on each call to the main function, use 
+the current value of the suffix vector to indicate the size of the suffix to 
+reverse, then reverse said suffix in the permutation and create the corresponding root ladder 
+from the resulting permutation Reversing a suffix takes $O(N)$ time. This is done $N!$ times.
+The cost of creating the root ladder is $O(N^{3})$.
+
+
+
+%%Section Lex
+\subsubsection{Lexicographic Algorithm}
+
+\begin{algorithm}
+  \begin{algorithmic}[1]
+    \Function{modifiedlex}{perm, ladder, n}
+      \If{$globalCount = n!$}
+        \State return
+      \EndIf
+      \For{$i \gets n-1$, $i > 0$, $i \gets i-1$}
+        \If{$perm[i-1]<perm[i]$}
+          \State $maxMin \gets $ min value $>$ $perm[i-1]$ and to the right of 
+          $perm[i-1]$
+          
+                                  
+          \State $swap(perm[i-1], maxMin)$
+          \State sort $perm$ from index $i$ to index $n-1$ in ascending order
+          \State $ladder \gets Root_{perm}$
+          \State $MODIFIEDLEX(perm, ladder, n)$
+        \EndIf
+      \EndFor
+
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
+The principles founding the modified lexicographic algorithm are the following.
+On each call to the algorithm, begin at the end of the permutation and 
+find a decreasing subsequence going right to left. Once found, get the index 
+of the lesser element. Then go to the right of the lesser element and find the 
+smallest value greater than the lesser element. Swap this element with the lesser element. 
+Sort the section of the array that is to the right of the original index of the 
+lesser element before it was swapped. Once sorted, create the root ladder corresponding 
+to this new permutation. The cost of sorting a suffix is $Nlog{N}$ and is done $N!$ times.
+The cost of creating the root ladder is $N^{3}$.
+
+\subsubsection{Algorithmic Analysis}
+  It should be noted that only the modified SJT algorithm has been customized for ladder lotteries. The rest of the algorithms 
+  require a permutation in order to generate the corresponding root ladder from the permutation. More work needs to be done in 
+  order to create the proper modified Gray Code algorithms customized for ladder-lotteries. 
+  Nonetheless, the above algorithms allow for analysis of the two basic operations which in turn can lead to determining which Gray Code is best 
+  for enumerating the canonical representative. These results will be discussed in the next section.

@@ -8,6 +8,7 @@
 #include "ladder.h"
 #include "utilities.h"
 #include "Zaks.h"
+#include "LinkedListAPI.h"
 
 
 int globalCount = 0;
@@ -108,15 +109,17 @@ int fact(int n)
     return res;
 }
 
-void genPermsSJT(int **perms, int *perm, int n, int *arr, bool *direction)
+void genPermsSJT(List* perms, int *perm, int n, int *arr, bool *direction)
 {
 
     //printPerm(perm, n);
-    if(perms[0] == NULL)
-        appendPerm(perms, perm, n);
+    if(perms->length == 0)
+        insertBack(perms, copyIntArr(perm, n));
 
-    if (globalCount == factorial(n))
+    if (globalCount == factorial(n)){
+        globalCount = 0;
         return;
+    }
 
     int p = -1;
     int q = -1;
@@ -138,7 +141,7 @@ void genPermsSJT(int **perms, int *perm, int n, int *arr, bool *direction)
             p--;
             q--;
             globalCount++;
-            appendPerm(perms, perm, n);
+           
             arr[n - 1] += 1;
         }
         else
@@ -148,26 +151,28 @@ void genPermsSJT(int **perms, int *perm, int n, int *arr, bool *direction)
             p++;
             q++;
             globalCount++;
-            appendPerm(perms, perm, n);
+           
             arr[n - 1] += 1;
         }
         //printPerm(perm, n);
+        insertBack(perms, copyIntArr(perm, n));
     }
 
     direction[n - 1] = !(direction[n - 1]);
     adjustPerm(perms, perm, n - 1, arr, direction);
+    globalCount++;
     genPermsSJT(perms, perm, n, arr, direction);
 }
 
-void adjustPerm(int **perms, int *perm, int n, int *arr, bool *direction)
+void adjustPerm(List* perms, int *perm, int n, int *arr, bool *direction)
 {
 
-    globalCount++;
+    //globalCount++;
     int index = -1;
     for (int i = n-1; i >= 0; i--)
     {
-        //if you found the maximum n-1 value such that its bars have not been added or removed
-        //n-1 times
+    //     if you found the maximum n-1 value such that its bars have not been added or removed
+    //     n-1 times
         if (arr[i] < i)
         {
            
@@ -176,32 +181,32 @@ void adjustPerm(int **perms, int *perm, int n, int *arr, bool *direction)
             if (direction[i] == LEFT)
             {
                 
-                _swap(&(perm[index - 1]), &(perm[index]));
-                appendPerm(perms, perm, n+1);
+                 _swap(&(perm[index - 1]), &(perm[index]));
                 //add a bar to the ladder of level i+1
                 //increment arr[i]
                 arr[i] += 1;
             }
             else
             {
-                _swap(&(perm[index]), &(perm[index + 1]));
+                 _swap(&(perm[index]), &(perm[index + 1]));
                 
-                appendPerm(perms, perm, n+1);
-                //add a bar to the ladder of level i+1
-                //increment arr[i]
-                arr[i] += 1;
-            }
-            //printPerm(perm, n+1);
-            return;
+    //             add a bar to the ladder of level i+1
+    //             increment arr[i]
+                 arr[i] += 1;
+             }
+             insertBack(perms, copyIntArr(perm, n+1));
+             //printPerm(perm, n+1);
+             return;
         }
-        //else set it to 0
-        //change its direction
-        else
-        {
-            arr[i] = 0;
-            direction[i] = !(direction[i]);
-        }
+         //else set it to 0
+         //change its direction
+         else
+         {
+             arr[i] = 0;
+             direction[i] = !(direction[i]);
+         }
     }
+    
 }
 
 
@@ -290,7 +295,6 @@ void copyPerm(int *dest, int *src, int n)
 void genPermsSJTReverse(int **perms, int *perm, int n, int *arr, bool *direction)
 {
    
-    appendPerm(perms, perm, n);
     //if the globalCount n! return
     if (globalCount == factorial(n))
         return;
@@ -322,7 +326,6 @@ void genPermsSJTReverse(int **perms, int *perm, int n, int *arr, bool *direction
             _swap(&(perm[p]), &(perm[q]));
             globalCount++;
 
-            appendPerm(perms, perm, n);
             p++;
             q++;
         }
@@ -330,7 +333,6 @@ void genPermsSJTReverse(int **perms, int *perm, int n, int *arr, bool *direction
         {
             _swap(&(perm[q]), &(perm[p]));
             globalCount++;
-            appendPerm(perms, perm, n);
 
             p--;
             q--;
@@ -368,7 +370,6 @@ void adjustPermReverse(int **perms, int *perm, int n, int *arr, bool *direction)
                 _swap(&(perm[index]), &(perm[index - 1]));
                 arr[i] += 1;
             }
-            appendPerm(perms, perm, n+1);
             return;
         }
         else

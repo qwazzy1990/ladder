@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "ladder.h"
+#include "LinkedListAPI.h"
 
 
 #define LEFT false
@@ -20,8 +21,8 @@ int getMobile(int* a, bool* dir, int n);
 
 void printOnePerm(int** perms, int *a, bool *dir, int n, int count);
 
-void genPermsSJT(int** perms, int * perm, int n, int* arr, bool* direction);
-void adjustPerm(int** perms, int* perm, int n, int* arr, bool* direction);
+void genPermsSJT(List* perms, int * perm, int n, int* arr, bool* direction);
+void adjustPerm(List* perms, int* perm, int n, int* arr, bool* direction);
 void copyPerm(int *dest, int *src, int n);
 void adjustPermReverse(int **perms, int *perm, int n, int *arr, bool *direction);
 int fact(int n);

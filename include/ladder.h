@@ -7,8 +7,12 @@
 #include <stdbool.h>
 #include "LinkedListAPI.h"
 
+List* allLadders;
+bool SAVEALL;
+bool PRINT;
 
-#define MAXROWS 500
+
+#define MAXROWS 50
 typedef struct bar
 {
     //route the bar belongs to
@@ -99,6 +103,8 @@ void destroyLadder(void * l);
 
 void destroyClone(void * clone);
 
+void destroyDTSA(void* dts);
+
 //Getters
 /**
  * Gets the index in perm that contains the largest value.
@@ -117,6 +123,7 @@ char* printBar(Bar* b);
 void printLadder(Ladder* l);
 void printPerm(int *perm, int size);
 char* ladderToString(void * data);
+void printAllPerms(List* perms, int n);
 
 
 void printAllLadders(List* ladders);
@@ -232,7 +239,7 @@ bool canBeActiveBar(Ladder* l, int val, int k);
 
 bool isUpwardVisible(Ladder * l, int val, int route);
 
-void findAllChildren( Ladder* l, int cleanLevel, int level, DTSA* dts);
+void findAllChildren(Ladder* l, int cleanLevel, int level, DTSA* dts);
 void driver(int* perm, int size);
 
 
@@ -295,6 +302,8 @@ void encodingDriver(int* perm, int numDig, int mode);
 
 
 void saveAllLadders(int* perm, int numDig);
+
+List* copyListOfLadders(List* ogList);
 
 
 #endif

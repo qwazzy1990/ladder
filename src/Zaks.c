@@ -5,6 +5,7 @@
 #include "ladder.h"
 #include "Zaks.h"
 #include "utilities.h"
+#include "LinkedListAPI.h"
 
 void suffixSize(int n, int *suffixVector)
 {
@@ -50,18 +51,19 @@ int getLen(int *a)
 }
 
 //Zaks algorithm for generating permutations
-void zaks(int** perms, int *perm, int n, int *suffixSizes, int idx)
+void zaks(List* perms, int *perm, int n, int *suffixSizes, int idx)
 {
     //if done then return
     if (suffixSizes[idx] == -1)
     {
-       appendPerm(perms, perm, n);
+       
+       insertBack(perms, copyIntArr(perm, n));
 
         return;
     }
 
-    //print the current perm
-    appendPerm(perms, perm, n);
+    
+    insertBack(perms, copyIntArr(perm, n));
 
     //get the end index of the suffix
     int endIdx = n - 1;
@@ -85,33 +87,4 @@ void zaks(int** perms, int *perm, int n, int *suffixSizes, int idx)
     zaks(perms, perm, n, suffixSizes, idx);
 }
 
-void appendPerm_real(int*** perms, int* perm, int n)
-{
-    int i = 0; 
-    for(i = 0; (*perms)[i] != NULL; i++){
 
-    }
-
-    (*perms)[i] = calloc(n, sizeof(int));
-    
-    forall(n)
-    {
-        
-        ((*perms)[i])[x] = perm[x];
-    }
-}
-
-
-void genLaddersFromPerms(int** perms, int n)
-{
-    for(int i = 0; perms[i] != NULL; i++)
-    {
-        Ladder* l = newLadder(n);
-        initLadder(l);
-        printPerm(perms[i], n);
-        l->ladderNumber = i+1;
-        createRoot(l, perms[i], n, 0);
-        printLadder(l);
-        destroyLadder(l);
-    }
-}

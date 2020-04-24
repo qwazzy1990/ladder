@@ -191,4 +191,6 @@ void dummy_delete(AnyData d);
 
 void print(void* p);
 
+int* copyIntArr(int* a, int n);
+
 #endif

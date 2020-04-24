@@ -15,15 +15,25 @@ int MAXVAL;
 int ladderCount = 1;
 
 bool DEBUG3 = true;
-bool PRINT = true;
 
 bool MIN = false;
-bool SAVEALL = false;
+
 int CURMIN = 1000000;
 
 
 List *minLadders;
-List* allLadders;
+
+void printAllPerms(List* perms, int n)
+{
+    PRINT = true;
+    printf("---NUMBER OF ITEMS: %d---\n", perms->length);
+    for(Node* h = perms->head; h!=NULL; h = h->next)
+    {
+        printPerm(h->data, n);
+    }
+    PRINT = false;
+}
+
 
 /***STATIC FUNCTIONS */
 static void copyArray(int **write, int *read, int largestIndex, int size)
@@ -170,6 +180,16 @@ void destroyClone(void *l)
     clear(ll);
 }
 
+void destroyDTSA(void* dts)
+{
+    DTSA* d = dts;
+    forall(d->amnt)
+    {
+        free(d->dts[x]);
+    }
+    free(d->dts);
+    free(d);
+}
 /*END DESTROYERS */
 
 void initLadder(Ladder *l)
@@ -179,7 +199,7 @@ void initLadder(Ladder *l)
     //Create the ladder
     forall(l->numRows)
     {
-        l->ladder[x] = calloc(l->numRows, sizeof(int));
+        l->ladder[x] = calloc(l->numCols, sizeof(int));
     }
 
     //Initialize the ladder
@@ -200,18 +220,12 @@ void createRoot(Ladder *l, int *perm, int size, int currRow)
     /**
      * Base case: fix the completed root ladder and return
      */
+    if(l == NULL || perm == NULL)return;
     if (size == 1)
     {
         /*Fix the ladder by shifting every value as high as it can go */
         if (l->numBars == 0)
         {
-            forall(l->numCols)
-            {
-                if (PRINT)
-                    printf("[0 0] ");
-            }
-            if (PRINT)
-                printf("\n");
             return;
         }
         l->depth = getDepth(l);
@@ -323,6 +337,7 @@ char *printBar(Bar *b)
 
 void printLadder(Ladder *l)
 {
+    PRINT = true;
     
     printf(CYAN "Ladder Number:%d\n" COLOR_RESET, l->ladderNumber);
     printf(MAGENTA "Height:%d\n" COLOR_RESET, l->depth + 1);
@@ -343,14 +358,18 @@ void printLadder(Ladder *l)
         printf("\n");
     }
     printf("\n");
+    PRINT = false;
 }
 
 void printAllLadders(List* ladders)
 {
+    PRINT = true;
+    printf("---NUMBER OF ITEMS: %d---\n", ladders->length);
     for(Node* h = ladders->head; h != NULL; h = h->next)
     {
         printLadder((Ladder*)h->data);
     }
+    PRINT = false;
 }
 
 char *ladderToString(void *data)
@@ -760,16 +779,18 @@ void driver(int *perm, int size)
     displaySwapCount(l);
 
     destroyLadder(l);
+    destroyDTSA(dts);
+    ladderCount = 1;
+    
 }
 
 void findAllChildren(Ladder *l, int cleanLevel, int level, DTSA *dts)
 {
     if (l == NULL)
         return;
-    if (l->numBars == 0)
-        return;
-
-    printDtsAsBinString(dts);
+    
+    if(PRINT)
+        printDtsAsBinString(dts);
     l->ladderNumber = ladderCount;
     if (MIN)
     {
@@ -806,6 +827,10 @@ void findAllChildren(Ladder *l, int cleanLevel, int level, DTSA *dts)
         printLadder(l);
 
     }
+
+    //if the ladder has no bars, then there is only one, so return
+    if (l->numBars == 0)
+        return;
    
        
 
@@ -860,7 +885,7 @@ void findAllChildren(Ladder *l, int cleanLevel, int level, DTSA *dts)
                             //clear(bars);
 
                             /*Recursive call with clean level = to b->routeNum+1*/
-                            findAllChildren(l, b->routeNum + 1, level + 1, dts);
+                            findAllChildren( l, b->routeNum + 1, level + 1, dts);
                             rotateDTS(dts, bb->vals[0], bb->vals[1], rightBar->vals[0], rightBar->vals[1], upBar->vals[0], upBar->vals[1], dts->amnt);
 
                             /*Reset to previous state, before right swap */
@@ -913,7 +938,7 @@ void findAllChildren(Ladder *l, int cleanLevel, int level, DTSA *dts)
                         rightSwap(l, lowerNeighbor);
                         rotateDTS(dts, bb->vals[0], bb->vals[1], rightBar->vals[0], rightBar->vals[1], upBar->vals[0], upBar->vals[1], dts->amnt);
 
-                        findAllChildren(l, cleanLevel, level + 1, dts);
+                        findAllChildren( l, cleanLevel, level + 1, dts);
                         rotateDTS(dts, bb->vals[0], bb->vals[1], rightBar->vals[0], rightBar->vals[1], upBar->vals[0], upBar->vals[1], dts->amnt);
 
                         leftSwap(l, clone);
@@ -1385,7 +1410,8 @@ void setDTSs(DTSA *dts, int *perm, int numDts, int size)
                     dts->dts[x]->isRotated = false;
                     dts->dts[x]->num = count + 1;
                     count++;
-                    printDTS(dts->dts[x]);
+                    if(PRINT)
+                        printDTS(dts->dts[x]);
                     x++;
                 }
             }
@@ -1405,6 +1431,7 @@ void rotateDTS(DTSA *dts, int l1, int l2, int m1, int m2, int t1, int t2, int nu
 }
 void printDTSA(DTSA *dts)
 {
+
     printf("----Inside print DTSA----Amount is %d----\n", dts->amnt);
     forall(dts->amnt)
     {
@@ -1479,6 +1506,7 @@ void saveAllLadders(int* perm, int numDig)
     SAVEALL = true;
     driver(perm, numDig);
     //freeList(allLadders);
+    SAVEALL = false;
 
 }
 
@@ -1523,7 +1551,7 @@ char* ilEncode(Ladder* l)
     new_object(char*, final, 100);
     new_object(char*, first, l->depth+3);
     new_object(char*, second, l->depth+3);
-    bool flag = false;
+   // bool flag = false;
     forall(l->depth+2){
         first[x] = 'x';
         second[x] = 'x';
@@ -1547,6 +1575,7 @@ char* ilEncode(Ladder* l)
            printf("%s\n", first);
        }
     }
+    return NULL;
 }
 
 
@@ -1578,4 +1607,14 @@ bool adjustHeight(Ladder* l, int startRow, int row, int col)
     }
     return adjustHeight(l, startRow, row+1, col);
 
+}
+
+List* copyListOfLadders(List* ogList)
+{
+    List* newList = initializeList(ogList->printData, ogList->deleteData, ogList->compare);
+    for(Node* temp = ogList->head; temp != NULL; temp = temp->next)
+    {
+        insertBack(newList, cloneLadder((Ladder*)temp->data));
+    }
+    return newList;
 }

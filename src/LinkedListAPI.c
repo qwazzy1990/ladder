@@ -72,10 +72,10 @@ void clearList(List* list)
 *@param list pointer to the List-type dummy node
 *@return  on success: NULL, on failure: head of list
 **/
-void freeList(List* list){	
-
-    clearList(list);
-	free(list);
+void freeList(void* list){	
+	List* l = list;
+    clearList(l);
+	free(l);
 }
 
 /**Function for creating a node for the linked list. 
