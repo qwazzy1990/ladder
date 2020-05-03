@@ -1,0 +1,101 @@
+\subsection{Data Analysis}
+The data will be analyzed in two parts. The first operation will be analyzed independent 
+of the second operation, the second operation will be analyzed independent of the first operation 
+and lastly, the two operations will be analyzed together.\par 
+\subsubsection{Operation One}
+For the first operation, which is the addition/removal of a bar, it is clear that the SJT Gray Code 
+is the most efficient. In fact, there is no more efficient Gray code when it comes to the first operation.
+This is true because every ladder corresponds to some permutation, $\pi_{N}$, which entails 
+that there is at least one inversion added or removed when comparing two permutations of size $N$. 
+Let these permutations be denoted as $\pi_{x}$ and $\pi_{y}$.
+Thus, for each corresponding ladder from each permutation's $OptL\{\pi\}$, there must be at least 
+one bar added or removed from $L_{x}$ to $L_{y}$. Otherwise they would be the same ladder corresponding 
+to the same permutation. Notice how the average number of additions/removals of bars for the SJT algorithm 
+stays 1 regardless of whether the root ladder is chosen or the optimal ladder is chosen. With the other three 
+Gray Codes, the average number of addition/removal of bars increases as $N$ increases, yet there is no 
+difference between choosing the root ladder or the optimal ladder as the canonical representative.
+The rate of growth will be analyzed for these other three Gray Codes. The second best Gray Code for operation 
+one is the lexicographic Gray Code. The values are
+1.400000, 1.739130, 1.915966, 1.979138. These values are the same whether choosing the root ladder or 
+the optimal ladder as the representative. As $N$ increased from three to six, 
+the average number of insertions or deletions of bars was 1.758558 and the variance was 0.067458.
+This suggests that the rate of growth for the number of insertions/deletions of bars moderately increases when $N$ increases whilst 
+using Heaps algorithm. The third best Gray Code for operation one is Heaps Gray Code.
+The values are 1.800000, 1.956522, 2.126050, 2.146036.
+These values are the same regardless of the canonical representative. As $N$ increased from three to six, 
+the average number of insertions or deletions of bars was 2.007152 and the variance was 0.026300.
+This suggests that the rate of growth for the number of insertions/deletions of bars increases at a slower rate than the lexicographic Gray Code 
+when $N$ increases whilst using Heaps algorithm. The worst Gray Code for operation one 
+is Zaks Gray Code. The values are 1.8000000, 2.347826, 2.605042, 2.691238. These values 
+are the same regardless of the canonical representative chosen. As $N$ increased from three to six, 
+the average number of inserstions or deletions of bars was 2.361026 and the variance was 0.161169.
+This suggests that the rate of growth for the number of insertions/deletions of bars increases at the fastest rate 
+when $N$ increases whilst using Zaks algorithm.\par 
+When it comes to operation one, it is clear that SJT is the best Gray Code. In terms of the second best Gray Code, 
+it is debatable whether lexicographic or Heaps is better. Although lexicographic produced better numbers in the data set, the variance and mean is greater than Heaps as $N$ increased. 
+On the other hand, it appears that as $N$ increases, the difference between the average number of insertions/deletions decreases with lexicographic Gray Code. The difference 
+between $N=5$ and $N=6$ for lexicographic is 0.063172 whereas with Heaps it is 0.019986. This implies that as $N$ gets larger 
+Heaps will outperform lexicographic. Zaks algorithm performed the worst in the data set and had the highest 
+degree of variance as $N$ increased from three to six. Also, the difference between $N=5$ to $N=6$ is the largest 
+when using Zaks algorithm, with a difference of 0.086196 providing further evidence for Zaks being the worst of the four Gray Codes when it comes to 
+operation one.  
+\subsubsection{Operation Two}
+For the second operation, which is the swapping of two bars, there is a difference between choosing the root ladder or the optimal ladder as 
+the canonical representative. However, choosing the optimal ladder as the representative did not make a difference for the SJT Gray Code.
+This means that it is better to choose the optimal ladder when selecting the canonical representative for Heaps, Zaks and lexicographic, but 
+not for SJT. If the root ladder is selected as the representative, then the order of best to worst Gray Code in terms of the data set is 
+Heaps, SJT, Zaks, Lex. However, since three of the four perform better when the optimal ladder is selected, the remainder of the analysis 
+for operation two will be done using the optimal ladder as the representative. The best algorithm, when it comes to operation two, is 
+Zaks algorithm with the values for $N=[3 \dots 6]$ being 0.000000, 0.000000, 0.000000, 0.000000. The reason Zaks does not have any swap operations 
+is becuase of the suffix reversal. When a suffix is reversed, every permutation in said suffix becomes uninverted and every non-inversion 
+becomes inverted. Since the swap operation on $L_{i}$ to get to $L_{i+1}$ swaps bars that exist in $L_{i}$ and $L_{i+1}$, then removing 
+said bars by reversing a suffix, implies the bars cannot be swapped. For example, given a suffix $"\dots2431"$, the inversion set is $\{(2,1),
+(4,1), (3,1), (4,3)\}$ and the non-inversion set is $\{(4,2), (3,2)\}$. When the suffix is reversed, the resulting suffix is $\dots1342$ with the 
+inversion set $\{(4,2), (3,2)\}$ and the non-inversion set $\{(2,1), (4,1), (3,1), (4,3)\}$. This implies that the resulting ladders would have no 
+bars in common, thus resulting in no swap operations. The second best Gray Code was Heaps Gray Code with the values of 0.000000, 0.043478, 
+0.058824, 0.054242 for $N=[3 \dots 6]$. The average number of swaps was 0.039136 when $N$ increased from three to six and the variance was 
+0.000722. Also, as $N$ increased, the difference between the number of swaps decreased, implying that as $N$ gets large, Heaps algorithm performs 
+better in terms of the average number of swaps. In fact, when $N=5$ the average number of swaps is greater 
+than when $N=6$. It is possible that the average number of swaps will decrease as $N$ gets larger when 
+using Heaps algorithm. Although this can only be true to a certain point, seeing as there cannot be a negative number of swaps.
+The third best Gray Code was lexicographic Gray Code with the values 0.000000, 0.043478, 0.058824, 0.063978. 
+The average number of swaps was 0.041570 when $N$ increased from three to six, and the variance was 
+0.000844. The first three values are the same as with Heaps Gray Code, but notice that when $N=6$, the average 
+number of swaps increased from $N=5$ for the lexicographic Gray Code, whereas it decreased for Heaps Gray Code.
+Therefore lexicographic Gray Code performed worse than Heaps algorithm, but only marginally. The worst Gray Code for 
+the second operation is SJT with the values of 0.200000, 0.173913, 0.134454, 0.109875. The average number of 
+swaps when $N$ increased from three to six was 0.15460 and the variance was 0.001613 when using SJT Gray Code.
+Notice how that when $N=6$, the average number of swaps is roughly twice as large as for lexicographic or Heaps.
+However, also notice that when $N=6$, the average number of swaps is less than when $N=5$ 
+for the SJT algorithm. Like with Heaps algorithm, this means it is possible that the average number 
+of swaps will decrease for SJT as $N$ gets large. Perhaps at large values of $N$, SJT will outperform 
+lexicographic and even Heaps when it comes to operation two. Yet when looking strictly at the data set, 
+SJT performed the worst when it came to operation two.
+
+\subsubsection{Operations One and Two}
+In order to analyze operations one and two together, the optimal ladder will be used as the canonical
+representative. This is because the performance of operation one did not change based on the 
+canonical representative, whereas the performance of operation two did change. In order to evaluate the 
+operations together, the average amount of change between each operation at each $N$ value will be added together then 
+divided by two in order to get the average amount of change for that particular $N$ across both operations. 
+For example, with SJT the average change for $N=3\dots6$ will be asessed as follows. $N=3=(1 + 0.2)/2$, $N=4=(1+ 0.173913)/2, 
+N=5=(1+0.134454), N=6=(1+0.109875)$. Each of these values represent the average amount of change between 
+the two operations for each $N$ value in regards to the SJT Gray Code. The values for $N=3\dots6$ for
+SJT are 0.600000, 0.5869565, 0.567227, 0.5549375. The values for $N=3 \dots 6$ for
+Heaps are 0.900000, 1.000000, 1.092437, 1.100139.  The values for $N=3\dots6$ for Zaks 
+are 0.900000, 1.173913, 1.302521, 1.345619. The values for $N=3\dots6$ for lexicographic are 
+0.700000, 0.891304, 0.987395, 1.021558. Cleary SJT outperforms the other three Gray Codes by a substantial 
+amount. This is because the difference between the amount of change for operation one 
+across the four Gray Codes is much larger than it is for operation two. Therefore operation one has more 
+weight when it comes to the average amount of change between the two operations than does operation two.
+As $N$ increased form three to six, the average overall amount of change for SJT was 
+0.577280 and the variance was 0.000403. Also notice that when $N=5$ the avearge amount of overall 
+change is greater than when $N=6$ which suggests that the overall amount of change may decrease as 
+$N$ approaches large values. As $N$ increased form three to six, the average overall amount of change for Heaps was 
+1.023144 and the variance was 0.008810.
+As $N$ increased form three to six, the average overall amount of change for Zaks was 
+1.180513 and the variance was 0.040292. As $N$ increased form three to six, the average overall amount of change for lexicographic was 
+0.900064 and the variance was  0.020830. In terms of overall change, SJT is the best, followed by lexicographic, followed by
+Heaps, followed by Zaks. Notice how only SJT demonstrated a decerease in the overall average amount of change as $N$ went from five 
+to six. Therefore there is only evidence that SJT will decrease in terms of overall amount of change as $N$ approaches 
+large values.  
