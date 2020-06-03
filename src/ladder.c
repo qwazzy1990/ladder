@@ -268,41 +268,94 @@ void createRoot(Ladder *l, int *perm, int size, int currRow)
     free(arr);
 }
 
-void createMinLadder(Ladder* l, int* perm, int maxSize, int n, int currRow)
+void createMinLadder(Ladder *l, int *perm, int maxSize, int n, int currRow)
 {
     //done the ladder
-    if(n == 1)
+    if (n == 1)
     {
         return;
     }
 
     //get the index of the current elemenet
     int idx = getIndex(perm, n, maxSize);
-
-    //get the end index of where the element needs to go
-    int endIdx = maxSize - (maxSize - idx);
-
-    bool isInLadder = false;
-    //check if n has a bar in the ladder yet
-    forall(l->numBars)
+    int tempRow = -1;
+    int tempCol = -1;
+    int numInversions = 0;
+    foreach (idx, maxSize)
     {
-        Bar* b = l->bars[x];
-        if(b->vals[1] == n || b->vals[2] == n)
+        if (perm[idx] > perm[x])
         {
-            isInLadder = true;
+            numInversions++;
+        }
+    }
+
+    int numBars = 0;
+    foreach (idx, maxSize)
+    {
+        //if an inversion is found based on the largest value in the array, create a bar in the ladder
+        if (perm[idx] > perm[x])
+        {
+            int col = x - 1;
+            numBars++;
+            //create a bar for the inversion
+            Bar *b = newBar();
+
+            //set it's values
+            setBar(b, l->numBars + 1, perm[idx], perm[x]);
+
+            //put it into the array
+            l->bars[l->numBars] = b;
+
+            //increase number of bars
+            l->numBars++;
+
+            //set the value in the table
+            if (tempRow == -1)
+                l->ladder[currRow][col] = l->numBars;
+            else
+                l->ladder[tempRow][col] = l->numBars;
+
+            tempCol = col;
+            currRow++;
+            int ogRow = getRowIndex(l, b->barNum);
+            int ogCol = getColIndex(l, b->barNum);
+            while (isRightSwappable(l, b->barNum))
+            {
+                tempCol++;
+                rightSwap(l, b->barNum);
+            }
+            fixLadder(l);
+            swapVals(&(l->ladder[ogRow][ogCol]), &(l->ladder[getRoIndex(l, b->barNum)][getColIndex(l, b->barNum)]));
+            if (canBeAddedToRow(l, 0, tempCol) && tempCol != col)
+            {
+                swapVals(&(l->ladder[getRoIndex(l, b->barNum)][getColIndex(l, b->barNum)]), &(l->ladder[0][tempCol]));
+                tempRow = 1;
+                tempCol++;
+                forall(numInversions)
+                {
+                    printf("Adding bar at row:%d col:%d\n", tempRow, tempCol);
+                    currRow++;
+                }
+                tempRow++;
+                tempCol++;
+              
+            }
             break;
         }
-    }//end for
+    }
+    
+    int *arr = calloc(n - 1, sizeof(int));
+    /*Copy everything from the previous array into arr except the largest value. */
+    copyArray(&arr, perm, largestIndex, size);
+    //end else
     //FIX ME
-
-
 }
 
-int getIndex(int* perm, int n, int len)
+int getIndex(int *perm, int n, int len)
 {
     forall(len)
     {
-        if(perm[x] == n)
+        if (perm[x] == n)
             return x;
     }
     return -1;
@@ -560,56 +613,54 @@ void leftSwapTwo(Ladder *l, int currBar, int leftNeighbor, int botNeighbor)
     printf("ENTERING LEFT SWAP\n");
     printLadder(l);
     //row and col for left neighbor
-   int rLeft = getRowIndex(l, leftNeighbor);
-   int cLeft = getColIndex(l, leftNeighbor);
+    int rLeft = getRowIndex(l, leftNeighbor);
+    int cLeft = getColIndex(l, leftNeighbor);
     //row and col for bot neighbor
     int rBot = getRowIndex(l, botNeighbor);
     int cBot = getColIndex(l, botNeighbor);
 
     //swap left neighbor with bot neighbor
-   swapVals(&(l->ladder[rLeft][cLeft]), &(l->ladder[rBot][cBot]));
+    swapVals(&(l->ladder[rLeft][cLeft]), &(l->ladder[rBot][cBot]));
 
-    int rowToGo = rBot+1;
-    int colToGo = getColIndex(l, currBar)-1;
+    int rowToGo = rBot + 1;
+    int colToGo = getColIndex(l, currBar) - 1;
     int rCurr = getRowIndex(l, currBar);
-    swapVals(&(l->ladder[rCurr][colToGo+1]), &(l->ladder[rowToGo][colToGo]));
+    swapVals(&(l->ladder[rCurr][colToGo + 1]), &(l->ladder[rowToGo][colToGo]));
 
     //call the function to readjust the ladder
-    Bar* bb = getBar(l, botNeighbor);
+    Bar *bb = getBar(l, botNeighbor);
     int routeCrossed = bb->routeNum;
     fixCleanLevel(l, currBar, routeCrossed);
     fixLadder(l);
     printf("DONE LEFT SWAP\n");
-
 }
 
-void fixCleanLevel(Ladder* l, int barNum, int routeCrossed)
+void fixCleanLevel(Ladder *l, int barNum, int routeCrossed)
 {
-    if(allBelow(l, barNum, routeCrossed))return;
+    if (allBelow(l, barNum, routeCrossed))
+        return;
     print("---FIXING CLEAN LEVEL\n----");
     printLadder(l);
     print("---END--\n");
     int colIndex = getColIndex(l, barNum);
     int rowIndex = getRowIndex(l, barNum);
-    Bar* theBar = getBar(l, barNum);
-    for(int i = 0; i <= l->depth+1; i++)
-        for(int j = 0; j < colIndex; j++)
+    Bar *theBar = getBar(l, barNum);
+    for (int i = 0; i <= l->depth + 1; i++)
+        for (int j = 0; j < colIndex; j++)
         {
-            if(l->ladder[i][j] != 0)
+            if (l->ladder[i][j] != 0)
             {
                 //get route number
                 //get row
                 //if row is > bar's row shift the bar down by 1
                 //
-                Bar* b = getBar(l, l->ladder[i][j]);
+                Bar *b = getBar(l, l->ladder[i][j]);
                 int rIndex = getRowIndex(l, l->ladder[i][j]);
                 int cIndex = getColIndex(l, l->ladder[i][j]);
-                
-                          
-                if(b->routeNum < theBar->routeNum && rIndex <= rowIndex && belowLevel(l, b->barNum, routeCrossed))
-                {
-                    swapVals(&(l->ladder[rIndex][cIndex]), &(l->ladder[rIndex+1][cIndex]));
 
+                if (b->routeNum < theBar->routeNum && rIndex <= rowIndex && belowLevel(l, b->barNum, routeCrossed))
+                {
+                    swapVals(&(l->ladder[rIndex][cIndex]), &(l->ladder[rIndex + 1][cIndex]));
                 }
             }
         }
@@ -617,40 +668,41 @@ void fixCleanLevel(Ladder* l, int barNum, int routeCrossed)
     fixCleanLevel(l, barNum, routeCrossed);
 }
 
-bool allBelow(Ladder* l, int barNum, int routeCrossed)
+bool allBelow(Ladder *l, int barNum, int routeCrossed)
 {
     int colIndex = getColIndex(l, barNum);
     int rowIndex = getRowIndex(l, barNum);
-    Bar* theBar = getBar(l, barNum);
-   for(int i = 0; i <= l->depth; i++)
-   {
-       for(int j = 0; j < colIndex; j++)
-       {
-           if(l->ladder[i][j] != 0)
-           {
-               //
-                Bar* b = getBar(l, l->ladder[i][j]);
+    Bar *theBar = getBar(l, barNum);
+    for (int i = 0; i <= l->depth; i++)
+    {
+        for (int j = 0; j < colIndex; j++)
+        {
+            if (l->ladder[i][j] != 0)
+            {
+                //
+                Bar *b = getBar(l, l->ladder[i][j]);
                 int rIndex = getRowIndex(l, l->ladder[i][j]);
                 bool below = belowLevel(l, b->barNum, routeCrossed);
 
-                if(rIndex < rowIndex && b->routeNum < theBar->routeNum && below)
+                if (rIndex < rowIndex && b->routeNum < theBar->routeNum && below)
                     return false;
-           }
-       }
-   }
-   return true;
+            }
+        }
+    }
+    return true;
 }
 
-bool belowLevel(Ladder* l, int barNum, int level)
+bool belowLevel(Ladder *l, int barNum, int level)
 {
     int rowNum = getRowIndex(l, barNum);
     int colIndex = getColIndex(l, barNum);
-    for(int i = rowNum-1; i >= 0; i--)
+    for (int i = rowNum - 1; i >= 0; i--)
     {
-        if(l->ladder[i][colIndex] != 0)
+        if (l->ladder[i][colIndex] != 0)
         {
-            Bar* b = getBar(l, l->ladder[i][colIndex]);
-            if(b->routeNum == level)return true;
+            Bar *b = getBar(l, l->ladder[i][colIndex]);
+            if (b->routeNum == level)
+                return true;
         }
     }
     return false;
@@ -1040,7 +1092,7 @@ void findAllChildren(Ladder *l, int cleanLevel, int level, DTSA *dts)
                             findAllChildren(l, b->routeNum + 1, level + 1, dts);
                             rotateDTS(dts, bb->vals[0], bb->vals[1], rightBar->vals[0], rightBar->vals[1], upBar->vals[0], upBar->vals[1], dts->amnt);
                             //leftSwapTwo(l, lowerNeighbor, getLeftNeighbor(l, lowerNeighbor), getLowerNeighbor(l, lowerNeighbor));
-                           
+
                             /*Reset to previous state, before right swap */
                             leftSwap(l, clone);
 
@@ -1095,7 +1147,7 @@ void findAllChildren(Ladder *l, int cleanLevel, int level, DTSA *dts)
                         findAllChildren(l, cleanLevel, level + 1, dts);
                         rotateDTS(dts, bb->vals[0], bb->vals[1], rightBar->vals[0], rightBar->vals[1], upBar->vals[0], upBar->vals[1], dts->amnt);
                         //leftSwapTwo(l, lowerNeighbor, getLeftNeighbor(l, lowerNeighbor), getLowerNeighbor(l, lowerNeighbor));
-                        
+
                         leftSwap(l, clone);
                     }
                 }
