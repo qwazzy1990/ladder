@@ -2,12 +2,12 @@
 \subsection{Introduction to the Problem}
 \emph{Gray Codes} are enumerations of objects in a set such that there is 
 minimal amount change to transition from $Obj_{i}$ to $Obj_{i+1}$. In order 
-to define the mininmal amount change, a basic operation needs to be defined that constitutes a change
+to define the mininmal amount of change, a basic operation needs to be defined that constitutes a change
 from one object to the next. For example, enumerating all binary strings of length $N$ defines the basic 
 operation as flipping a bit. The better the Gray Code, the lower the number of 
 bit flips are required to transition from $BinaryString_{i}$ to $BinaryString_{i+1}$. 
 The problem of finding a Gray Code for generating canonical ladders from $OptL\{\pi\}$ is inspired by finding the most efficient way to produce a 
-single ladder acting as a  representative for all $OptL\{\pi_{n}\}$. The formal statement of the problem is the following; given a value 
+single ladder acting as a  representative for all $OptL\{\pi_{N}\}$. The formal statement of the problem is the following; given a value 
 $N\geq3$ where $N \in Z$, generate a canonical ladder from $OptL\{\pi_{N}\}$ for each $\pi$ of order $N$.
 For example, let $N=4$, then there are twenty-four, or $N!$ permutations 
 of order $N$. These permutations, listed lexicographically (smallest to largest)
@@ -48,7 +48,7 @@ is necessary to transition from $L_{i}$ to $L_{i+1}$ whereas the second operatio
     Suppose that the first of the two basic operations was not necessary.
     Let $L_{i}$ be the canonical representative of $OptL\{\pi_{i}\}$ of 
     order $N$. Let $L_{i+1}$ be the canonical representative of $OptL\{\pi_{i+1}\}$
-    of order $N$. Let $x$ be any bar in $L_{i}$. Note that $x$ represents an 
+    of order $N$. Let $x$ be any labelled bar in $L_{i}$. Note that $x$ represents an 
     inversion in $\pi_{i}$. If $x$ is not removed from $L_{i+1}$ then $L_{i+1}$ 
     must have an additional bar, otherwise $\pi_{i}$ and $\pi_{i+1}$ are the same permutation.
     Thus, at least one new bar, $y$ is inserted to $L_{i+1}$. Suppose that $x$ is removed $L_{i+1}$,

@@ -12,6 +12,8 @@
 
 
 int globalCount = 0;
+
+
 int searchArr(int *a, int n, int mobile)
 {
     for (int i = 0; i < n; i++)
@@ -116,7 +118,7 @@ void genPermsSJT(List* perms, int *perm, int n, int *arr, bool *direction)
     if(perms->length == 0)
         insertBack(perms, copyIntArr(perm, n));
 
-    if (globalCount == factorial(n)){
+    if (globalCount >= factorial(n)){
         globalCount = 0;
         return;
     }
@@ -401,21 +403,44 @@ int _getIndex(int *perm, int n, int val)
 //Sjt algorithm for generating ladders
 void sjtLadder(Ladder* l, int n, int* arr, bool* direction)
 {
-    if(direction[1] == false && arr[1] == 0)return;
+    if(globalCount == factorial(n))
+    {
+        globalCount = 0;
+        return;
+    }
     forall(n-1)
     {
-        printf("\nLadder Number = %d\n", globalCount + 2);
-        globalCount += 1;
+        printf("\nLadder Number = %d\n", globalCount + 1);
         //if the direction is true then add a bar
-        if(direction[n-1] == true)
+        if(direction[n-1] == false)
         {
+            //column = (n-1) - i+1
+            int col = (n-1) - (x+1);
+            int row = col;
+            int val1 = n;
+            int val2 = (n) - (x+1);
+            int up = -1;
+          
+                //swap them eventually
+            //vals = n, n - (i+1)
+            //need to get the bar number. Bar number = 
             printf("Adding a bar at level %d\n", n);
+            printf("col:%d row:%d val1:%d val2:%d\n", col, row, val1, val2);
+            //get th
         }
         else 
         {
+            int col = x;
+            int row = x;
+            //step 1: get the bar number
+            //step 2: get the bar
+           
+
             printf("Removing a bar at level %d\n", n);
+            printf("col:%d row:%d\n", col, row);
             //remove a bar belonging to lvl n to the ladder
         }
+        globalCount++;
     }
 
     //readust the direction for the next call
@@ -423,6 +448,7 @@ void sjtLadder(Ladder* l, int n, int* arr, bool* direction)
 
     //call a function to add or remove a bar belnonging to level 1 <= bar <=n-1
     adjustLadder(l, arr, n-1, direction);
+    globalCount++;
 
     sjtLadder(l, n, arr, direction);
 }
@@ -431,27 +457,38 @@ void sjtLadder(Ladder* l, int n, int* arr, bool* direction)
 //adds or removes a bar belonging to level 1 <= level <= n-1
 void adjustLadder(Ladder* l, int* arr, int level, bool* direction)
 {
+    int count  = 0;
+    int countTwo = 1;
     for(int i = level-1; i >= 0; i--)
     {
-        //if you found the maximum n-1 value such that its bars have not been added or removed 
-        //n-1 times
+        //if you found the maximum n-i value such that its bars have not been added or removed 
+        //n-i times
         if(arr[i] < i)
         {
-            printf("\nLadder Number = %d\n", globalCount + 2);
-            globalCount++;
 
-            if(direction[i] == true)
+            printf("\nLadder Number = %d\n", globalCount + 1);
+
+            if(direction[i] == false)
             {
                 //add a bar to the ladder of level i+1
                 //increment arr[i]
+
+                int row = (i+countTwo) - count - arr[i];
+                int col = (i - 1 ) - arr[i];
                 printf("Adding a bar at level %d\n", i+1);
+                printf("Row:%d Col:%d\n", row, col);
                 arr[i] += 1;
             }
             else 
             {
                 //remove a bar from the ladder of i+1
                 //incremement arr[i]
+                //col = arr[i]
+                //row = arr[i] + 2*count
+                int col = arr[i];
+                int row = arr[i] + 2*countTwo;
                 printf("Removing a bar at level %d\n", i+1);
+                printf("Row:%d Col:%d\n", row, col);
                 arr[i] += 1;
             }
             return;
@@ -464,7 +501,9 @@ void adjustLadder(Ladder* l, int* arr, int level, bool* direction)
             arr[i] = 0;
             direction[i] = !(direction[i]);
         }
-    }
+        count--;
+        countTwo++;
+    }//end for
 }
 
 

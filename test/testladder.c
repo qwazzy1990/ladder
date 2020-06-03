@@ -15,12 +15,12 @@
 #include "lexicographic.h"
 #include "GrayCode.h"
 
-bool DEBUG1 = false;
+bool DEBUG1 = true;
 bool DEBUG7 = false;
 bool DEBUG8 = false;
 bool DEBUG9 = false;
 bool DEBUG10 = false;
-bool DEBUG11 = true;
+bool DEBUG11 = false;
 int memSize = 1;
 int numDig = 0;
 
@@ -85,7 +85,11 @@ int main(int argc, char *argv[])
 
         //genMinLadders(perm, numDig);
         //saveAllLadders(perm, numDig);
-        encodingDriver(perm, numDig, 1);
+        //encodingDriver(perm, numDig, 1);
+        PRINT = true;
+        //driver(perm, numDig);
+        genMinLadders(perm, numDig);
+        PRINT = false;
 
         free(perm);
     }
@@ -97,17 +101,29 @@ int main(int argc, char *argv[])
         int n = 5;
         bool *direction = calloc(n, sizeof(bool));
         int *arr = calloc(n, sizeof(arr));
+        new_object(int*, perm, n);
         forall(n)
         {
-            direction[x] = true;
+            direction[x] = false;
+            arr[x] = 0;
+            perm[x] = x+1;
+        }
+        List* perms = initializeList(dummy_print, free, dummy_compare);
+        genPermsSJT(perms, perm, n, arr, direction);
+        printAllPerms(perms, n);
+        Ladder *l = newLadder(n);
+        forall(n)
+        {
+            direction[x] = false;
             arr[x] = 0;
         }
-        Ladder *l = newLadder(n);
         initLadder(l);
         sjtLadder(l, n, arr, direction);
         destroyLadder(l);
         free(arr);
         free(direction);
+        free(perm);
+        freeList(perms);
     }
 
     if (DEBUG9)
@@ -140,7 +156,7 @@ int main(int argc, char *argv[])
     }
     if (DEBUG11)
     {
-        int n = 4;
+        int n = 7;
 
         grayCodeDriver(n);
     }

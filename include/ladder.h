@@ -95,6 +95,9 @@ void initLadder(Ladder* l);
  */
 void createRoot(Ladder* l, int* perm, int size, int currRow);
 
+void createMinLadder(Ladder* l, int* perm, int maxSize, int n, int currRow);
+int getIndex(int* perm, int n, int len);
+
 /***DESTROYERS */
 
 void delstroyBar(void* bar);
@@ -139,6 +142,9 @@ void printAllLadders(List* ladders);
 //bar->vals[0] = routeNum. Therefore valOne is not needed as a param
 void setBar(Bar* bar, int barNum, int routeNum, int valTwo);
 
+//inserts a bar at a specfic row and column
+void addBar(Ladder* l, Bar* bar, int row, int col);
+
 void setRoutesCrossed(Ladder* l, int* perm, int size);
 
 void setTimesCrossed(Bar* b, int levelCrossed);
@@ -159,6 +165,7 @@ void fixLadder(Ladder * l);
     For shifting the children of val in rightSwap.
     This function shifts the children down the ladder.
     I.e. given child, ch, if ch's row is x in state 1 then ch's
+    
     row will be x+n after shiftChildrenDown is applied.
  */
 void shiftChildrenDown(Ladder* l, int val, int offset);
@@ -171,9 +178,10 @@ void shiftChildrenDown(Ladder* l, int val, int offset);
 /*These two functions are for right swapping */
 int getUpperNeighbor(Ladder* l, int n);
 int getRightNeighbor(Ladder* l, int n);
+int getLowerNeighbor(Ladder* l, int n);
+int getLeftNeighbor(Ladder* l, int n);
 
 /*These two functions are for left swapping - reverse engineering */
-int getLowerNeighbor(Ladder* l, int n);
 
 /*These functions return the left and right child of val.
 They are required for readjusting the ladder when a right swap
@@ -198,6 +206,13 @@ int getDepth(Ladder* l);
 
 void leftSwap(Ladder* l, Ladder* clone);
 
+void leftSwapTwo(Ladder* l, int currBar, int leftNeighbor, int botNeighbor);
+
+
+//function to fix the clean level of the ladder after a left swap
+void fixCleanLevel(Ladder* l, int barNum, int routeCrossed);
+bool allBelow(Ladder* l, int barNum, int routeCrossed);
+bool belowLevel(Ladder* l, int barNum, int level);
 
 //left swap
     //find row to go

@@ -12,7 +12,6 @@
 #include "svg.h"
 #include "LinkedListAPI.h"
 
-<<<<<<< HEAD
 bool _DEBUG1 = false;
 bool _DEBUG2 = true;
 bool _DEBUG3 = false;
@@ -132,17 +131,6 @@ int main()
         free(direction);
 
     }
-=======
-int main()
-{
-
-   // Ladder* l = newLadder(5);
-   // initLadder(l);
-
-    int* reservedRows = calloc(5, sizeof(int));
-    reserveRows(reservedRows, 5);
-    free(reservedRows);
->>>>>>> parent of bf5667a... Need to generate the ladders using the reverse SJT algorithm
 
     return 0;
 }
