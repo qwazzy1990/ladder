@@ -95,8 +95,10 @@ void initLadder(Ladder* l);
  */
 void createRoot(Ladder* l, int* perm, int size, int currRow);
 
-void createMinLadder(Ladder* l, int* perm, int maxSize, int n, int currRow);
+void createMinLadder(Ladder* l, int* perm, int n, int currRow);
 int getIndex(int* perm, int n, int len);
+int getTempRow(Ladder* l, int row, int col);
+void fixLadderTwo(Ladder* l);
 
 /***DESTROYERS */
 

@@ -83,15 +83,17 @@ int main(int argc, char *argv[])
         }
         printf("\n");
 
-        //genMinLadders(perm, numDig);
+        genMinLadders(perm, numDig);
         //saveAllLadders(perm, numDig);
         //encodingDriver(perm, numDig, 1);
         PRINT = true;
-        //driver(perm, numDig);
+       // genMinLadders(perm, numDig);
+       //driver(perm, numDig);
         genMinLadders(perm, numDig);
         PRINT = false;
 
         free(perm);
+        
     }
     if (DEBUG7)
     {

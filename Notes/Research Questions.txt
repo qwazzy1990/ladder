@@ -293,3 +293,45 @@ only one ladder lottery?
 
 Cases for DSS3s:
         If there are two DSS3s such that 
+
+
+Minimum Height Problem:
+
+The upper bound for the minimum height = N. 
+This is because the reverse ladder has the max 
+number of bars with the highest column density of bars. 
+Column Density is defined as a relation between two bars such that the 
+closer they are in terms of their columns the denser they are. 1 indicates the
+highest density, as in 1 column apart. For every two bars with a column density of 
+1, a new row is required. A column density of 0 or 2 ... N-2 means the two bars 
+do not require a new row. But if there is a column density of 0 between two bars, x and y, 
+then there is a third bar z with a column density of 1 in relation to both x and y. 
+        Proof: Pretty simple, suppose two bars were in the same column, had a column density of 
+        0 and they did not require seperate rows. Then the two bars would be in the same row and 
+        column, thus resulting in the bars overlapping each other. Which is not allowed. 
+
+The lowest density between any two bars = n-2. The greater the 
+column density of a ladder, the more rows are required. Counting column density:
+The overall column density equals the sum of the column densities. The higher 
+the number the higher the overall density. Proof: Let the column density between 
+two bars be = to N-2. If these are the only two bars in the ladder, then we are finished. 
+Now suppose this one of the bars that compose this column density has been removed and the next 
+largest column density is N-3. If that is the case, then a bar has been added to either the second last 
+column or the second column. If the bar has been added to 
+The reverse ladder 
+has the highest overall density because each bar represents an inversion, the 
+inversion set is maximal for reverse L N. The uninversin set is 0.
+For each uninversion, a bar is removed from the inversion set of reverse L N, thus 
+reducing the overall column density. 
+
+
+** Let  element i be an element that forms inversions in pi, let element i+1 also form inversions in pi, let 1 < i < N and i left of element i+1 in pi, 
+let dir be the direction of the route of the element in the ladder. 
+If the direction of element i and i+1 start by going right to left and do not change direction, then one more row needs to be added to the ladder 
+for the last bar of element i. Why? The last bar of element i+1's route appears in column i and some arbitrary row r, and 
+the second last bar of element i+1s 
+route appears in column i-1 and some arbitrary row r-1. The last bar of element i needs to go into column i-1, but it cannot go 
+to row r-1 because the second last bar of element i+1 is there and it cannot go to row r because the last bar of element i+1 
+is at said row. Therefore a new row needs to be added to the ladder to compensate of the last bar of element i.  
+If element N is directly to the left of element N-1 then the min height is at least pos(N) in Idendity - Posn(N) in pi + 1.  
+e.g. the ladder for 3457621 has at least a min height of 7 - 4 = 3, 3 +1 = 4. 
