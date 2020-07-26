@@ -94,8 +94,13 @@ void initLadder(Ladder* l);
     a clean level of 1. No other ladder in the set has a clean level of 1
  */
 void createRoot(Ladder* l, int* perm, int size, int currRow);
+void minLadderDriver(int* perm, int n);
 
-void createMinLadder(Ladder* l, int* perm, int n, int currRow);
+void createMinLadder(Ladder* l, int* perm, int n, int currRow, bool* toBeFlipped, bool* beenFlipped);
+void createMinLadderTwo(Ladder* l, int* perm, int n, int currRow);
+void createMinLadderThree(Ladder* l, int* perm, int n, int currRow, bool direction);
+void minLadderDriver(int* perm, int n);
+bool isSorted(int* perm, int n);
 int getIndex(int* perm, int n, int len);
 int getTempRow(Ladder* l, int row, int col);
 void fixLadderTwo(Ladder* l);

@@ -268,132 +268,301 @@ void createRoot(Ladder *l, int *perm, int size, int currRow)
     free(arr);
 }
 
-void createMinLadder(Ladder *l, int *perm, int n, int currRow)
+void minLadderDriver(int *perm, int n)
 {
-   
-    //done the ladder
-    if (n == 1)
+    Ladder *l = newLadder(n);
+    initLadder(l);
+    int *tempPerm = copyIntArr(perm, n);
+    //run the first algo
+    printf("---RUNNING FIRST ALGO---\n");
+
+    new_object(bool *, toBeFlipped, n);
+    new_object(bool *, beenFlipped, n);
+    forall(n)
     {
+        toBeFlipped[x] = false;
+        beenFlipped[x] = false;
+    }
+    createMinLadder(l, tempPerm, n, 0, toBeFlipped, beenFlipped);
+    printLadder(l);
+    destroyLadder(l);
+    free(tempPerm);
+
+    l = newLadder(n);
+    initLadder(l);
+    tempPerm = copyIntArr(perm, n);
+    //run second algo
+    printf("-RUNNING SECOND ALGO---\n");
+
+    createMinLadderTwo(l, tempPerm, n, 0);
+    printLadder(l);
+    destroyLadder(l);
+    free(tempPerm);
+
+    l = newLadder(n);
+    initLadder(l);
+    tempPerm = copyIntArr(perm, n);
+    //run second algo
+    printf("---RUNNING THRID ALGO----\n");
+    createMinLadderThree(l, tempPerm, n, 0, false);
+    printLadder(l);
+    destroyLadder(l);
+    free(tempPerm);
+}
+
+void createMinLadder(Ladder *l, int *perm, int n, int currRow, bool *toBeFlipped, bool *beenFlipped)
+{
+    printPerm(perm, n);
+
+    if (isSorted(perm, n))
         return;
+
+    //if there are no bars yet added to the ladder
+    if (currRow == 0)
+    {
+        //find each DSS3
+        for (int i = 0; i < n - 2; i++)
+        {
+            for (int j = i + 1; j < n - 1; j++)
+            {
+                for (int k = j + 1; k < n; k++)
+                {
+                    if (perm[i] > perm[j] && perm[j] > perm[k])
+                    {
+                        //if Dss3 is at the beginning
+                        if (i == 0)
+                        {
+                            toBeFlipped[perm[j] - 1] = true;
+                            
+                        }
+                        //if Dss3 is at the end
+                        else if (k == n - 1)
+                        {
+                            toBeFlipped[perm[i] - 1] = true;
+                            
+                        }
+                        //if it is in the middle
+                        else
+                        {
+                            if (perm[i - 1] > perm[j])
+                            {
+
+                                toBeFlipped[perm[i] - 1] = true;
+                                
+                            }
+                            else
+                            {
+
+                                toBeFlipped[perm[j] - 1] = true;
+                               
+                            }
+                        }
+                        i += 2;
+                        break;
+                    }
+                } //for
+                break;
+            } //end for
+        }     //end for
+
+        //flip all the DSS3s
+        forall(n - 1)
+        {
+            if (toBeFlipped[x])
+            {
+
+                int idx = getIndex(perm, x+1, n);
+                beenFlipped[perm[idx]-1] = true; 
+                beenFlipped[perm[idx+1]-1] = true;
+                swapInts(&perm[idx], &perm[idx+1]);
+
+            }
+        }
+        printPerm(perm, n);
+
+        //swap all the non DSS3s
+        forall(n - 1)
+        {
+            if (perm[x] > perm[x + 1] && !beenFlipped[perm[x] - 1] && !beenFlipped[perm[x + 1] - 1])
+            {
+                toBeFlipped[perm[x] - 1] = true;
+                beenFlipped[perm[x] - 1] = true;
+                beenFlipped[perm[x + 1] - 1] = true;
+                int idx = getIndex(perm, perm[x], n);
+                swapInts(&perm[idx], &perm[idx + 1]);
+                x++;
+            }
+        }
+    } //end if row = 0
+
+    //if not at the current row
+    else
+    {
+        forall(n - 2)
+        {
+            if (perm[x] > perm[x + 1] && toBeFlipped[perm[x] - 1] && !beenFlipped[perm[x] - 1] && !beenFlipped[perm[x + 1] - 1])
+            {
+                beenFlipped[perm[x] - 1] = true;
+                beenFlipped[perm[x + 1] - 1] = true;
+                int idx = getIndex(perm, perm[x], n);
+                swapVals(&perm[idx], &perm[idx+1]);
+                x++;
+            }
+        }
+        forall(n - 2)
+        {
+            if (perm[x] > perm[x + 1] && !toBeFlipped[perm[x]-1] && !beenFlipped[perm[x] - 1] && !beenFlipped[perm[x + 1] - 1])
+            {
+                toBeFlipped[perm[x] - 1] = true;
+                x++;
+            }
+        }
+        forall(n-2)
+        {
+            if(perm[x] > perm[x+1] && toBeFlipped[perm[x]-1] && !beenFlipped[perm[x]-1] && !beenFlipped[perm[x+1]-1])
+            {
+                beenFlipped[perm[x]-1] = true;
+                beenFlipped[perm[x+1]-1] = true;
+                int idx = getIndex(perm, perm[x], n);
+                swapVals(&perm[idx], &perm[idx+1]);
+                x++;
+            }
+        }
     }
 
-    //get the index of the current elemenet
-    int idx = getLargestIndex(perm, n);
-    int tempRow = 0;
-    int tempCol = -1;
-    bool flag = false;
-
-    int numBars = 0;
-    int nextRow = currRow;
-    foreach (idx, n)
+    forall(n)
     {
-        //if an inversion is found based on the largest value in the array, create a bar in the ladder
-        if (perm[idx] > perm[x])
-        {
-            int col = x - 1;
-            numBars++;
-            //create a bar for the inversion
-            Bar *b = newBar();
+        beenFlipped[x] = false;
+    }
+    createMinLadder(l, perm, n, currRow + 1, toBeFlipped, beenFlipped);
 
-            //set it's values
-            setBar(b, l->numBars + 1, perm[idx], perm[x]);
+    //     if (perm[x] < perm[x - 1])
+    //     {
+    //         Bar *b = newBar();
+    //         setBar(b, l->numBars + 1, perm[x - 1], perm[x]);
+    //         l->bars[l->numBars] = b;
+    //         l->numBars++;
+    //         l->ladder[currRow][x - 1] = b->barNum;
+    //         swapInts(&(perm[x - 1]), &(perm[x]));
+    //         x--;
+    //     }
+    // }
+    // l->depth++;
+    // int row = currRow + 1;
 
-            //put it into the array
-            l->bars[l->numBars] = b;
-
-            //increase number of bars
-            l->numBars++;
-
-            //set the value in the ladder
-            //if you need to add to the original row and column
-            if (!flag)
-            {
-                l->ladder[currRow][col] = l->numBars;
-                fixLadder(l);
-                
-            }
-            //if you can add to the upper row and column
-            else
-            {
-                tempRow++;
-                tempCol++;
-                l->ladder[tempRow][tempCol] = l->numBars;
-                
-            }
-            //if adding the first bar on this call
-            if (numBars == 1)
-            {
-                tempCol = col;
-                int ogRow = getRowIndex(l, b->barNum);
-                int ogCol = getColIndex(l, b->barNum);
-                //int tempRowTwo = ogRow;
-                //check if you can keep right swapping the bar
-                while (isRightSwappable(l, b->barNum))
-                {
-                    tempCol++;
-                    //tempRowTwo--;
-                    rightSwap(l, b->barNum);
-                }
-                fixLadderTwo(l);
-               
-                //swap the bar back to its original position
-                swapVals(&(l->ladder[ogRow][ogCol]), &(l->ladder[getRowIndex(l, b->barNum)][getColIndex(l, b->barNum)]));
-                //fix the ladder
-                fixLadder(l);
-               
-                int tempRowTwo = getTempRow(l, 0, tempCol);
-                //if you can add the bar to row 0 and the new column, then do so.
-               
-                if (canBeAddedToRow(l, tempRowTwo, tempCol) && tempCol != col && !flag)
-                {
-                    flag = true;
-                    swapVals(&(l->ladder[getRowIndex(l, b->barNum)][getColIndex(l, b->barNum)]), &(l->ladder[tempRowTwo][tempCol]));
-                    tempRow = tempRowTwo;
-                }//emd if
-            }//end if numbars is one
-            currRow++;
-        }//end if inversion is 1
-        
-    }//end for loop
-
-    int *arr = calloc(n - 1, sizeof(int));
-    /*Copy everything from the previous array into arr except the largest value. */
-    copyArray(&arr, perm, idx, n);
-    fixLadder(l);
-    createMinLadder(l, arr, n-1, currRow);
-    free(arr);
-
-    
+    //createMinLadder(l, perm, n, row);
 }
-int getTempRow(Ladder* l, int row, int col)
+
+void createMinLadderTwo(Ladder *l, int *perm, int n, int currRow)
+{
+    printPerm(perm, n);
+
+    if (isSorted(perm, n))
+        return;
+
+    for (int x = 0; x < n - 1; x++)
+    {
+        if (perm[x] > perm[x + 1])
+        {
+            Bar *b = newBar();
+            setBar(b, l->numBars + 1, perm[x], perm[x + 1]);
+            l->bars[l->numBars] = b;
+            l->numBars++;
+            l->ladder[currRow][x] = b->barNum;
+            swapInts(&(perm[x + 1]), &(perm[x]));
+            x++;
+        }
+    }
+    l->depth++;
+    int row = currRow + 1;
+
+    createMinLadderTwo(l, perm, n, row);
+}
+
+void createMinLadderThree(Ladder *l, int *perm, int n, int currRow, bool direction)
+{
+    printPerm(perm, n);
+
+    if (isSorted(perm, n))
+        return;
+    if (direction)
+    {
+        for (int x = n - 1; x > 0; x--)
+        {
+            if (perm[x] < perm[x - 1])
+            {
+                Bar *b = newBar();
+                setBar(b, l->numBars + 1, perm[x - 1], perm[x]);
+                l->bars[l->numBars] = b;
+                l->numBars++;
+                l->ladder[currRow][x - 1] = b->barNum;
+                swapInts(&(perm[x - 1]), &(perm[x]));
+                x--;
+            }
+        }
+    }
+    else
+    {
+        for (int x = 0; x < n - 1; x++)
+        {
+            if (perm[x] > perm[x + 1])
+            {
+                Bar *b = newBar();
+                setBar(b, l->numBars + 1, perm[x], perm[x + 1]);
+                l->bars[l->numBars] = b;
+                l->numBars++;
+                l->ladder[currRow][x] = b->barNum;
+                swapInts(&(perm[x + 1]), &(perm[x]));
+                x++;
+            }
+        }
+    }
+    l->depth++;
+    int row = currRow + 1;
+
+    createMinLadderThree(l, perm, n, row, !direction);
+}
+
+bool isSorted(int *perm, int n)
+{
+    forall(n)
+    {
+        if (perm[x] != x + 1)
+            return false;
+    }
+    return true;
+}
+
+int getTempRow(Ladder *l, int row, int col)
 {
     int tempRow = row;
-    if(canBeAddedToRow(l, row, col))return row;
-    while(canBeAddedToRow(l, tempRow, col) == false)
+    if (canBeAddedToRow(l, row, col))
+        return row;
+    while (canBeAddedToRow(l, tempRow, col) == false)
     {
         tempRow++;
-        if(l->ladder[tempRow][col-1] != 0 || l->ladder[tempRow+1][col] != 0)
+        if (l->ladder[tempRow][col - 1] != 0 || l->ladder[tempRow + 1][col] != 0)
             break;
     }
     return tempRow;
-
 }
-void fixLadderTwo(Ladder* l)
+void fixLadderTwo(Ladder *l)
 {
-    for(int i = 0; i < MAXROWS; i++)
+    for (int i = 0; i < MAXROWS; i++)
     {
-        for(int j = 0; j < l->numCols; j++)
+        for (int j = 0; j < l->numCols; j++)
         {
-            if(l->ladder[i][j] != 0)
+            if (l->ladder[i][j] != 0)
             {
-                int tempRow = i-1;
-                while(canBeAddedToRow(l, tempRow, j) && tempRow > 0)
+                int tempRow = i - 1;
+                while (canBeAddedToRow(l, tempRow, j) && tempRow > 0)
                 {
                     tempRow--;
                 }
                 tempRow++;
                 //if it can be moved up the ladder
-                if(tempRow < i){
+                if (tempRow < i)
+                {
                     l->ladder[tempRow][j] = l->ladder[i][j];
                     l->ladder[i][j] = 0;
                 }
@@ -639,17 +808,12 @@ void rightSwap(Ladder *l, int val)
 
     shiftChildrenDown(l, getRightChild(l, rightNeighbor), 2);
 
-  
-
     swapVals(&(l->ladder[upArr[0]][upArr[1]]), &(l->ladder[currArr[0] + 1][currArr[1] + 1]));
     swapVals(&(l->ladder[currArr[0]][currArr[1]]), &(l->ladder[rightArr[0]][rightArr[1]]));
 
     fixLadder(l);
-   
 
-   // fixLadder(l);
-   
-    
+    // fixLadder(l);
 }
 
 /*Reverse engineers right swap:
@@ -668,7 +832,7 @@ void leftSwap(Ladder *l, Ladder *clone)
 
 void leftSwapTwo(Ladder *l, int currBar, int leftNeighbor, int botNeighbor)
 {
-    
+
     //row and col for left neighbor
     int rLeft = getRowIndex(l, leftNeighbor);
     int cLeft = getColIndex(l, leftNeighbor);
@@ -689,14 +853,13 @@ void leftSwapTwo(Ladder *l, int currBar, int leftNeighbor, int botNeighbor)
     int routeCrossed = bb->routeNum;
     fixCleanLevel(l, currBar, routeCrossed);
     fixLadder(l);
-   
 }
 
 void fixCleanLevel(Ladder *l, int barNum, int routeCrossed)
 {
     if (allBelow(l, barNum, routeCrossed))
         return;
-   
+
     int colIndex = getColIndex(l, barNum);
     int rowIndex = getRowIndex(l, barNum);
     Bar *theBar = getBar(l, barNum);
@@ -997,9 +1160,7 @@ Base_Case:
     int rowIndex = getRowIndex(l, val);
     l->ladder[rowIndex + offset][colIndex] = val;
     l->ladder[rowIndex][colIndex] = 0;
-    
-    
-  
+
     return;
 }
 }
@@ -1013,14 +1174,11 @@ void driver(int *perm, int size)
     }
     //create a ladder
     Ladder *l = newLadder(size);
-    Ladder* ll = newLadder(size);
 
     //initialize it
     initLadder(l);
-    initLadder(ll);
     //Generate root.
     createRoot(l, perm, size, 0);
-    createMinLadder(ll, perm, size, 0);
     // printf("---Min Ladder is ----\n");
     // printLadder(l);
     // printf("----Done Min Ladder----\n");
@@ -1046,15 +1204,12 @@ void driver(int *perm, int size)
     //Call find all children with clean level 1 because l is currently the root.
     //The only ladder in the set with a clean level of 1.
     findAllChildren(l, 1, 0, dts);
-    if (PRINT)
-        printf("The number of degenerative subsequences is %d\n", countDegenerativeSubsequences(perm, size));
+    // if (PRINT)
+    //     printf("The number of degenerative subsequences is %d\n", countDegenerativeSubsequences(perm, size));
     //displaySwapCount(l);
 
     destroyLadder(l);
-    printf("----MIN LADDER----\n");
-    printLadder(ll);
-    printf("---END MIN LADDER---\n");
-    destroyLadder(ll);
+
     destroyDTSA(dts);
     ladderCount = 1;
 }
@@ -1103,7 +1258,7 @@ void findAllChildren(Ladder *l, int cleanLevel, int level, DTSA *dts)
     //if the ladder has no bars, then there is only one, so return
     if (l->numBars == 0)
         return;
-   
+
     ladderCount++;
     Ladder *clone = cloneLadder(l);
 
@@ -1775,7 +1930,12 @@ void saveAllLadders(int *perm, int numDig)
     allLadders = initializeList(dummy_print, destroyClone, dummy_compare);
     SAVEALL = true;
     driver(perm, numDig);
-    //freeList(allLadders);
+    for (Node *h = allLadders->head; h != NULL; h = h->next)
+    {
+        Ladder *l = h->data;
+        printLadder(l);
+    }
+    freeList(allLadders);
     SAVEALL = false;
 }
 

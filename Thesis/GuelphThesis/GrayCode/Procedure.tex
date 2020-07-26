@@ -1,0 +1,164 @@
+\subsection{Procedure}
+
+Thus far, the problem has been introduced and the required terminologt has been defined. Recall that there are two 
+changes; the insertion/deletion of bars or repositioning bars.
+However, there has yet to be discussion regarding the two 
+listing algorithms. In the procedure section 
+we look at the pseudo code for each of the algorithms and explain what 
+each of the algorithms are doing. The goal is to transition from 
+$L_{i}$ to $L_{i+1}$ with minimal change, which means adding or removing 
+the least number of bars to get from $L_{i}$ to $L_{i+1}$ or relocating 
+the least number of bars to get from $L_{i}$ to $L_{i+1}$.\par 
+
+The reason that the modified SJT and CI algorithms were chosen is because they allow 
+for minimal change from $L_{i}$ to $L_{i+1}$. While conducting this research, modifications 
+to the permutation listing algorithms mentioned in chapter one were applied. Recall that 
+these listing algorithms were Zaks, Heaps, and Lexicographic. These listing algorithms 
+did not allow for minimal change when transitioning from $L_{i}$ to $L_{i+1}$.\pagebreak
+%%section SJT
+\subsubsection{Steinhaus-Johnson-Trotter}
+
+
+\begin{algorithm}
+  \begin{algorithmic}[1]
+    \Function{modifiedSjt}{$N=[1, 3, 4, \dots]$, $Ladder[2N-3][N-1]$, $Arr[N-1]$, $Direction[N]$}
+
+
+      \State $print(Ladder)$
+
+      %%base case
+      \If{$globalCount = n!$}
+        \State return
+      \EndIf
+
+     
+      \State $dir \gets direction[n-1]$
+
+      %%swap the nth element n-1 times
+      \For{$i \gets 0$,$i < n-1$, $i \gets i+1$}
+        
+        \State $arr[n-1] \gets arr[n-1]+1$
+        \If{$dir = left$}
+            \State $row \gets (n-1) + (i+1)$
+            \State $col \gets row$
+            \State $ladder[row][col] \gets 1$
+        \Else
+            \State $row \gets i$
+            \State $col \gets row$
+            \State $ladder[row][col] \gets 0$
+        \EndIf
+        \State $globalCount \gets globalCount+1$
+        \State $print(Ladder)$
+
+      \EndFor
+      \State $direction[n-1] \gets !direction[n-1]$
+      \State $HELPERSJT(n-1, ladder, arr, direction)$
+      \State $MODIFIEDSJT(n,  ladder, arr, direction)$
+
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
+%%helper algorithm
+\begin{algorithm}
+  \begin{algorithmic}[1]
+    \Function{helpersjt}{$N-1=[1, 3, 4, \dots]$, $Ladder[2N-3][N-1]$, $Arr[N-1]$, $Direction[N]$}
+
+      \State $c1 \gets 0$
+      \State $c2 \gets 1$
+      \For{$i \gets n-1$, $i \geq 0$, $i \gets i-1$}
+        \If{$arr[i] < i$}
+        \State $globalCount \gets globalCount + 1$
+
+          \If{$dir[i] = LEFT$}
+            \State $row \gets (i + c2) - c1 - arr[i]$
+            \State $col \gets (i - 1) - arr[i]$
+            \State $ladder[row][col] \gets 1$
+
+          \Else
+            \State $row \gets  arr[i] + (2(countTwo))$
+            \State $col \gets arr[i]$
+            \State $ladder[row][col] \gets 0$
+          \EndIf
+          \State $arr[i]\gets arr[i+1]$
+          \State return
+        \Else 
+          \State $arr[i] \gets 0$
+          \State $direction[i] \gets !direction[i]$
+        \EndIf
+        $c1 \gets c1 - 1$
+        $c2 \gets c2 + 1$
+      \EndFor
+      \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
+Let the \emph{identity ladder} be the ladder for the sorted permutation from $[1 \dots N]$.
+Let the initial conditions of the algorithm be the fallowing. The $Ladder= 2D array$,  
+let $n \geq 1$, let $arr$ be set to zero for all indexes. Let $dir$ be set to false 
+for all indexes. The principles of the algorithm are the following, if the direction for a 
+given route is false, then bars will be added for that given route, from right to left, bottom to top, until no more bars can be added.
+If the direction for a given route is true, then bars will be removed for that given route, left to right, top to bottom, until 
+no more bars can be removed. Let $K$ be the value of some given route where $1 < K <= N$. 
+The number of bars for a given route is $0 < K < N$. This is because the maximum number of inversions 
+the $kth$ element can make is $K-1$, therefore the $kth$ route can have at most $N-1$, if $K=N$, and 
+at least $1$ bar since element $1$ has no route. Once all the bars for the $Kth$ route have been added 
+or removed, the direction for the $Kth$ route is switched, indicating that its bars will be removed if they 
+were added, or added if they were removed.\par 
+\begin{theorem}
+  The number of rows required for the ladder data-structure is $2N - 3$ and the number of columns required for 
+  the ladder is $N-1$.
+\end{theorem}
+\begin{proof}
+  The number of columns is fairly straighforward. Seeing as there are always $N$ elements in $\pi_{N}$, 
+  a column represents a gap between lines in the corresponding ladder-lottery. Let $Line_{i}$ be a vertical line in a ladder-lottery 
+  with some element in $\pi_{N}$ at the top of the line and the $ith$ element in $\pi_{N}$ be 
+  at the bottom of $Line_{i}$. There are $N$ lines in the ladder-lottery, a column in the ladder data-structure
+  simply represents a gap between two adjacent lines in the ladder lottery.\par 
+  The number of rows for the ladder data-structure is calculated a follows, given $\pi_{N}$, the minimal 
+  number of rows required is when $\pi_{N}$ is sorted. In this case there are zero rows because there are 
+  zero bars added to the ladder. This ladder is $L_{N_{ID}}$ and is 
+  the first ladder in $CanL{\pi_{N}}$. When a bar is added to the ladder it can be added to an already existing row 
+  or to a new row. Since $L_$
+\end{proof}
+The calculations for the row and column for the bar 
+depend on several factors. The first factor is whether the row and column is being calculated for $K=N$ or 
+if $K < N$. If $K=N$, then the row and column are calculated using the main function, modifiedSJT.
+If the row and column are being calculated for $K < N$, then the  row and column are calculated in the 
+function helpersjt. The row and column are calculated differently depending on which function they are 
+being calculated in. In the case of sjtmodified, the row is calculated as follows. Assuming a zero indexed array,  when adding bars 
+for the route $K=N$, Let $I$ be the current 
+value of the counter in the for-loop. The value of $I$ is one less than the $Mth$ bar to 
+be added to the route. For example, if $i=0$, then the first bar of the $K=Nth$ route is
+to be added. The row is equal to $N-i$ - 2. For example, if $K=N=5$ and the first bar of the 
+fifth route was going to be added to the ladder, then $I=0$ and the row is the third row, seeing 
+as $N-0-2=5-0-2=3$. The column is equal to the row because the bars are added right to left. 
+For an example of adding bars of the $K=N'th$ route to the ladder see figure -- 
+when removing a bar from the $K=Nth$ route, the row and column are simply equal to $I$. 
+For example, if the first bar of the $K=Nth$ route is to be removed, said bar exists at 
+row zero, column zero which is the value of $I$ on the first iteration of the for loop.\par 
+Helpersjt is used when $K<N$. The array in helpersjt is used to keep track of the number of bars
+that have been added or removed for a given $1< K <N$. Recall that the number of bars for any given route 
+$K$ at any given time is $[0 \dots k-1]$. Therefore, when the number of bars for route $K=K-1$, 
+the $arr[K-1]$  gets set to zero, and the $direction[K]$ gets switched indicating that all the bars of the 
+$Kth$ route have to be removed if they were added, or added again if they were removed. Assuming a zero indexed 
+array, when adding bars for route $K$ and the number of bars for route $K=[0 \dots K-2]$, then the row is calculated 
+as follows. 
+
+\begin{theorem}
+  Let $arr$ be a zero indexed array. Let $arr[K-1]$ represent the number of bars for route $K$ that are currently in the 
+  ladder. Let $L_{i}$ be a two dimensional, zero indexed array representing the current ladder.
+  Let $1 < K < N$. The the row for the current bar to be added for routr $K$ is $Row=(N-2) + (N-K) - arr[K-1]$.
+\end{theorem}
+\begin{proof}
+  It must be noted that we are listing only root ladders. So when transitioning from 
+$L_{i}$ to $L_{i+1}$ in $CanL{\pi_{N}}$ both are root ladders. Recall that the root ladder is the ladder such that no  
+route of any lesser value in $\pi$ has crossed the route of a greater value. With this in mind, one can say that the 
+number of rows required for the $Nth$ value is $N-1$ seeing as the $Nth$ value can have at most $N-1$ bars in its route. 
+Since bars are added right to left, bottom, up, then the first bar of route $K$ will be added to the row 
+just  below the last bar of the previous route. The reason $N-2$ is added is because the route of the last row of the route of the $Nth$ element is 
+at row $N-2$ in $L$. When the first bar is to be added, the $arr[k-1]=0$. If $K$ is one less than $N$ then 
+the first bar of $K$ will be added one row below the last bar of $N$. If $K$ is two less than $N$ then the first bar 
+of $K$ will be added two rows below the last bar of $N$, etc. The first bar of the $Kth$ route 
+will be added to the 
+\end{proof}

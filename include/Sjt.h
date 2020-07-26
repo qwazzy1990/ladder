@@ -33,9 +33,13 @@ void _swap(int *v1, int *v2);
 //Failed sjt algorithm, still interesting algorithm for generating all perms
 void sjt(int *perm, int count, int max, int size, bool flag);
 
-void sjtLadder(Ladder* l, int n, int* arr, bool* direction);
+void sjtLadder(Ladder* l, Node** node, int n, int* arr, bool* direction);
 //adds or removes a bar belonging to level 1 <= level <= n-1
 void adjustLadder(Ladder* l, int* arr, int level, bool* direction);
+
+void addBarSjt(Ladder* l, int row, int col);
+void removeBarSjt(Ladder* l, int row, int col);
+void printLadderSjt(Ladder* l);
 
 
 //reserves the rows in a ladder for the bars of value n to 2

@@ -9,10 +9,9 @@
 #include "utilities.h"
 #include "Zaks.h"
 #include "LinkedListAPI.h"
-
+#include "Color.h"
 
 int globalCount = 0;
-
 
 int searchArr(int *a, int n, int mobile)
 {
@@ -54,7 +53,7 @@ int getMobile(int *a, bool *dir, int n)
     return mobile;
 }
 
-void printOnePerm(int** perms, int *a, bool *dir, int n, int count)
+void printOnePerm(int **perms, int *a, bool *dir, int n, int count)
 {
     int mobile = getMobile(a, dir, n);
     int pos = searchArr(a, n, mobile);
@@ -95,10 +94,9 @@ void printOnePerm(int** perms, int *a, bool *dir, int n, int count)
 
     for (int i = 0; i < n; i++)
     {
-         //printf("%d ", a[i]);
-         perms[count][i] = a[i];
+        //printf("%d ", a[i]);
+        perms[count][i] = a[i];
     }
-
 }
 
 int fact(int n)
@@ -111,14 +109,15 @@ int fact(int n)
     return res;
 }
 
-void genPermsSJT(List* perms, int *perm, int n, int *arr, bool *direction)
+void genPermsSJT(List *perms, int *perm, int n, int *arr, bool *direction)
 {
 
     //printPerm(perm, n);
-    if(perms->length == 0)
+    if (perms->length == 0)
         insertBack(perms, copyIntArr(perm, n));
 
-    if (globalCount >= factorial(n)){
+    if (globalCount >= factorial(n))
+    {
         globalCount = 0;
         return;
     }
@@ -143,7 +142,7 @@ void genPermsSJT(List* perms, int *perm, int n, int *arr, bool *direction)
             p--;
             q--;
             globalCount++;
-           
+
             arr[n - 1] += 1;
         }
         else
@@ -153,7 +152,7 @@ void genPermsSJT(List* perms, int *perm, int n, int *arr, bool *direction)
             p++;
             q++;
             globalCount++;
-           
+
             arr[n - 1] += 1;
         }
         //printPerm(perm, n);
@@ -166,52 +165,49 @@ void genPermsSJT(List* perms, int *perm, int n, int *arr, bool *direction)
     genPermsSJT(perms, perm, n, arr, direction);
 }
 
-void adjustPerm(List* perms, int *perm, int n, int *arr, bool *direction)
+void adjustPerm(List *perms, int *perm, int n, int *arr, bool *direction)
 {
 
     //globalCount++;
     int index = -1;
-    for (int i = n-1; i >= 0; i--)
+    for (int i = n - 1; i >= 0; i--)
     {
-    //     if you found the maximum n-1 value such that its bars have not been added or removed
-    //     n-1 times
+        //     if you found the maximum n-1 value such that its bars have not been added or removed
+        //     n-1 times
         if (arr[i] < i)
         {
-           
-            index = _getIndex(perm, n+1, i + 1);
+
+            index = _getIndex(perm, n + 1, i + 1);
 
             if (direction[i] == LEFT)
             {
-                
-                 _swap(&(perm[index - 1]), &(perm[index]));
+
+                _swap(&(perm[index - 1]), &(perm[index]));
                 //add a bar to the ladder of level i+1
                 //increment arr[i]
                 arr[i] += 1;
             }
             else
             {
-                 _swap(&(perm[index]), &(perm[index + 1]));
-                
-    //             add a bar to the ladder of level i+1
-    //             increment arr[i]
-                 arr[i] += 1;
-             }
-             insertBack(perms, copyIntArr(perm, n+1));
-             //printPerm(perm, n+1);
-             return;
+                _swap(&(perm[index]), &(perm[index + 1]));
+
+                //             add a bar to the ladder of level i+1
+                //             increment arr[i]
+                arr[i] += 1;
+            }
+            insertBack(perms, copyIntArr(perm, n + 1));
+            //printPerm(perm, n+1);
+            return;
         }
-         //else set it to 0
-         //change its direction
-         else
-         {
-             arr[i] = 0;
-             direction[i] = !(direction[i]);
-         }
+        //else set it to 0
+        //change its direction
+        else
+        {
+            arr[i] = 0;
+            direction[i] = !(direction[i]);
+        }
     }
-    
 }
-
-
 
 void sjt(int *perm, int count, int max, int size, bool flag)
 {
@@ -283,7 +279,6 @@ void sjt(int *perm, int count, int max, int size, bool flag)
         sjt(perm, count, max, size, flag);
         return;
     }
-  
 }
 
 void copyPerm(int *dest, int *src, int n)
@@ -296,7 +291,7 @@ void copyPerm(int *dest, int *src, int n)
 //generates the permutations using the reverse of the sjt algorithm
 void genPermsSJTReverse(int **perms, int *perm, int n, int *arr, bool *direction)
 {
-   
+
     //if the globalCount n! return
     if (globalCount == factorial(n))
         return;
@@ -401,133 +396,164 @@ int _getIndex(int *perm, int n, int val)
     return -1;
 }
 //Sjt algorithm for generating ladders
-void sjtLadder(Ladder* l, int n, int* arr, bool* direction)
+
+void addBarSjt(Ladder *l, int row, int col)
 {
-    if(globalCount == factorial(n))
+    l->ladder[row][col] = 1;
+}
+void removeBarSjt(Ladder *l, int row, int col)
+{
+    l->ladder[row][col] = 0;
+}
+void sjtLadder(Ladder *l, Node **node, int n, int *arr, bool *direction)
+{
+    if(*node == NULL)return;
+    int *perm = (*node)->data;
+    printPerm(perm, n);
+    *node = (*node)->next;
+    printLadderSjt(l);
+
+    if (globalCount == factorial(n))
     {
         globalCount = 0;
         return;
     }
-    forall(n-1)
+    forall(n - 1)
     {
         printf("\nLadder Number = %d\n", globalCount + 1);
-        //if the direction is true then add a bar
-        if(direction[n-1] == false)
+        //if the direction is false then add a bar
+        if (direction[n - 1] == false)
         {
             //column = (n-1) - i+1
-            int col = (n-1) - (x+1);
+            int col = (n - 1) - (x + 1);
             int row = col;
-            int val1 = n;
-            int val2 = (n) - (x+1);
-            int up = -1;
-          
-                //swap them eventually
+
+            //swap them eventually
             //vals = n, n - (i+1)
-            //need to get the bar number. Bar number = 
-            printf("Adding a bar at level %d\n", n);
-            printf("col:%d row:%d val1:%d val2:%d\n", col, row, val1, val2);
+            //need to get the bar number. Bar number =
+
+            addBarSjt(l, row, col);
+
             //get th
         }
-        else 
+        else
         {
             int col = x;
             int row = x;
             //step 1: get the bar number
             //step 2: get the bar
-           
 
-            printf("Removing a bar at level %d\n", n);
-            printf("col:%d row:%d\n", col, row);
+            removeBarSjt(l, row, col);
             //remove a bar belonging to lvl n to the ladder
         }
+        int *perm = (*node)->data;
+        printPerm(perm, n);
+        *node = (*node)->next;
+        printLadderSjt(l);
         globalCount++;
     }
 
     //readust the direction for the next call
-    direction[n-1] = !(direction[n-1]);
+    direction[n - 1] = !(direction[n - 1]);
 
     //call a function to add or remove a bar belnonging to level 1 <= bar <=n-1
-    adjustLadder(l, arr, n-1, direction);
+    adjustLadder(l, arr, n - 1, direction);
     globalCount++;
 
-    sjtLadder(l, n, arr, direction);
+    sjtLadder(l, node, n, arr, direction);
 }
 
-
 //adds or removes a bar belonging to level 1 <= level <= n-1
-void adjustLadder(Ladder* l, int* arr, int level, bool* direction)
+void adjustLadder(Ladder *l, int *arr, int level, bool *direction)
 {
-    int count  = 0;
+    int count = 0;
     int countTwo = 1;
-    for(int i = level-1; i >= 0; i--)
+    for (int i = level - 1; i >= 0; i--)
     {
-        //if you found the maximum n-i value such that its bars have not been added or removed 
+        //if you found the maximum n-i value such that its bars have not been added or removed
         //n-i times
-        if(arr[i] < i)
+        if (arr[i] < i)
         {
 
             printf("\nLadder Number = %d\n", globalCount + 1);
 
-            if(direction[i] == false)
+            if (direction[i] == false)
             {
                 //add a bar to the ladder of level i+1
                 //increment arr[i]
 
-                int row = (i+countTwo) - count - arr[i];
-                int col = (i - 1 ) - arr[i];
-                printf("Adding a bar at level %d\n", i+1);
-                printf("Row:%d Col:%d\n", row, col);
+                int row = (i + countTwo) - count - arr[i];
+                int col = (i - 1) - arr[i];
+
+                addBarSjt(l, row, col);
                 arr[i] += 1;
             }
-            else 
+            else
             {
                 //remove a bar from the ladder of i+1
                 //incremement arr[i]
                 //col = arr[i]
                 //row = arr[i] + 2*count
                 int col = arr[i];
-                int row = arr[i] + 2*countTwo;
-                printf("Removing a bar at level %d\n", i+1);
-                printf("Row:%d Col:%d\n", row, col);
+                int row = arr[i] + 2 * countTwo;
+
+                removeBarSjt(l, row, col);
                 arr[i] += 1;
             }
             return;
         }
         //else set it to 0
         //change its direction
-        else 
+        else
         {
-            printf("Resetting level %d\n", i+1);
             arr[i] = 0;
             direction[i] = !(direction[i]);
         }
         count--;
         countTwo++;
-    }//end for
+    } //end for
 }
 
-
-void reserveRows(int* reservations, int n)
+void printLadderSjt(Ladder *l)
 {
-    int count = n-2;
-    for(int i = n; i> n - (n-2); i--)
+    int numVals = l->numCols+1;
+    int numRows = (2*numVals - 3)+ 1;
+    for(int i = 0; i < numRows; i++)
+    {
+        for(int j = 0; j < l->numCols; j++)
+        {
+            printf("|");
+            if(l->ladder[i][j] == 1)printf("-----");
+            else printf("     ");
+        }
+        printf("|");
+        printf("\n");
+    }
+}
+void reserveRows(int *reservations, int n)
+{
+    int count = n - 2;
+    for (int i = n; i > n - (n - 2); i--)
     {
         reservations[i] = count;
         count = count + 1 + (i - 3);
-
     }
 }
 
-bool hasLeftNeighbor(Ladder* l, int row, int col)
+bool hasLeftNeighbor(Ladder *l, int row, int col)
 {
-    if(col == 0)return false;
-    if(l->ladder[row][col-1] == 0)return false;
+    if (col == 0)
+        return false;
+    if (l->ladder[row][col - 1] == 0)
+        return false;
     return true;
 }
 
-bool hasRightNeighbor(Ladder* l, int row, int col)
+bool hasRightNeighbor(Ladder *l, int row, int col)
 {
-    if(col == l->numCols) return false;
-    if(l->ladder[row][col+1] == 0)return false;
+    if (col == l->numCols)
+        return false;
+    if (l->ladder[row][col + 1] == 0)
+        return false;
     return true;
 }

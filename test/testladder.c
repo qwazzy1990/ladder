@@ -15,11 +15,17 @@
 #include "lexicographic.h"
 #include "GrayCode.h"
 
+//for the mid ladder problem
 bool DEBUG1 = true;
+//for the enumeration problem
 bool DEBUG7 = false;
+//for the sjt problem
 bool DEBUG8 = false;
+//for counting degenerative triadic subsequences
 bool DEBUG9 = false;
+//for heaps ladders
 bool DEBUG10 = false;
+//for the gray code problem using all 4 algorithms
 bool DEBUG11 = false;
 int memSize = 1;
 int numDig = 0;
@@ -27,6 +33,10 @@ int numDig = 0;
 void getInput(int **perm, char *s);
 
 void testDriverSJT(int n);
+
+
+
+
 
 static bool allUnique(List *l, int nn)
 {
@@ -46,19 +56,17 @@ static bool allUnique(List *l, int nn)
                     count++;
                 }
             }
-            if(count == nn)
+            if (count == nn)
             {
-                printf("perms at %d %d\n", cc, cc+1);
-                printf("%p %p\n", (void*)h, (void*)n);
+                printf("perms at %d %d\n", cc, cc + 1);
+                printf("%p %p\n", (void *)h, (void *)n);
                 printPerm(p1, nn);
                 printPerm(p2, nn);
                 return false;
             }
             count = 0;
-           
         }
         cc++;
-        
     }
     return true;
 }
@@ -84,35 +92,49 @@ int main(int argc, char *argv[])
         printf("\n");
 
         genMinLadders(perm, numDig);
-        //saveAllLadders(perm, numDig);
-        //encodingDriver(perm, numDig, 1);
-        PRINT = true;
-       // genMinLadders(perm, numDig);
-       //driver(perm, numDig);
-        genMinLadders(perm, numDig);
-        PRINT = false;
-
+        minLadderDriver(perm, numDig);
         free(perm);
-        
     }
     if (DEBUG7)
     {
+        char *s = calloc(1000, sizeof(char));
+        int *perm = NULL;
+
+        printf("Enter a permutation\n");
+        fgets(s, 1000, stdin);
+        getInput(&perm, s);
+        printf("Number of digits is %d\n", numDig);
+        clear(s);
+
+        printf("Input Permutation:\n");
+        forall(numDig)
+        {
+            printf(GREEN " %d " COLOR_RESET, perm[x]);
+        }
+        printf("\n");
+        saveAllLadders(perm, numDig);
+        free(perm);
     }
     if (DEBUG8)
     {
-        int n = 5;
+        printf("Enter an integer greater than or equal to 1\n");
+        int n;
+        scanf("%d", &n);
         bool *direction = calloc(n, sizeof(bool));
         int *arr = calloc(n, sizeof(arr));
-        new_object(int*, perm, n);
+        new_object(int *, perm, n);
         forall(n)
         {
             direction[x] = false;
             arr[x] = 0;
-            perm[x] = x+1;
+            perm[x] = x + 1;
         }
-        List* perms = initializeList(dummy_print, free, dummy_compare);
+        List *perms = initializeList(dummy_print, free, dummy_compare);
         genPermsSJT(perms, perm, n, arr, direction);
-        printAllPerms(perms, n);
+        //printAllPerms(perms, n);
+        Node* node = perms->head;
+        //printPerm(perms->head->data, n);
+        Node* tempHead = perms->head;
         Ladder *l = newLadder(n);
         forall(n)
         {
@@ -120,7 +142,8 @@ int main(int argc, char *argv[])
             arr[x] = 0;
         }
         initLadder(l);
-        sjtLadder(l, n, arr, direction);
+        sjtLadder(l, &node, n, arr, direction);
+        perms->head = tempHead;
         destroyLadder(l);
         free(arr);
         free(direction);
@@ -167,14 +190,39 @@ int main(int argc, char *argv[])
 void getInput(int **perm, char *s)
 {
     *perm = calloc(memSize, sizeof(int));
-    forall(strlen(s))
+    char delim[5];
+    strcpy(delim, " \n");
+    char *token = NULL;
+    token = strtok(s, delim);
+    int muls = 1;
+
+    while (token != NULL)
     {
-        if (isdigit(s[x]))
+        
+        int currNum = 0;
+        for(int i = strlen(token) - 1; i >= 0; i--)
         {
-            (*perm)[numDig] = s[x] - 0x30;
-            numDig++;
-            memSize++;
-            *perm = (int *)realloc(*perm, memSize * sizeof(int));
+            currNum += muls * (token[i] - 0x30);
+            muls *= 10;
         }
+       
+        (*perm)[numDig] = currNum;
+       
+        numDig++;
+        memSize++;
+        muls = 1;
+
+        token = strtok(NULL, delim);
+        *perm = (int *)realloc(*perm, memSize * sizeof(int));
     }
+    // forall(strlen(s))
+    // {
+    //     if (isdigit(s[x]))
+    //     {
+    //         (*perm)[numDig] = s[x] - 0x30;
+    //         numDig++;
+    //         memSize++;
+    //         *perm = (int *)realloc(*perm, memSize * sizeof(int));
+    //     }
+    // }
 }

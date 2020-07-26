@@ -29,5 +29,15 @@ makeladder: BIN INCLUDE SRC OBJ TEST LIB
 
 runladder: makeladder
 	cd bin; ./ladder
+
+makedisalvo: BIN INCLUDE SRC OBJ LIB
+	$(CC) $(CFLAGS) -Iinclude src/*.c test/DisalvoGrayCode.c -o bin/disalvo
+
+rundisalvo: makedisalvo
+	cd bin; ./disalvo
+
+##runs the disalvo ladder generating algorithm
+disalvo: rundisalvo
+
 clean: 
 	if [ -d "bin" ]; then rm -rf ./bin/; fi; \

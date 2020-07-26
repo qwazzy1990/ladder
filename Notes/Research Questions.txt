@@ -219,7 +219,10 @@ L5 of 4321 = L39 of 54321
 L6 of 4321 = L48 of 54321
 L7 of 4321 = L55 of 54321
 
-
+*******************COUNTING PROBLEM*******************
+When there is a strictly increasing substring followed by a stricyly decreasing substring such that the largest value of the decreasing 
+substring is one less than the smallest value of the increasing substring, then do the following. Let B = the bar corresponding to the 
+first two elements in the decreasing substring. The bar crosses  
 
 
 Given permutation 43521 - total : 11 = 10 Swaps + root
@@ -333,5 +336,89 @@ the second last bar of element i+1s
 route appears in column i-1 and some arbitrary row r-1. The last bar of element i needs to go into column i-1, but it cannot go 
 to row r-1 because the second last bar of element i+1 is there and it cannot go to row r because the last bar of element i+1 
 is at said row. Therefore a new row needs to be added to the ladder to compensate of the last bar of element i.  
-If element N is directly to the left of element N-1 then the min height is at least pos(N) in Idendity - Posn(N) in pi + 1.  
-e.g. the ladder for 3457621 has at least a min height of 7 - 4 = 3, 3 +1 = 4. 
+If element N is directly to the left of element N-1 then the min height is at least pos(N) inIdendity - Posn(N) in pi + 1.  
+e.g. the ladder for 3457621 has at least a min height of 7 - 4 = 3, 3 +1 = 4.
+
+
+#Min ladder algorithm
+##case 1: route of N cannot be right swapped. Add bars of route N to the position they would be in the root ladder
+##case 2: route of N can be right swapped. case 2A: If right swapping does not add a new row to the ladder then right swap route N 
+and place it above route N+1. case 2B: If right swapping route N does add a new row to the ladder and not right swapping route N 
+does not add a new row to the ladder then place route N in the position it would go in the root ladder. case 2C: If right swapping route 
+N does add a new row to the ladder and leaving route N in the position it would go in the route ladder both add a new row to the ladder 
+then right swap route N.
+
+
+Min Height algorithm****
+
+Let pi(0) = 7634521
+
+L0 = 
+| | | | | | |
+| | | | | | |
+| | | | | | |
+| | | | | | |
+| | | | | | |
+
+Perform the maximum number of adjacent transpositions on pi(0) such that the intersection of all adjacent transpositions is the empty set.
+Add the bars to the ladder for each adj transposition in the column = to the greater element of the adjacent transposition. Go from left to 
+right in the permutation. 
+
+pi(1) = 6,7,3,4,2,5,1
+
+Add the bars [7,3][4,2][5,1] to the ladder at row 0 columns 1, 3, 5 respectively.
+
+pi(2) 6,3,7,2,4,1,5 
+Add the bars [6,3][7,2][4,1] to row 1 and columns 0,2,4 respectively 
+
+pi(3) 3,6,2,7,1,4,5 
+Add the bars [6,2][7,1] to row 2 and columns 1,3 respectively
+
+pi(4) 3,2,6,1,7,4,5 
+Add the bars [3,2][6,1][7,4] to row 3 and columns 0,2,4 respectively
+
+pi(5) 2,3,1,6,4,7,5
+Add the bars [3,1][6,4][7,5] to row 4 and columns 1,3,5 respectively 
+
+pi(6) 2,1,3,4,6,5,7
+Add the bars [2,1],[6,5] to row 5 and columns 0,4 respectively.
+
+pi(7) 1,2,3,4,5,6,7
+No more bars to add, ladder complete.
+
+
+****** The way to figure out this problem is to find all the DSS3s in the first perm.
+Then you need to figure out the bars in each DSS3 to add such that 
+it maximizes the number of bars that can be added in the second 
+iteration and the max number of bars are added on the first iteration.  
+
+Once a bar for a route has been added, do not add a bar 
+that will stop the route from progressing. This means once you swap 
+an element, keep swapping it until it is in its spot. 
+ 
+For example: Given 8 7 4 6 5 1 3 2
+
+P[0] = 8 7 4 6 5 1 3 2
+        [8,7], [5,1], [3,2]
+P[1] = 7 8 4 6 1 5 2 3
+        [8,4], [6,1], [5,2]
+P[2] = 7 4 8 1 6 2 5 3
+        [8,1], [6,2], [5,3]
+P[3] = 4 7 1 8 2 6 3 5
+        [7,1], [8,2], [6,3]
+P[4] = 4 1 7 2 8 3 6 5
+        [4,1], [7,2], [8,3],[6,5]
+P[5] = 1 4 2 7 3 8 5 6
+        [4,2], [7,3], [8,5]
+P[6] = 1 2 4 3 7 5 8 6
+        [4,3], [7,5], [8,6]
+P[7] = 1 2 3 4 5 7 6 8
+        [7,6]
+P[8] = 1 2 3 4 5 6 7 8
+You can start by swapping [8,7], [5,1], [3,2], but you could not start by swapping 
+ [8,7], [6,5], [3,2]. Why? Because swapping the 6,5 does not create an adj inversion 
+ in the second level since the 4 is directly to the left of 5. But swapping the 
+ 5,1 does create an  inversion on the next level because the 5 creates an inversion with 
+ the value to the left of 1 which is three. This maximizes the number of adj inversions 
+ on the next level. Once this is done, do not swap an adj perm 
+ if it prevents the element of the adj trans from the prev level to not be swapped.
