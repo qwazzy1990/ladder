@@ -150,7 +150,8 @@ void printAllLadders(List* ladders);
 void setBar(Bar* bar, int barNum, int routeNum, int valTwo);
 
 //inserts a bar at a specfic row and column
-void addBar(Ladder* l, Bar* bar, int row, int col);
+
+void addBar(Ladder* l, int valOne, int valTwo, int row, int col);
 
 void setRoutesCrossed(Ladder* l, int* perm, int size);
 

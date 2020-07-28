@@ -28,7 +28,7 @@ makeladder: BIN INCLUDE SRC OBJ TEST LIB
 
 
 runladder: makeladder
-	cd bin; ./ladder
+	cd bin; ./ladder > ladder.txt
 
 makedisalvo: BIN INCLUDE SRC OBJ LIB
 	$(CC) $(CFLAGS) -Iinclude src/*.c test/DisalvoGrayCode.c -o bin/disalvo

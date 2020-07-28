@@ -422,3 +422,16 @@ You can start by swapping [8,7], [5,1], [3,2], but you could not start by swappi
  the value to the left of 1 which is three. This maximizes the number of adj inversions 
  on the next level. Once this is done, do not swap an adj perm 
  if it prevents the element of the adj trans from the prev level to not be swapped.
+
+
+
+
+
+ *************UPDATED ALGORITHM JULY 27th*****************
+
+ Go left to right and Find a DSS(N) where N >= 2. If N is even, then flip all the inversions.
+ If N is odd then split the DSS(N) as follows: create a DSS3 with the first 3 elements. Let i = posn of first elem
+ let j = posn of second elem let k = posn of third elem. If elem at index i-1 creates an 
+ inversion with elem j the flip elem i and j, else flip elem j and k. For the remaining N-3 elements 
+ in the DSSN, treat them as an even DSS seperate from the first three, and flip all of them.
+ Repeat until pi is sorted. 

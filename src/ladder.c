@@ -320,6 +320,7 @@ void createMinLadder(Ladder *l, int *perm, int n, int currRow, bool *toBeFlipped
     //if there are no bars yet added to the ladder
     if (currRow == 0)
     {
+        l->depth--;
         //find each DSS3
         for (int i = 0; i < n - 2; i++)
         {
@@ -333,13 +334,13 @@ void createMinLadder(Ladder *l, int *perm, int n, int currRow, bool *toBeFlipped
                         if (i == 0)
                         {
                             toBeFlipped[perm[j] - 1] = true;
-                            
+                            addBar(l, perm[j], perm[k], currRow, j);
                         }
                         //if Dss3 is at the end
                         else if (k == n - 1)
                         {
                             toBeFlipped[perm[i] - 1] = true;
-                            
+                            addBar(l, perm[i], perm[j], currRow, i);
                         }
                         //if it is in the middle
                         else
@@ -348,16 +349,21 @@ void createMinLadder(Ladder *l, int *perm, int n, int currRow, bool *toBeFlipped
                             {
 
                                 toBeFlipped[perm[i] - 1] = true;
-                                
+
+                                addBar(l, perm[i], perm[j], currRow, i);
                             }
                             else
                             {
 
                                 toBeFlipped[perm[j] - 1] = true;
-                               
+                                addBar(l, perm[j], perm[k], currRow, j);
                             }
                         }
                         i += 2;
+                        break;
+                    }
+                    else
+                    {
                         break;
                     }
                 } //for
@@ -371,14 +377,13 @@ void createMinLadder(Ladder *l, int *perm, int n, int currRow, bool *toBeFlipped
             if (toBeFlipped[x])
             {
 
-                int idx = getIndex(perm, x+1, n);
-                beenFlipped[perm[idx]-1] = true; 
-                beenFlipped[perm[idx+1]-1] = true;
-                swapInts(&perm[idx], &perm[idx+1]);
-
+                int idx = getIndex(perm, x + 1, n);
+                beenFlipped[perm[idx] - 1] = true;
+                beenFlipped[perm[idx + 1] - 1] = true;
+                swapInts(&perm[idx], &perm[idx + 1]);
             }
         }
-        printPerm(perm, n);
+        //printPerm(perm, n);
 
         //swap all the non DSS3s
         forall(n - 1)
@@ -388,6 +393,8 @@ void createMinLadder(Ladder *l, int *perm, int n, int currRow, bool *toBeFlipped
                 toBeFlipped[perm[x] - 1] = true;
                 beenFlipped[perm[x] - 1] = true;
                 beenFlipped[perm[x + 1] - 1] = true;
+                addBar(l, perm[x], perm[x + 1], currRow, x);
+
                 int idx = getIndex(perm, perm[x], n);
                 swapInts(&perm[idx], &perm[idx + 1]);
                 x++;
@@ -398,33 +405,36 @@ void createMinLadder(Ladder *l, int *perm, int n, int currRow, bool *toBeFlipped
     //if not at the current row
     else
     {
-        forall(n - 2)
+        forall(n - 1)
+        {
+            if (perm[x] > perm[x + 1] && toBeFlipped[perm[x] - 1] && !beenFlipped[perm[x] - 1] && !beenFlipped[perm[x + 1] - 1])
+            {
+                beenFlipped[perm[x] - 1] = true;
+                beenFlipped[perm[x + 1] - 1] = true;
+                addBar(l, perm[x], perm[x + 1], currRow, x);
+
+                int idx = getIndex(perm, perm[x], n);
+                swapVals(&perm[idx], &perm[idx + 1]);
+                x++;
+            }
+        }
+        forall(n - 1)
+        {
+            if (perm[x] > perm[x + 1] && !toBeFlipped[perm[x] - 1] && !beenFlipped[perm[x] - 1] && !beenFlipped[perm[x + 1] - 1])
+            {
+                toBeFlipped[perm[x] - 1] = true;
+                addBar(l, perm[x], perm[x + 1], currRow, x);
+                x++;
+            }
+        }
+        forall(n - 1)
         {
             if (perm[x] > perm[x + 1] && toBeFlipped[perm[x] - 1] && !beenFlipped[perm[x] - 1] && !beenFlipped[perm[x + 1] - 1])
             {
                 beenFlipped[perm[x] - 1] = true;
                 beenFlipped[perm[x + 1] - 1] = true;
                 int idx = getIndex(perm, perm[x], n);
-                swapVals(&perm[idx], &perm[idx+1]);
-                x++;
-            }
-        }
-        forall(n - 2)
-        {
-            if (perm[x] > perm[x + 1] && !toBeFlipped[perm[x]-1] && !beenFlipped[perm[x] - 1] && !beenFlipped[perm[x + 1] - 1])
-            {
-                toBeFlipped[perm[x] - 1] = true;
-                x++;
-            }
-        }
-        forall(n-2)
-        {
-            if(perm[x] > perm[x+1] && toBeFlipped[perm[x]-1] && !beenFlipped[perm[x]-1] && !beenFlipped[perm[x+1]-1])
-            {
-                beenFlipped[perm[x]-1] = true;
-                beenFlipped[perm[x+1]-1] = true;
-                int idx = getIndex(perm, perm[x], n);
-                swapVals(&perm[idx], &perm[idx+1]);
+                swapVals(&perm[idx], &perm[idx + 1]);
                 x++;
             }
         }
@@ -434,6 +444,7 @@ void createMinLadder(Ladder *l, int *perm, int n, int currRow, bool *toBeFlipped
     {
         beenFlipped[x] = false;
     }
+    l->depth++;
     createMinLadder(l, perm, n, currRow + 1, toBeFlipped, beenFlipped);
 
     //     if (perm[x] < perm[x - 1])
@@ -740,6 +751,14 @@ void setBar(Bar *bar, int barNum, int routeNum, int valTwo)
     bar->vals[1] = valTwo;
 }
 
+void addBar(Ladder *l, int valOne, int valTwo, int row, int col)
+{
+    Bar *b = newBar();
+    setBar(b, l->numBars + 1, valOne, valTwo);
+    l->ladder[row][col] = b->barNum;
+    l->bars[l->numBars] = b;
+    l->numBars++;
+}
 void setRoutesCrossed(Ladder *l, int *perm, int size)
 {
     for (int i = 0; i < l->numRows; i++)
