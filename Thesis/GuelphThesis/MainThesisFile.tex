@@ -23,6 +23,7 @@
 \usepackage{xcolor}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{subcaption} 
 
 
 %%for images
@@ -42,7 +43,12 @@
 \newtheorem{conjecture}[theorem]{Conjecture}   % Numbers a conjecture by a theorem number.
 \newtheorem{definition}[theorem]{Definition}       % Numbers a definition by a theorem number.
 
+%%Envoironments
 \newenvironment{proof}{{\em Proof.}}{\hspace*{\fill}$\Box$\par\vspace{4mm}}
+
+\newcounter{casenum}
+\newenvironment{caseof}{\setcounter{casenum}{1}}{\vskip.5\baselineskip}
+\newcommand{\case}[2]{\vskip.5\baselineskip\par\noindent {\bfseries Case \arabic{casenum}:} #1\\#2\addtocounter{casenum}{1}}
 
 %%tree 
 \tikzset{

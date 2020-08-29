@@ -109,12 +109,10 @@ It is termed the cyclic-inversion algorithm. Both of these algorithms will
 be described, explained and analyzed throughout the remainder of the chapter.\par
 
 Before proceeding, the justification for the canonical ladder will be presented. 
-The canonical ladder is selected as the root ladder from each $OptL\{\pi_{N}\}$. 
-The rationale for always choosing the root ladder was due to the fact that every 
-permutation has a root ladder in its $OptL\{\pi\}$ whereas not every permutation 
-has a non-root ladder. For example, given the permutation $(2,1,4,3)$, $OptL\{(2,1,4,3)\}$
-has only one ladder which is the root ladder. This is because there are only two 
-bars in the ladder, thus there is no swap operation that can be performed.
+The canonical represeantive from $OptL{\pi_{N}}$ for $CanL{\pi_{N}}$ depends 
+on which algorithm is being run. But in general, the canonical represeantive is 
+the given ladder, $L_{i}$, such that minimal change is required to get from 
+$L_{i-1}$ to $L_{i}$. 
 \begin{theorem}
     If $|OptL\{\pi\}|=1$ then the ladder is the root ladder.
 \end{theorem} 

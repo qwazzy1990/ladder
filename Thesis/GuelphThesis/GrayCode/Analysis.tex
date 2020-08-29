@@ -1,0 +1,51 @@
+
+\subsection{Analysis}
+    \subsubsection{Introduction}
+    From looking at the table in the results section, it is cear that the modified SJT algorithm performs 
+    better than the Cyclic Inversion algorithm. The reson(s) for this disparity in performance 
+    will be analyzed. Following this analysis, areas of application and practical relavence for the Listing Problem 
+    will be discussed along with concluding remarks.
+
+\subsubsection{Performane Analysis}
+    As $N \geq 9$ there is a noticeable difference between the runtimes of the two algorithms by a sizable order 
+    of magnitude. Cleary the modified SJT algorithm performs better than the Cyclic Inversion algorithm. The reason(s) 
+    for this improved performance are the following. Firstly, the time complexity of the two algorithms are different. 
+    The time complexity for the modified SJT algorithm is $(N!)N$. The time will be proven in the following lemma.
+    \begin{lemma}
+        The time complexity for the modified SJT algorithm is $O((N!)N)$
+    \end{lemma}
+    \begin{proof}
+        The $N!$ factor is fairly straightforward, the algorithm creates all $N!$ ladders in $CanL\{\pi_{N}\}$ which 
+        accounts for the $N!$ factor. The $N$ factor is a result of the second for loop found in the algorithm. The first for loop 
+        fount in the modified sjt function runs $(N-1)$ times each time the modified SJT function is called, however on each 
+        iteration of this for loop a ladder is listed, therefore the runtime of this for loop is accounted for by the $N!$ factor. However, 
+        the second for loop in the helper SJT function runs at worst, $N-1$ times before listing a ladder. This worst case 
+        is when the $K=2$ route needs to have a bar inserted or removed. Therefore, this second for-loop accounts for the $N$ factor 
+        in the time complexity. Thus, the time complexity of the modified SJT algorithm is $O((N!)N)$.
+    \end{proof}
+
+    On the other hand, the time complexity of the Cyclic Inversion algoirthm is $O((N!)N^{2})$. The time complexity for the Cyclic 
+    Inversion Algorithm will be proven in the following lemma.
+
+    \begin{lemma}
+        The time complexity for the Cyclic Inversion algorithm is $O((N!)N^{2})$
+    \end{lemma}
+    \begin{proof}
+        The $N!$ factor is fairly straightforward, the algorithm creates all $N!$ ladders in $CanL\{\pi_{N}\}$ which accounts 
+        for the $N!$ factor. The $N^{2}$ factor is a result of the for loop that is executed when $2 \leq K < N$. This for loop runs 
+        from $1$ to $K$ for each value of $K$. Thus, the for loop is executed $1 + 2 + 3 + 4, ... + N-1$ times. This summation 
+        is equal to $((N-1)N-2)/2$ which is reduced to $N^{2}$. Therefore the for-loop when $2 \leq K < N$ accounts for the $N^{2}$
+        factor.
+    \end{proof}
+
+    \subsubsection{Application(s)}
+    The applications for generating $CanL\{\pi_{N}\}$ are currently unknown insofar as this problem has yet to be solved to my knowledge. 
+    However, if I am to be granted some speculation, I could provide some hypothetical scenarios in which listing $CanL\{\pi_{N}\}$ could 
+    be of interest. The first hypothetical application could be to model an \emph{oblivious sorting system} for $N!$ permutations. An oblivious 
+    sorting system is a system such that the sorting operations are done irrespective of the data being passed to the system. Recall 
+    that a bar in a ladder simply swaps two adjacent elements in a permutation. Due to the static nature of each ladder, the swap operation 
+    resulting from two elements in a permutation crossing a bar is unchanging. 
+    Seeing as each ladder in $CanL\{\pi_{N}\}$ sorts the corresponding permutation of order $N$, one can implement all of $CanL\{\pi_{N}\}$ 
+    for some arbitrary $N$ value and then pass each permutation of order $N$ through its respective ladder from $CanL\{pi_{N}\}$ thus 
+    resulting in each permutation being ordered. The ladders from $CanL\{\pi_{N}\}$ only need to be generated once and saved. Once this is done 
+    a permutation can be passed to the correct ladder and it can be sorted by having each of its elements pass through the ladder. 

@@ -18,14 +18,12 @@
     problem which asks, given all the ladders in $Optl\{\pi\}$, which ladder(s) are 
     the shortest, that is to say which ladders have the smallest height? This thesis 
     provides a theorem as to which ladder(s) in $OptL\{\pi\}$ have the shortest heights.
-    The third problem is the so called canonical ladder generation problem. 
-    This problem asks, given all permutations of size $N$, is there a Gray Code 
-    to generate a canonical ladder from each permutation's $OptL\{\pi\}$? In other words, 
+    The third problem is the so called canonical ladder listing problem. 
+    This problem asks, given all permutations of size $N$, is there an algorithm 
+    to list a canonical ladder from each permutation's $OptL\{\pi\}$? In other words, 
     is there an easy way to transition from one permutation's canonical ladder to the next 
     permutation's canonical ladder until all permutations of size $N$ have had their canonical 
-    ladder generated. This thesis provides such a Gray Code. The last problem is the so called encoding problem.
-    The encoding problem asks, given a ladder-lottery, provide an optimal compact 
-    representation of said ladder-lottery. This thesis provides an encoding for ladder-lotteries.
+    ladder generated. This thesis provides two such algorithms.
 \section{Overview of Thesis}  
 
 This thesis is broken down into several sections. Firstly, an introuduction to Amidakuji, 
@@ -56,11 +54,14 @@ Finally, a conlcusion that summarizes the thesis will be provided.
 %----------------  METHODOLOGY and IMPLEMENTATION ----------------------
 \chapter{Methodology and Implementation}  
 \label{chapter:methodology}
-\section{The Gray Code Problem}
+\section{The Listing Problem}
 \input{GrayCode/Intro}
 \input{GrayCode/Procedure}
-%\input{GrayCode/GrayCodeResults}
-%\input{GrayCode/GrayCodeAnalysis}
+\input{GrayCode/Results}
+\input{GrayCode/Analysis}
+
+\section{The Minimum Height Problem}
+\input{MinHeight/Intro}
 
 
 %----------------  EVALUATION or ANALYSIS ------------------------------------------

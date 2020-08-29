@@ -96,7 +96,10 @@ void initLadder(Ladder* l);
 void createRoot(Ladder* l, int* perm, int size, int currRow);
 void minLadderDriver(int* perm, int n);
 
-void createMinLadder(Ladder* l, int* perm, int n, int currRow, bool* toBeFlipped, bool* beenFlipped);
+void createMinLadder(Ladder* l, int* perm, int n, int currRow);
+int funcGetCount(int* perm, int start, int* end, int n);
+//returns which index to flip in a DSS3
+int findWhichToFlip(int* perm, int firstIndex, int lastIndex);
 void createMinLadderTwo(Ladder* l, int* perm, int n, int currRow);
 void createMinLadderThree(Ladder* l, int* perm, int n, int currRow, bool direction);
 void minLadderDriver(int* perm, int n);

@@ -283,7 +283,7 @@ void minLadderDriver(int *perm, int n)
         toBeFlipped[x] = false;
         beenFlipped[x] = false;
     }
-    createMinLadder(l, tempPerm, n, 0, toBeFlipped, beenFlipped);
+    createMinLadder(l, tempPerm, n, 0);
     printLadder(l);
     destroyLadder(l);
     free(tempPerm);
@@ -308,144 +308,126 @@ void minLadderDriver(int *perm, int n)
     printLadder(l);
     destroyLadder(l);
     free(tempPerm);
+    free(toBeFlipped);
+    free(beenFlipped);
+}
+int funcGetCount(int *perm, int start, int *end, int n)
+{
+    int count = 1;
+    while (perm[start] > perm[start + 1])
+    {
+      
+        start++;
+        count++;
+        if (start == n - 1)
+            break;
+    }
+    *end = start;
+    return count;
 }
 
-void createMinLadder(Ladder *l, int *perm, int n, int currRow, bool *toBeFlipped, bool *beenFlipped)
+void swapDSS(Ladder *l, int *perm, int start, int count, int currRow)
+{
+
+    for (int i = 0; i < count/2; i++)
+    {
+        addBar(l, perm[start], perm[start + 1], currRow, start);
+
+        swapInts(&(perm[start]), &(perm[start + 1]));
+        start += 2;
+    }
+}
+
+int *copyA(int *src, int start, int end)
+{
+    int *cpy = calloc((end - start) + 1, sizeof(int));
+    int c = 0;
+    for (int i = start; i <= end; i++)
+    {
+        cpy[c] = src[i];
+        c++;
+    }
+    return cpy;
+}
+void preProcessRowZero(Ladder *l, int *perm, int n)
+{
+    int start;
+    int end;
+    int count;
+    forall(n - 1)
+    {
+        //if a DSS was found
+        if (perm[x] > perm[x + 1])
+        {
+            count = funcGetCount(perm, x, &end, n);
+            //if count is even, then just swap
+            if (!(count % 2))
+            {
+                swapDSS(l, perm, x, count, 0);
+            }
+            //else try swapping the first two and see if a DSS3 or greater is created to the left.
+            else
+            {
+                swapInts(&(perm[x]), &perm[x + 1]);
+                int *cpy = copyA(perm, 0, x + 1);
+                int numDSS = countDegenerativeSubsequences(cpy, x + 1);
+                //if swapping the first 2 created no DSS3 or greater then we are good
+                if (numDSS == 0)
+                {
+                    addBar(l, perm[x + 1], perm[x], 0, x);
+                    swapDSS(l, perm, x + 2, count - 2, 0);
+                }
+                //swap it back and swap the other two
+                else
+                {
+                    swapInts(&(perm[x]), &perm[x + 1]);
+                    swapInts(&(perm[x + 1]), &(perm[x + 2]));
+                    addBar(l, perm[x + 2], perm[x + 1], 0, x + 1);
+                    swapDSS(l, perm, x + 3, count - 3, 0);
+                }
+            }
+            x = end;
+        }
+    }
+}
+
+
+
+void createMinLadder(Ladder *l, int *perm, int n, int currRow)
 {
     printPerm(perm, n);
+
+    if (currRow == 0)
+    {
+        preProcessRowZero(l, perm, n);
+        createMinLadder(l, perm, n, currRow + 1);
+    }
 
     if (isSorted(perm, n))
         return;
 
-    //if there are no bars yet added to the ladder
-    if (currRow == 0)
+    int end;
+    int count;
+    forall(n - 1)
     {
-        l->depth--;
-        //find each DSS3
-        for (int i = 0; i < n - 2; i++)
+        if (perm[x] > perm[x + 1])
         {
-            for (int j = i + 1; j < n - 1; j++)
+            count = funcGetCount(perm, x, &end, n);
+            if (!(count % 2))
             {
-                for (int k = j + 1; k < n; k++)
-                {
-                    if (perm[i] > perm[j] && perm[j] > perm[k])
-                    {
-                        //if Dss3 is at the beginning
-                        if (i == 0)
-                        {
-                            toBeFlipped[perm[j] - 1] = true;
-                            addBar(l, perm[j], perm[k], currRow, j);
-                        }
-                        //if Dss3 is at the end
-                        else if (k == n - 1)
-                        {
-                            toBeFlipped[perm[i] - 1] = true;
-                            addBar(l, perm[i], perm[j], currRow, i);
-                        }
-                        //if it is in the middle
-                        else
-                        {
-                            if (perm[i - 1] > perm[j])
-                            {
-
-                                toBeFlipped[perm[i] - 1] = true;
-
-                                addBar(l, perm[i], perm[j], currRow, i);
-                            }
-                            else
-                            {
-
-                                toBeFlipped[perm[j] - 1] = true;
-                                addBar(l, perm[j], perm[k], currRow, j);
-                            }
-                        }
-                        i += 2;
-                        break;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                } //for
-                break;
-            } //end for
-        }     //end for
-
-        //flip all the DSS3s
-        forall(n - 1)
-        {
-            if (toBeFlipped[x])
-            {
-
-                int idx = getIndex(perm, x + 1, n);
-                beenFlipped[perm[idx] - 1] = true;
-                beenFlipped[perm[idx + 1] - 1] = true;
-                swapInts(&perm[idx], &perm[idx + 1]);
+                swapDSS(l, perm, x, count, currRow);
             }
-        }
-        //printPerm(perm, n);
-
-        //swap all the non DSS3s
-        forall(n - 1)
-        {
-            if (perm[x] > perm[x + 1] && !beenFlipped[perm[x] - 1] && !beenFlipped[perm[x + 1] - 1])
+            else
             {
-                toBeFlipped[perm[x] - 1] = true;
-                beenFlipped[perm[x] - 1] = true;
-                beenFlipped[perm[x + 1] - 1] = true;
-                addBar(l, perm[x], perm[x + 1], currRow, x);
-
-                int idx = getIndex(perm, perm[x], n);
-                swapInts(&perm[idx], &perm[idx + 1]);
-                x++;
+                addBar(l, perm[x + 1], perm[x + 2], currRow, x + 1);
+                swapInts(&(perm[x + 1]), &(perm[x + 2]));
+                swapDSS(l, perm, x + 3, count - 3, currRow);
             }
-        }
-    } //end if row = 0
-
-    //if not at the current row
-    else
-    {
-        forall(n - 1)
-        {
-            if (perm[x] > perm[x + 1] && toBeFlipped[perm[x] - 1] && !beenFlipped[perm[x] - 1] && !beenFlipped[perm[x + 1] - 1])
-            {
-                beenFlipped[perm[x] - 1] = true;
-                beenFlipped[perm[x + 1] - 1] = true;
-                addBar(l, perm[x], perm[x + 1], currRow, x);
-
-                int idx = getIndex(perm, perm[x], n);
-                swapVals(&perm[idx], &perm[idx + 1]);
-                x++;
-            }
-        }
-        forall(n - 1)
-        {
-            if (perm[x] > perm[x + 1] && !toBeFlipped[perm[x] - 1] && !beenFlipped[perm[x] - 1] && !beenFlipped[perm[x + 1] - 1])
-            {
-                toBeFlipped[perm[x] - 1] = true;
-                addBar(l, perm[x], perm[x + 1], currRow, x);
-                x++;
-            }
-        }
-        forall(n - 1)
-        {
-            if (perm[x] > perm[x + 1] && toBeFlipped[perm[x] - 1] && !beenFlipped[perm[x] - 1] && !beenFlipped[perm[x + 1] - 1])
-            {
-                beenFlipped[perm[x] - 1] = true;
-                beenFlipped[perm[x + 1] - 1] = true;
-                int idx = getIndex(perm, perm[x], n);
-                swapVals(&perm[idx], &perm[idx + 1]);
-                x++;
-            }
+            x = end;
         }
     }
-
-    forall(n)
-    {
-        beenFlipped[x] = false;
-    }
+    createMinLadder(l, perm, n, currRow + 1);
     l->depth++;
-    createMinLadder(l, perm, n, currRow + 1, toBeFlipped, beenFlipped);
 
     //     if (perm[x] < perm[x - 1])
     //     {
