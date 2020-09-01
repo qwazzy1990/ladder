@@ -28,7 +28,7 @@ makeladder: BIN INCLUDE SRC OBJ TEST LIB
 
 
 runladder: makeladder
-	cd bin; ./ladder ../assets/4\ 3\ 6\ 2\ 1\ 5.txt
+	cd bin; ./ladder 
 
 makedisalvo: BIN INCLUDE SRC OBJ LIB
 	$(CC) $(CFLAGS) -Iinclude src/*.c test/DisalvoGrayCode.c -o bin/disalvo
@@ -36,6 +36,7 @@ makedisalvo: BIN INCLUDE SRC OBJ LIB
 rundisalvo: makedisalvo
 	cd bin; ./disalvo
 
+disalvo: rundisalvo
 ##runs the disalvo ladder generating algorithm
 makemin: BIN INCLUDE SRC OBJ LIB
 	$(CC) $(CFLAGS) -Iinclude src/*.c test/MinLadder.c -o bin/min

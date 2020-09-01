@@ -174,13 +174,12 @@ void funcTwo(Ladder *l, int currLimit, int maxLimit, int k, int n)
         for (int i = 0; i < k; i++)
         {
            
+            if(l->numBars == currLimit)break;
             if (i == 0)
             {
                 funcTwo(l, currLimit, maxLimit, k + 1, n);
                 //continue;
             }
-            if(l->numBars == currLimit)break;
-
             else
             {
 

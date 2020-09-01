@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <time.h>
+
 #include "ladder.h"
 #include "utilities.h"
 #include "Color.h"
@@ -14,9 +16,10 @@
 #include "ehr.h"
 #include "lexicographic.h"
 #include "GrayCode.h"
-
+#include "HashMap.h"
 //for the mid ladder problem
-bool DEBUG1 = true;
+bool DEBUG0 = true;
+bool DEBUG1 = false;
 //for the enumeration problem
 bool DEBUG7 = false;
 //for the sjt problem
@@ -34,46 +37,99 @@ void getInput(int **perm, char *s);
 
 void testDriverSJT(int n);
 
+void runMinLadderExperiment(int start, int end, int numRuns, int mapSize);
 
+int *generateRandomPerm(int n, HashMap *h);
 
-
-
-static bool allUnique(List *l, int nn)
+void runMinLadderExperiment(int start, int end, int numRuns, int mapSize)
 {
-    int count = 0;
-    int cc = 0;
-    for (Node *h = l->head; h != NULL; h = h->next)
+    HashMap *hMap = newMap(1000, dummy_print, &free, &strcmp);
+
+    for (int i = start; i <= end; i++)
     {
-        for (Node *n = h->next; n != NULL; n = n->next)
+        for (int j = 0; j < numRuns; j++)
         {
-            //if(n == NULL)return true;
-            int *p1 = h->data;
-            int *p2 = n->data;
-            forall(nn)
-            {
-                if (p1[x] == p2[x])
+            
+        
+                int *perm = generateRandomPerm(i, hMap);
+
+                printf("Input Permutation:\n");
+                forall(i)
                 {
-                    count++;
+                    printf(GREEN " %d " COLOR_RESET, perm[x]);
                 }
-            }
-            if (count == nn)
-            {
-                printf("perms at %d %d\n", cc, cc + 1);
-                printf("%p %p\n", (void *)h, (void *)n);
-                printPerm(p1, nn);
-                printPerm(p2, nn);
-                return false;
-            }
-            count = 0;
+                printf("\n");
+
+                genMinLadders(perm, i);
+                minLadderDriver(perm, i);
+                free(perm);
+            
         }
-        cc++;
     }
-    return true;
+    deleteHashMap(hMap);
+}
+
+int *generateRandomPerm(int n, HashMap *h)
+{
+    new_object(int *, perm, n);
+    forall(n) perm[x] = 0;
+    int numDig = 0;
+    time_t t;
+    bool repeat = false;
+
+    /* Intializes random number generator */
+    srand((unsigned)time(&t));
+
+    while (1)
+    {
+        int randDig = (rand() % n) + 1;
+        for (int i = 0; i < numDig; i++)
+        {
+            if (perm[i] == randDig)
+            {
+                repeat = true;
+                break;
+            }
+        }
+        if (!repeat)
+        {
+            perm[numDig] = randDig;
+            numDig++;
+        }
+        else
+        {
+            repeat = !repeat;
+        }
+        if (numDig == n)
+        {
+            char *s = calloc(n + 2, sizeof(char));
+            forall(n)
+            {
+                s[x] = perm[x] + '0';
+            }
+            if (containsData(h, s) == false)
+            {
+                insertToMap(h, s);
+                return perm;
+            }
+            else
+            {
+                free(perm);
+                free(s);
+                perm = calloc(n, sizeof(int));
+                numDig = 0;
+            }
+        }
+    }
 }
 
 int main(int argc, char *argv[])
 {
     PRINT = false;
+    if (DEBUG0)
+    {
+        runMinLadderExperiment(4, 7, 5, 1000);
+    }
     if (DEBUG1)
     {
         char *s = calloc(1000, sizeof(char));
@@ -132,9 +188,9 @@ int main(int argc, char *argv[])
         List *perms = initializeList(dummy_print, free, dummy_compare);
         genPermsSJT(perms, perm, n, arr, direction);
         //printAllPerms(perms, n);
-        Node* node = perms->head;
+        Node *node = perms->head;
         //printPerm(perms->head->data, n);
-        Node* tempHead = perms->head;
+        Node *tempHead = perms->head;
         Ladder *l = newLadder(n);
         forall(n)
         {
@@ -198,16 +254,16 @@ void getInput(int **perm, char *s)
 
     while (token != NULL)
     {
-        
+
         int currNum = 0;
-        for(int i = strlen(token) - 1; i >= 0; i--)
+        for (int i = strlen(token) - 1; i >= 0; i--)
         {
             currNum += muls * (token[i] - 0x30);
             muls *= 10;
         }
-       
+
         (*perm)[numDig] = currNum;
-       
+
         numDig++;
         memSize++;
         muls = 1;

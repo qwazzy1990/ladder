@@ -287,27 +287,6 @@ void minLadderDriver(int *perm, int n)
     printLadder(l);
     destroyLadder(l);
     free(tempPerm);
-
-    l = newLadder(n);
-    initLadder(l);
-    tempPerm = copyIntArr(perm, n);
-    //run second algo
-    printf("-RUNNING SECOND ALGO---\n");
-
-    createMinLadderTwo(l, tempPerm, n, 0);
-    printLadder(l);
-    destroyLadder(l);
-    free(tempPerm);
-
-    l = newLadder(n);
-    initLadder(l);
-    tempPerm = copyIntArr(perm, n);
-    //run second algo
-    printf("---RUNNING THRID ALGO----\n");
-    createMinLadderThree(l, tempPerm, n, 0, false);
-    printLadder(l);
-    destroyLadder(l);
-    free(tempPerm);
     free(toBeFlipped);
     free(beenFlipped);
 }
@@ -316,7 +295,7 @@ int funcGetCount(int *perm, int start, int *end, int n)
     int count = 1;
     while (perm[start] > perm[start + 1])
     {
-      
+
         start++;
         count++;
         if (start == n - 1)
@@ -329,7 +308,7 @@ int funcGetCount(int *perm, int start, int *end, int n)
 void swapDSS(Ladder *l, int *perm, int start, int count, int currRow)
 {
 
-    for (int i = 0; i < count/2; i++)
+    for (int i = 0; i < count / 2; i++)
     {
         addBar(l, perm[start], perm[start + 1], currRow, start);
 
@@ -390,8 +369,6 @@ void preProcessRowZero(Ladder *l, int *perm, int n)
         }
     }
 }
-
-
 
 void createMinLadder(Ladder *l, int *perm, int n, int currRow)
 {
@@ -662,7 +639,7 @@ void printLadder(Ladder *l)
         printf("\n");
     }
     printf("\n");
-    //PRINT = false;
+    PRINT = false;
 }
 
 void printAllLadders(List *ladders)
@@ -1236,7 +1213,7 @@ void findAllChildren(Ladder *l, int cleanLevel, int level, DTSA *dts)
             CURMIN = clone->depth;
             //set CURMIN to l->depth
         }
-        if (l->depth == CURMIN)
+        else if (l->depth == CURMIN)
         {
             Ladder *clone = cloneLadder(l);
             clone->ladderNumber = ladderCount;
@@ -1918,10 +1895,10 @@ void genMinLadders(int *perm, int numDig)
         printf(MAGENTA "Height:%d\n" COLOR_RESET, minLadder->depth + 1);
         printLadder(minLadder);
     }
-
     freeList(minLadders);
 
     MIN = false;
+    CURMIN = 1000000;
 }
 
 /****ENCODING LADDERS SECTION****/
