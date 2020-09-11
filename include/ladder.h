@@ -8,6 +8,9 @@
 #include "LinkedListAPI.h"
 
 List* allLadders;
+List* minLadders;
+
+bool MIN;
 bool SAVEALL;
 bool PRINT;
 
@@ -94,15 +97,12 @@ void initLadder(Ladder* l);
     a clean level of 1. No other ladder in the set has a clean level of 1
  */
 void createRoot(Ladder* l, int* perm, int size, int currRow);
-void minLadderDriver(int* perm, int n);
 
-void createMinLadder(Ladder* l, int* perm, int n, int currRow);
 int funcGetCount(int* perm, int start, int* end, int n);
 //returns which index to flip in a DSS3
 int findWhichToFlip(int* perm, int firstIndex, int lastIndex);
 void createMinLadderTwo(Ladder* l, int* perm, int n, int currRow);
 void createMinLadderThree(Ladder* l, int* perm, int n, int currRow, bool direction);
-void minLadderDriver(int* perm, int n);
 bool isSorted(int* perm, int n);
 int getIndex(int* perm, int n, int len);
 int getTempRow(Ladder* l, int row, int col);

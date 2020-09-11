@@ -1,9 +1,9 @@
-\section{Coding Latter Lotteries}
-\subsection{Overview}
+\subsection{Coding Latter Lotteries}
+\subsubsection{Overview}
 In this paper, the authors provide three methods to encode ladder-lotteries as 
 binary strings. Coding discrete objects as binary strings is an appealing theme because 
 it allows for compact represntation of them for a computer \cite{A5}.
-\subsection{Route Based Encoding}
+\subsubsection{Route Based Encoding}
 The first method is termed \emph{route based encoding method} in 
 which each route of an element in the permutation has a binary encoding. Let $L_{k}$
 be a ladder lottery for some arbitrary permutation $\pi=(p_{1},\dots,p_{n})$. The route 
@@ -61,7 +61,7 @@ belongs to $\mathcal{O}(n^{2})$.\par
 
 \end{figure}
 
-\subsection{Line Based Encoding}
+\subsubsection{Line Based Encoding}
 The second method is termed \emph{line based encoding} which focuses 
 on encoding the lines of the ladder-lottery. Each line is represented 
 as a sequence of endpoints of bars. Let $L$ be an optimal ladder-lottery 
@@ -156,20 +156,20 @@ is the number of lines and $B$ is the number of bars. Encoding and decoding can 
 done in $\mathcal{O}(n+b)$ time. Clearly the line-based encoding 
 trumps the route-based encoding in both time and space complexity.
 
-\subsection{Improved Line-Based Encoding}
+\subsubsection{Improved Line-Based Encoding}
 Although the line-based encoding is better than the route based 
 encoding, it can still be further optimized. The authors provide 
 three improvements to the line-based encoding. These three improvements
 can be combined to really help imrpove the line based encoding's 
 space efficiency \cite{A5}. 
-\subsubsection{Imrpovement 1}
+\paragraph{Imrpovement 1}
 Since the $nth$ line has only right endpoints attached to it, 
 then it actually does not need to be encoded. Right endpoints 
 are denoted as $0$ and left endpoints are encoded as $1$, therefore the number of right endpoints 
 for line $n$ is equal to the number of $1s$ in $lc_{n-1}$.
 Thus, there is no need for $lc_{n}$ \cite{A5}. The encoding with improvment 
 one for the ladder in Fig. 2.6 is $11\underline{0}0110\underline{0}010$.
-\subsubsection{Improvement 2}
+\paragraph{Improvement 2}
 Improvement Two is based off of the fact that given any two bars,
 $x,y$ let $l_{x}$ denote the left endpoint of bar $x$, let 
 $l_{y}$ denote the left endoint of bar $y$, let $r_{x}$ denote 
@@ -293,7 +293,7 @@ between them on line $i$ \cite{A5}. That is to say, if there is not a $0$ betwee
 the two  $1s$ for $l_{x}$, $l_{y}$ in $lc_{i}$, it is implied that there is at least one $1$ between 
 the two $0s$ for $r_{x}$, $r_{y}$ on $lc_{i+1}$. Hence, one of the $1s$ in $lc_{i+1}$ can be omitted. 
 The line encoding with improvement two for the ladder in Fig 2.6 is $11\underline{0}010\underline{0}00\underline{0}0$.
-\subsubsection{Imrpovement 3}
+\paragraph{Imrpovement 3}
 Improvement three is based off of saving some bits for right 
 end points/$0s$ in $lc_{n-1}$. Since line $n$ has no left end points,
 then then there must be some right endpoints between any two 
@@ -346,7 +346,7 @@ For an example of improvement three with its line encoding for $lc_{n-1}$ please
     included in $lc_{n-1}$. For every other $1$ in $lc_{n-1}$, a $0$ is omitted following 
     said $1$.}
 \end{figure}
-\subsubsection{Combining All Three}
+\paragraph{Combining All Three}
 The combination of all three improvements can be done independently. 
 Let $IC_{L}$ be the \emph{improved line-based encoding} for some ladder $L$ 
 by applying improvements 1-3 to $LC_{L}$. Recall that $LC_{L}$ denotes the line-based encoding for some ladder $L$.

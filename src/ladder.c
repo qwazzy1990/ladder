@@ -16,11 +16,11 @@ int ladderCount = 1;
 
 bool DEBUG3 = true;
 
-bool MIN = false;
+//bool MIN = false;
 
 int CURMIN = 1000000;
 
-List *minLadders;
+//List *minLadders;
 
 void printAllPerms(List *perms, int n)
 {
@@ -268,55 +268,6 @@ void createRoot(Ladder *l, int *perm, int size, int currRow)
     free(arr);
 }
 
-void minLadderDriver(int *perm, int n)
-{
-    Ladder *l = newLadder(n);
-    initLadder(l);
-    int *tempPerm = copyIntArr(perm, n);
-    //run the first algo
-    printf("---RUNNING FIRST ALGO---\n");
-
-    new_object(bool *, toBeFlipped, n);
-    new_object(bool *, beenFlipped, n);
-    forall(n)
-    {
-        toBeFlipped[x] = false;
-        beenFlipped[x] = false;
-    }
-    createMinLadder(l, tempPerm, n, 0);
-    printLadder(l);
-    destroyLadder(l);
-    free(tempPerm);
-    free(toBeFlipped);
-    free(beenFlipped);
-}
-int funcGetCount(int *perm, int start, int *end, int n)
-{
-    int count = 1;
-    while (perm[start] > perm[start + 1])
-    {
-
-        start++;
-        count++;
-        if (start == n - 1)
-            break;
-    }
-    *end = start;
-    return count;
-}
-
-void swapDSS(Ladder *l, int *perm, int start, int count, int currRow)
-{
-
-    for (int i = 0; i < count / 2; i++)
-    {
-        addBar(l, perm[start], perm[start + 1], currRow, start);
-
-        swapInts(&(perm[start]), &(perm[start + 1]));
-        start += 2;
-    }
-}
-
 int *copyA(int *src, int start, int end)
 {
     int *cpy = calloc((end - start) + 1, sizeof(int));
@@ -327,100 +278,6 @@ int *copyA(int *src, int start, int end)
         c++;
     }
     return cpy;
-}
-void preProcessRowZero(Ladder *l, int *perm, int n)
-{
-    int start;
-    int end;
-    int count;
-    forall(n - 1)
-    {
-        //if a DSS was found
-        if (perm[x] > perm[x + 1])
-        {
-            count = funcGetCount(perm, x, &end, n);
-            //if count is even, then just swap
-            if (!(count % 2))
-            {
-                swapDSS(l, perm, x, count, 0);
-            }
-            //else try swapping the first two and see if a DSS3 or greater is created to the left.
-            else
-            {
-                swapInts(&(perm[x]), &perm[x + 1]);
-                int *cpy = copyA(perm, 0, x + 1);
-                int numDSS = countDegenerativeSubsequences(cpy, x + 1);
-                //if swapping the first 2 created no DSS3 or greater then we are good
-                if (numDSS == 0)
-                {
-                    addBar(l, perm[x + 1], perm[x], 0, x);
-                    swapDSS(l, perm, x + 2, count - 2, 0);
-                }
-                //swap it back and swap the other two
-                else
-                {
-                    swapInts(&(perm[x]), &perm[x + 1]);
-                    swapInts(&(perm[x + 1]), &(perm[x + 2]));
-                    addBar(l, perm[x + 2], perm[x + 1], 0, x + 1);
-                    swapDSS(l, perm, x + 3, count - 3, 0);
-                }
-            }
-            x = end;
-        }
-    }
-}
-
-void createMinLadder(Ladder *l, int *perm, int n, int currRow)
-{
-    printPerm(perm, n);
-
-    if (currRow == 0)
-    {
-        preProcessRowZero(l, perm, n);
-        createMinLadder(l, perm, n, currRow + 1);
-    }
-
-    if (isSorted(perm, n))
-        return;
-
-    int end;
-    int count;
-    forall(n - 1)
-    {
-        if (perm[x] > perm[x + 1])
-        {
-            count = funcGetCount(perm, x, &end, n);
-            if (!(count % 2))
-            {
-                swapDSS(l, perm, x, count, currRow);
-            }
-            else
-            {
-                addBar(l, perm[x + 1], perm[x + 2], currRow, x + 1);
-                swapInts(&(perm[x + 1]), &(perm[x + 2]));
-                swapDSS(l, perm, x + 3, count - 3, currRow);
-            }
-            x = end;
-        }
-    }
-    createMinLadder(l, perm, n, currRow + 1);
-    l->depth++;
-
-    //     if (perm[x] < perm[x - 1])
-    //     {
-    //         Bar *b = newBar();
-    //         setBar(b, l->numBars + 1, perm[x - 1], perm[x]);
-    //         l->bars[l->numBars] = b;
-    //         l->numBars++;
-    //         l->ladder[currRow][x - 1] = b->barNum;
-    //         swapInts(&(perm[x - 1]), &(perm[x]));
-    //         x--;
-    //     }
-    // }
-    // l->depth++;
-    // int row = currRow + 1;
-
-    //createMinLadder(l, perm, n, row);
 }
 
 void createMinLadderTwo(Ladder *l, int *perm, int n, int currRow)
@@ -1888,14 +1745,17 @@ void genMinLadders(int *perm, int numDig)
     minLadders = initializeList(dummy_print, destroyLadder, dummy_compare);
     MIN = true;
     driver(perm, numDig);
-    for (Node *n = minLadders->head; n != NULL; n = n->next)
+    if (PRINT)
     {
-        Ladder *minLadder = n->data;
-        printf(CYAN "Ladder Number:%d\n" COLOR_RESET, minLadder->ladderNumber);
-        printf(MAGENTA "Height:%d\n" COLOR_RESET, minLadder->depth + 1);
-        printLadder(minLadder);
+        for (Node *n = minLadders->head; n != NULL; n = n->next)
+        {
+            Ladder *minLadder = n->data;
+            printf(CYAN "Ladder Number:%d\n" COLOR_RESET, minLadder->ladderNumber);
+            printf(MAGENTA "Height:%d\n" COLOR_RESET, minLadder->depth + 1);
+            printLadder(minLadder);
+        }
     }
-    freeList(minLadders);
+    //freeList(minLadders);
 
     MIN = false;
     CURMIN = 1000000;

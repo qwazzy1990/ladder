@@ -39,118 +39,13 @@ void testDriverSJT(int n);
 
 void runMinLadderExperiment(int start, int end, int numRuns, int mapSize);
 
-int *generateRandomPerm(int n, HashMap *h);
 
-void runMinLadderExperiment(int start, int end, int numRuns, int mapSize)
-{
-    HashMap *hMap = newMap(1000, dummy_print, &free, &strcmp);
 
-    for (int i = start; i <= end; i++)
-    {
-        for (int j = 0; j < numRuns; j++)
-        {
-            
-        
-                int *perm = generateRandomPerm(i, hMap);
 
-                printf("Input Permutation:\n");
-                forall(i)
-                {
-                    printf(GREEN " %d " COLOR_RESET, perm[x]);
-                }
-                printf("\n");
-
-                genMinLadders(perm, i);
-                minLadderDriver(perm, i);
-                free(perm);
-            
-        }
-    }
-    deleteHashMap(hMap);
-}
-
-int *generateRandomPerm(int n, HashMap *h)
-{
-    new_object(int *, perm, n);
-    forall(n) perm[x] = 0;
-    int numDig = 0;
-    time_t t;
-    bool repeat = false;
-
-    /* Intializes random number generator */
-    srand((unsigned)time(&t));
-
-    while (1)
-    {
-        int randDig = (rand() % n) + 1;
-        for (int i = 0; i < numDig; i++)
-        {
-            if (perm[i] == randDig)
-            {
-                repeat = true;
-                break;
-            }
-        }
-        if (!repeat)
-        {
-            perm[numDig] = randDig;
-            numDig++;
-        }
-        else
-        {
-            repeat = !repeat;
-        }
-        if (numDig == n)
-        {
-            char *s = calloc(n + 2, sizeof(char));
-            forall(n)
-            {
-                s[x] = perm[x] + '0';
-            }
-            if (containsData(h, s) == false)
-            {
-                insertToMap(h, s);
-                return perm;
-            }
-            else
-            {
-                free(perm);
-                free(s);
-                perm = calloc(n, sizeof(int));
-                numDig = 0;
-            }
-        }
-    }
-}
 
 int main(int argc, char *argv[])
 {
     PRINT = false;
-    if (DEBUG0)
-    {
-        runMinLadderExperiment(4, 7, 5, 1000);
-    }
-    if (DEBUG1)
-    {
-        char *s = calloc(1000, sizeof(char));
-        int *perm = NULL;
-
-        printf("Enter a permutation\n");
-        fgets(s, 1000, stdin);
-        getInput(&perm, s);
-        clear(s);
-
-        printf("Input Permutation:\n");
-        forall(numDig)
-        {
-            printf(GREEN " %d " COLOR_RESET, perm[x]);
-        }
-        printf("\n");
-
-        genMinLadders(perm, numDig);
-        minLadderDriver(perm, numDig);
-        free(perm);
-    }
     if (DEBUG7)
     {
         char *s = calloc(1000, sizeof(char));

@@ -1,4 +1,4 @@
-\section{Enumeration, Counting, and Random Generation of Ladder Lotteries}
+\subsection{Enumeration, Counting, and Random Generation of Ladder Lotteries}
 
 In this paper, the authors consider the problem of enumeration, counting and 
 random generation of ladder-lotteries with $n$ lines and $b$ bars \cite{A6}. 
@@ -9,7 +9,7 @@ The authors use  the line-based encoding, $LC_{L}$ for the representation of lad
 that was discussed in the review of \textbf{Coding Ladder Lotteries}.
 
 %%Section for enumeration
-\subsection{Enumeration}
+\subsubsection{Enumeration}
 The authors denote a set of ladder lotteries with $n$ lines and 
 $b$ bars as $S_{n,b}$. The problem is how to enumerate all the 
 ladders in $S_{n,b}$ \cite{A6}. The authors use a \emph{forest structure}
@@ -219,7 +219,7 @@ terminating sub-ladders, i.e., roots of trees in $F_{n, r}$.The removal sequence
 %%end enumeratiom section
 
 %%section for counting
-\subsection{Counting}
+\subsubsection{Counting}
 The authors provide a method and algorithm to count all ladders 
 with $n$ lines and $b$ bars. According to the authors, the enumeration algorithm is 
 much slower than the counting algorithm \cite{A6}. The counting algorithm 
@@ -229,7 +229,7 @@ $n$ is the number of lines, $h$ is the number of half bars,
 $p$ is the number of unmatched end-points on line $n-1$ and 
 $q$ is the number of unmatched end-points on line $n$. From this 
 type there are four sub-divisions of sub-ladders.
-\subsubsection{Case 1: $h < p+q$ or $n<2$}
+\paragraph{ $h < p+q$ or $n<2$}
 There are zero ladders because it is impossible for the 
 root sub-ladder to have less than two lines. It is also 
 impossible for the number of half bars, $h$, to 
@@ -237,7 +237,8 @@ be less than the number of detached left end points
 on line $n-1$ plus the number of detached end points on 
 line $n$.
 
-\subsubsection{Case 2: $n=2$ and $h=p$ and $q=0$}
+%%\subsubsubsection{Case 2: $n=2$ and $h=p$ and $q=0$}
+\paragraph{$n=2$ and $h=p$ and $q=0$}
 There is only one ladder because the number of half bars 
 on the last/$2nd$ line is 0 since $q=0$. Therefore all half bars are on the 
 $n-1th$/$1st$ line of the sub-ladder. This is known because 
@@ -247,7 +248,8 @@ half bars on the $1st$ line must be connected to the $2nd$
 line. Once these are all matched the ladder will be complete. 
 Thus, there is only one ladder for this case.
 
-\subsubsection{Case 3: $(n \geq 3$ or $h>p)$ and $q=0$}
+%%\subsubsubsection{Case 3: $(n \geq 3$ or $h>p)$ and $q=0$}
+\paragraph{$(n \geq 3$ or $h>p)$ and $q=0$}
 If this is the case, then there are no endpoints attached to 
 line $n$, but the number of half bars is greater than the 
 number of enpoints attached to line $n-1$, which means there is 
@@ -277,7 +279,9 @@ In order to count the number of ladders of type
 $t(n\geq3, h>p, q=0)$ the authors demonstrate an injection 
 from $t(n\geq3, h>p, q=0)$ to $t(n-1,h,0,p) \cup t(n,h-1,p+1,q)$ \cite{A6}.
 They then demonstrate that the $|t(n\geq3, h>p, q=0)|=|t(n-1,h,0,p)| + |t(n,h-1,p+1,q)|$.
-\subsubsection{Case 4: $h\geq p+q$ and $q>0$}
+
+\paragraph{ $h\geq p+q$ and $q>0$}
+%%\subsubsubsection{Case 4: $h\geq p+q$ and $q>0$}
 Let $R$ be a pre-ladder of type $t(n,h,p,q)$. Then 
 the second last bit of $LC_{R}$ is either a $0$ 
 or a $1$. If it is a $0$ then it represents a 
@@ -295,7 +299,7 @@ Therefore, by removing this $1$ in $LC_{R}$ results
 in a parent with one less detached end point on line $n$.
 Thus $P(R)$ is of type $t(n,h-1,p,q-1)$. This leads the 
 authors to conclude $|t(n,h\geq p+q,q>0)|=|t(n,h-1,p+1,q)|+|t(n,h-1,p,q-1)|$ \cite{A6}.
-\subsection{Random Genearation}
+\subsubsection{Random Genearation}
 The random generation of ladder lotteries with $n$ lines and
 $b$ bars is done by the recurrence relations in the counting 
 and enumerating sections. The goal is to produce 
