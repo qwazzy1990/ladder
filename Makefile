@@ -39,7 +39,7 @@ rundisalvo: makedisalvo
 disalvo: rundisalvo
 ##runs the disalvo ladder generating algorithm
 makemin: BIN INCLUDE SRC OBJ LIB
-	$(CC) $(CFLAGS) -Iinclude src/*.c test/MinLadder.c -o bin/min
+	$(CC) $(CFLAGS) -Iinclude src/*.c test/MinLadder.c -lm -o bin/min
 
 runmin: makemin
 	cd bin; ./min

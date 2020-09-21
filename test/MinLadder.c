@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
+#include <math.h>
 #include "ladder.h"
 #include "utilities.h"
 #include "LinkedListAPI.h"
@@ -13,8 +14,12 @@
 bool DEBUG0 = false;
 bool DEBUG1 = false;
 bool DEBUG2 = true;
+bool DEBUGN = false;
 
 //end flags
+
+void printLadderDisalvo(Ladder *l);
+
 
 List *uninvert(int *perm, int n);
 List *copyList(List *og, int nn);
@@ -26,11 +31,15 @@ void preProcessRowZero(Ladder *l, int *og, int *cpy, int n);
 int funcGetCount(int *perm, int start, int *end, int n);
 void swapDSS(Ladder *l, int *perm, int start, int count, int currRow);
 void createMinLadder(Ladder *l, int *perm, int n, int currRow);
+
 int *generateRandomPerm(int n, HashMap *h);
 Ladder *minLadderDriver(int *perm, int n);
 
-int countAllLaddersWithHeightOfOne(int n, int k);
+int T(int n);
 
+double TFormula(int n);
+
+void genT(Ladder* l, int n);
 int getMaxLenSubString(int *perm, int n);
 int max(int a, int b);
 int numDig = 0;
@@ -473,29 +482,66 @@ void getInput(int **perm, char *s)
     }
 }
 
-int countAllLaddersWithHeightOfOne(int n, int k)
+int T(int n)
 {
-    if (n == 2 || n == 3)
-        return 1;
-    if (n <= 1)
-        return 0;
-    int count = 0;
-
-    if (n == k)
-    {
-        count += 2 * (countAllLaddersWithHeightOfOne(n - 2, k));
-        count += (countAllLaddersWithHeightOfOne(n - 1, k));
-    }
-
-    else 
-    {
-        count += countAllLaddersWithHeightOfOne(n-2, k);
-        count += countAllLaddersWithHeightOfOne(n-1, k);
-    }
-    count += 1;
-    return count;
+   if(n == 0)return 0;
+   if(n == 1)return 0;
+   int count = T(n-1) + T(n-2) + 1;
+   return count; 
 }
 
+double TFormula(int n)
+{
+    double a = 1/sqrt(5);
+    double b = pow((1+sqrt(5))/2, n+1);
+    double c = pow((1-sqrt(5))/2, n+1);
+
+    double d = 5 + (3*sqrt(5));
+    double e = 5 - (3*sqrt(5));
+    double f = (1 + sqrt(5))/2; 
+    double g = (1 - sqrt(5))/2;
+
+    double h = (d*pow(e, n));
+    double i = (f*pow(g, n));
+    double j = ((h + i)/10) - 1;
+    printf("---j is %f----\n", j);
+
+
+    return (a*(b-c))-1;
+}
+
+void genT(Ladder* l, int n)
+{
+    if(n < 0)return;
+   
+    l->ladder[1][n] = 1;
+        printf("\n");
+        printLadderDisalvo(l);
+        printf("\n");
+    genT(l, n-2);
+    l->ladder[1][n] = 0;
+    genT(l, n-1);
+    
+}
+//prints the ladder with bars and columns
+void printLadderDisalvo(Ladder *l)
+{
+    
+    int offset = 3;
+    for (int i = 0; i < offset; i++)
+    {
+        for (int j = 0; j < l->numCols; j++)
+        {
+            printf("|");
+            if (l->ladder[i][j] == 1)
+                printf("-----");
+            else
+                printf("     ");
+        }
+        printf("|");
+        printf("\n");
+    }
+}
 int main()
 {
     if (DEBUG0)
@@ -532,20 +578,18 @@ int main()
     }
     if (DEBUG2)
     {
-        int n = 2;
-        printf("n=%d count=%d\n", n, countAllLaddersWithHeightOfOne(n, n));
-        n++;
-        printf("n=%d count=%d\n", n, countAllLaddersWithHeightOfOne(n, n));
-        n++;
-        printf("n=%d count=%d\n", n, countAllLaddersWithHeightOfOne(n, n));
-        n++;
-        printf("n=%d count=%d\n", n, countAllLaddersWithHeightOfOne(n, n));
-        n++;
-        printf("n=%d count=%d\n", n, countAllLaddersWithHeightOfOne(n, n));
-        n++;
-        printf("n=%d count=%d\n", n, countAllLaddersWithHeightOfOne(n, n));
-        n++;
-        printf("n=%d count=%d\n", n, countAllLaddersWithHeightOfOne(n, n));
+        for(int i = 2; i <= 15; i++){
+            printf("%d %d %d\n", i, (int)TFormula(i), T(i));
+        }
+    }
+    if(DEBUGN)
+    {
+        int n;
+        printf("Enter the number of columns for the ladder\n");
+        scanf("%d", &n);
+        Ladder* l = newLadder(n+1);
+        initLadder(l);
+        genT(l, n-1);
     }
 
     return 0;

@@ -499,6 +499,7 @@ void printLadder(Ladder *l)
     PRINT = false;
 }
 
+
 void printAllLadders(List *ladders)
 {
     PRINT = true;

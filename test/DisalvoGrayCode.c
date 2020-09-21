@@ -44,11 +44,12 @@ void funcDriverTwo(Ladder *l, int n);
 void removeAllBars(Ladder *l);
 void __addBar(Ladder *l, int row, int col);
 void removeSomeBars(Ladder *l, int currRow, int currCol);
-void printLadderDisalvo(Ladder *l);
 int calcOffset(Ladder *l);
 void HelperSJT(Ladder *l, int n, int *arr, bool *dir);
 void SJTLadder(Ladder *l, int n, int *arr, bool *dir);
 void SJTDriver(Ladder *l, int n);
+void printLadderDisalvo(Ladder *l);
+
 
 int calcOffset(Ladder *l)
 {
@@ -58,26 +59,7 @@ int calcOffset(Ladder *l)
 
 }
 
-//prints the ladder
-void printLadderDisalvo(Ladder *l)
-{
-    if (Print == false)
-        return;
-    int offset = calcOffset(l);
-    for (int i = 0; i < offset; i++)
-    {
-        for (int j = 0; j < l->numCols; j++)
-        {
-            printf("|");
-            if (l->ladder[i][j] == 1)
-                printf("-----");
-            else
-                printf("     ");
-        }
-        printf("|");
-        printf("\n");
-    }
-}
+
 //add a bar at a certain row col
 void __addBar(Ladder *l, int row, int col)
 {
@@ -115,6 +97,26 @@ void removeSomeBars(Ladder *l, int currRow, int currCol)
         removeSomeBars(l, currRow + 1, currCol + 1);
 }
 
+//prints the ladder with bars and columns
+void printLadderDisalvo(Ladder *l)
+{
+    if (Print == false)
+        return;
+    int offset = calcOffset(l);
+    for (int i = 0; i < offset; i++)
+    {
+        for (int j = 0; j < l->numCols; j++)
+        {
+            printf("|");
+            if (l->ladder[i][j] == 1)
+                printf("-----");
+            else
+                printf("     ");
+        }
+        printf("|");
+        printf("\n");
+    }
+}
 void funcTwo(Ladder *l, int currLimit, int maxLimit, int k, int n)
 {
     //if you have a ladder with the correct number of
