@@ -11,15 +11,26 @@
 #include "Color.h"
 
 //flags for the main
-bool DEBUG0 = false;
+bool DEBUG0 = true;
 bool DEBUG1 = false;
-bool DEBUG2 = true;
+bool DEBUG2 = false;
 bool DEBUGN = false;
 
 //end flags
 
 void printLadderDisalvo(Ladder *l);
 
+/****
+ * For the removal sequence
+ * */
+
+void __removeBar(Ladder *l, int row, int col);
+void __addAllBars(Ladder *l, int row, int col);
+
+Ladder *createMinFromRoot(int *reverse, int n);
+void removalSequence(Ladder *l, int currLimit, int maxLimit, int n, int k);
+
+/**End for the removal sequence**/
 
 List *uninvert(int *perm, int n);
 List *copyList(List *og, int nn);
@@ -28,9 +39,15 @@ void swapEven(int *perm, int start, int end, int n);
 void getInput(int **perm, char *s);
 void swapOdd(int *perm, List *perms, int start, int end, int n);
 void preProcessRowZero(Ladder *l, int *og, int *cpy, int n);
+void __createMinLadderTwo(int *ogPerms, int *bestPerm, Ladder *l, int currRow);
+//always swap the odd ones going right to left if no DSSodd is created
+int **swapOddTwo(int *perm, int *start, int *end, int n, int len);
+int *preProcessRowZeroTwo(Ladder *l, int *perm, int n);
 int funcGetCount(int *perm, int start, int *end, int n);
 void swapDSS(Ladder *l, int *perm, int start, int count, int currRow);
 void createMinLadder(Ladder *l, int *perm, int n, int currRow);
+
+bool hasDSSOdd(int *perm, int n);
 
 int *generateRandomPerm(int n, HashMap *h);
 Ladder *minLadderDriver(int *perm, int n);
@@ -39,7 +56,7 @@ int T(int n);
 
 double TFormula(int n);
 
-void genT(Ladder* l, int n);
+void genT(Ladder *l, int n);
 int getMaxLenSubString(int *perm, int n);
 int max(int a, int b);
 int numDig = 0;
@@ -228,6 +245,127 @@ void createMinLadder(Ladder *l, int *perm, int n, int currRow)
     l->depth++;
 }
 
+void __createMinLadderTwo(int *ogPerms, int *bestPerm, Ladder *l, int currRow)
+{
+    printPerm(bestPerm, l->numCols+1);
+    if (isSorted(bestPerm, l->numCols+1))
+        return;
+    if (currRow == 0)
+    {
+        forall(l->numCols + 1)
+        {
+            if (ogPerms[x] != bestPerm[x])
+            {
+                addBar(l, ogPerms[x], bestPerm[x], 0, x);
+                x++;
+            }
+        }
+        __createMinLadderTwo(ogPerms, bestPerm, l, currRow + 1);
+    }
+    else
+    {
+        int end;
+        int count;
+        forall(l->numCols)
+        {
+            if (bestPerm[x] > bestPerm[x + 1])
+            {
+                count = funcGetCount(bestPerm, x, &end, l->numCols+1);
+                if (!(count % 2))
+                {
+                    swapDSS(l, bestPerm, x, count, currRow);
+                }
+                else
+                {
+                    addBar(l, bestPerm[x + 1], bestPerm[x + 2], currRow, x + 1);
+                    swapInts(&(bestPerm[x + 1]), &(bestPerm[x + 2]));
+                    swapDSS(l, bestPerm, x + 3, count - 3, currRow);
+                }
+                x = end;
+            }
+        }
+        __createMinLadderTwo(ogPerms, bestPerm, l, currRow + 1);
+        l->depth++;
+    }
+}
+int *preProcessRowZeroTwo(Ladder *l, int *perm, int n)
+{
+    int end;
+    int count;
+    int *evenStart = calloc(100, sizeof(int));
+    int *evenEnd = calloc(100, sizeof(int));
+    int *oddStart = calloc(100, sizeof(int));
+    int *oddEnd = calloc(100, sizeof(int));
+    int lEven = 0;
+    int lOdd = 0;
+
+    forall(n - 1)
+    {
+        if (perm[x] > perm[x + 1])
+        {
+            count = funcGetCount(perm, x, &end, n);
+            if (!(count % 2))
+            {
+                evenStart[lEven] = x;
+                evenEnd[lEven] = end;
+                lEven++;
+                //swapDSS(l, perm, x, count, currRow);
+            }
+            else
+            {
+                oddStart[lOdd] = x;
+                oddEnd[lOdd] = end;
+                lOdd++;
+            }
+            x = end;
+        }
+    }
+    for (int i = 0; i < lEven; i++)
+    {
+        int range = (evenStart[i] - evenEnd[i]) * -1;
+        int c = evenStart[i];
+        for (int j = 0; j < range; j++)
+        {
+            addBar(l, perm[c], perm[c + 1], 0, c);
+            swapInts(&(perm[c]), &(perm[c + 1]));
+            c += 2;
+        }
+    }
+    int **perms = swapOddTwo(perm, oddStart, oddEnd, n, lOdd);
+    if (hasDSSOdd(perms[0], n) && hasDSSOdd(perms[1], n))
+    {
+        return perms[0];
+        //reeturn perms[0]
+    }
+    if (!(hasDSSOdd(perms[0], n)))
+    {
+        return perms[0];
+    }
+    else
+    {
+        return perms[1];
+    }
+}
+
+bool hasDSSOdd(int *perm, int n)
+{
+    int count = 0;
+    int end = 0;
+    forall(n - 1)
+    {
+        if (perm[x] > perm[x + 1])
+        {
+            count = funcGetCount(perm, x, &end, n);
+            if ((count % 2))
+            {
+                return true;
+                //swapDSS(l, perm, x, count, currRow);
+            }
+        }
+        end = x;
+    }
+    return false;
+}
 Ladder *minLadderDriver(int *perm, int n)
 {
     int *og = copyPerm(perm, n);
@@ -388,6 +526,36 @@ void swapOdd(int *perm, List *perms, int start, int end, int n)
     }
 }
 
+int **swapOddTwo(int *perm, int *start, int *end, int n, int len)
+{
+
+    int *c1 = copyPerm(perm, n);
+    int *c2 = copyPerm(perm, n);
+    for (int i = 0; i < len; i++)
+    {
+        for (int j = end[i]; j > start[i]; j--)
+        {
+
+            swapInts(&(c1[j]), &(c1[j - 1]));
+            j--;
+        }
+    }
+
+    for (int i = 0; i < len; i++)
+    {
+        for (int j = start[i]; j < end[i]; j++)
+        {
+            swapInts(&(c2[j]), &(c2[j + 1]));
+            j++;
+        }
+    }
+    int **perms = calloc(2, sizeof(int *));
+    perms[0] = copyPerm(c1, n);
+    perms[1] = copyPerm(c2, n);
+    free(c1);
+    free(c2);
+    return perms;
+}
 void swapEven(int *perm, int start, int end, int n)
 {
     for (int i = start; i <= end; i += 2)
@@ -484,49 +652,50 @@ void getInput(int **perm, char *s)
 
 int T(int n)
 {
-   if(n == 0)return 0;
-   if(n == 1)return 0;
-   int count = T(n-1) + T(n-2) + 1;
-   return count; 
+    if (n == 0)
+        return 0;
+    if (n == 1)
+        return 0;
+    int count = T(n - 1) + T(n - 2) + 1;
+    return count;
 }
 
 double TFormula(int n)
 {
-    double a = 1/sqrt(5);
-    double b = pow((1+sqrt(5))/2, n+1);
-    double c = pow((1-sqrt(5))/2, n+1);
+    double a = 1 / sqrt(5);
+    double b = pow((1 + sqrt(5)) / 2, n + 1);
+    double c = pow((1 - sqrt(5)) / 2, n + 1);
 
-    double d = 5 + (3*sqrt(5));
-    double e = 5 - (3*sqrt(5));
-    double f = (1 + sqrt(5))/2; 
-    double g = (1 - sqrt(5))/2;
+    double d = 5 + (3 * sqrt(5));
+    double e = 5 - (3 * sqrt(5));
+    double f = (1 + sqrt(5)) / 2;
+    double g = (1 - sqrt(5)) / 2;
 
-    double h = (d*pow(e, n));
-    double i = (f*pow(g, n));
-    double j = ((h + i)/10) - 1;
+    double h = (d * pow(e, n));
+    double i = (f * pow(g, n));
+    double j = ((h + i) / 10) - 1;
     printf("---j is %f----\n", j);
 
-
-    return (a*(b-c))-1;
+    return (a * (b - c)) - 1;
 }
 
-void genT(Ladder* l, int n)
+void genT(Ladder *l, int n)
 {
-    if(n < 0)return;
-   
+    if (n < 0)
+        return;
+
     l->ladder[1][n] = 1;
-        printf("\n");
-        printLadderDisalvo(l);
-        printf("\n");
-    genT(l, n-2);
+    printf("\n");
+    printLadderDisalvo(l);
+    printf("\n");
+    genT(l, n - 2);
     l->ladder[1][n] = 0;
-    genT(l, n-1);
-    
+    genT(l, n - 1);
 }
 //prints the ladder with bars and columns
 void printLadderDisalvo(Ladder *l)
 {
-    
+
     int offset = 3;
     for (int i = 0; i < offset; i++)
     {
@@ -556,7 +725,13 @@ int main()
         int *p2 = copyPerm(perm, numDig);
 
         Ladder *l = minLadderDriver(perm, numDig);
+        printLadder(l);
         genMinLadders(p2, numDig);
+
+        printf("\n-- GENERATING ALL MIN LADDERS----\n");
+        printLadder(getFromBack(minLadders));
+        printf("\n--END OF GENERATING ALL MIN LADDERS---\n");
+        PRINT = true;
         destroyLadder(l);
     }
     if (DEBUG1)
@@ -578,18 +753,27 @@ int main()
     }
     if (DEBUG2)
     {
-        for(int i = 2; i <= 15; i++){
-            printf("%d %d %d\n", i, (int)TFormula(i), T(i));
-        }
+        char *s = calloc(1000, sizeof(char));
+        int *perm = NULL;
+
+        printf("Enter a permutation\n");
+        fgets(s, 1000, stdin);
+        getInput(&perm, s);
+        clear(s);
+        Ladder *l = newLadder(numDig);
+        initLadder(l);
+        int *bestPerm = preProcessRowZeroTwo(l, perm, numDig);
+        __createMinLadderTwo(perm, bestPerm, l, 0);
+        printLadder(l);
     }
-    if(DEBUGN)
+    if (DEBUGN)
     {
         int n;
         printf("Enter the number of columns for the ladder\n");
         scanf("%d", &n);
-        Ladder* l = newLadder(n+1);
+        Ladder *l = newLadder(n + 1);
         initLadder(l);
-        genT(l, n-1);
+        genT(l, n - 1);
     }
 
     return 0;

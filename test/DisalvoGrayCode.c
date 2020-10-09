@@ -43,6 +43,7 @@ void funcDriverTwo(Ladder *l, int n);
 
 void removeAllBars(Ladder *l);
 void __addBar(Ladder *l, int row, int col);
+
 void removeSomeBars(Ladder *l, int currRow, int currCol);
 int calcOffset(Ladder *l);
 void HelperSJT(Ladder *l, int n, int *arr, bool *dir);
@@ -305,6 +306,15 @@ void HelperSJT(Ladder *l, int n, int *arr, bool *dir)
         }
     }
 }
+
+
+
+
+
+
+
+
+
 int main()
 {
     int n;

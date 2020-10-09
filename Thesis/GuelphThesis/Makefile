@@ -1,6 +1,9 @@
 
 
 compile:
-	pdflatex MainThesisFile.tex
+	pdflatex MainThesisFile
+	bibtex MainThesisFile
+	pdflatex MainThesisFile
+	pdflatex MainThesisFile
 
 

@@ -1,18 +1,15 @@
 \section{Introduction To The Problem}
-The Minimum Height Problem an optimization problem relating to ladder lotteries.
 Let the \emph{height} of a ladder be the number of rows that a ladder has. 
-The Minimum Height Problem asks, given $OptL\{\pi\}$, what ladders in the set have the shortest height? 
 Let $MinL\{\pi\} \subseteq OptL\{\pi\}$ such that the ladders in $MinL\{\pi\}$ are the shortest ladders from 
-$OptL\{\pi\}$. Let \emph{a minimal ladder} be a ladder from $MinL\{\pi\}$. Given a permutation $\pi$, is there an algorithm for generating a minimal ladder
+$OptL\{\pi\}$. Therefore  $MinL\{\pi\}\subset OptL\{\pi\}$.  Let \emph{a minimal ladder} be a ladder from $MinL\{\pi\}$. The \emph{Minimum Height Problem} asks, 
+given a permutation $\pi$, is there an algorithm for generating a minimal ladder
 from $MinL\{\pi\}$?\par  
-Some tangential questions that result from this problem are the following. Let $MinL\{\pi_{N}\}$ 
+Two tangential questions that result from this problem are the following. Let $MinL\{\pi_{N}\}$ 
 be the set of all $MinL\{\pi\}$ for each permutation of order $N$. Recall that $OptL\{\pi_{N}\}$ is the set of all 
 $OptL\{\pi\}$ of order $N$. Thus, $MinL\{\pi_{N}\} \subseteq OptL\{\pi_{N}\}$.  The first tangential question is, 
-what are the upper and lower bounds for a minimal ladder in $MinL\{\pi_{N}\}$? 
+what are the upper and lower bounds for the heights of ladders in $MinL\{\pi_{N}\}$? 
 Let \emph{ladders of order N} pertain to ladders derived from some $\pi$ with $N$ elements.
-The second tangential question is what ladders of order $N$ have a height of zero or one? 
-Thirdly, is $|MinL\{\pi\}|=1$, or in other words is there 
-only one ladder from $OptL\{\pi\}$ with a minimal height?\par 
+The second tangential question is what ladders of order $N$ have a height of zero or one? \par 
 
 
 
@@ -25,15 +22,9 @@ about the efficacy of the heuristic algorithm along with some applications of th
 
 %%Upper and lower bounds question
 \subsection{Upper and Lower Bounds of the heights of the Ladders in each $MinL\{\pi_{N}\}$}
-In order to address the question as to what the upper and lower bounds for each $MinL\{\pi_{N}\}$ 
-some points of clarification need to be addressed. It must be noted that each $MinL\{\pi_{N}\} \subseteq$ of each
-corresponding $OptL\{\pi_{N}\}$. For example, let $N=4$, there are $24$ or $4!$ $OptL\{\pi\}$ in $OptL\{\pi_{4}\}$, which is to say 
-each permutation of order $4$ has its own $OptL\{\pi\}$. Each $MinL\{\pi_{4}\}$ is a subset of one of the $24$
-$OptL\{\pi_{4}\}$. We are going to determine what the upper and lower bounds for the heights of the ladders in $MinL\{\pi_{N}\}$ are;
-not the upper and lower bounds for the heights of the ladders in $OptL\{\pi_{N}\}$. Although the lower bound for the 
-height of a ladder in $MinL\{\pi_{N}\}$ will also be the lower bound for the height of a ladder in $OptL\{\pi_{N}\}$
-seeing as the ladder from $MinL\{\pi_{N}\}$ that has the lower bound for its height will be the shortest ladder 
-from all $OptL\{\pi_{N}\}$.
+In this section the upper and lower bounds for the heights of the ladders in $MinL\{\pi_{N}\}$ will be determined;
+not the upper and lower bounds for the heights of the ladders in $OptL\{\pi_{N}\}$. Seeing as $MinL\{\pi_{N}\}\subseteq OptL\{\pi_{N}\}$, 
+by determining the lower bound for the height of $MinL\{\pi_{N}\}$, the lower bound for the height of $OptL\{\pi_{N}\}$ will also be determined. 
 \begin{lemma}
     The lower bound for the height of a ladder $MinL\{\pi_{N}\}$ is zero
 \end{lemma} 
@@ -55,42 +46,29 @@ Once we have established how to derive the ladder with minimal height from the r
 of the reverse permutation of order $N$, it will be relatively easy to prove the upper bound 
 for $MinL\{\pi_{N}\}$.\par 
  Let $Degen_{\pi_{N}}$ be the reverse permutation of order 
- $N$. Let $MinL_{Degen_{\pi_{N}}}$ be a ladder with the shortest height for $Degen_{\pi_{N}}$.
- Let $R_{Degen}$ be the root ladder from $OptL_\{Degen_{\pi_{N}}\}$. Recall that the root ladder is the ladder such 
-    that no bar of a lesser element has crossed the route of a greater element. $R_{degen}$ requires 
-    $2(N-1)-1$ rows. The $Nth$ element requires $N-1$ rows seeing as each of the bars in its route cannot be on the same row as 
-    any other bar in the same route. The route of the $Nth$ element spans from the first column to the $N-1th$ column.
-    The $N-1th$ element requires $N-2$ bars. Seeing as the $N-1th$  element is directly to the right of the $Nth$ element 
-    in $Degen_{\pi_{N}}$ and it requires $N-2$ bars in $R_{Degen}$; its firt bar in $R_{Degen}$ will be in the first column and its last bar will be in the
-    $N-2th$ column. Since the endpoints of no two bars can be touching, the last bar of the $N-1th$ route 
-    will be one row below the last bar of the $Nth$ route. The same pattern applies to the $N-2th$ element in relation 
-    to the $N-1th$ element and so on. Since all the bars of a lesser route in $R_{Degen}$ must be below the route of 
-    any greater element, this means the first bar of any route will begin at column one in the ladder. Since each bar 
-    of the $N-Kth$, $0 \leq K < (N-1)$, element requires $N-K-1$ bars in its route, the route will span from column one to 
-    column $N-K-1$; each bar of the route cannot share a row with any other bar in the route.
-   Yet since the last bar of the previous element's route is at the currently lowest row in the ladder, a new row 
-   will need to be added to the ladder to accomodate the last bar of the current element.\par 
+ $N$. Let $MinL(Degen_{\pi_{N}})$ be a ladder with the shortest height for $Degen_{\pi_{N}}$.
+ Let $R_{Degen}$ be the root ladder for $Degen_{\pi_{N}}$. Recall that the root ladder is the ladder such 
+    that no bar of a lesser element has crossed the route of a greater element. $R_{Degen}$ requires 
+    $2(N-1)-1$ rows. See proof --Insert reference\par 
    
-   In order to create a ladder with minimal height from $OptL_\{Degen_{\pi_{N}}\}$, one simply needs to 
+   In order to create $MinL(Degen_{\pi_{N}})$, one simply needs to 
    take $R_{Degen}$ and modify it. In order to modify $R_{Degen}$ correctly, consider what happens when 
-   the bars of lesser elements are swapped above the bars of greater elements. Of course, if this is done then 
+   the bars of lesser elements are right swapped above the bars of greater elements. Of course, if this is done then 
    the ladder is no longer $R_{Degen}$. Nonetheless, when the $N-1th$ route is swapped above the $Nth$ route, 
    this frees up an extra row in the ladder for the $N-2th$ route. This is the row where the last bar of the $N-1th$ element resided
    before it was swapped above the $Nth$ route. Now, the first bar of the $N-1th$ route will begin in column $2$ and end at column $N-1$. 
    Furthermore, a new row will need to be added to the top of the ladder in order to accomodate the first bar of the $N-1th$ route. Now the route 
    of the $N-2th$ element can be raised up a row seeing as its last bar will still be in column $N-2$ and the row 
    that was previously occupied by the last bar of the $N-1th$ element will be free. Then the $N-3$ route can be swapped above 
-   element $N$ and begin at column $4$ and span to column $N-1$. Since a new row was already added aboev route $N$ for element $N-1$
-   and the first bar of element $N-1$ route began at column $2$, the first bar of element $N-3$ and go in the 
-   same row as element $N-1$ seeing as the only other bar in this new row is at column 2. By  swapping 
-   all the  $N-Jth$, $1 \leq J < (N-1)$ and $J=2K+1$, routes  above the route of the route of the $Nth$
-   element in $R_{Degen}$, the ladder is reconfigured to have the minimal height. This height is $N$ because the 
-   $Nth$ element still requires $N-1$ rows, and the $N-1th$ element will require a new row to be added above 
-   the row of the first bar of the $Nth$ element to accomodate its first bar. Essentially, if $N$ is even, then 
-   swap the route of each odd element in $R_{Degen}$ above route $N$ and keep the route of each even element below route $N$ 
-   to create a ladder with $N$ rows. If $N$ is odd, then swap the route of each even element in $R_{Degen}$ above the 
-   $Nth$ element and keep the route of eahc odd element below the route of $N$ to create a ladder with $N$ rows. Please refer 
-   to figure --fig for an example of modifying $R_{5,4,3,2,1}$ to $MinL_{5,4,3,2,1}$.\pagebreak
+   the route of elements $N-2 \dots N$. The route of $N-3$ will begin at column $4$ and span to column $N-1$. 
+   Since a new row was already added above route $N$ for element $N-1$, 
+   the first bar of element $N-3$ begins at the 
+   same row as the fijrst bar for element $N-1$. By  swapping 
+   all the  $N-Jth$, $1 \leq J < (N-1)$ and $J=2K+1$, routes above the routes of elements 
+   $(N-J)+1 \dots N$ in $R_{Degen}$, the ladder is reconfigured to have the minimal height. This height is $N$ because the 
+   $Nth$ element still requires $N-1$ rows, and the $N-1th$ element requires one additional row to be added above 
+   the row for the first bar of the $Nth$ element. Please refer 
+   to Fig. \ref{Fig:RootToMinLadder} for an example of modifying $R_{5,4,3,2,1}$ to $MinL_{5,4,3,2,1}$.\pagebreak
 
 
    \begin{center}
@@ -192,10 +170,11 @@ for $MinL\{\pi_{N}\}$.\par
             by swapping routes $2$ and $4$ above route $5$ whilst leaving route $3$ below route $5$ in $R_{5,4,3,2,1}$, we get 
             $MinL_{5,4,3,2,1}$. The height of $MinL_{5,4,3,2,1}$ is $5$. There is no way to reduce the height seeing as route $5$ still needs 
             $4$ rows and route $4$ needs one extra row for its first bar.}
+            \label{Fig:RootToMinLadder}
         \end{figure}   
 
    \end{center}
-   Now that $MinL_{Degen_{\pi_{N}}}$ has been established, we will go back to proving the upper bound for 
+   Now that $MinL_{Degen_{\pi_{N}}}$ has been established, we can prove the upper bound for
    $MinL\{\pi_{N}\}$. 
    \begin{lemma}
        The upper bound for $MinL\{\pi_{N}\}$ is $N$.
@@ -203,21 +182,22 @@ for $MinL\{\pi_{N}\}$.\par
    \begin{proof}
        We shall use a proof by contradiction. Suppose that the upper bound for the height of $MinL\{\pi_{N}\}$ was greater than $N$. (It cannot be less than $N$ because 
        we have already demonstrated that the minimal height of the ladder for the reverse permutation is $N$). Let $MinL_{Degen_{N}}$ be the 
-       minimal ladder for the reverse permutation of order $N$. Refer to figure --fig for an example of $MinL_{5,4,3,2,1}$. It will be shown that for each 
-       ladder of order $N$ can be created by deriving it from $MinL_{Degen_{N}}$.
-       Recall that a bar simply univerts an inversion in a permutation. By removing bars from $MinL_{Degen_{N}}$, that is effectively removing 
-       inversions from $Degen_{\pi_{N}}$. Of course, when a bar is removed from  $MinL_{Degen_{N}}$, the laddr ceases to be  $MinL_{Degen_{N}}$. 
-       Let $K$ be the number of bars in the current state of the ladder, wth $MinL_{Degen_{N}}$, $K=(N(N-1))/2$. Fpr each subsequent 
-       ladder, $0 \leq K < (N(N-1))/2$. Thus, to create the minimal ladders with  $K=((N(N-1))/2)-1$ bars , simply one of the correct bars from $MinL_{Degen_{N}}$. 
+       minimal ladder for the reverse permutation of order $N$. Refer to Fig. \ref{Fig:RootToMinLadder} for an example of $MinL_{5,4,3,2,1}$. It will be shown that one 
+       $MinL\{\pi\}$ of order $N$ can be derived from $MinL_{Degen_{N}}$.
+       Recall that a bar univerts an inversion in a permutation. By removing bars from $MinL_{Degen_{N}}$, that is effectively removing 
+       inversions from $Degen_{\pi_{N}}$. Of course, when a bar is removed from  $MinL_{Degen_{N}}$, the ladder ceases to be  $MinL_{Degen_{N}}$. 
+       Let $K$ be the number of bars in the current state of the ladder, with $MinL_{Degen_{N}}$, $K=(N(N-1))/2$. For each subsequent 
+       ladder, $0 \leq K < (N(N-1))/2$. Thus, to create the minimal ladders with $K=((N(N-1))/2)-1$ bars, simply remove one of the correct bars from $MinL_{Degen_{N}}$. 
        Once all the minimal ladders with  $K=((N(N-1))/2)-1$ bars have been created, simply remove the correct bar from each of these ladders with 
         $K=(N(N-1))/2-1$ bars to get all minimal ladders with  $K=((N(N-1))/2)-2$ bars.
-       This process continues until each minimal ladder of order $N$ has been created. Since bars are only being removed from the initial ladder which is $MinL_{Degen_{N}}$, no more rows 
+       This process continues until each minimal ladder of order $N$ has been created. Since bars are only being removed from ladders, no more rows 
        will be added to the ladder. Removing a bar does not necessarily remove a row, but removing a bar definitely does not add a row to the ladder. Earlier we stated that 
-       the height of $MinL_{Degen_{N}}$ is $N$, and at the same time we stated that we could create a minimal ladder of order $N$ by deriving it from $MinL_{Degen_{N}}$ 
+       the height of $MinL_{Degen_{N}}$ is $N$, and at the same time we stated that we could create one minimal ladder order $N$ from each $MinL\{\pi\}$ of order $N$
+       by deriving it from $MinL_{Degen_{N}}$ 
        through removing bars. Yet at the beginning of the proof, 
        we supposed the upper bound was greater than $N$ which contradicts the claim that by removing bars from  
        $MinL_{Degen_{N}}$ the height of  $MinL_{Degen_{N}}$ will not increase. Thus, the upper bound for $MinL_\{\pi_{N}\}$ is $N$. 
-       Please refer to figure --fig for each ladder with minimal height generated derived from $MinL_{4,3,2,1}$. 
+       Please refer to Fig. \ref{Fig:RemovalSequence} for the removal sequence which lists $MinL\{\pi_{4}\}$. 
 
    \end{proof}\pagebreak
 
@@ -476,7 +456,11 @@ for $MinL\{\pi_{N}\}$.\par
              \draw(9, -48.2) to (9, -49.2);
              \draw(9.3, -48.2) to (9.3, -49.2);
         \end{tikzpicture}
+
+         \caption{Removal sequence of bars from the minimal ladder for $(4,3,2,1)$ resulting in $MinL\{\pi_{N}\}$}
+        \label{Fig:RemovalSequence}
         \end{figure}
+       
    \end{center}
    %%End upper and lower bounds section
 
@@ -489,12 +473,12 @@ for $MinL\{\pi_{N}\}$.\par
    minimal height. What is more interesting is ladders of order $N$ with a height of one. 
    One may be tempted to assume that if the identity permutation results in a minimal ladder 
    with a height of zero, then all permutations of order $N$ with exactly one inversion result in minimal ladders with a height of one.
-   Although this is true, it is only partially true. There are more permutations of order $N$ with more than one inversion 
+   Although this is true, it is only partially true. There are permutations of order $N$ with more than one inversion 
    which result in minimal ladders with a height of one. Below will be presented one algorithm, one recurrence relation and one formula pertaining 
    to ladders of order $N$ with a height of one. The algrithm lists all ladders of order $N$ with a height of one. The recurrence relation
    counts all ladders of order $N$ with a height. The formula is the closed 
    form solution to the recurrence relation. The similarities between ladders of order $N$ with a height of one and other mathematical 
-   objects will close off the topic.\par 
+   objects will also be analyzed.\par 
 
    \subsubsection{Listing Algorithm for all Ladders of Order $N$ with a Height of One}
    \begin{algorithm}
@@ -521,7 +505,8 @@ for $MinL\{\pi_{N}\}$.\par
    left on the first recursive call. This ensures that the next bar added will be two columns away from the current bar that was just added. 
    Once the $Col$ is less than $1$ the function returns to the previous value of $Col$ and removes the bar that was at $Ladder[1][Col]$. 
    This now frees the column that is one away from the  value of $Col$. Thus, the function makes a second recursive call, this time reducing $Col$ by one. 
-   Each call to the function produces a unique ladder. To see the tree of all ladders with a height of one for $N=5$ please refer to figure --Fig\pagebreak
+   Each call to the function produces a unique ladder. To see the tree of all ladders with a height of one for $N=5$ please refer to Fig. 
+   \ref{Fig:GenHeightOne}\pagebreak
 
    \begin{figure}[!htp]
         \begin{center}
@@ -598,22 +583,21 @@ for $MinL\{\pi_{N}\}$.\par
             \end{tikzpicture}
         \end{center}
         \caption{All $7$ ladders of order $5$ with a height of one listed by the function $GenHeightOne$}
+        \label{Fig:GenHeightOne}
    \end{figure}
 
    \subsubsection{Recurrence Relation for Counting the Number of Ladders of Order $N$ with a Height of One}
-   Although it may seem redunant to provide a recurrence relation to count the number of ladders of order $N$ with a height of one, seeing as 
-   there is already an algorithm for listing all ladders of order $N$ with a height of one, one can use the recurrence relation to prove the 
-   veracity of the listing algorithm. Also, the recurrence relation of the number of ladders of order $N$ is the same recurrence relation for 
-   other combinatorial objects such as the number of involutions in the Symmetric Group $S_{N-1}$ or the number of permutations, $\pi$, of {1, 2, ..., n - 1} 
-   such that $max|\pi_{i} - i| = 1$.\par 
+   The recurrence relation of the number of ladders of order $N$ is the same recurrence relation for 
+   other combinatorial objects such as the number of binary strings of length $N-1$ with no consecutive $1s$ 
+   and at least one $1$.\cite{A8}\cite{A11}. The recurrence relation is used to prove the veracity of the $GenHeightOne$ algorithm.\par 
    
    \begin{theorem}
        The recurrence relation for the number of ladders of order $N$ with a height of $1$ is:
-       \[   \left\{
+      \[   \left\{
         \begin{array}{ll}
-        L(0) = 0 & N = 0 \\
-        L(1) = 0 & N=1 \\
-        L(N) = L(N-1) + L(N-2) + 1 & N \geq 2 
+        L_{count}(0) = 0 & N = 0 \\
+        L_{count}(1) = 0 & N=1 \\
+        L_{count}(N) = L_{count}(N-1) + L_{count}(N-2) + 1 & N \geq 2 
         \end{array} 
     \right. \]
    \end{theorem}
@@ -622,7 +606,7 @@ for $MinL\{\pi_{N}\}$.\par
     can be no consecutive $1s$ and there must be at least one $1$ in the string. Suppose we are counting $1s$ from right to left. Suppose the first $1$ in a binary string of length $N$ is at position $N$, 
     then the second $1$ can appear at position $N-2$, thus we have binary 
     strings of length $N$ with the first $1$ appearing at position $N$ and the second one appearing at position $N-2$; let $M=$ the number of binary strings of length $N$ such that there is a $1$ 
-    at position $N-2$. Suppose a binary string of length $N$ has a $0$ at position $N$, then
+    at position $N-2$. Next, suppose a binary string of length $N$ has a $0$ at position $N$, then
     the first $1$ can appear at position $N-1$ or position $N-2$. If it appears at position $N-2$ we have binary strings of length $N$ with a $1$ at position $N-2$. 
     We already designated this number as $M$, so we get $2(M)$. 
     Still supposing we are considering binary strings of length $N$ with a $0$ at position $N$, consider all binary strings of length $N-1$ with 
@@ -634,16 +618,16 @@ for $MinL\{\pi_{N}\}$.\par
     $M$ from $K$ thus leaving us with $J=$ the number of binary strings of length $N$ with the first $1$ appearing at position $N-1$. 
     Now we have $2(M)+J$. Then consider all binary strings of length $N$ such that from positions $1\dots N-1$ there are 
     only $0s$. Therefore there must be a $1$ at position $N$ seeing as we are considering all binary strings of length $N$ with at least one $1$. 
-    Since only one such binary string of length $N$ exists we simply add one. Thus we get $2(M)+(K-M)+1=2(M)+J+1=$ the number of binary strings of length $N$ with at least one $1$ and 
+    Since only one such binary string of length $N$ exists we add one. Thus we get $2(M)+(K-M)+1=2(M)+J+1=$ the number of binary strings of length $N$ with at least one $1$ and 
     no consecutive $1s$.\par 
-    Now consder a ladder, $L$, with $N+1$ lines. The number of columns in $L$ is $N$. The stipulation of $L$ is that $L$ has a height of one. Note that the end points 
+    Now consder a ladder, $L$, with $N+1$ lines. The number of columns in $L$ is $N$ and the height of $L$ is one. Note that the end points 
     of no two bars can be touching which is to say that there can be no adjacent bars on the same row. For example, if there is a bar at row $1$, column $N$ then 
     the next consecutive bar in row $1$ can appear at most at column $N-2$. Knowing this, we can easily see how this scenario models all binary strings of length $N$ with no 
     consecutive $1s$ and having at least one $1$. Let a bar in $L$ be represented as a $1$ in a binary string of length $N$. 
-    Knowing that a ladder with zero bars has a height of zero, it must be the case that $L$ has at least one bar. Thus we get the same formula for the number of 
+    Knowing that a ladder with zero bars has a height of zero, it must be the case that $L$ has at least one bar. Thus we get the same recurrence relation for the number of 
     ladders of order $N+1$ where $M$ is the number of ladders with a bar appearing in column $N-2$, $(K-M)=J$ being the number of ladders with the first bar in column $N-1$ minus 
-    all ladders with the first bar appearing at column $N-2$. Lastly is the $+1$ for all ladders of order $N+1$ where the only bar appears at column $N$.
-    See figure --Fig for the mapping of binary strings of length $N=5$ with no consecutive $1s$ and at least one $1$ to ladders of order $6$ with a height of one.\pagebreak
+    ladders with a bar appearing at $N-2$. Lastly is the $+1$ for all ladders of order $N+1$ where the only bar appears at column $N$.
+    See Fig. \ref{Fig:MapBinToLadder} for the mapping of binary strings of length $N=5$ with no consecutive $1s$ and at least one $1$ to ladders of order $6$ with a height of one.\pagebreak
 
 \end{proof}
 
@@ -872,23 +856,40 @@ for $MinL\{\pi_{N}\}$.\par
 
     \caption{All 12 binary strings of length $5$ with at least one $1$ and no consecutive $1s$ maps to all twelve ladders of order $6$ with a height of one. 
     The recurrence relation being $L(6)=2L(4)+(L(5)-L(4))+1=L(4)+L(5)+1$}
+    \label{Fig:MapBinToLadder}
 \end{figure}
 \end{center}
 
+
+
 \subsubsection{Closed form Formula for Ladders of Order $N$ with a Height of One}
 Before providing the closed form formula for the number of ladders with a height of one, it is important to connect ladders with a height of one to other 
-mathematical phenomena because ladders with a height follow the same pattern as these other mathematical phenomena. These phenomena include 
-the number of involutions in the Symmetric Group $S_{N}$, the $Nth$ Fibonacci meander, and the number of allowable transitions rules for passing from 
-one change to the next in the English art of bell ringing - insert ref. Each of these other mathematical phenomena will be expained along with their 
-connections to ladders of order $N$ with a height of one.\par 
+mathematical phenomena because ladders with a height follow the same pattern as these other mathematical phenomena. \cite{A12} One of these phenomena include 
+the number of involutions in the Symmetric Group $S_{N}$.\cite{A13} The connection between the Symmetric Group, $S_{N}$ and ladders of order $N$ with a height 
+of zero or one will be analyzed followed by the closed form formula.\par 
 
-Let $S_{N}$ be a the symmetric group of degree $N$ such that each of its elements are one of the $N!$ permutations of order $N$. Let the group 
-operation of $S$ be the composition of two permutations (not necessarily unqique) of order $N-1$. Let an \emph{involution} 
-be defined as a composition of a permutation with itself such that the result of the composition is the identity permutation. 
+A \emph{group} is a finite set along with a binary operation on the elements of the set such that the binary operation on two elements in the set 
+produces a result that is also in the set. The stipulations of a group are the following. Firstly, the group must have \emph{closure} which means the 
+result of the binary operation produces a result in the set; this stipulation was already addressed in the definition of a group. Secondly, the group must 
+be associative, meaning the rearrangement of priority of the order of application of the binary operation across $2 \leq K$ $\leq N$ elements in the set 
+does not change the result; associativity means the order of application of the binary operation across multiple elements in the set does not change the result. The third stipulation 
+is that the set has the identity element. The identity element is the element such that when the binary operation is applied to an element, $x$, with the identity element, $ID$, 
+the result is $X$. The fourth stipulation is the \emph{inverse element} which is the property that for any element in the set, $X$, when the binary operation is applied to $X$ and 
+its inverse element $Y$, 
+the result is $X$.\cite{A14}\par 
+
+A \emph{symmetric group of order $N$/$S_{N}$} is finite group whose elements are all $N!$ permutations of order $N$, the binary operation 
+is permutation composition, applying the composition forms a bijection between all elements in the set. When a permutation is written in 
+cycle notation, the \emph{orbit} is defined as the transposition of elements on the identity permutation. For example, 
+let $\pi=(3,2,1,6,4,5,7)$ be written as $(1,3)(4,5,6)$ in cycle notation. There are two orbits, one of size two, namely $(1,3)$ and 
+one of size three, namely $(4,5,6)$. \cite{A15}. There Let an \emph{involution} 
+be defined as a composition of a permutation with itself such that the result of the composition is the identity permutation. \cite{A13} 
 For example, $X=\{1, 2, 3\}$. Let $S_{X} = S_{N} = \{(1,2,3),(1,3,2),(2,1,3),(2,3,1),(3,1,2),(3,2,1)\}$. The involutions of $S_{N}=\{(2,1,3),(1,3,2),(1,2,3)\}$.
 The reason these are the involutions is because when we define a permutation as a bijective function on the identity permutation, we can see the the composition 
-of a permutation from the involution set with itself returns the identity permutation. Let $(1,2,3)=F$,$(2,1,3)=G$ and $(1,3,2)=H$ then we have $F \circ F=(1,2,3)$,
-$G \circ G = (1,2,3)$ and $H \circ H=(1,2,3)$. To see an example of the mapping of the composition of $(2,1,3)$ with itself see figure -- fig.\pagebreak  
+of an involution with itself returns the identity permutation. Let $(1,2,3)=F$, let $(2,1,3)=G$ and let $(1,3,2)=H$ then we have $F \circ F=(1,2,3)$,
+$G \circ G = (1,2,3)$ and $H \circ H=(1,2,3)$. The orbit(s) of an involution are of size two and 
+the orbits are transitive, meaning the elements composing the orbit(s) are adjacent in the identity permutation.
+To see an example of the mapping of the composition of $(2,1,3)$ with itself see Fig. \ref{Fig:InvolutionExample}\newline 
 
 
 \begin{figure}
@@ -916,162 +917,295 @@ $G \circ G = (1,2,3)$ and $H \circ H=(1,2,3)$. To see an example of the mapping 
   \draw[->,thick,shorten <=1pt,shorten >=2pt] (b2) -- (c1);
   \draw[->,thick,shorten <=1pt,shorten >=2pt] (b3) -- (c3);
 
-  \node at (2,4.5){$F(1,2,3)$};
-  \node at(6,4.5){$F \circ F(1,2,3)$};
+  \node at (2,4.5){$G(1,2,3)$};
+  \node at(6,4.5){$G \circ G(1,2,3)$};
+   \node at(-3, 3){\small{$G=(2,1,3)$}};
  \end{tikzpicture}
+ 
+ \caption{The involution $(2,1,3)$ composed with itself when applied to the identity permutation returns the identity permutation}
+ \label{Fig:InvolutionExample}
 \end{figure}
 
 \begin{theorem}
-    There is a surjective function between ladders of order $N$ with a height of one and the involution set of $S_{N}$. Note that 
-if one were includes the ladder of order $N$ with a height of zero, then there is a bijective function between ladders of order $N$ with a height of zero or one and the involution set of $S_{N}$.
+    There is a bijectie function between ladders of order $N$ with a height of zero or one and the involution set of $S_{N}$.
 \end{theorem}
 \begin{proof}
     The involution set of $S_{N}$ consists of all permutations of order $N$ such that when composed with themselves, the result of the composition is the identity permutation. 
     If a permutation is an involution it either has no inversions or for each pair of inversions, the inversion pairs are pairwise disjoint. That is to say, no element in the 
-    involution forms more than $1$ inversion. When inversion pairs are pairwise disjoint, 
-    each element in the pair is rotated by one position from its position in the identity permutation. When an involution is composed with the identity permutation, each element is 
+    involution set forms more than $1$ inversion. When an involution is applied to the identity permutation, each element in the identity is 
     rotated by one or zero positions. If an element from the identity permutation is rotated two times over over a span of two positions, the element returns to its original position in the identity permutation.
-    Thus, composing an involution with itself either rotates an element zero times or it rotates an element twice over a span of two positions, thus placing the element in its 
-    original position in the identity permutation.\par 
-    A ladder of order $N$ with a height of one consists only of bars such that each bar swaps an element in $\pi$ to its correct position in the identity permutation. Suppose an element, $X$,
-    needed to be swappped more than once in $L_{\pi}$ to reach its position in the identity permutation. This would mean the route of $X>1$. If that is the case, then the bars of route $X$ require their own rows, seeing as each bar of an element's route 
-    cannot be on the same row as any of the other bars of its route. But if that is the case then we have a contradiction seeing as we supposed ladders of order $N$ with a height of one.
-    Then it must be the case that for all ladders of order $N$ with a height of one, each bar in any of these given ladders swaps an elmenet in $\pi$ to its correct position 
-    in the idetity permutation. That is to say, every ladder of order $N$ with a height of $1$ sorts a $\pi$ such that each element in $\pi$ forms at most 
-    one inversion.
-    To see a bijective mapping between ladders of order $5$ with a height of zero or one and the involution set of $S_{5}$ please refer to figure --fig.
-\end{proof}\pagebreak
-
+    Thus, applying an involution to itself either rotates an element zero times or it rotates an element twice over a span of two positions, thus placing the element in its 
+    original position in the identity permutation. The \emph{orbit} in $\pi$ refers to the transposition of an element. When writing $\pi$  \par 
+    A ladder of order $N$ with a height of one consists only of bars such that each element in $\pi$ is uninverted zero or one times. Suppose an element $X$
+    needed to be swappped more than once in $L_{\pi}$ to reach its position in the identity permutation. This would mean the route of $X>1$. If that is the case then the height of the ladder would 
+    be greater than one, which contradicts the claim that the ladder has a height of one.
+    Then it must be the case that for all ladders of order $N$ with a height of one, each bar in any of these given ladders uninverts a pair of elments in $\pi$ exactly once and no two bars 
+    uninvert the same element. It follows that each bar places an element in $\pi$ to its correct position 
+    in the idetity permutation.  We know that each ladder with a height of zero or one is unique, in that they all sort different permutations, because the only way to get 
+    two or more ladders to sort the same permutation is to perform a swap operation on bar(s) in a ladder to get another ladder that sorts the same permutation.
+    Yet with ladders of height zero or one, no swap operation can be performed.\par
+    Let $F_{L_{N}}$ be the representation of a ladder as a function. We have already established that an involution can be thought of as a function. Let $G$ be the represetation of an 
+    involution as a function. We know that $G \circ G(ID)=ID$. I propose that for each $G$ there is a corresponding $F_{L_{N}}$
+    such that $F_{L_{N}} \circ G(ID) = ID$ where each $F_{L_{N}}$ and $G$ are unique. 
+    This shall be proven by way of contradiction. Suppose there exists a $G$ of order $N$ such that  $F_{L_{N}} \circ G(ID) \neq ID$ for every $F_{L_{N}}$.
+    Let this $G$ be known as $K$. 
+    We know that the number of ladders with a height of zero or one of order $N$ equals the number of involutions of order $N$. We also know that each bar in $F_{L_{N}}$ of order one uninverts an inversion in $\pi$ 
+    We know that each $G$ is unique seeing as the involution set $\subset$ all $N!$ permutations and all 
+    $N!$ permutations are unique. Thus, if $F_{L_{N}} \circ K(ID) \neq ID$ for every $F_{L_{N}}$ of a height of zero or one that means either there is a 
+    $F_{L_{N}}$ of height zero or one that does not map $K$ to $ID$ when composed with $K$ or there exists at least two $F_{L_{N}}$ of height zero or one that map the 
+    same $G \neq K$ to $ID$ when composed with $G$. In the first case this would mean that there is some involution, $K$, that could not be sorted into the identity 
+    permutation by any $F_{L_{N}}$ of height zero or one. Yet if that is the case then there is an $F_{L_{N}}$ of height zero or one such that there exists 
+    a bar in $F_{L_{N}}$ that does not place the element crossing it into its correct position in $ID$. But if that is the case then $F_{L_{N}}$ does not 
+    have a height of zero or one which is a contradiction. In the second case, this would mean that there are two $F_{L_{N}}$ with a height of zero or one, 
+    let us call them $A$ and $B$, and some $G\neq K$, such that $A\circ G(ID) = B\circ G(ID)=ID$ and $A \neq B$. Yet we know that the only way for two unique ladders 
+    to sort the same permutation is by right/left swapping the bars of one ladder to get the configuration of the bars in the other ladder. Yet a bar cannot be 
+    right/left swapped in a ladder with a height of zero or one because there is no bar of one element's route above/below the bar of another element's route. Thus if 
+    $A\circ G(ID) = B\circ G(ID)=ID$ it must be the case that $A=B$ which is a contradiction. Therefore for each $G$ there exists an $F_{L_{N}}$ such that 
+     $F_{L_{N}} \circ G(ID) = ID$ where each $F_{L_{N}}$ and $G$ are unique. To see the bijective mapping 
+     between ladders of order $4$ with a height of zero or one and the involution set of $S_{4}$ please refer to \ref{Fig:BijectiveMapping}\pagebreak
+\end{proof}
 \begin{figure}
     \centering
-        \begin{minipage}{.4\textwidth}
-            \begin{tikzpicture}
-            \draw(0,0) to (0,2);
-        \draw(.5,0) to (.5,2);
-        \draw(1,0) to (1,2);
-        \draw(1.5,0) to (1.5,2);
-        \draw(2,0) to (2,2);
-    
-        \draw[->, line width = .3mm](2.3, 1) to (4.3, 1);
+        \begin{tikzpicture}[ele/.style={fill=black,circle,minimum width=.8pt,inner sep=1pt},every fit/.style={ellipse,draw,inner sep=-1pt}]
+        %%1
+        \node at(1.5, .5){$G=()$};
+        \node at(-.5, .5){$L=$};
+        \draw(0, 0) to (0, 1);
+        \draw(.2, 0) to (.2, 1);
+        \draw(.4, 0) to (.4, 1);
+        \draw(.6, 0) to (.6, 1);
 
-        \node at(4.6, 1){$1$};
-        \node at(4.9, 1){$2$};
-        \node at(5.2, 1){$3$};
-        \node at(5.5, 1){$4$};
-        \node at(5.8, 1){$5$};
+        \node[ele,label=left:$1$] (a1) at (6,1.2) {};    
+        \node[ele,label=left:$2$] (a2) at (6,.7) {};    
+        \node[ele,label=left:$3$] (a3) at (6,.2) {};
+        \node[ele,label=left:$4$] (a4) at (6,-.3) {};
+        \node[draw,fit= (a1) (a2) (a3) (a4), minimum width=2cm] {} ;  
 
-        \draw(0,3) to (0,5);
-        \draw(.5,3) to (.5,5);
-        \draw(1,3) to (1,5);
-        \draw(1.5,3) to (1.5,5);
-            \draw(1.5, 4) to (2,4);
-        \draw(2,3) to (2,5);
-    
-        \draw[->, line width = .3mm](2.3, 4) to (4.3, 4);
+         \node[ele,label=left:$1$] (b1) at (9,1.2) {};    
+        \node[ele,label=left:$2$] (b2) at (9,.7) {};    
+        \node[ele,label=left:$3$] (b3) at (9,.2) {};
+        \node[ele,label=left:$4$] (b4) at (9,-.3) {};
+        \node[draw,fit= (b1) (b2) (b3) (b4), minimum width=2cm] {} ;  
+ 
+        \node[ele,label=right:$1$] (c1) at (12,1.2) {};    
+        \node[ele,label=right:$2$] (c2) at (12,.7) {};    
+        \node[ele,label=right:$3$] (c3) at (12,.2) {};
+        \node[ele,label=right:$4$] (c4) at (12,-.3) {};
+        \node[draw,fit= (c1) (c2) (c3) (c4), minimum width=2cm] {} ;  
 
-        \node at(4.6, 4){$1$};
-        \node at(4.9, 4){$2$};
-        \node at(5.2, 4){$3$};
-        \node at(5.5, 4){$5$};
-        \node at(5.8, 4){$4$};
+        \draw[->,thick,shorten <=1pt,shorten >=1pt] (a1) -> (b1) ->(c1);
+        \draw[->,thick,shorten <=2pt,shorten >=2pt] (a2) -> (b2) -> (c2);
+        \draw[->,thick,shorten <=2pt,shorten >=2pt] (a3) -> (b3) -> (c3);
+        \draw[->,thick,shorten <=2pt,shorten >=2pt] (a4) -> (b4) -> (c4);
 
-        \draw(0,6) to (0,8);
-        \draw(.5,6) to (.5,8);
-            \draw(.5, 7) to (1, 7);
-        \draw(1,6) to (1,8);
-        \draw(1.5,6) to (1.5,8);
-            \draw(1.5, 7) to (2,7);
-        \draw(2,6) to (2,8);
-    
-        \draw[->, line width = .3mm](2.3, 7) to (4.3, 7);
 
-        \node at(4.6, 7){$1$};
-        \node at(4.9, 7){$3$};
-        \node at(5.2, 7){$2$};
-        \node at(5.5, 7){$5$};
-        \node at(5.8, 7){$4$};
 
-        \draw(0,9) to (0,11);
-        \draw(.5,9) to (.5,11);
-            \draw(0, 10) to (.5, 10);
-        \draw(1,9) to (1,11);
-        \draw(1.5,9) to (1.5,11);
-            \draw(1.5, 10) to (2,10);
-        \draw(2,9) to (2,11);
-    
-        \draw[->, line width = .3mm](2.3, 10) to (4.3, 10);
 
-        \node at(4.6, 10){$2$};
-        \node at(4.9, 10){$1$};
-        \node at(5.2, 10){$3$};
-        \node at(5.5, 10){$5$};
-        \node at(5.8, 10){$4$};
-            \end{tikzpicture}
-        \end{minipage}
-        \begin{minipage}{.4\textwidth}
-            \begin{tikzpicture}
-            \draw(0,12) to (0,14);
-        \draw(.5,12) to (.5,14);
-        \draw(1,12) to (1,14);
-        \draw(1.5,12) to (1.5,14);
-            \draw(1, 13) to (1.5,13);
-        \draw(2,12) to (2,14);
-    
-        \draw[->, line width = .3mm](2.3, 13) to (4.3, 13);
+        %%2
+        \node at(2, 3.5){$G=(1,2)$};
+        \node at(-.5, 3.5){$L=$};
+        \draw(0, 3) to (0, 4);
+            \draw(0, 3.5) to (.2, 3.5);
+        \draw(.2, 3) to (.2, 4);
+        \draw(.4, 3) to (.4, 4);
+        \draw(.6, 3) to (.6, 4);
 
-        \node at(4.6, 13){$1$};
-        \node at(4.9, 13){$2$};
-        \node at(5.2, 13){$4$};
-        \node at(5.5, 13){$3$};
-        \node at(5.8, 13){$5$};
+        \node[ele,label=left:$1$] (d1) at (6,4.2) {};    
+        \node[ele,label=left:$2$] (d2) at (6,3.7) {};    
+        \node[ele,label=left:$3$] (d3) at (6,3.2) {};
+        \node[ele,label=left:$4$] (d4) at (6,2.7) {};
+        \node[draw,fit= (d1) (d2) (d3) (d4), minimum width=2cm] {} ;  
 
-        \draw(0,15) to (0,17);
-            \draw(0, 16) to (0.5, 16);
-        \draw(.5,15) to (.5,17);
-        \draw(1,15) to (1,17);
-        \draw(1.5,15) to (1.5,17);
-            \draw(1, 16) to (1.5,16);
-        \draw(2,15) to (2,17);
-    
-        \draw[->, line width = .3mm](2.3, 16) to (4.3, 16);
+         \node[ele,label=left:$1$] (e1) at (9,4.2) {};    
+        \node[ele,label=left:$2$] (e2) at (9,3.7) {};    
+        \node[ele,label=left:$3$] (e3) at (9,3.2) {};
+        \node[ele,label=left:$4$] (e4) at (9,2.7) {};
+        \node[draw,fit= (e1) (e2) (e3) (e4), minimum width=2cm] {} ;  
+ 
+        \node[ele,label=right:$1$] (f1) at (12,4.2) {};    
+        \node[ele,label=right:$2$] (f2) at (12,3.7) {};    
+        \node[ele,label=right:$3$] (f3) at (12,3.2) {};
+        \node[ele,label=right:$4$] (f4) at (12,2.7) {};
+        \node[draw,fit= (f1) (f2) (f3) (f4), minimum width=2cm] {} ;  
 
-        \node at(4.6, 16){$2$};
-        \node at(4.9, 16){$1$};
-        \node at(5.2, 16){$4$};
-        \node at(5.5, 16){$3$};
-        \node at(5.8, 16){$5$};
 
-        \draw(0,18) to (0,20);
-        \draw(.5,18) to (.5,20);
-        \draw(1,18) to (1,20);
-        \draw(1.5,18) to (1.5,20);
-            \draw(.5, 19) to (1,19);
-        \draw(2,18) to (2,20);
-    
-        \draw[->, line width = .3mm](2.3, 19) to (4.3, 19);
+        \draw[->,thick,shorten <=1pt,shorten >=1pt] (d1) -> (e2) ->(f1);
+        \draw[->,thick,shorten <=2pt,shorten >=2pt] (d2) -> (e1) -> (f2);
+        \draw[->,thick,shorten <=2pt,shorten >=2pt] (d3) -> (e3) -> (f3);
+        \draw[->,thick,shorten <=2pt,shorten >=2pt] (d4) -> (e4) -> (f4);
 
-        \node at(4.6, 19){$1$};
-        \node at(4.9, 19){$3$};
-        \node at(5.2, 19){$2$};
-        \node at(5.5, 19){$4$};
-        \node at(5.8, 19){$5$};
+        %%3
+        \node at(2, 6.5){$G=(2,3)$};
+        \node at(-.5, 6.5){$L=$};
+        \draw(0, 6) to (0, 7);
+        \draw(.2, 6) to (.2, 7);
+            \draw(.2, 6.5) to (.4, 6.5);
+        \draw(.4, 6) to (.4, 7);
+        \draw(.6, 6) to (.6, 7);
 
-        \draw(0,21) to (0,23);
-        \draw(.5,21) to (.5,23);
-        \draw(1,21) to (1,23);
-        \draw(1.5,21) to (1.5,23);
-            \draw(0, 22) to (.5,22);
-        \draw(2,21) to (2,23);
-    
-        \draw[->, line width = .3mm](2.3, 22) to (4.3, 22);
 
-        \node at(4.6, 22){$2$};
-        \node at(4.9, 22){$1$};
-        \node at(5.2, 22){$3$};
-        \node at(5.5, 22){$4$};
-        \node at(5.8, 22){$5$};
-            \end{tikzpicture}
-        \end{minipage}
+        \node[ele,label=left:$1$] (g1) at (6,7.2) {};    
+        \node[ele,label=left:$2$] (g2) at (6,6.7) {};    
+        \node[ele,label=left:$3$] (g3) at (6,6.2) {};
+        \node[ele,label=left:$4$] (g4) at (6,5.7) {};
+        \node[draw,fit= (g1) (g2) (g3) (g4), minimum width=2cm] {} ;  
+
+         \node[ele,label=left:$1$] (h1) at (9,7.2) {};    
+        \node[ele,label=left:$2$] (h2) at (9,6.7) {};    
+        \node[ele,label=left:$3$] (h3) at (9,6.2) {};
+        \node[ele,label=left:$4$] (h4) at (9,5.7) {};
+        \node[draw,fit= (h1) (h2) (h3) (h4), minimum width=2cm] {} ;  
+ 
+        \node[ele,label=right:$1$] (i1) at (12,7.2) {};    
+        \node[ele,label=right:$2$] (i2) at (12,6.7) {};    
+        \node[ele,label=right:$3$] (i3) at (12,6.2) {};
+        \node[ele,label=right:$4$] (i4) at (12,5.7) {};
+        \node[draw,fit= (i1) (i2) (i3) (i4), minimum width=2cm] {} ;  
+
+        \draw[->,thick,shorten <=1pt,shorten >=1pt] (g1) -> (h1) ->(i1);
+        \draw[->,thick,shorten <=2pt,shorten >=2pt] (g2) -> (h3) -> (i2);
+        \draw[->,thick,shorten <=2pt,shorten >=2pt] (g3) -> (h2) -> (i3);
+        \draw[->,thick,shorten <=2pt,shorten >=2pt] (g4) -> (h4) -> (i4);
+
         
+
+        %%4
+        \node at(2, 9.5){$G=(3,4)$};
+        \node at(-.5, 9.5){$L=$};
+        \draw(0, 9) to (0, 10);
+        \draw(.2, 9) to (.2, 10);
+        \draw(.4, 9) to (.4, 10);
+            \draw(.4, 9.5) to (.6, 9.5);
+        \draw(.6, 9) to (.6, 10);
+
+
+       \node[ele,label=left:$1$] (j1) at (6,10.2) {};    
+        \node[ele,label=left:$2$] (j2) at (6,9.7) {};    
+        \node[ele,label=left:$3$] (j3) at (6,9.2) {};
+        \node[ele,label=left:$4$] (j4) at (6,8.7) {};
+        \node[draw,fit= (j1) (j2) (j3) (j4), minimum width=2cm] {} ;  
+
+         \node[ele,label=left:$1$] (k1) at (9,10.2) {};    
+        \node[ele,label=left:$2$] (k2) at (9,9.7) {};    
+        \node[ele,label=left:$3$] (k3) at (9,9.2) {};
+        \node[ele,label=left:$4$] (k4) at (9,8.7) {};
+        \node[draw,fit= (k1) (k2) (k3) (k4), minimum width=2cm] {} ;  
+ 
+        \node[ele,label=right:$1$] (l1) at (12,10.2) {};    
+        \node[ele,label=right:$2$] (l2) at (12,9.7) {};    
+        \node[ele,label=right:$3$] (l3) at (12,9.2) {};
+        \node[ele,label=right:$4$] (l4) at (12,8.7) {};
+        \node[draw,fit= (l1) (l2) (l3) (l4), minimum width=2cm] {} ;  
+
+        \draw[->,thick,shorten <=1pt,shorten >=1pt] (j1) -> (k1) ->(l1);
+        \draw[->,thick,shorten <=2pt,shorten >=2pt] (j2) -> (k2) -> (l2);
+        \draw[->,thick,shorten <=2pt,shorten >=2pt] (j3) -> (k4) -> (l3);
+        \draw[->,thick,shorten <=2pt,shorten >=2pt] (j4) -> (k3) -> (l4);
+
+
+        
+
+        %%5
+        \node at(2.5, 12.5){$G=(1,2)(3,4)$};
+        \node at(-.5, 12.5){$L=$};
+        \draw(0, 12) to (0, 13);
+            \draw(0, 12.5) to (.2, 12.5);
+            \draw(.4, 12.5) to (.6, 12.5);
+        \draw(.2, 12) to (.2, 13);
+        \draw(.4, 12) to (.4, 13);
+        \draw(.6, 12) to (.6, 13);
+
+        \node[ele,label=left:$1$] (m1) at (6,13.2) {};    
+        \node[ele,label=left:$2$] (m2) at (6,12.7) {};    
+        \node[ele,label=left:$3$] (m3) at (6,12.2) {};
+        \node[ele,label=left:$4$] (m4) at (6,11.7) {};
+        \node[draw,fit= (m1) (m2) (m3) (m4), minimum width=2cm] {} ;  
+
+         \node[ele,label=left:$1$] (n1) at (9,13.2) {};    
+        \node[ele,label=left:$2$] (n2) at (9,12.7) {};    
+        \node[ele,label=left:$3$] (n3) at (9,12.2) {};
+        \node[ele,label=left:$4$] (n4) at (9,11.7) {};
+        \node[draw,fit= (n1) (n2) (n3) (n4), minimum width=2cm] {} ;  
+ 
+        \node[ele,label=right:$1$] (o1) at (12,13.2) {};    
+        \node[ele,label=right:$2$] (o2) at (12,12.7) {};    
+        \node[ele,label=right:$3$] (o3) at (12,12.2) {};
+        \node[ele,label=right:$4$] (o4) at (12,11.7) {};
+        \node[draw,fit= (o1) (o2) (o3) (o4), minimum width=2cm] {} ;  
+
+
+        \draw[->,thick,shorten <=1pt,shorten >=1pt] (m1) -> (n2) ->(o1);
+        \draw[->,thick,shorten <=2pt,shorten >=2pt] (m2) -> (n1) -> (o2);
+        \draw[->,thick,shorten <=2pt,shorten >=2pt] (m3) -> (n4) -> (o3);
+        \draw[->,thick,shorten <=2pt,shorten >=2pt] (m4) -> (n3) -> (o4);
+
+
+        \node at(7.5, 14){\small{$G(1,2,3,4)$}};
+        \node at(10.6, 14){\small{$L \circ G(1,2,3,4)$}};
+
+    
+        \end{tikzpicture}
+        \caption{All ladders of order $4$ with a height of zero or one form a bijection with the involution set of $S_{4}$.}
+        \label{Fig:BijectiveMapping}
 \end{figure}
+\pagebreak
+So far we have demostarated that ladders of order $N$ with a height of one are congruent with binary strings of length $N-1$ 
+with no consecutive ones and at least one $1$ and the involution set of $S_{N}$. The final mathematical phenomena to be discussed 
+is the \emph{Fibonacci sequence}. The Fibonacci sequence is the sequence $0,1,1,2,3,5,8,13, \dots$. It is defined by the piecewise 
+recurrence relation:\cite{A12}
+
+ \[   
+     \left\{
+       \begin{array}{ll}
+        Fib(0) = 0 & N = 0 \\
+        Fib(1) = 1 & N=1 \\
+        Fib(N) = Fib(N-1) + Fib(N-2) & N \geq 2 
+        \end{array} 
+    \right.
+\]
+
+
+The Fibonacci sequence is considered famous for its ocurrence in natural phenomena such as the structure of a pine cone, the number of petals 
+on sunflowers and the spiral of the shells of ammonites which are a prehistoric crustaceans. The Fibonacci sequence was first discovered by an 
+Indian mathematician named Pingala at some time between 450 - 200 BCE. \cite{A16} It was then introduced to Western cultures in 1202 by the 
+Italian mathematician, Fibonacci. The recurrence relation for the Fibonacci numbers should look familiar to the recurrence 
+relation for the number of ladders of order $N$ with a height of one. The difference between the two is the recurrence relation 
+for the number of ladders of order $N$ with a height of one has an additional $+1$ because of the single ladder of 
+order $N$ in which the first $N-2$ columns have a $0$ in row one and the last column has a $1$ in row one. Other than the additional 
+$+1$, the sequences are the same. Please refer to Fig. \ref{Fig:FibLadderSequence} to see the sequences together.\newline
+    
+\begin{figure}[!htp]
+    \centering
+    $Fib: \qquad 00,01,01,02,03,05,08,13,21,34,55, \dots$\newline
+    $L_{count}: \quad   00,00,01,02,04,07,12,20,33,54,88, \dots$\newline
+    $ N=: \qquad   00,01,02,03,04,05,06,07,08,09,10, \dots$\newline
+    \caption{The Fibonacci sequence lined up with the sequence for the number of ladders with a height of one.}
+    \label{Fig:FibLadderSequence}
+
+\end{figure}
+
+From looking at the sequences in Fig. \ref{Fig:FibLadderSequence}, it is interesting to note that\newline 
+\small{$L_{count}(N)=Fib(N+1)-1$}.
+ There is a well known equation for the Fibonacci sequence which is the following: 
+
+\begin{equation*}
+   Fib(N)=1/\sqrt{5}((1+\sqrt{5}/2)^{n})((1-\sqrt{5}/2)^{n}))
+\end{equation*}\cite{A12}
+From the Fibonacci equation along with the equation $L_{count}(N)=Fib(N+1)-1$, it is fairly straightforward to derive the 
+equation for $L_{count}(N)$
+\begin{center}
+\begin{equation*}
+    L_{count}(N)=1/\sqrt{5} ((1+\sqrt{5}/2)^{n+1})((1-\sqrt{5}/2)^{n+1}))-1
+\end{equation*}
+\end{center}
+The equation is simply the closed form formula for the $N+1th$ Fibonacci number minus $1$.\par 
+
+We have examined the congruency between ladders of a height of one with three other mathematical phenomena. The three being 
+binary strings of lenth $N-1$ with at least one $1$ and no consecutive $1s$, the involution set of the symmetric group $S_{N}$
+and the Fibonacci sequence. The similarities between these mathematical phenomena is of theoretical interest because it has been 
+shown that the set containing all mathematical phenomena that follow the sequence $0,0,1,2,4,7,12,20\dots$ also contains 
+ladders with a height of one.
+
+
+
 %%End section with ladders of a height of zero or one

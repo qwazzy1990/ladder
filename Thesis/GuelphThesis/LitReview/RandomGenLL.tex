@@ -1,7 +1,7 @@
 \subsection{Enumeration, Counting, and Random Generation of Ladder Lotteries}
 
 In this paper, the authors consider the problem of enumeration, counting and 
-random generation of ladder-lotteries with $n$ lines and $b$ bars \cite{A6}. 
+random generation of ladder-lotteries with $N$ lines and $B$ bars \cite{A6}. 
 It is important to note that the authors considered both optimal and 
 non-optimal ladders for this paper. Nonetheless, the paper is still fruitful 
 for its modelling of the probelems and insights into ladder-lotteries.
@@ -10,29 +10,29 @@ that was discussed in the review of \textbf{Coding Ladder Lotteries}.
 
 %%Section for enumeration
 \subsubsection{Enumeration}
-The authors denote a set of ladder lotteries with $n$ lines and 
-$b$ bars as $S_{n,b}$. The problem is how to enumerate all the 
-ladders in $S_{n,b}$ \cite{A6}. The authors use a \emph{forest structure}
+The authors denote a set of ladder lotteries with $N$ lines and 
+$B$ bars as $S_{N,B}$. The problem is how to enumerate all the 
+ladders in $S_{N,B}$ \cite{A6}. The authors use a \emph{forest structure}
 to model the problem. A \emph{forest structure} is a set of trees 
 such that each tree in the forest is dijoint union with every other 
-tree in the forest. Consider $S_{n,b}$ to be tree in the forest.
-That is to say, a union disjoint subset of all ladders with $n$
-lines and $n$ bars. Then $F_{n,b}$, or the forrest of all $S_{n,b}s$
-is the set of all ladders with $n$ lines and $n$ bars \cite{A6}. For an example 
-of a forest for $F_{3,2}$ refer to Fig. 2.10\par %figure number.
+tree in the forest. Consider $S_{N,B}$ to be a tree in a forest.
+That is to say, a union disjoint subset of all ladders with $N$
+lines and $B$ bars. Then $F_{N,B}$, or the forest of all $S_{N,B}s$,
+is the set of all ladders with $N$ lines and $B$ bars \cite{A6}. For an example 
+of a forest for $F_{3,2}$ refer to Fig. \ref{fig:forest3,2}\par %figure number.
 
-The authors create $F_{n,r}$ by defining a removal sequennce for 
+The authors create $F_{N,R}$ by defining a removal sequennce for 
 each $LC_{L}$ \cite{A6}. Each ladder, $L$, in 
-$F_{n,r}$ is a leaf node. By removing the second last bit of $LC_{L}$ the result 
+$F_{N,R}$ is a leaf node. By removing the second last bit of $LC_{L}$ the result 
 is $P(LC_{L})$ and the resulting substructure is some \emph{sub-ladder}, $P(L)$, which 
 is an incomplete ladder containing unmatched endpoints of bars or a missining line \cite{A6}. For example, 
-given $LC(L)=10100$, $P(LC_{L})=1010$. Notice how the second last bit was removed. 
+given $LC_{L}=10100$, $P(LC_{L})=1010$. Notice how the second last bit was removed. 
 By removing the second last bit from $P(LC_{L})$ we get $P(P(LC_{L}))$ and $P(P(L))$ respectively.
 The removal sequence is repeated until the sub-ladder consists of two lines with $0$ endpoints
-attached to line $2$ and $0$ to $r$ left endpoints are attached to line $1$. There are $r+1$
-terminating sub-ladders, i.e., roots of trees in $F_{n, r}$.The removal sequence is uniqe for each ladder in $F_{n,r}$ is unique.\par
+attached to line $2$ and $0$ to $R$ left endpoints are attached to line $1$. There are $R+1$
+terminating sub-ladders, i.e., roots of trees in $F_{N, R}$.The removal sequence is uniqe for each ladder in $F_{N,R}$ is unique.\par
 \begin{figure}[!htp]
-    \begin{flushleft}
+    \begin{center}
     \begin{minipage}{.8\textwidth}
         \begin{tikzpicture}
             \draw(0, 0) to (0, 2);
@@ -85,13 +85,13 @@ terminating sub-ladders, i.e., roots of trees in $F_{n, r}$.The removal sequence
         \end{tikzpicture}
         
     \end{minipage}
-    \end{flushleft}
+    \end{center}
     
     
   
 
     %%second tree
-    \begin{flushleft}
+    \begin{center}
           \begin{minipage}{0.8\textwidth}
             \begin{tikzpicture}
                 \draw(0, 0) to (0, 2);
@@ -170,10 +170,10 @@ terminating sub-ladders, i.e., roots of trees in $F_{n, r}$.The removal sequence
             \end{tikzpicture}
             
         \end{minipage}
-    \end{flushleft}
+    \end{center}
 
 
-    \begin{flushleft}
+    \begin{center}
         \begin{minipage}{0.8\textwidth}
             \begin{tikzpicture}%% start pocture
             
@@ -211,9 +211,10 @@ terminating sub-ladders, i.e., roots of trees in $F_{n, r}$.The removal sequence
                
             \end{tikzpicture}%%end picture
         \end{minipage}
-    \end{flushleft}
-    \caption{The forrest, $F_{3,2}$ where $3$ is the number of lines and $2$ is the number of bars. All ladders with $3$ lines and $2$ bars are leaf nodes of one of three trees $S_{3,2}$.
+    \end{center}
+    \caption{The forest, $F_{3,2}$ where $3$ is the number of lines and $2$ is the number of bars. All ladders with $3$ lines and $2$ bars are leaf nodes of one of three trees $S_{3,2}$.
     The underlined bits are the inserted second last bit from the parent's line-encoding resulting in the child's line encoding}
+    \label{fig:forest3,2}
 \end{figure}
 
 %%end enumeratiom section
@@ -221,7 +222,7 @@ terminating sub-ladders, i.e., roots of trees in $F_{n, r}$.The removal sequence
 %%section for counting
 \subsubsection{Counting}
 The authors provide a method and algorithm to count all ladders 
-with $n$ lines and $b$ bars. According to the authors, the enumeration algorithm is 
+with $N$ lines and $B$ bars. According to the authors, the enumeration algorithm is 
 much slower than the counting algorithm \cite{A6}. The counting algorithm 
 works by dividing ladders into four types of sub-ladders.
 For sub-ladder, $R$, its type is a tuple $t(n,h,p,q)$ where 
@@ -300,8 +301,8 @@ in a parent with one less detached end point on line $n$.
 Thus $P(R)$ is of type $t(n,h-1,p,q-1)$. This leads the 
 authors to conclude $|t(n,h\geq p+q,q>0)|=|t(n,h-1,p+1,q)|+|t(n,h-1,p,q-1)|$ \cite{A6}.
 \subsubsection{Random Genearation}
-The random generation of ladder lotteries with $n$ lines and
-$b$ bars is done by the recurrence relations in the counting 
+The random generation of ladder lotteries with $N$ lines and
+$B$ bars is done by the recurrence relations in the counting 
 and enumerating sections. The goal is to produce 
 some $L$ of type $t(n,2b,0,0)$ where the number of half 
 bars equals the total $2(b)$ and there are no detached 

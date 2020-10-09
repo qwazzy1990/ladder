@@ -303,7 +303,8 @@ void createMinLadderTwo(Ladder *l, int *perm, int n, int currRow)
     l->depth++;
     int row = currRow + 1;
 
-    createMinLadderTwo(l, perm, n, row);
+   createMinLadderTwo(l, perm, n, row);
+    
 }
 
 void createMinLadderThree(Ladder *l, int *perm, int n, int currRow, bool direction)
