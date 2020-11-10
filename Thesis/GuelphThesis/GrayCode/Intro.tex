@@ -1,18 +1,20 @@
 \section{Introduction to the Problem}
 Listing problems are common problems in cambinatorics. In general, listing problems 
 focus on enumerating the objects of a given finite set in some specific order. The listing problem in this thesis 
-will be termed \emph{The Canonical Ladder Listing Problem}. The problem is stated as follows: Let $\pi$ be one of $N!$ arbitrary permutation of $[1 \dots N]$. 
-Let \emph{The Canonical Ladder} be a unique ladder from each one of the $N!$ permutation's $OptL\{\pi\}$. Let $CanL\{\pi_{N}\}$ be the set of all canonical ladders for 
-all $N!$ permutations of order $N$. Let $L_{i}$ be some arbitrary canonical ladder from $CanL\{\pi_{N}\}$. A \emph{change} 
-is defined as the insertion or deletion of one or more bar(s) to get from $L_{i}$ to $L{i+1}$, or the relocation of one or more bars in $L_{i}$ to get to $L_{i+1}$. 
-The \emph{relocation} of a bar is defined as moving a bar from a given row and column, to a new row and/or column in the ladder under the following conditions.
+will be termed \emph{The Canonical Ladder Listing Problem}. The problem is stated as follows: Let 
+$S_{N}$ be the set of all $N!$ permutations of order $N$. To see $S_{4}$ please refer to table \ref{table:aa}. 
+Let $\pi$ be a permutation from $S_{N}$. 
+Let \emph{the canonical ladder} be a unique ladder from each permutation's $OptL\{\pi\}$. Let $CanL\{\pi_{N}\}$ be the set of all 
+canonical ladders for each $\pi$ in $S_{N}$. Let $L_{i}$ be some arbitrary canonical ladder from $CanL\{\pi_{N}\}$. A \emph{change} 
+is defined as the insertion or deletion of one or more bar(s) to get from $L_{i}$ to $L{j}$ or the relocation of one or more bars 
+in $L_{i}$ to get to $L_{j}$. The \emph{relocation} of a bar is defined as moving a bar from a given row and column 
+to a new row and/or column in the ladder under the following conditions.
 The relocation cannot be a right/left swap operation. If the relocation of the bar moves the bar to a new row, but not a new column, then the endpoint 
-of the bar being moved must cross the endpoint of a bar not being moved. To see examples of the relocation of a bar please refer to figure -- 
-The \emph{Listing Problem} asks given all $N!$ permutations, is there a way to generate $CanL\{\pi_{N}\}$? 
-Furthermore, if there is a way to do so, what is the most efficient way to do so? Efficiency is defined as 
-using minimal change to transition from $L_{i}$ to $L_{i+1}$. For example, let $N=4$, there are $N!$ or 24 permutations 
-of order $N$. Since each permutation has at least one ladder in its respective $OptL\{\pi\}$, then $|CanL\{\pi_{4}\}=24|$; therefore there are 24 canonical ladders, one from each $OptL\{\pi_{4}\}$. 
-See Table \ref{table:aa} for the 24 permutations of order 4.
+of the bar being moved must cross the endpoint of a bar not being moved. To see examples of the relocation of a bar please refer to Fig.\ref{fig:bar-relocation}   
+The canonical listing problem asks, given all $S_{N}$, is there an efficient way to generate $CanL\{\pi_{N}\}$? Efficiency is defined as 
+using minimal change to transition from $L_{i}$ to $L_{j}$. For example, let $N=4$, then $|S_{N}|=24$ 
+Since each permutation has at least one ladder in its respective $OptL\{\pi\}$, then $|CanL\{\pi_{4}\}=24|$. $CanL\{\pi\}$ consists 
+of a canonical representative from each $OptL\{\pi\}$. 
 
 \begin{center}
 \begin{table}[ht]
@@ -34,28 +36,22 @@ See Table \ref{table:aa} for the 24 permutations of order 4.
 \end{center}
 
 
-Each permutation has one or more ladders in their respective 
-$OptL\{\pi\}$. The canonical ladder listing  problem asks, given some arbitrary $N \geq 1$,
-what is the most efficient way to list $CanL\{\pi_{N}\}$? Recall that in order to get from $L_{i}$ to $L_{i+1}$, at least one of the 
-two changes must be applied to $L_{i}$ to get to $L_{i+1}$. At least one bar has to be removed/added or at least one bar 
-has to be reolocated in $L_{i}$ to get to $L_{i+1}$.
-
 \begin{theorem}
-    In order to transition from canonical ladder $L_{i}$ to canonical ladder $L_{i+1}$, at least one bar has to be added or 
+    In order to transition from canonical ladder $L_{i}$ to canonical ladder $L_{j}$, at least one bar has to be added or 
     removed from $L_{i}$ or at least one bar has to be relocated in $L_{i}$.
 \end{theorem}
 \begin{proof}
     We begin this proof by contradiction. Suppose $L_{i}$ is some arbitrary canonical ladder for some arbitrary permutation, $\pi$, of 
-    order $N$. Suppose that $L_{i+1}$ is the next canonical ladder in the set of canonical ladders for some other arbitrary permutation $\pi+1$ 
-    of order $N$. Suppose a bar does not need to be added or removed from $L_{i}$ to get to $L_{i+1}$ nor does a bar need to be relocated to get to $L_{i}$ to 
-    $L_{i+1}$. We know that each bar in $L_{i}$ uninverts a single inversion in $\pi$. We know that each bar in $L_{i+1}$ 
-    uninverts a single inversion in $\pi+1$. We know that $\pi \neq \pi+1$. Therefore we know that $L_{i} \neq L_{i+1}$. Two ladders corresponding to 
+    order $N$. Suppose that $L_{j}$ is the next canonical ladder in the set of canonical ladders for some other arbitrary permutation $\pi+1$ 
+    of order $N$. Suppose a bar does not need to be added or removed from $L_{i}$ to get to $L_{j}$ nor does a bar need to be relocated to get to $L_{i}$ to 
+    $L_{j}$. We know that each bar in $L_{i}$ uninverts a single inversion in $\pi_{i}$. We know that each bar in $L_{j}$ 
+    uninverts a single inversion in $\pi_{j}$. We know that $\pi_{i} \neq \pi_{j}$. Therefore we know that $L_{i} \neq L_{j}$. Two ladders corresponding to 
     two different permutations differ from each other in three ways. The first way is by the number of lines, the second way is by the number of 
     bars, and the third way is the location of bars. Note that two ladders can differ in more than one of the three ways. In the case 
-    of $L_{i}$ and $L_{i+1}$, they have the same number of lines seeing as they are ladders of order $N$. Therefore they cannot differ in terms 
-    of the number of lines. We also assumed that $L_{i}$ and $L_{i+1}$ had the same number of bars and the same location of bars. Which means 
-    that the ladders are the same. But we already stated that $L_{i} \neq L_{i+1}$. Therefore we have a contradiction. Which means that 
-    either a bar needs to be added/removed from $L_{i}$ to get to $L_{i+1}$ or a bar needs to be relocated in $L_{i}$ to get to $L_{i+1}$. End of proof.
+    of $L_{i}$ and $L_{j}$, they have the same number of lines seeing as they are ladders of order $N$. Therefore they cannot differ in terms 
+    of the number of lines. We also assumed that $L_{i}$ and $L_{j}$ have the same number of bars and the same location of bars. Which means 
+    that the ladders are the same. But we already stated that $L_{i} \neq L_{j}$. Therefore we have a contradiction. Which means that 
+    either a bar needs to be added/removed from $L_{i}$ to get to $L_{j}$ or a bar needs to be relocated in $L_{i}$ to get to $L_{j}$. End of proof.
 \end{proof}
 
 
@@ -105,95 +101,22 @@ has to be reolocated in $L_{i}$ to get to $L_{i+1}$.
     \label{fig:bar-relocation}   
 \end{figure}
 
-In this thesis, two listing algorithms are used to generate the canonical 
+In this thesis, two listing algorithms are used to list the canonical 
 ladders for each $CanL\{\pi_{N}\}$. The first of these listing algorithms 
 is a modification of the Steinhaus-Johnson-Trotter permutation listing algorithm. 
-The second listing algorithm is, as far as I know, a novel algorithm. 
-It is termed the cyclic-inversion algorithm. Both of these algorithms will 
+The second listing algorithm is influenced by Effler and Ruskey's algorithm in their paper 
+A CAT Algorithm for Generating Permutations with a Fixed number of Inversions. 
+It is termed the cyclic-bar algorithm. Both of these algorithms will 
 be described, explained and analyzed throughout the remainder of the chapter.\par
 
-Before proceeding, the justification for the canonical ladder will be presented. 
-The canonical represeantive from $OptL{\pi_{N}}$ for $CanL{\pi_{N}}$ depends 
-on which algorithm is being run. But in general, the canonical represeantive, $L_{i}$, is defined as the ladder 
-such that minimal change is required is required to get from $L_{i-1}$ to $L_{i}$. 
-Let the \emph{first ancestor ladder} be the initial ladder 
-from $CanL\{\pi_{N}\}$ such that every other ladder is (in)directly derived from the 
-first ancestor ladder; every ladder in $CanL\{\pi_{N}\}$ can be traced back to the first ancestor 
-ladder by reverse engineering the listing procedure. The first ancestor ladder is much like the 
-root ladder for $OptL\{\pi\}$. For both listing algorithms, the first ancestor ladder is the 
-ladder of order $N$ without bars.
-% %%Save this section for the counting section.
-% \begin{theorem}
-%     If $|OptL\{\pi\}|=1$ then the ladder is the root ladder.
-% \end{theorem} 
-% \begin{proof}
-%     The root ladder is defined as the ladder whose clean level is one.
-%     This means either there is no bar of a lesser element above the route a 
-%     greater element. Keeping in mind that the clean level of the root ladder is one, next consider what is meant by a  \emph{child bar}
-%      which is a bar to the bottom left or right of a given bar $x$. Within the context of the root ladder, 
-%      if the left endpoint of the child bar is directly below the right end point of $x$ then the child is a 
-%     right child of $x$. If the right end point of the child bar is directly 
-%     below the left end point of $x$ then it is a left child. 
-%     Keeping in mind the root ladder has not undergone any right swap operations, then
-%     if a child is a right child 
-%     then the child belongs to the same route of $x$ in the root ladder. 
-%     Let $R_{m}$ denote this route. Let $x$ be a bar representing an inversion with element $m$ and $k$.
-%     The right child of $x$ is a bar which represents an inversion 
-%     with $m$ and some element to the right of $k$. Suppose this was not the case, 
-%     then this would mean that the right child of $x$ was either a bar representing an inversion 
-%     between some element $m'$ that was greater than $m$ or lesser than $m$. If $m'$ was 
-%     greater than $m$ then this would be a contradiction seeing as $x$ would be above the bar of a route 
-%     of a greater element which contradicts the definition of the root ladder. On the other hand if 
-%     $m'$ were lesser than $m$, then $m$ would form an inversion with $m'$ and therefore 
-%     the bar representing this inversion would be part of the route of $m$ route. Thus, the right child 
-%     of a bar $x$ belongs to the same route as $x$ in the root ladder.\par The left child of $x$
-%     represents an inversion with some lesser element than $m$ and $k$. Suppose this was not the case, 
-%     then the left child could belong to a route greater than $m$, but if that were the case, this contradicts 
-%     the definition of the root ladder.
-%     Thus the first element of the left child must belong to the route of some lesser element than $m$. Next suppose that 
-%     the lesser element of the left child of $x$ was not $k$. Let this element be termed $k'$.
-%     $k'$ forms an inversion with the greater element of the left child of $x$. But since the greater element of the left child is less than $m$, 
-%     then $m$ would also form an inversion with $k'$. Thus, the bar of $m$ and $k'$ would be the parent of the left child, which is also 
-%     a contradiction, seeing as the left child is the child of bar $x$. Therefore the left child of $x$ must be a bar that 
-%     it belongs to the route of a lesser element than $m$ and its lesser element is $k$.\par 
-%     Please refer to FIG--- to view an example of a root ladder with left and right children.\pagebreak
-
-    
-% \end{proof}
-
-
-% \begin{figure}[!htp]
-%     \begin{center}
-%     \begin{tikzpicture}
-%         \draw(0, 0) to (0, 4);
-%             \node at(0, 4.3){4};
-%              \draw(0, 3.5) to (2, 3.5);
-%                 \node at(1, 3.8){4, 3};
-            
-%             \draw[line width=0.8mm, red](0, 2.5) to (2, 2.5);
-%                 \node at(1, 2.8){3, 2};
-
-%             \draw(0, 1.5) to (2, 1.5);
-%                 \node at(1, 1.8){2, 1};
-%         \draw(2, 0) to (2, 4);
-%             \node at(2, 4.3){3};
-%                 \draw[line width=.8mm, red](2, 3) to (4, 3);
-%                     \node at(3, 3.3){4, 2};
-           
-%                 \draw(2, 2) to (4, 2);
-%                     \node at(3, 2.3){3, 1};
-%         \draw(4, 0) to (4, 4);
-%              \node at(4, 4.3){2};
-%                 \draw[line width=0.8mm, red](4, 2.5) to (6, 2.5);
-%                     \node at (5, 2.8){4, 1};
-%         \draw(6, 0) to (6, 4);
-%             \node at(6, 4.3){1};
-
-
-%     \end{tikzpicture}
-%     \end{center}
-%     \caption{The root ladder of $(4,3,2,1)$. Note that bar 4,2 is the parent of bar 3,2 and 4,1. Also note that 
-%     bar 3, 2 is the the left child of 4, 2 and 4, 1 is the right child.}
-% \end{figure}
-
+Before proceeding, the selection process for choosing the canonical ladder will be explained.
+In general, the canonical represeantive from $OptL{\pi_{N}}$ is chosen based on a tree structure. 
+The root of the tree is the only ladder from $OptL\{\pi=(1, 2, \dots  ,N)\}$.
+Proceeding from the root ladder, for every canonical ladder $L_{j}$, it 
+is chosen based on the minimal amount of change required to get from $L_{i}$ where $j=i+1$. 
+Since the minimal amount of change is defined as the insertion or deletion of one bar 
+or the relocation of a bar, then the canonical representative, $L_{j}$, is equal 
+to $L_{i}$ plus the minimal amount of change. The exception to this rule is 
+in the cyclic-bar algorithm in which transitioning between trees in the forest 
+structure generated by the algorithm.
 

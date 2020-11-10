@@ -35,40 +35,43 @@ by determining the lower bound for the height of $MinL\{\pi_{N}\}$, the lower bo
     order $N$, then there are no bars that need to be added to its corresponding 
     ladder. Since a ladder with no bars requires no rows, then the lower 
     bound for the height of a ladder from $MinL{\pi_{N}}$ is zero. This is 
-    the ladder belonging to $OptL\{\pi_{ID_{N}}\}$.
+    the ladder belonging to $OptL\{\pi_{ID_{N}}\}$.End of Proof.
 \end{proof}\par 
 The upper bound for the heights of the ladders in $MinL\{\pi_{N}\}$ is more difficult to prove than the lower bound. 
 The lower bound is unique seeing as there is only one ladder of order $N$ with zero bars. 
 With the upper bound however, it has yet to be shown if there is an upper bound for 
 $MinL\{\pi_{N}\}$. Before proving the upper bound for $MinL\{\pi_{N}\}$ it must be shown how to 
 derive the ladder with minimal height from the root ladder of the reverse permutation of order $N$.
-Once we have established how to derive the ladder with minimal height from the root ladder 
+Refer to this ladder as $MinL(Rev(\pi_{N}))$.
+Once we have established how to derive $MinL(Rev(\pi_{N}))$ from the root ladder 
 of the reverse permutation of order $N$, it will be relatively easy to prove the upper bound 
 for $MinL\{\pi_{N}\}$.\par 
- Let $Degen_{\pi_{N}}$ be the reverse permutation of order 
- $N$. Let $MinL(Degen_{\pi_{N}})$ be a ladder with the shortest height for $Degen_{\pi_{N}}$.
- Let $R_{Degen}$ be the root ladder for $Degen_{\pi_{N}}$. Recall that the root ladder is the ladder such 
-    that no bar of a lesser element has crossed the route of a greater element. $R_{Degen}$ requires 
+ Let $Rev(\pi_{N})$ be the reverse permutation of order 
+ $N$.
+ Let $RootL(Rev(\pi_{N}))$ be the root ladder for $Rev(\pi_{N})$. Recall that the root ladder is the ladder such 
+    that no bar of a lesser element has crossed the route of a greater element. $RootL(Rev(\pi_{N}))$ requires 
     $2(N-1)-1$ rows. See proof --Insert reference\par 
    
-   In order to create $MinL(Degen_{\pi_{N}})$, one simply needs to 
-   take $R_{Degen}$ and modify it. In order to modify $R_{Degen}$ correctly, consider what happens when 
-   the bars of lesser elements are right swapped above the bars of greater elements. Of course, if this is done then 
-   the ladder is no longer $R_{Degen}$. Nonetheless, when the $N-1th$ route is swapped above the $Nth$ route, 
+   In order to create $MinL(Rev(\pi_{N}))$, one simply needs to 
+   take $RootL(Rev(\pi_{N}))$ and modify it. In order to modify $RootL(Rev(\pi_{N}))$ correctly, consider what happens when 
+   the bars of lesser elements are right swapped above the routes of greater elements. Of course, if this is done to $RootL(Rev(\pi_{N}))$ then 
+   the ladder is no longer $RootL(Rev(\pi_{N}))$. Nonetheless, when the $N-1th$ route is swapped above the $Nth$ route, 
    this frees up an extra row in the ladder for the $N-2th$ route. This is the row where the last bar of the $N-1th$ element resided
    before it was swapped above the $Nth$ route. Now, the first bar of the $N-1th$ route will begin in column $2$ and end at column $N-1$. 
    Furthermore, a new row will need to be added to the top of the ladder in order to accomodate the first bar of the $N-1th$ route. Now the route 
-   of the $N-2th$ element can be raised up a row seeing as its last bar will still be in column $N-2$ and the row 
+   of the $N-2th$ element can be raised up a row seeing as its last bar will still be in column $N-3$ and the row/column 
    that was previously occupied by the last bar of the $N-1th$ element will be free. Then the $N-3$ route can be swapped above 
    the route of elements $N-2 \dots N$. The route of $N-3$ will begin at column $4$ and span to column $N-1$. 
    Since a new row was already added above route $N$ for element $N-1$, 
    the first bar of element $N-3$ begins at the 
-   same row as the fijrst bar for element $N-1$. By  swapping 
+   same row as the first bar for element $N-1$. By  swapping 
    all the  $N-Jth$, $1 \leq J < (N-1)$ and $J=2K+1$, routes above the routes of elements 
-   $(N-J)+1 \dots N$ in $R_{Degen}$, the ladder is reconfigured to have the minimal height. This height is $N$ because the 
-   $Nth$ element still requires $N-1$ rows, and the $N-1th$ element requires one additional row to be added above 
+   $(N-J)+1 \dots N$ in $RootL(Rev(\pi_{N}))$, the ladder is reconfigured to $MinL(Rev(\pi_{N}))$. The height of $MinL(Rev(\pi_{N}))$ is $N$ 
+   because the $Nth$ element still requires $N-1$ rows, and the $N-1th$ element requires one additional row to be added above 
    the row for the first bar of the $Nth$ element. Please refer 
-   to Fig. \ref{Fig:RootToMinLadder} for an example of modifying $R_{5,4,3,2,1}$ to $MinL_{5,4,3,2,1}$.\pagebreak
+   to Fig.\ref{Fig:RootToMinLadder} for an example of modifying $R_{5,4,3,2,1}$ to $MinL_{5,4,3,2,1}$. 
+   Please refer to Alg.\ref{Alg:MinRevLadder} to see the algorithm for creating $MinL(Rev(\pi_{N}))$. Alg.\ref{Alg:MinRevLadder} 
+   creates $MinL(Rev(\pi_{N}))$ irrespective of $RootL(Rev(\pi_{N}))$.\pagebreak
 
 
    \begin{center}

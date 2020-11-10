@@ -11,6 +11,7 @@
 
 
 %---- ADD PACKAGES ------
+%\usepackage{setspace}
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{latexsym}
@@ -28,6 +29,32 @@
 \usepackage{subcaption}
 \usepackage{titlesec}
 \usepackage[font=small,labelfont=bf]{caption}
+%\usepackage{algorithm2e}
+%\SetAlFnt{\small}
+%%\SetAlCapFnt{\large}
+%\SetAlCapNameFnt{\large}
+%%\usepackage{algorithmic}
+
+
+\usepackage[dvipsnames]{xcolor}
+
+\usepackage{fancyvrb}
+
+% redefine \VerbatimInput
+\RecustomVerbatimCommand{\VerbatimInput}{VerbatimInput}%
+{fontsize=\footnotesize,
+ %
+ frame=lines,  % top and bottom rule only
+ framesep=2em, % separation between frame and text
+%% rulecolor=\color{Gray},
+ %
+ label=\fbox{MinLadders.txt},
+ labelposition=topline,
+ %
+ commandchars=\|\(\), % escape character and argument delimiters for
+                      % commands within the verbatim
+ commentchar=*        % comment character
+}
 
 
 \usetikzlibrary{calc,trees,positioning,arrows,fit,shapes,calc}
@@ -158,6 +185,6 @@ I do not know whom I should include here. I am assuming my advisor and second re
 %--- APPENDIX  ------
 
 \appendix
-\include{Appendix}
+\include{appendix}
 
 \end{document} 

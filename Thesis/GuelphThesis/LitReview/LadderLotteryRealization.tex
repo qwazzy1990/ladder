@@ -1,6 +1,6 @@
 
 
-\subsection{Ladder-Lottery Realization}
+\section{Ladder-Lottery Realization}
 
 In their paper \textbf{Ladder-Lottery Realization} the authors provide 
 a rather interesting puzzle in regards to ladder lotteries. The puzzle 
@@ -16,7 +16,7 @@ and a multi-set of bars,
 is there a \emph{non-optimal} ladder lottery for $\pi$
 that uses every bar in the multi-set the number 
 of times it appears in the  multi-set \cite{A3}. 
-For an example of an affirmative solution to the ladder lottery realization problem, see Fig. \ref{fig:ladder-realization}.
+For an example of an affirmative solution to the ladder lottery realization problem, see Fig.\ref{fig:ladder-realization}.
 
 \begin{figure}[!htp]
     \begin{center}
@@ -89,7 +89,7 @@ problem is a problem with a given a set of variables, $X$, a set
 of \emph{disjuntcive clauses}, $C$, which are disjunctive expressions over 
 literals of $X$. Each clause in $C$ 
 must contain three literals, then there is a truth assignment for $X$ such that 
-each clause in $C$ has exactly one true literal. For eaxmple, let 
+each clause in $C$ has exactly one true literal \cite{A17}. For eaxmple, let 
 $X=\{p, q, r, s, t\}$ and let $C=\{C_{p,q,s}, C_{r,q,s} C_{p,s,t}, C_{r,t,q}\}$,
 the question is whether it is possible for each clause to have exactly one
 true literal. The answer in this case is yes. If $p=T$, $r=T$, $q=F$, $s=F$
@@ -105,9 +105,9 @@ realization problem can be solved in polynomial time. These cases
 include the follwing. First, if every bar in the multi-set appears
 exactly once and every bar corresponds to an inversion, 
 then an affirmative solution to the ladder-lottery realization 
-instance can be gotten in polynomial time \cite{A3}. 
+instance can be achieved in polynomial time \cite{A3}. 
 Second, if there is an inversion in the perumutation and its bar appears in the multi-set an even 
 number of times, then a negative solution to
 the ladder-lottery realization instance
-can be solved in polynomial time \cite{A3}. This is because the elements that cross the bar will 
-uninverted then inverted again. Therefore $\pi$ will not be sorted by the ladder.\par
+can be achieved in polynomial time \cite{A3}. This is because the elements that cross the bar will 
+be uninverted when then be inverted again. Therefore $\pi$ will not be sorted by the ladder.\par

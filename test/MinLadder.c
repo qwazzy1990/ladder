@@ -11,10 +11,11 @@
 #include "Color.h"
 
 //flags for the main
-bool DEBUG0 = true;
-bool DEBUG1 = false;
+bool DEBUG0 = false;
+bool DEBUG1 = true;
 bool DEBUG2 = false;
 bool DEBUGN = false;
+bool DEBUGM = false;
 
 //end flags
 
@@ -60,6 +61,9 @@ void genT(Ladder *l, int n);
 int getMaxLenSubString(int *perm, int n);
 int max(int a, int b);
 int numDig = 0;
+
+
+void minLadderReversePerm(Ladder* l, int n, int row, int col, int elem);
 
 static int *copyPerm(int *og, int n)
 {
@@ -217,7 +221,7 @@ void swapDSS(Ladder *l, int *perm, int start, int count, int currRow)
 
 void createMinLadder(Ladder *l, int *perm, int n, int currRow)
 {
-
+    //printPerm(perm, n);
     if (isSorted(perm, n))
         return;
 
@@ -324,7 +328,7 @@ int *preProcessRowZeroTwo(Ladder *l, int *perm, int n)
     {
         int range = (evenStart[i] - evenEnd[i]) * -1;
         int c = evenStart[i];
-        for (int j = 0; j < range; j++)
+        for (int j = 0; j < range/2; j++)
         {
             addBar(l, perm[c], perm[c + 1], 0, c);
             swapInts(&(perm[c]), &(perm[c + 1]));
@@ -332,18 +336,26 @@ int *preProcessRowZeroTwo(Ladder *l, int *perm, int n)
         }
     }
     int **perms = swapOddTwo(perm, oddStart, oddEnd, n, lOdd);
-    if (hasDSSOdd(perms[0], n) && hasDSSOdd(perms[1], n))
+    int* p1 = copyPerm(perms[0], n);
+    int* p2 = copyPerm(perms[1], n);
+    free(evenStart);free(oddStart);free(evenEnd);free(oddEnd);
+    free(perms[0]);free(perms[1]);free(perms);
+    if (hasDSSOdd(p1, n) && hasDSSOdd(p2, n))
     {
-        return perms[0];
-        //reeturn perms[0]
+        free(p2);
+         return p1;
     }
-    if (!(hasDSSOdd(perms[0], n)))
+    if (!(hasDSSOdd(p1, n)))
     {
-        return perms[0];
+         free(p2);
+
+         return p1;
     }
-    else
-    {
-        return perms[1];
+     else
+     {
+        free(p1);
+
+         return p2;
     }
 }
 
@@ -369,13 +381,13 @@ bool hasDSSOdd(int *perm, int n)
 Ladder *minLadderDriver(int *perm, int n)
 {
     int *og = copyPerm(perm, n);
-    List *swappedLists = uninvert(perm, n);
-    int bestScore = 10000;
+    //List *swappedLists = uninvert(perm, n);
+    //int bestScore = 10000;
     int *bestPerm = NULL;
     Ladder *l = newLadder(n);
     initLadder(l);
 
-    for (Node *nn = swappedLists->head; nn != NULL; nn = nn->next)
+    /**for (Node *nn = swappedLists->head; nn != NULL; nn = nn->next)
     {
         int maxLen = getMaxLenSubString(nn->data, n);
         if (maxLen < bestScore)
@@ -383,11 +395,18 @@ Ladder *minLadderDriver(int *perm, int n)
             bestScore = maxLen;
             bestPerm = nn->data;
         }
-    }
+    }**/
+    bestPerm = preProcessRowZeroTwo(l, og, n);
+   // printPerm(perm, n);
+    //printPerm(bestPerm, n);
     preProcessRowZero(l, og, bestPerm, n);
+
     createMinLadder(l, bestPerm, n, 1);
     free(og);
-    freeList(swappedLists);
+    free(bestPerm);
+    //freeList(swappedLists);
+    //if(bestPerm != NULL)
+        //free(bestPerm);
     //printLadder(l);
     return l;
 }
@@ -541,14 +560,14 @@ int **swapOddTwo(int *perm, int *start, int *end, int n, int len)
         }
     }
 
-    for (int i = 0; i < len; i++)
-    {
-        for (int j = start[i]; j < end[i]; j++)
-        {
-            swapInts(&(c2[j]), &(c2[j + 1]));
-            j++;
-        }
-    }
+     for (int i = 0; i < len; i++)
+     {
+         for (int j = start[i]; j < end[i]; j++)
+         {
+             swapInts(&(c2[j]), &(c2[j + 1]));
+             j++;
+         }
+     }
     int **perms = calloc(2, sizeof(int *));
     perms[0] = copyPerm(c1, n);
     perms[1] = copyPerm(c2, n);
@@ -696,7 +715,7 @@ void genT(Ladder *l, int n)
 void printLadderDisalvo(Ladder *l)
 {
 
-    int offset = 3;
+    int offset = l->depth;
     for (int i = 0; i < offset; i++)
     {
         for (int j = 0; j < l->numCols; j++)
@@ -709,6 +728,41 @@ void printLadderDisalvo(Ladder *l)
         }
         printf("|");
         printf("\n");
+    }
+}
+
+
+void minLadderReversePerm(Ladder* l, int n, int row, int col, int elem)
+{
+	printf("Row is: %d\nCol is: %d\nelem is: %d\n", row, col, elem);
+	if(elem == 0 || elem == 1)return;
+	else 
+	{
+
+		if(elem == n)
+		{
+			minLadderReversePerm(l, n, row+2, 0, elem-2);
+			minLadderReversePerm(l, n, 0, 1, elem-1);
+		}
+		else 
+		{
+			if((n - elem) %2 == 0)
+			{
+				minLadderReversePerm(l, n, row+2, 0, elem-2);
+			}
+			else 
+			{
+				minLadderReversePerm(l, n, 0, col+2, elem-2);
+			}
+		}
+	}
+    int r = row;
+    int c = col;
+    forall(elem-1)
+    {
+        l->ladder[r][c] = 1;
+        r++; 
+        c++;
     }
 }
 int main()
@@ -768,12 +822,16 @@ int main()
     }
     if (DEBUGN)
     {
-        int n;
-        printf("Enter the number of columns for the ladder\n");
-        scanf("%d", &n);
-        Ladder *l = newLadder(n + 1);
+      
+    }
+    if(DEBUGM)
+    {
+        int n = 6;
+        Ladder * l = newLadder(n);
         initLadder(l);
-        genT(l, n - 1);
+        l->depth = n;
+    	minLadderReversePerm(l, n, 1, 0, n);
+        printLadderDisalvo(l);
     }
 
     return 0;

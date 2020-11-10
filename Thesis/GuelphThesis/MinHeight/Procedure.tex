@@ -1,54 +1,25 @@
 \section{Procedure}
 
+\subsection{Introduction}
 In the procedure section a heuristic algorithm is provided for the Minimum Height Problem. Recall that the 
 Minimum Height Problem asks, given some $\pi$ is there an algorithm for creating a minimal ladder 
 from $MinL\{\pi\}$? Before providing the heuristic algorithm, it must be stated that there is an exact  
-procedure to generate a minimal ladder from each $MinL\{\pi\}$ from $MinL\{\pi_{N}\}$. In the introduction of this chapter, there 
-is a description of a removal sequence of bars from the minimal ladder for the reverse permutation of order $N$, resulting in one  
-minimal ladder for each $MinL\{\pi\}$ from $MinL\{\pi_{N}\}$. However, this method for creating a minimal ladder is not efficient. 
-Using this method on some arbitrary permutation $\pi$ would first require creating the root ladder for the reverse 
-permutation of order $N$, then swapping every other route in the root ladder to create a minimal ladder
-for the reverse permutation. Once the swapping is completed, each bar in the minimal ladder for the reverse permutation that 
-does not correspond to the inversion set of $\pi$ would need to be removed from the minimal ladder of the reverse permutation. 
+procedure to generate a minimal ladder from each $MinL\{\pi\}$ from $MinL\{\pi_{N}\}$. Refer to the minimal ladder for the revserse permutation 
+of order $N$ as $MinL(Rev(\pi_{N}))$. In the introduction of this chapter, there 
+is a description of a removal sequence of bars from $MinL(Rev(\pi_{N}))$ resulting in one  
+minimal ladder for each $MinL\{\pi\}$ from $MinL\{\pi_{N}\}$. However, this method for creating a minimal ladder for an arbitrary 
+permutation of order $N$ is inefficient. 
+Using this method on some arbitrary permutation $\pi$ would first require creating $MinL(Rev(\pi_{N}))$, then each bar in $MinL(Rev(\pi_{N}))$ that 
+does not correspond to an inversion in $\pi$ would need to be removed from the $MinL(Rev(\pi_{N}))$. 
 The resulting ladder is a minimal ladder from $MinL\{\pi\}$. To see an example of the exact procedure 
-for creating a minimal ladder, given some arbitrary $\pi$ of order $N$ please refer to Fig. \ref{Fig:ExactProcedure}.
+for creating a minimal ladder, given some arbitrary $\pi$ of order $N$ please refer to Fig.\ref{Fig:ExactProcedure}. To see 
+the algorithm for creating $MinL(Rev(\pi_{N}))$ please refer to Alg.\ref{Alg:MinRevLadder}.\pagebreak
 
-\begin{figure}[!htp]
+\begin{center}
+    \begin{figure}[!htp]
+    \centering
     \begin{tikzpicture}
-        
-        \node at(0, 3.2){4};
-        \node at(1, 3.2){3};
-        \node at(2, 3.2){2};
-        \node at(3, 3.2){1};
-        \node at(1.5, 3.8){\small{$Root Ladder(4,3,2,1)$}};
-
-        \node at(.5, 2.8){\small{$(4,3)$}};
-        \node at(1.5, 2.3){\small{$(4,2)$}};
-        \node at(2.5, 1.8){\small{$(4,3)$}};
-        \node at(.5, 1.8){\small{$(3,2)$}};
-        \node at(1.5, 1.3){\small{$(3,1)$}};
-        \node at(.5, .8){\small{$(2,1)$}};
-        \draw(0, 0) to (0, 3);
-            \draw(0, 2.6) to (1, 2.6);
-            \draw(1, 2.1) to (2, 2.1);
-            \draw(2, 1.6) to (3, 1.6);
-        \draw(1, 0) to (1, 3);
-            \draw(0, 1.6) to (1, 1.6);
-            \draw(1, 1.1) to (2, 1.1);
-        \draw(2, 0) to (2, 3);
-            \draw(0, .6) to (1, .6);
-        \draw(3, 0) to (3, 3);
-
-        \draw[->, line width=.6mm](3.3, 1.8) to (5.3, 1.8);
-
-          
-        \node at(5.5, 3.2){4};
-        \node at(6.5, 3.2){3};
-        \node at(7.5, 3.2){2};
-        \node at(8.5, 3.2){1};
         \node at(7, 3.8){\small{$Min Ladder(4,3,2,1)$}};
-
-
         \draw(5.5, 0) to (5.5, 3);
             \draw(5.5, 2.1) to (6.5, 2.1);
             \draw(6.5, 1.6) to (7.5, 1.6);
@@ -94,28 +65,260 @@ for creating a minimal ladder, given some arbitrary $\pi$ of order $N$ please re
         \node at(12.5, 1.8){\small{$(4,1)$}};
         \node at(13.5, 1.3){\small{$(4,3)$}};
         \node at(11.5, 1.3){\small{$(2,1)$}};
-
-
     \end{tikzpicture}
-    \caption{Given $\pi=(4,2,1,3)$, the exact procedure first creates the root ladder for $(4,3,2,1)$ then creates a min ladder for $(4,3,2,1)$ then removes bars to create a min ladder for $(4,2,1,3)$}
+    \caption{Given $\pi=(4,2,1,3)$, the exact procedure first creates creates a min ladder for $(4,3,2,1)$ then removes bars to create a min ladder for $(4,2,1,3)$}
     \label{Fig:ExactProcedure}
 \end{figure}
+\end{center}
+
+\subsection{Algorithm to create $MinL(Rev(\pi_{N}))$}
+\begin{algorithm}
+    \begin{algorithmic}[1]
+        \Function{CreateMinRL}{$Ladder$, $N$, $Row$, $Col$, $Elem$}
+            \If{\small{$Elem = 0$ $OR$ $Elem = 1$}}
+                \State \small{return}
+            \EndIf
+            \If{\small{$Elem = N$}}
+                \State \small{$CreateMinRL(Ladder, N, Row \gets Row+2, Col \gets 1, Elem \gets Elem-2)$}
+                \State \small{$CreateMinRL(Ladder, N, Row \gets 1, Col \gets 2, Elem \gets Elem-1)$}
+            \Else 
+                \If{\small{$N-Elem = 2k$}}
+                    \State \small{$CreateMinRL(Ladder, N, Row \gets Row+2, Col \gets 1, Elem \gets Elem-2)$}
+                \Else 
+                    \State \small{$CreateMinRL(Ladder, N, Row \gets 1, Col \gets Col+2, Elem \gets Elem-2)$}
+
+                \EndIf
+            \EndIf
+
+        \State \small{$r \gets Row, c \gets Col$}
+        \For{\small{$i \gets 1, i < Elem, i \gets i+1$}}
+            \State \small{$Ladder[r][c] \gets 1$}
+            \State \small{$r \gets r+1,c \gets c+1$}
+        \EndFor
+        \EndFunction
+    \end{algorithmic}
+    \caption{Algorithm for creating $MinL(Rev(\pi_{N}))$}
+    \label{Alg:MinRevLadder}
+\end{algorithm}
+
+Let $Ladder$ be initialized to an empty two dimensional array. Let $N$ be initialized to $[N]$. Let $Row$ be initialized to 
+$2$. Let $Col$ be initialized to $1$. Let $Elem$ be initialized to $N$. The goal is to create $MinL(Rev(\pi_{N}))$.
+The bars for the $Nth$ element begin at $Row=2$, 
+$Col=1$ and span to $Row=2+(N-1)$, $Col=(N-1)$. Each element equal to $N-2k$ where $0 \leq k \leq floor(N/2)$ indicates an element with the 
+same polarity as $N$ and $\leq N$. We know from the introduction to this chapter that the routes of the same polarity as $N$ remain 
+below the route of $N$. We also know that the first bar of each of these routes begins at column $1$.\par 
+To calculate the row of the first bar of the $jth$ element where $j$ has the 
+same polarity as $N$ consider the following. Let the previous element with the same polarity as $N$ be referred to as $j+2$.
+Let the row of the first bar of the route of $j+2$ be equal to $m$. Thus, $Ladder[m][1]$ is the first bar 
+of the route of element $j+2$. We know that the second bar of the route of $j+2$ goes in $Ladder[m+1][2]$. Thus, the 
+first bar of the $jth$ route must begin at $row=m+2$; it cannot go in $Ladder[m][1]$ seeing as the first bar 
+of $j+2$ occupies this cell. Nor can it go in $Ladder[m+1][1]$ seeing as the second bar of the route of $j+2$ 
+is at $Ladder[m+1][2]$. Nor can it go in a $row > m+2$ seeing as the ladder would no longer be minimal. Thus, 
+the first bar of the route of element $j$ is at $Ladder[m+2][1]$ where $m$ is the row of the first bar of the route 
+of element $j+2$.\par 
+Each element equal to $N-(2k+1)$  where $0 \leq k \leq floor(N/2)$ indicates an element with the opposite polarity as $N$ and $\leq N$. We know 
+from the introduction to this chapter that the routes of elements with the opposite polarity of $N$ are right swapped above the routes 
+of all elements greater than themselves. We also know from the introduction that the first 
+bar of each of these routes begin at row $1$ in $MinL(Rev(\pi_{N}))$. The number of bars in each of these elements' 
+routes equals $j-1$ where $j$ is one of these elements. Lastly, we know from the introduction of this chapter, that the last 
+bar of each of these elements' routes end at column $N-1$/the last column in $Ladder$.\par 
+To calculate the column of the first bar of the $jth$ element where $j$ has the opposite polarity 
+as $N$ consider the following. Let the previous element with the opposite polarity as $N$ be referred to as $j+2$. 
+Let the column of the first bar of the route of $j+2$ be equal to $m$. Thus, $Ladder[1][m]$ is the first bar 
+of the route of element $j+2$. We know that the first bar of the route of element $j$ must begin at row $1$. 
+This bar cannot go in $Ladder[1][m]$ seeing as this is where the first bar of the route of element $j+2$. 
+Nor can this bar go in $Ladder[1][m+1]$ seeing as if it did, its left enpoint would be touching the right 
+endpoint of the first bar of the route of element $j+2$. Nor can it go in $Ladder[1][m+>2]$ seeing as if it 
+did, the bars of route $j$ would extend beyond the last/$N-1th$ coulmn in $Ladder$. 
+\begin{lemma}
+    The column for the first bar of element $j's$ route is $m+2$.
+    
+\end{lemma}
+\begin{proof}
+    \begin{itemize}
+        \item     Let the column of the first bar of element $j+2's$ route be $m$. 
+        \item     Let the number of columns in $Ladder=N-1$.
+        \item     Let the number of bars in $j+2's$ route be equal to $j+2-1=j+1$.
+    \end{itemize}
+        From the axioms we get the equation $N-1-(j+1)=m$.
+        We need to derive $N-1-(j-1)=m+2$ from $N-1-(j+1)=m$.
+   \begin{equation} \label{eq1}
+        \centering
+        \begin{split}
+            (N-1)-(j+1)=m \\
+            (N)-(j)= m+2\\
+            (N-1)-(j)=m+2-1=m+1 \\ 
+            (N-1)-(j-1)=m+2-1+1=m+2\\
+            (N-1)-(j-1) = m+2\\
+        \end{split}
+    \end{equation}
+   Thus, the first bar for $j's$ route is $m+2$.
+   End of proof. To see $MinL((5,4,3,2,1))$ please refer to Fig.\ref{Fig:RootToMinLadder}.
+\end{proof}
 
 
+\begin{lemma}
+    The time complexity of $CreateMinRL$ is $O{n \choose 2}$ 
+\end{lemma}
+\begin{proof}
+    For each element, $x$, in $Rev(\pi_{N})$, the function makes a recursive call and the function 
+    adds all $x-1$ bars belonging to $x's$ route in the ladder. The total number of bars for the $MinL(Rev(\pi))$
+    equals the number of inversions for $Rev(\pi_{N})$ which is eqaul to ${n \choose 2}$. End of proof.
+\end{proof}
+
+
+
+\subsection{The Heuristic Algorithm to Create $MinL(\pi)$}
+
+In the previous section, the algorithm to create $MinL(Rev(\pi))$ was provided. The algorithm 
+is exact, but unfortunately only creates the minimal ladder for the reverse permutation. The following algorithm 
+is a heuristic algorithm for creating a minimal ladder for any permutation. The heuristic algorithm 
+is based on inserting the maximum the number of bars per row of the ladder. Each bar uninverts and inversion, 
+two or more bars on the same row uninvert two or more inversions in parallel. Thinking back to sorting networks, 
+when two or more connectors are directly above/below each other, the connectors swap elements in tandem. The same 
+can be said for bars on the same row of the ladder. Let $Ladder$ be a ladder lottery for some $\pi$. 
+One can say if $Ladder$ has a height of 
+one, then it sorts $\pi$ into $\pi_{ID}$ in one step. If $Ladder$ has a height of two, then it sorts $\pi$ into an intermediary $\pi^{2}$
+in row $1$ then sorts $\pi^{2}$ into $\pi_{ID}$ in row $2$, etc.
+Define \emph{bar compression} as the average number of bars per row in $Ladder$; if the ladder has zero rows and/or zero bars, then the 
+bar compression is undefined. The more bars per row the higher the bar compression, the less bars per row the lower the bar compression. The heuristic algorithm 
+works by maximizing bar compression of $Ladder$. It should be intuitive that given a $Ladder$ with $b$ bars, 
+each bar could be given its own row; in this case the $Ladder$ would have the least bar compression. This $Ladder$ 
+is the opposite of the minimal ladder. Thus, for the heuristic algorithm, the goal is to squeeze as many bars in the same row as possible in 
+order to maximinze the bar compression of $Ladder$.\par 
+Recall that when inverted elements of $\pi$ travel through the ladder and cross a bar, the elements are swapped, thus resulting in 
+some intermediate permutation $\pi^{k}$. Define $InvPi(\pi)$ as the permutation of indermidiate permutations, beginning at $\pi$ and 
+ending at the identity permutation. Each $\pi^{k} \in InvPi(\pi)$ corresponds to a row from a unique $Ladder$ from $OptL\{\pi\}$. 
+Given some arbitrary $\pi$, there can be more than one $InvPi(\pi)$. See table \ref{Tab:InvPi} 
+for two different $InvPi(3,5,4,6,2,1)$.
+
+\begin{table}[!htp]
+    \begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+        \hline 
+    \multicolumn{3}{|c|}{2 $InvPi(3,5,4,6,2,1)$}\\
+    \hline 
+    \hline 
+    $\pi^{k}$ & $A=InvPi(3,5,4,6,2,1)$ & $B=InvPi(3,5,4,6,2,1)$\\ 
+    \hline 
+    $\pi^{1}$ & $(3,5,4,6,2,1)$ & $(3,5,4,6,2,1)$\\ 
+    \hline
+    $\pi^{2}$ & $(3,4,5,6,1,2)$ & $(3,4,5,6,2,1)$\\ 
+    \hline 
+    $\pi^{3}$ & $(3,4,5,1,6,2)$ & $(3,4,5,2,6,1)$ \\ 
+    \hline 
+    $\pi^{4}$ & $(3,4,1,5,2,6)$ & $(3,4,2,5,6,1)$ \\ 
+    \hline 
+    $\pi^{5}$ & $(3,1,4,2,5,6)$ & $(3,2,4,5,1,6)$\\ 
+    \hline 
+    $\pi^{6}$ & $(1,3,2,4,5,6)$ & $(2,3,4,1,5,6)$\\ 
+    \hline 
+    $\pi^{7}$ & $(1,2,3,4,5,6)$ & $(2,3,1,4,5,6)$\\ 
+    \hline 
+    $\pi^{8}$ & $None$  & $(2,1,3,4,5,6)$ \\ 
+    \hline 
+     $\pi^{9}$ & $None$  & $(1,2,3,4,5,6)$ \\ 
+    \hline 
+
+        
+    \end{tabular}
+    \caption{Table for 2 different InvPi(3,5,4,6,2,1)}
+    \label{Tab:InvPi}
+\end{table}
+
+
+
+When creating a $MinL(\pi)$, the goal is to create a $Ladder$ with the least number of rows, which in turn corresponds 
+to the shortest $InvPi(\pi)$.
+Let $MinInvPi(\pi)$ be the $InvPi(\pi)$ generated by the heuristic algorithm. $MinInvPi(\pi)$ is not unique.
+Let $\pi^{k} \in MinInvPi(\pi)$. Then the recurrence relation for $\pi^{k}=\pi^{k-1} \rightarrow \tau(\pi^{k-1}_{i},\pi^{k-1}_{i+1}) | \pi^{k-1}_{i}>\pi^{k-1}_{i+1}$ $\mbox{ and for any }$$\tau(\pi^{k-1}_{i},\pi^{k-1}_{i+1}) \cap \tau(\pi^{k-1}_{j},\pi^{k-1}_{j+1}) = \emptyset$. 
+In simpler terms, for some $\pi^{k} \in MinInvPi(\pi)$, perform the maximum number 
+of adjacent transpositions on adjacent inversions in $\pi^{k-1}$ as is possible.
+In turn, this means the maximum number of bars can be added to the $kth$ row in $Ladder$.
+The less rows there are in the $Ladder$ the smaller the corresponding 
+ $InvPi(\pi)$ and the greater the bar compression.
+ To see an example of maximal bar compression and a corresponding $MinInvPi(\pi)$, please refer to Fig.\ref{Fig:BarCompressionInvPi}.
+
+\begin{figure}[!htp]
+    \begin{minipage}{.45\textwidth}
+        \centering 
+    \begin{tikzpicture}
+        \node at (0, 5.3)(a){5};
+        \node at (1, 5.3)(b){2};
+        \node at (2, 5.3)(c){4};
+        \node at (3, 5.3)(d){3};
+        \node at (4, 5.3)(e){1};
+
+        \draw(0, 0) to (0, 5);
+            \draw(0, 4.5) to (1, 4.5);
+            \draw(1, 3.5) to (2, 3.5);
+            \draw(2, 2.5) to (3, 2.5);
+            \draw(3, 1.5) to (4, 1.5);
+        \draw(1, 0) to (1, 5);
+            \draw(2, 4.5) to (3, 4.5);
+            \draw(3, 3.5) to (4, 3.5);
+        \draw(2, 0) to (2, 5);
+            \draw(0, .5) to (1, .5);
+            \draw(1, 1.5) to (2, 1.5);
+        \draw(3, 0) to (3, 5);
+        \draw(4, 0) to (4, 5);
+
+
+
+        \node at(-1, 5.3){R0};
+        \node at(-1, 4.5){R1};
+        \node at(-1, 3.5){R2};
+        \node at(-1, 2.5){R3};
+        \node at(-1, 1.5){R4};
+        \node at(-1, 0.5){R5};
+    \end{tikzpicture}
+    \end{minipage}
+       \begin{minipage}{.45\textwidth}
+        \centering 
+    \begin{tikzpicture}
+        \draw node at(0, 5.5){$(5,2,4,3,1) \rightarrow (5,2,4,3,1)$};
+      \draw node at(0, 4.7){$(5,2,4,3,1)\rightarrow (2,5,3,4,1)$};
+      \draw node at(0, 3.7){$(2,5,3,4,1) \rightarrow (2,3,5,1,4)$};
+      \draw node at(0, 2.7){$(2,3,5,1,4) \rightarrow (2,3,1,5,4)$};
+      \draw node at(0, 1.7){$(2,3,1,5,4) \rightarrow (2,1,3,4,5)$};
+      \draw node at(0, 0.7){$(2,1,3,4,5) \rightarrow (1,2,3,4,5)$};
+      \node at(-3, 5.5){$R0$};
+      \node at(-3, 4.7){$R1$};
+      \node at(-3, 3.7){$R2$};
+      \node at(-3, 2.7){$R3$};
+      \node at(-3, 1.7){$R4$};
+      \node at(-3, .7){$R5$};
+    \end{tikzpicture}
+    \end{minipage}
+    
+    \caption{The ladder on the left has a bar compression of $8/5$. The corresponding $InvPi((5,2,4,3,1))$ is on the right.}
+    \label{Fig:BarCompressionInvPi}
+    
+\end{figure}
+\pagebreak
+
+
+  
 \begin{algorithm}
         \begin{algorithmic}[1]
-            \Function{HeuristicMinLadder}{$Ladder[N][N-1]$, $\pi$, $N$, $Row \gets 0$}
+            \Function{HeuristicMinLadder}{$Ladder[N][N-1]$, $\pi$, $N$, $Row \gets 1$}
                 \If{\small{$Sorted(\pi)$}}
                     \State \small{return}
                 \EndIf
-                \If{\small{$Row = 0$}}
-                    \State \small{$\pi,Ladder \gets PreProcessRow(Ladder, \pi)$}
-                    \State \small{$HeuristicMinLadder(Ladder, \pi, N, Row \gets Row+1)$}
+                \If{\small{$Row = 1$}}
+                    \State \small{$\pi^{2} \gets PreProcessRowOne(\pi,N)$}
+                    \For{$i \gets 1, i \leq N, i \gets i+1$}
+                        \If{\small{$\pi_{i} \neq \pi'_{i}$}}
+                            \State \small{$Ladder[1][i] \gets 1$}
+                            \State \small{$i \gets i+1$} 
+                        \EndIf
+                    \EndFor
+                    \State \small{$HeuristicMinLadder(Ladder, \pi \gets \pi^{2}, N, Row \gets Row+1)$}
                 \Else
-                    \For{\small{$i \gets 0, i < N, i \gets i+1$}}
+                    \For{\small{$i \gets 1, i < N, i \gets i+1$}}
                         \If{\small{$\pi_{i}>\pi_{i+1}$}} 
                             \State \small{$Swap(\pi{i}, \pi_{i+1})$}
                             \State \small{$Ladder[Row][i] \gets 1$}
+                            \State \small{$i \gets i+1$}
                         \EndIf
                     \EndFor
                     \State \small{$HEURISTICMINLADDER(Ladder, \pi, N, Row \gets  Row+1)$}
@@ -126,27 +329,264 @@ for creating a minimal ladder, given some arbitrary $\pi$ of order $N$ please re
 
 
         \end{algorithmic}
-
+        \caption{Heuristic algorithm to create a ladder with minimal height}
+        \label{Algo:heuristic}
+    \end{algorithm}
+        \pagebreak
+    \begin{algorithm}
          \begin{algorithmic}[1]
-            \Function{PreProcessRowZero}{$Ladder[N][N-1]$, $\pi$, $N$}
+            \Function{PreProcessRowOne}{$\pi$, $N$}
                 \State \small{$\pi' \gets \pi$}
-                \State \small{For each even lengthed deacreasing substring in $\pi$, swap all adjacent inversions in the decreasing substring in $\pi$.}
+                \For {$\pi_{i}>\pi_{i+1} \dots > \pi_{i+2k+1} \in \pi$.}
+                    \State $\tau(\pi_{i},\pi_{i+1}),\tau(\pi_{i+2},\pi_{i+3}) \dots \tau(\pi_{i+2k},\pi_{i+2k+1})$
+                \EndFor
+                \State 
                 \State \small{$\pi'' \gets \pi$}
-                \State \small{$pi''' \gets \pi$}
-                \State \small{For each odd lengthed decreasing subsrting in $\pi'$, swap all the adjacent elements belonging to the same decreasing substring 
-                in $\pi''$, going left to right.}
-                \State \small{For each odd lengthed decreasing subsrtiing in $\pi'$, swap all adjacent elements belonging to the same decreasing substring 
-                in $\pi'''$ going right to left.}
-                \If{\small{$\pi''$ and $\pi'''$ have the same number of odd lengthed decreasing substrings}}
+                \State \small{$\pi''' \gets \pi$}
+                \For{$\pi'_{i}>\pi'_{i+1} \dots > \pi_{i+2k} \in \pi'$}
+                    \State $\tau(\pi''_{i},\pi''_{i+1}),\tau(\pi''_{i+2},\pi''_{i+3}) \dots \tau(\pi''_{i+2k-2},\pi''_{i+2k-1})$
+                \EndFor
+                \For{$\pi'_{i} < \pi'_{i-1} \dots < \pi_{i-2k} \in \pi'$}
+                    \State $\tau(\pi'''_{i},\pi'''_{i-1}),\tau(\pi'''_{i-2},\pi'''_{i-3}) \dots \tau(\pi'''_{i-2k+2},\pi'''_{i-2k+1})$
+                \EndFor
+                \If{\small{$\pi''$ and $\pi'''$ are equally zig-zaggy}}
                     \State return $\pi'''$
-                
                 \Else 
-                    \State \small{return $Min(\pi'',\pi''')$ where $Min$ returns the permutation with the minimal number of odd lengthed decreasing substrings.}
+                    \State \small{return $ZigZag(\pi'',\pi''')$ where $ZigZag$ returns the permutation that is most zig-zaggy.}
                 \EndIf
 
             \EndFunction
         
         \end{algorithmic} 
-        \caption{Heuristic Algorithm for creating a Minimal Ladder}
-        \label{Algo:heuristic}
+        \caption{Algorithm to return the second permutation from $InvPi\{\pi\}$ which will result in the maximal bar compression}
+        \label{Algo:PreProcessRow}
 \end{algorithm}
+
+
+
+
+Let $Ladder$ be initialized to the empty ladder. Let $\pi$ be some arbitrary permutation of order $N$. Let $\pi^{k}$ be a permutation 
+from $InvPi(\pi)$. The function $PreProcessRowOne$ 
+transposes as many adjacent inversions in $\pi$ as possible. This corresponds to adding as many bars to row one $Ladder$ as is possible. 
+Define a \emph{decreasing subsrting of $\pi$ (DSS for short)}
+as follows: given some value $k$ $2 \leq k \leq N$, a decreasing substring of length $k$ is defined as $\pi_{i}>\pi_{i+1}>\pi_{i+2} \dots > \pi_{k}$.
+A DSS in $\pi$ can 
+be even or odd; the polarity of the DSS is defined by the length of the substring. For example, 
+the DSS $(3,2,1)$ has odd polarity whereas the DSS $(4,3,2,1)$ has even polarity. A DSS terminates when ceases to be an adjacent inversion. 
+For example, given $(3,2,1,4)$ in $\pi$, the DSS is $(3,2,1)$ which 
+has odd polarity. $PreProcessRowOne$ returns the $\pi^{2}$ from some $MinInvPi(\pi)$; the first permutation being $\pi^{1}=\pi$.\par 
+There are two criteria for $\pi^{2}$. The first is $\pi^{2}$ is a transformation of $\pi$ such that $\pi$ has undergone as many adjacent transpositions as possible.
+The second criteria for $\pi^{2}$ is that $\pi^{2}$ is as zig-zaggy as possible, given that it has undergone the maximum amount of 
+adjacent transpositions. \emph{Maximal zig-zagginess} is defined in four cases. 
+
+\begin{caseof}
+
+    Max zig-zag = 
+        $\begin{cases}
+            \pi_{1} < \pi_{2} > \pi_{3} < \pi_{4} \dots \pi_{N-1=2k} > \pi_{N=2k+1} & \mbox{if } N=2k+1 \mbox{ and } \pi_{1} < \pi_{2}\\
+            \pi_{1} > \pi_{2} < \pi_{3} > \pi_{4} \dots  \pi_{N-1=2k} < \pi_{N=2k+1} & \mbox{if } N=2k+1 \mbox { and } \pi_{1} > \pi_{2}\\ 
+            \pi_{1} < \pi_{2} > \pi_{3} < \pi_{4} \dots \pi_{N-1=2K-1} < \pi_{N=2k} & \mbox{if } N = 2k \mbox{ and } \pi_{1} < \pi_{2}\\ 
+            \pi_{1} < \pi_{2} > \pi_{3} < \pi_{4} \dots \pi_{N-1=2K-1} < \pi_{N=2k} & \mbox{if } N = 2k \mbox{ and } \pi_{1} > \pi_{2}\\
+        \end{cases}$
+   
+\end{caseof}
+
+
+
+When a DSS is of even length, then there are $k/2$ adjacent inversions that can be uninverted in tandem, where $k$ is the length of the DSS. 
+For example, given DSS $(4,3,2,1)$, $\tau(4,3)$ and $\tau(2,1)$ are done in tandem. When a DSS is of odd length, the maximum 
+number of adjacent inversions that can be uninverted in tandem is $floor(k/2)$ where $k$ is the length of the DSS. A choice 
+needs to be made in terms of whether or not the first element in the DSS will be transposed or the $kth$ element in the subsrting will be 
+transposed. For example, given the DSS $(5,4,3,2,1)$, either $\tau(5,4),\tau(3,2)$ or $\tau(4,3)\tau(2,1)$ are legitimate options. 
+The first step of $PreProcessRowOne$ is to perform  $k/2$ $\tau(\pi_{i},\pi_{i+1})$ in tandem for all
+even lengthed DSSs. Then, for all odd lengthed DSSs in $\pi$, $PreProcessRowOne$ performs $floor(k/2$) $\tau(\pi_{i}, \pi_{i+1}), \dots \tau(\pi_{k-2},\pi_{k-1})$
+resulting in a candidate permutation $\pi''$. $PreProcessRowOne$ then performs $floor(k/2$) $\tau(\pi_{k},\pi_{k-1}) \dots \tau(\pi_{3},\pi_{2})$
+resulting in a second candiate permutation $\pi'''$.
+This results in two candiate permutations for $\pi^{2}$. In order to choose between $\pi''$ and $\pi'''$, 
+the algorithm then checks for which of the two have a better zig-zag pattern; a better zig-zag 
+pattern is a relation between two prmutations such that if one permutation is closer to maximal zig-zagginess 
+than the other, then it has a better zig-zag pattern. The reason the algorithm looks 
+for better zig-zagginess is because the more zig-zaggy $\pi^{k}$ is, the more adjacent
+2 lengthed DSSs there are in $\pi^{k}$. The more adjacent $2$ lengthed DSSs there are, 
+the more pairwise disjoint adjacent inversions there are in $\pi^{k}$. The more pairwise disjoint adjacent 
+inversions there are in $\pi^{k}$, the more bars can be added to $Ladder$ at row $k$. 
+The result is likely to be $MinL(\pi)$ and the shortest lengthed $InvPi(\pi)$.\par 
+\begin{lemma}
+    Given $j$ adjacent inversions in $\pi^{k}$, the more of these inversions that are pairwise disjoint, the more 
+    bars can be added to the $kth$ row.
+\end{lemma}
+\begin{proof}
+    We shall use proof by induction. Let $m$ be the number of elements it takes to create $j$ adjacent inversions.
+    Let $n$ be the number of bars that can be added to the $kth$ row of ladder.
+    Inductive Hypothesis:\newline
+
+    m,n=:$\begin{cases}
+            2j,j \small{\mbox{ if j adjacent inversions are pairwise disjoint}}\\
+            j+1,ceil(j/2) \small{\mbox{ if j adjacent inversions are not pairwise disjoint.  Bars added right to left}}\\
+            j+1,floor(j/2) \small{\mbox{ if j adjacent inversions are not pairwise disjoint. Bars added left to right}}\\
+        \end{cases}$\\
+
+
+
+    Base case 1: let $\pi=(4,3,2,1)$/$j=2$. $(4,3) \cap (2,1) = \emptyset$ and $m=2j=4$ and $n=2=j$. \newline 
+    Base case 2: let $\pi=(3,2,1)$/$j=2$. $(3,2) \cap (2,1)= \{2\}$ and $m=j+1=3$ and $n=1=ceil(j/2)$.\newline
+    Base case 3: let $\pi=(3,2,1)$/$j=2$. $(3,2) \cap (2,1)= \{2\}$ and $m=j+1=3$ and $n=1=floor(j/2)$.\newline
+
+
+
+    We need to show that for $j+1$, $m=2(j+1)$ and $n=j+1$ when the $j+1th$ adjacent inversion is pairwise disjoint.
+    We also need to show that for $j+1$, $m=j+1+1$ and $n=ceil/floor(j+1/2)$ when the $j+1th$ adjacent inversion is not pairwise 
+    disjoint.\par
+
+
+
+    Suppose the $j+1th$ adjacent inversion is pairwise disjoint and suppose the first $j$ adjacent inversions are also 
+    pairwise disjoint, then this would require two more elements to form an 
+    inversion in $\pi$. The reason being is that if the $j+1th$ inversion was formed by one more element in $\pi$ then 
+    the $j+1th$ inversion would not be pairwise disjoint. Let this element be referred to as $x$. We shall prove by contradiction 
+    that if $x$, on its own, forms the $j+1th$ adjacent inversion in $\pi$ then inversion $j+1$ cannot be pairwise disjoint. Let $inv(a,b)$ 
+    be the $jth$ inversion in $\pi$ where $a>b$. If one were to insert $x$
+    to the left $a$ and $x>a$ then $inv(x,a) \cap inv(a,b) \neq \emptyset$. If one were to insert $x$ to the right of $b$ and 
+    $x<b$ then $inv(a,b) \cap inv(b,x) \neq \emptyset$. Therefore, we have a contradiction. Thus, if adjacent inversion $j+1$ 
+    is a pairwise disjoint, then $2$ more 
+    elements are required to make the $j+1th$ adjacent inversion. Therefore, $m=2(j+1)=2j+2$ where the $+2$ accounts for the 
+    two more elements required to make the $j+1th$ inversion. $n=j+1$ seeing as $j$ inversions are pairwise disjoint, then the $j$ bars 
+    at row $k$ in $Ladder$ are at least two columns away from every other bar corresponding 
+    to one of the $j$ inversions. Since the $j+1th$ adjacent inversion is also pairwise disjoint from all other $j$ inversions, 
+    then the bar corresponding to this inversion is 
+    also placed at least two columns away from the other bars in the $kth$ row. Thus, $n=j+1$.\par 
+
+
+    Suppose the $j+1th$ adjacent inversion is not pairwise disjoint and suppose the first $j$ inversions 
+    are also not pairwise disjoint, then the $j+1th$ adjacent inversion would require one more element to form an inversion 
+    in $\pi$. We shall do a direct proof to show that one more element is required. Let $inv(a,b)$ be the $jth$ inversion 
+    in $\pi$ where $a>b$. Let $x$ be the element to form the $j+1th$ inversion in $\pi$. If one were to insert $x$
+    to the left $a$ and $x>a$ then $inv(x,a) \cap inv(a,b) \neq \emptyset$.  If one were to insert $x$ to the right of $b$ and 
+    $x<b$ then $inv(a,b) \cap inv(b,x) \neq \emptyset$. Therefore, in both cases, when $x$ forms the $j+1th$ inversion, 
+    the $j+1th$ inversion is not pairwise disjoint, which is exactly what we are trying to prove. Since the $xth$ element 
+    forms the $j+1th$ inversion then $m=j+1+1=j+2$ where the additional $+1$ comes from the $xth$ forming the $j+1th$ inversion.\par 
+
+    Next, suppose that $a$ is  the leftmost element of the first $j$ inversions. Let the position of $a$ in $\pi=i$. 
+    Thus, $\pi_{i}=a$.  
+    Also, suppose that the first $j/2$ bars are added to $row=k$ going left to right and element $x$ is directly to the left of $a$ 
+    in $\pi$ forming  the $j+1th$ inversion. 
+    Seeing as element $\pi_{i}$ and $\pi_{i+1}$ have a bar on row $k$ then elements $x$ and $a$ cannot have a bar on row $k$, 
+    thus $n=floor(j+1/2)$. Next, suppose that the first $j/2$ bars are added to $row=k$ going right to left, then it is possible to place a 
+    bar on row $k$ for elements $x$ and $a$, thus $n=ceil(j+1/2)$. Next suppose that $b$ is the rightmost element for the first 
+    $j$ inversions. Let the position of $b$ in $\pi=l$. Thus, $\pi_{l}=b$. Also, suppose that the first $j/2$ bars are added to 
+    $row=k$ going right to left and element $x$ is directly to the right of $b$ in $\pi$ forming the $j+1th$ inversion.
+    Seeing as element $\pi_{l-1}$ and $\pi_{l}$ have a bar on row $k$ then elements $x$ and $b$ cannot have a bar on row $k$, 
+    thus $n=floor(j+1/2)$.
+    Next, suppose that the first $j/2$ bars are added to $row=k$ going left to right, then it is possible to place a 
+    bar on row $k$ for elements $x$ and $b$, thus $n=ceil(j+1/2)$.
+
+    Clearly $n=j>n=floor/ceil(j/2)$, therefore, the more adjacent inversions that are pairwise disjoint, the more bars 
+    can be added to $Ladder$ in row $k$.
+    To see an example of the above proof please refer to Fig.\ref{Fig:PairwiseDisjoint}. End of proof.
+
+\end{proof}   
+
+
+\begin{figure}
+    \centering
+    \begin{minipage}{.9\textwidth}
+        \begin{tikzpicture}
+            \draw[dashed](0, 0) -- (0, 4);
+            \draw[dashed](.5, 0) -- (0.5, 4);
+            \draw(1.0, 0) to (1.0, 4);
+                \draw(1, 2.5) to (1.5, 2.5);
+            \draw(1.5, 0) to (1.5, 4);
+            \draw(2, 0) to (2, 4);
+                \draw(2, 2.5) to (2.5, 2.5);
+            \draw(2.5, 0) to (2.5, 4);
+            \draw[dashed](3, 0) -- (3, 4);
+            \draw[dashed](3.5, 0) -- (3.5, 4);
+            \draw(4, 0) to (4, 4);
+            \draw(4.5, 0) to (4.5, 4);
+            \draw(5, 0) to (5, 4);
+            \draw[dashed](5.5, 0) -- (5.5, 4);
+            \draw[dashed](6, 0) -- (6, 4);
+            \draw[dashed](6.5, 0) -- (6.5, 4);
+            \draw(7, 0) to (7, 4);
+            \draw(7.5, 0) to (7.5, 4);
+            \draw(8, 0) to (8, 4);
+            \draw(8.5, 0) to (8.5, 4);
+            \draw(9, 0) to (9, 4);
+               \draw[dashed](9.5, 0) -- (9.5, 4);
+            \draw[dashed](10, 0) -- (10, 4);
+            \draw[dashed](10.5, 0) -- (10.5, 4);
+
+
+            \node at(-1, 2.5)(a){\small{$k$}};
+            \node at(-1, 1.5)(b){\small{$k+1$}};
+            \node at(-1, 0.5)(c){\small{$k+2$}};
+
+            \node at(1, 4.3){\small{$4$}};
+            \node at(1.5, 4.3){\small{$3$}};
+            \node at(2, 4.3){\small{$2$}};
+            \node at(2.5, 4.3){\small{$1$}};
+
+           
+
+            \node at(4, 4.3){\small{$9$}};
+                \draw(4, 2.5) to (4.5, 2.5);
+            \node at(4.5, 4.3){\small{$8$}};
+            \node at(5, 4.3){\small{$7$}};
+
+            \node at(7, 4.3){\small{$15$}};
+            \node at(7.5, 4.3){\small{$14$}};
+                \draw(7.5, 2.5) to (8, 2.5);
+            \node at(8, 4.3){\small{$13$}};
+            \node at(8.5, 4.3){\small{$12$}};
+                \draw(8.5, 2.5) to (9, 2.5);
+            \node at(9, 4.3){\small{$11$}};
+
+            
+
+
+
+
+        \end{tikzpicture}
+    \end{minipage}\newline
+
+
+
+
+    \begin{tabular}{|p{3cm}||p{7cm}||p{1cm}||p{1cm}|}
+        \hline 
+    DSS & j & m & n \\ 
+    \hline
+    \small{$(4,3,2,1)$} & 2 $\{(4,3)\} \cap \{(2,1)\} = \emptyset$ & 4 & 2\\
+    \hline 
+    \small{$(9,8,7)$} & 2 $\{(9,8)\} \cap \{(8,7)\} = \{8\}$ & 3 & 1\\
+    \hline 
+     \small{$(15,14,13,12,11)$} & 4 $\{(15,14)\} \cap \{(14,13)\} \cap \{(13,12)\} \cap \{(12,11)\} = \{14,13,12,11\}$ & 5 & 2\\
+     \hline
+    \end{tabular}
+    \caption{Figure demonstrating that the more pairwise disjoing adjacent inversions there are in $\pi^{k}$ the more bars can 
+    be added to $Ladder$ at $row=k$}
+    \label{Fig:PairwiseDisjoint}
+\end{figure}
+
+
+From looking at Fig.\ref{Fig:PairwiseDisjoint}, one notices that when uninverting adjacent pairwise disjoint inversons, 
+the result is a better zig-zag pattern. E.g. uninverting $(4,3) \cap (2,1)$ from $(4,3,2,1)$ results in $(3,4,1,2)$
+which is more zig-zaggy than uninverting just the $(4,3)$ or just the $(2,1)$ which would result in $(3,4,2,1)$ or 
+$(4,3,1,2)$ respectively. Given $(15,14,13,12,11)$ uninverting $(12,11) \cap 
+(14,13)$ resulted in $(15,13,14,11,12)$ which is more zig-zaggy 
+than if we were to uninvert $(15,14)$ and $(12,11)$ which would result in $(14,15,13,11,12)$.
+In sum, the heuristic algorithm is based on two assumptions. The first assumption is in order 
+to create $MinL(\pi)$, $PreProcessRowOne$ permfoms the maximum numbe of transpositions 
+of adjacent inversions in $\pi$. This leads to multiple candiate permutations.
+ Once done, to determine which candiate permutation is the best option 
+for $\pi^{2}$, determine which candiate is most zig-zaggy. 
+This permutation is the permutation for $\pi^{2}$ in $MinInvPi(\pi)$. Then, from $\pi^{2}$, $HeuristicMinLadder$ 
+uninverts as many adjacent inversions in every subsequent $\pi^{k}$ in $MinInvPi(\pi)$. Bars 
+are added to the $Ladder$ accordingly. Once complete, the resulting ladder is likely to be a $MinL(\pi)$.
+
+
+
+
+
+
+ 

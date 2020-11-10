@@ -1,15 +1,15 @@
-\subsection{Enumeration, Counting, and Random Generation of Ladder Lotteries}
+\section{Enumeration, Counting, and Random Generation of Ladder Lotteries}
 
 In this paper, the authors consider the problem of enumeration, counting and 
-random generation of ladder-lotteries with $N$ lines and $B$ bars \cite{A6}. 
+random generation of ladder lotteries with $N$ lines and $B$ bars \cite{A6}. 
 It is important to note that the authors considered both optimal and 
 non-optimal ladders for this paper. Nonetheless, the paper is still fruitful 
-for its modelling of the probelems and insights into ladder-lotteries.
-The authors use  the line-based encoding, $LC_{L}$ for the representation of ladders 
+for its modelling of the problems and insights into ladder lotteries.
+The authors use  the line-based encoding, $LC(l)$ for the representation of ladders 
 that was discussed in the review of \textbf{Coding Ladder Lotteries}.
 
 %%Section for enumeration
-\subsubsection{Enumeration}
+\subsection{Enumeration}
 The authors denote a set of ladder lotteries with $N$ lines and 
 $B$ bars as $S_{N,B}$. The problem is how to enumerate all the 
 ladders in $S_{N,B}$ \cite{A6}. The authors use a \emph{forest structure}
@@ -17,20 +17,20 @@ to model the problem. A \emph{forest structure} is a set of trees
 such that each tree in the forest is dijoint union with every other 
 tree in the forest. Consider $S_{N,B}$ to be a tree in a forest.
 That is to say, a union disjoint subset of all ladders with $N$
-lines and $B$ bars. Then $F_{N,B}$, or the forest of all $S_{N,B}s$,
-is the set of all ladders with $N$ lines and $B$ bars \cite{A6}. For an example 
+lines and $B$ bars. Then $F_{N,B}$, or the forest of all $S_{N,B}$,
+is the union of all disjoint trees of ladders with $N$ lines and $B$ bars \cite{A6}. For an example 
 of a forest for $F_{3,2}$ refer to Fig. \ref{fig:forest3,2}\par %figure number.
 
-The authors create $F_{N,R}$ by defining a removal sequennce for 
-each $LC_{L}$ \cite{A6}. Each ladder, $L$, in 
-$F_{N,R}$ is a leaf node. By removing the second last bit of $LC_{L}$ the result 
-is $P(LC_{L})$ and the resulting substructure is some \emph{sub-ladder}, $P(L)$, which 
-is an incomplete ladder containing unmatched endpoints of bars or a missining line \cite{A6}. For example, 
-given $LC_{L}=10100$, $P(LC_{L})=1010$. Notice how the second last bit was removed. 
-By removing the second last bit from $P(LC_{L})$ we get $P(P(LC_{L}))$ and $P(P(L))$ respectively.
+The authors create $F_{N,B}$ by defining a removal sequennce for 
+each $LC(l)$ \cite{A6}. Each ladder, $l$, in 
+$F_{N,B}$ is a leaf node. By removing the second last bit of $LC(L)$ the result 
+is $P(LC(l))$ and the resulting substructure is some \emph{sub-ladder}, $P(l)$, which 
+is an incomplete ladder containing unmatched endpoints of bars and/or a missining line \cite{A6}. For example, 
+given $LC(l)=10100$, $P(LC(l))=1010$. Notice how the second last bit was removed. 
+By removing the second last bit from $P(LC(l))$ we get $P(P(LC(l)))$ and $P(P(L))$ respectively.
 The removal sequence is repeated until the sub-ladder consists of two lines with $0$ endpoints
-attached to line $2$ and $0$ to $R$ left endpoints are attached to line $1$. There are $R+1$
-terminating sub-ladders, i.e., roots of trees in $F_{N, R}$.The removal sequence is uniqe for each ladder in $F_{N,R}$ is unique.\par
+attached to line $2$ and $0$ to $r$ left endpoints are attached to line $1$. There are $r+1$
+terminating sub-ladders, i.e., roots of trees in $F_{N,B}$.The removal sequence is uniqe for each ladder in $F_{N,B}$ is unique.\par
 \begin{figure}[!htp]
     \begin{center}
     \begin{minipage}{.8\textwidth}
@@ -71,7 +71,7 @@ terminating sub-ladders, i.e., roots of trees in $F_{N, R}$.The removal sequence
             \draw(7, 0) to (7, 2);
             \draw(7.5, 0) to (7.5, 2);
                 \draw(7, 1.5) to (7.5, 1.5);
-                \draw(7, 1) to (7.5, 1);
+                \draw(7, 1) to (7.25, 1);
                 \node at (7, -0.5){0110\underline{0}0};
 
             \draw[line width=0.5mm](7.8, 1) to (8.3, 1);
@@ -196,7 +196,7 @@ terminating sub-ladders, i.e., roots of trees in $F_{N, R}$.The removal sequence
                 \draw[line width=0.5mm] (2.3, 1) to (2.8, 1);
                     \draw(3, 0) to (3, 2);
                        \draw(3, 1.5) to (3.5, 1.5);
-                       \draw(3, 1) to (3.25, 1);
+                       \draw(3, 1) to (3.5, 1);
                    \draw(3.5, 0) to (3.5, 2);
                     \node at (3.25, -0.5){$1100\underline{0}0$};
             
@@ -220,17 +220,17 @@ terminating sub-ladders, i.e., roots of trees in $F_{N, R}$.The removal sequence
 %%end enumeratiom section
 
 %%section for counting
-\subsubsection{Counting}
+\subsection{Counting}
 The authors provide a method and algorithm to count all ladders 
 with $N$ lines and $B$ bars. According to the authors, the enumeration algorithm is 
 much slower than the counting algorithm \cite{A6}. The counting algorithm 
 works by dividing ladders into four types of sub-ladders.
-For sub-ladder, $R$, its type is a tuple $t(n,h,p,q)$ where 
+For sub-ladder, $r$, its type is a tuple $t(n,h,p,q)$ where 
 $n$ is the number of lines, $h$ is the number of half bars, 
 $p$ is the number of unmatched end-points on line $n-1$ and 
 $q$ is the number of unmatched end-points on line $n$. From this 
-type there are four sub-divisions of sub-ladders.
-\paragraph{ $h < p+q$ or $n<2$}
+type there are four sub-divisions of sub-ladders.\cite{A6}
+\subsubsection{ $h < p+q$ or $n<2$}
 There are zero ladders because it is impossible for the 
 root sub-ladder to have less than two lines. It is also 
 impossible for the number of half bars, $h$, to 
@@ -239,68 +239,65 @@ on line $n-1$ plus the number of detached end points on
 line $n$.
 
 %%\subsubsubsection{Case 2: $n=2$ and $h=p$ and $q=0$}
-\paragraph{$n=2$ and $h=p$ and $q=0$}
+\subsubsection{$n=2$ and $h=p$ and $q=0$}
 There is only one ladder because the number of half bars 
-on the last/$2nd$ line is 0 since $q=0$. Therefore all half bars are on the 
-$n-1th$/$1st$ line of the sub-ladder. This is known because 
+on the last line is 0 since $q=0$. Therefore all half bars are on the 
+$n-1th$ line of the sub-ladder. This is known because 
 $h=p$ which means the number of half bars is the same as 
-the number of unmatched bars on line $n-1$/$1st$ Hence, the unmacthed 
-half bars on the $1st$ line must be connected to the $2nd$ 
+the number of unmatched bars on line $n-1$. Hence, the unmacthed 
+half bars on the $n-1th$ line must be connected to the $n$ 
 line. Once these are all matched the ladder will be complete. 
 Thus, there is only one ladder for this case.
 
 %%\subsubsubsection{Case 3: $(n \geq 3$ or $h>p)$ and $q=0$}
-\paragraph{$(n \geq 3$ or $h>p)$ and $q=0$}
+\subsubsection{$(n \geq 3$ or $h>p)$ and $q=0$}
 If this is the case, then there are no endpoints attached to 
 line $n$, but the number of half bars is greater than the 
 number of enpoints attached to line $n-1$, which means there is 
 some line(s) $n-t$, $t>2$ that have end points attached to them.
-Let $R$ be a sub-ladder of type $R=t(n,h,p,q)$
-with the the above values for $n,h,p,q$. Let $P(R)$ be 
-$R$ with the removal of $R's$ second last bit in $LC_{R}$; i.e. the parent of 
-$R$.  The $LC_{R}$ must have a $0$ for the second last bit. This $0$ designates either the 
+Let $r$ be a sub-ladder of type $r=t(n,h,p,q)$
+with the the above values for $n,h,p,q$. In order to count the number of ladders of type 
+$t(n\geq3, h>p, q=0)$ the authors demonstrate an injection $|t(n\geq3, h>p, q=0)|=|t(n-1,h,0,p)| + |t(n,h-1,p+1,q)|$.\cite{A6}
+Let $P(r)$ be $r$ with the removal of $r's$ second last bit in $LC(r)$; i.e. the parent of 
+$r$.  The $LC(R)$ must have a $0$ for the second last bit. This $0$ designates either the 
 end of line $n-1$ or a right endpoint of a bar attached to line $n-1$. 
-If the second last bit in $LC_{R}$ is the right end point of some 
-bar, then $P(R)=t(n,h-1,p+1,q)$. This is because the $n-1th$ bar 
+If the second last bit in $LC(r)$ is the right end point of some 
+bar, then $P(r)=t(n,h-1,p+1,q)$. This is because the $n-1th$ bar 
 has a right end point that must be connected to some left  
 endpoint at line $n-2$. Since the removal sequence of the second 
 last bit ensures that there cannot be a right end-point detached 
 from a left end-point. Only left end-points can be detached 
 from right end-points \cite{A6}. However, if the second last bit 
-of $LC_{R}$ designates the end of line $n-1$, then $P(R)=t(n-1,h,0,p)$. 
+of $LC(r)$ designates the end of line $n-1$, then $P(r)=t(n-1,h,0,p)$. 
 This is because the removal of the second last bit 
-is the removal of the end of line $n-1$ in $R$. Thus, 
-line $n$ must be empty in $R$ since the last bit in $LC_{R}$
+is the removal of the end of line $n-1$ in $r$. Thus, 
+line $n$ must be empty in $r$ since the last bit in $LC(r)$
 designated the end of line $n$. Thus, if line $n$ is empty 
-and the end point of line $n-1$ has been removed from $LC_{R}$, 
-resulting in $P(LC_{R})$, the last bit in $P(LC_{R})$ must be 
-the end of line $n-1$ in $R$ resulting in a pre-ladder with one 
-less line than $R$.\par  
-In order to count the number of ladders of type 
-$t(n\geq3, h>p, q=0)$ the authors demonstrate an injection 
-from $t(n\geq3, h>p, q=0)$ to $t(n-1,h,0,p) \cup t(n,h-1,p+1,q)$ \cite{A6}.
-They then demonstrate that the $|t(n\geq3, h>p, q=0)|=|t(n-1,h,0,p)| + |t(n,h-1,p+1,q)|$.
+and the end point of line $n-1$ has been removed from $LC(r)$, 
+resulting in $P(LC(r))$, the last bit in $P(LC(r))$ must be 
+the end of line $n-1$ in $r$ resulting in a pre-ladder with one 
+less line than $r$.\par  
 
-\paragraph{ $h\geq p+q$ and $q>0$}
+\subsubsection{ $h\geq p+q$ and $q>0$}
 %%\subsubsubsection{Case 4: $h\geq p+q$ and $q>0$}
-Let $R$ be a pre-ladder of type $t(n,h,p,q)$. Then 
-the second last bit of $LC_{R}$ is either a $0$ 
+Let $r$ be a pre-ladder of type $t(n,h,p,q)$. The authors 
+demonstrate $|t(n,h\geq p+q,q>0)|=|t(n,h-1,p+1,q)|+|t(n,h-1,p,q-1)|$.\cite{A6} 
+The second last bit of $LC(r)$ is either a $0$ 
 or a $1$. If it is a $0$ then it represents a 
 right end point attached to line $n$. Thus, 
-removing it to get $P(LC_{R})$ is in effect 
+removing it to get $P(LC(R))$ is in effect 
 detaching a right end point from some left end point 
 on line $n-1$. Therefore, the parent, $P(R)$ is 
 of type $t(n,h-1,p+1,q)$. Seeing as in the parent, 
 there is now a left end point detached from its right 
 end point in $R$. However, if the second last bit 
-of $LC_{R}$ is a $1$, then this indicates the left 
+of $LC(R)$ is a $1$, then this indicates the left 
 half of a bar on line $n$. But since there is no 
 bar $n+1$, this left end point must be detached. 
-Therefore, by removing this $1$ in $LC_{R}$ results 
+Therefore, by removing this $1$ in $LC(R)$ results 
 in a parent with one less detached end point on line $n$.
-Thus $P(R)$ is of type $t(n,h-1,p,q-1)$. This leads the 
-authors to conclude $|t(n,h\geq p+q,q>0)|=|t(n,h-1,p+1,q)|+|t(n,h-1,p,q-1)|$ \cite{A6}.
-\subsubsection{Random Genearation}
+Thus $P(R)$ is of type $t(n,h-1,p,q-1)$.
+\subsection{Random Genearation}
 The random generation of ladder lotteries with $N$ lines and
 $B$ bars is done by the recurrence relations in the counting 
 and enumerating sections. The goal is to produce 
@@ -308,7 +305,7 @@ some $L$ of type $t(n,2b,0,0)$ where the number of half
 bars equals the total $2(b)$ and there are no detached 
 end points on lines $n-1$ and $n$. This implies that there 
 are no detached endpoints on any line $n-t$ where $t\geq2$
-because the removal sequence from the $LC_{pre-ladder}$
+because the removal sequence from the $LC(pre-ladder)$
 ensures that any line before $n-1$ has no detached endpoints. Thus, 
 if $L$ is of type $t(n,2b,0,0)$ it is no longer a pre-ladder 
 but a complete ladder with $n$ lines and $b$ bars \cite{A6}.\par 

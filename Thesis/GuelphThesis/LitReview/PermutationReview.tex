@@ -1,9 +1,332 @@
-\subsection{Permutations}
-Ladder-lotteries and permutations are intricately related to each other. In one of the main problems addressed in this thesis, The Listing Problem, 
-the research for this problem primarily came from researching listing algorithms for permutations. Four of these 
-permutation listing algorithms will be presented along with their influence on the listing algorithms for The Listing Problem 
-pertaining to ladder-lotteries. These four permutation listing algorithms are Heap's algorithm, Zak's algorithm, Lexicographic algorithm 
-and the Steinhaus-Johnson-Trotter algorithm. 
+\section{Permutations}
+\subsection{Introduction}
+Ladder lotteries and permutations are intricately related to each other. Each $\pi$ has an $OptL\{\pi\}$ such that 
+each ladder form $OptL\{\pi\}$ sorts $\pi$. The so called Listing Problem is one of the problems addressed in this thesis.
+In brief, this problem is about how to list all $N!$ ladders efficiently. The research for this problem is highly influenced 
+by permutation enumeration research. Knuth describes a number of 
+permutation enumeration algorithms in \textbf{The Art of Computer Programming} \cite{A18}. Since this book, many algorithms for 
+enumerating $N!$ permutations have been created. During my research for the Listing Problem, I investigated five of these 
+enumeration algorithms. They are the lexicographic algorithm, Heap's algorithm, Zak's algorithm, Steinhaus-Johnston Trotter's algorithm 
+and Effler Rusky's algorithm. Each of these algorithms will be examined in detail.
 
-\subsubsection{Heap's Algorithm}
-Heap's algorithm was developed by B.R. Heap in 1963. The algorithm is based on rotating elements in an array such that the 
+\subsection{Lexicographic Algoritms}
+
+%%
+\subsubsection{Basic Lexicographic Algorithm}
+The lexicographic algorithm enumerates permutations in order from smallest to 
+largest. The lexicographic order for $S_{3}$ is $(1,2,3),(1,3,2),(2,1,3),(2,3,1),(3,1,2),(3,2,1)$.
+This is the same way the words in a dictionary are ordered in the sense that $a < b < c \dots y < z$.
+There are many algorithms for enumerating permutations lexiographically \cite{A19, A20, A21, A22, A23}. 
+Several will be discussed in this thesis. The first of which is the basic lexicographic ordering algorithm.
+Please refer to Alg.\ref{Alg:BasicLex} to see the basic lexicographic listing algorithm.\pagebreak
+\begin{algorithm}
+    \begin{algorithmic}[1]
+        \Function{Basic Lex}{$\pi$, $N$}
+            \For{$i \gets N, i >= 1, I \gets i-1$}
+                \If{$\pi_{i} > \pi_{i-1}$}
+                    \State $v \gets Min(\pi$ \textbackslash $(\pi_{0},\pi_{1}, \dots \pi_{i-1})) | v > \pi_{i-1}$.
+                    \State $Swap(\pi_{i-1}, v)$ in $\pi$.
+                    \State $Sort(\pi_{i},\pi_{i+1} \dots \pi_{N})$
+                    \State break
+                   
+                \EndIf
+            \EndFor
+            \State $BaiscLex(\pi, N)$
+
+        \EndFunction
+        
+    \end{algorithmic}
+    \caption{The Basic Lexicographic Algorithm}
+    \label{Alg:BasicLex}
+\end{algorithm}
+This algorithm works by beginning with the identity permutation of order $N$. Then going right to left, 
+it finds an increasing substring of size two. Once found, the algorithm finds the smallest value greater than the 
+value at index $i-1$ in $\pi$ to the right of index $i-1$; let this value be known as $V$. 
+Then the algorithm swaps $V$ $\pi_{i-1}$ in $\pi$. The algorithm sorts $\pi$ from index $i$ to index $N$ and a recursive call is made.
+The algorithm terminates when $\pi$ is in decending order.\par
+\begin{lemma}
+    The time complexity for the basic lexicographic algorithm is $O(N!)*N^{2}log(N)$.
+\end{lemma}
+\begin{proof}
+    The algorithm generates all $N!$ permutations which accounts for the $N!$ factor. The for loop runs between 
+    $0$ to $N$ times per function call which accounts for the $N$ factors. Lastly, the right portion of the permutation 
+    needs to be sorted on every function call. Sorting is done in $Nlog_{N}$ time. Thus, $N*Nlog_{N}$ is simplified to 
+    $N^{2}log_{N}$. Thus, we get $O(N!*N^{2}log_{N})$. End of proof.
+\end{proof}
+
+
+%%p2
+\subsubsection{Alternating Lexicographic Algorithm}
+In their paper, \emph{Generating Alternating Permutations Lexicographically}, the authors provide an algorithm 
+for generating permutations in lexicographic ordering such that the permutations form a zig-zag pattern. 
+The zig-zag pattern is formally deifned as follows, given $\pi$ of order $N$:  If $N = 2K$ then 
+zig-zag = $\pi_{1} < \pi_{2} > \pi_{3} < \pi_{4} \dots \pi_{N-1} < \pi_{N}$. 
+If $N= 2K+1$ then zig-zag = $\pi_{1} < \pi_{2} > \pi_{3} < \pi_{4} \dots \pi_{N-1} > \pi_{N}$ \cite{A19}.
+Please refer to Alg.\ref{Alg:AltLex} to see the Alternating Lexicographic Algorithm.
+
+
+\begin{algorithm}
+    \begin{algorithmic}[1]
+        \Function{AlternatingLex}{$m,val,level: int$, $s=\{1 \dots N\}$, $\pi$}
+            \State $\pi_{level} \gets val$
+            \State $s \gets s-\{val\}$
+            \If{$m = 1$}
+                \State $print(\pi)$
+                \State return
+            \EndIf
+            \State $t \gets \{\}$
+            \If{$level=2k+1$}
+                \State $t \gets \{x \in s | x < s_{max}$ and $x < val\}$
+            \Else 
+                \State $t \gets \{x \in s | x > s_{min}$ and $x > val\}$
+            \EndIf
+            \For{$x \in t$}
+                \State $AlternatingLex(m-1, x, level+1, s - \{x\}, \pi)$
+            \EndFor
+        \EndFunction
+        
+    \end{algorithmic}
+    \caption{Alternating Lexicographic Enumeration Algorithm}
+    \label{Alg:AltLex}
+\end{algorithm}
+
+The initial values for the funtion are $m=N$, $val=1$, $level=0$ and $s = \{1 \dots N\}$ and $\pi=()$.
+On each function call $val$ is inserted into $\pi$ at $level$. Then $val$ is removed from $s$.
+If $level$ is odd then the set $t$ gets every value from $s$ less than the max value in $s$ and 
+less than $val$. If  $level$ is even then $t$ gets every value from $s$ greater than  the min value 
+in $S$ and greater than $Val$. Then, for each $x$ in $T$, the function makes a recursive call 
+with $m$ equal to $m-1$, $k$ equal to $x$, $level$ equal to $level+1$ and $s$ equal to $s$ without 
+element $x$. To see the permutations of order $5$ generated by the alternating lexicographic algorithm, 
+please refer to Table \ref{Table:AltPerms}.
+
+\begin{center}
+\begin{table}
+\begin{tabular}{ |p{3cm}||p{3cm}|p{3cm}|p{3cm}|  }
+ \hline
+ \multicolumn{4}{|c|}{Alternating Permutations of order $5$} \\
+ \hline
+ \hline
+ 13254   & 14253    &14352&  15243\\\hline
+ 15342&  23154  & 24153   &24351\\\hline
+ 25143 &25341 & 34152&  34251\\\hline
+ 35142    &35241 & 45132&  45231\\
+ \hline
+\end{tabular}
+\label{Table:AltPerms}
+\end{table}
+\end{center}
+
+The authors state that the algorithm is \emph{constant average time} which means the total amount of
+computation done in generating all the objects, divided by the number of objects, is
+bounded by a constant. On the average and up to a constant factor no algorithm can
+run faster \cite{A19}. The constant refers to the number of function calls before the algorithm terminates. It is defined as follows. 
+Let $AL$ denote the recurrence relation for the Alternating Lexicographic algorithm, let $k$ denote the 
+first element in $\pi$ and let $N$ denote the number of elements in the set. 
+If $N=1$ and $K=1$ then $AL(N, K)=0$. If $N=N$ and $K=N-1$ then $AL(N,K)= 1 + AL(N-1,1)$ For all other cases, 
+then $AL(N, K) = AL(N, K+1) + A(N-1, N-K)$ \cite{A19}.
+
+% \subsubsection{Parallelized Lexicographic Algorithms}
+% The lexicographic listing algorithm can be improved by parallelizing the process. There are a number of algorithms for 
+% parallelizing the lexicographic listing problem. These algorithms are found in the following papers \cite{A21, A22, A23, A24}.
+% Rather than go through these papers one by one, a more general approach to parallelized solutions of the 
+% lexicographic listing problem will be provided.\par 
+% The general solution to the problem is to partition the $N$ elements into $M$ procecssors, then have each processor 
+% list $(N/M)!$ subsets of elements. Though these algorithms are interesting, the analysis of these algorithms was not 
+% pertinent to the research in this thesis, seeing as the Listing Problem runs on a single processor.
+
+\subsection{Heap's Algorithm}
+Heap's algorithm was developed by B.R. Heap in 1963 \cite{A24}. 
+The algorithm is based on rotating elements in an array such that the $Nth$ position 
+is occupued by the $Nth$ element for all permutations of the $(N-1)$ objects. 
+Then the $Nth$ element is swapped with one of the elements of in the first $(N-1)$ positions.
+The process repeats itself until all of the $N$ elements have occupied the $Nth$ positions. 
+To see Heap's algorithm please refer to Alg.\ref{Alg:Heaps}.
+
+\begin{algorithm}
+    \begin{algorithmic}[1]
+        \Function{Heaps}{$\pi$, $N$}
+            \If{$N=1$}
+                \State $Print(\pi)$
+            \Else 
+                \For{$i \gets 1, i \leq N, i \gets i+1$}
+                    \State $Heaps(\pi, N-1)$
+                    \If{$N = 2k+1$}
+                        \State $Swap(\pi_{1}, \pi_{N})$
+                    \Else 
+                        \State $Swap(\pi_{i}, \pi_{N})$
+                    \EndIf
+                \EndFor
+            \EndIf
+        \EndFunction
+        
+    \end{algorithmic}
+    \caption{Heaps Algorithm for Generating all $N!$ Permutations}
+    \label{Alg:Heaps}
+\end{algorithm}
+
+\begin{lemma}
+    The time complexity of Heap's algorithm is $O(N!)$
+\end{lemma}
+\begin{proof}
+    For each value of $N=[1 \dots N]$, the algorithm makes $N$ recursive calls, each of which produces all $(N-1)!$ permutations of 
+    order $(N-1)$. Thus, you get $N(N-1)!=N!$ which is $O(N!)$. End of proof.
+\end{proof}
+
+\subsection{Zak's Algorithm}
+Zak's Algorithm was first written about by Shmuel Zak's in the paper \textbf{A New Algorithm For
+Generation Of Permutations} \cite{A31}.The algorithm is based on reversing suffixes in a permutation 
+of different sizes until all $N!$ permutations have been listed. The algorithm makes 
+use of a \emph{suffix vector} which is a vector for holding all the suffix sizes to be reversed. 
+Since there are $N!$ permutations, there are $N!$ non-unique suffix sizes held in the suffix vector.
+The recurrence relation for the suffix sizes is as follows. Let $S(N)$ denote the suffix  of size $N$. 
+Then we get the following recurrence relation for $S(N)$. If $N=2$ then $S(N)=2$, else 
+$S(N)=(S(N-1)N)^{N-1}S(N-1)$. Let $V(N)$ denote the suffix vector of size $N$. Then if $N$ equals 
+two, append $2$ to $V(N)$, else append $V(N-1)$ followed by $N$ $N-1$ times to $V(N)$ \cite{A31}. On the $Nth$ time 
+append $V(N-1)$. Once the suffix vector has been crated, then for each suffix size in the suffix vector, reverse 
+the suffix of that size in $\pi$. To see Zak's Algorithm for creating the suffix vector please refer to 
+Alg.\ref{Alg:Zak's}
+
+\begin{algorithm}
+    
+    \begin{algorithmic}[1]
+        \Function{$Suffix Vector$}{$vector$, $N$}
+        \If{$N=2$}
+           \State append $2$ to $vector$
+        
+        \Else 
+            \For{$i \gets 1, i < N, i \gets i+1$}
+                \State append $SuffixVector(vector, N-1)$ to $vector$
+                \State append $N$ to $vector$
+            \EndFor
+            \State append $SuffixVector(vector, N-1)$ to $vector$
+        \EndIf
+        \EndFunction
+\end{algorithmic}
+    \caption{Creating the suffix vector}
+    \label{Alg:Zaks}
+\end{algorithm}
+
+
+\begin{lemma}
+    The time complexity of Suffix Vector is $O(N!)$
+\end{lemma}
+\begin{proof}
+    For each value of $N=[1 \dots N]$, the algorithm makes $N$ recursive calls, each of which produces all $(N-1)!$ permutations of 
+    order $(N-1)$. Thus, you get $N(N-1)!=N!$ which is $O(N!)$. End of proof.
+\end{proof}
+
+
+\begin{lemma}
+    The time complexity to create all $N!$ is $O(N!(N))$
+\end{lemma}
+\begin{proof}
+    Reversing a suffix is done in $O(N)$ time. The reversal happens $N!$ times. Therefore $O(N(N!))$. End of proof.  
+\end{proof}
+
+
+
+%Paragraph SJT
+\subsection{Steinhaus-Johnston Trotter Algorithm}
+The Steinhaus-Johnston Trotter algorithm generates $S_{N}$ by performing adjacent swap operations 
+on the permutation resulting in the next permutation. Thus, each permutation in $S_{N}$ differs 
+from it predecessor by a single swap operation \cite{A25}. This makes the SJT algorithm a very efficient 
+algorithm for listing $S_{N}$. Let an \emph{even permutation} be defined as a permutation 
+with an even number of inversion. Let an \emph{odd permutation} be defined as a 
+permutation with an odd number of inversions. The $Nth$ element is inserted into all 
+positions of $\pi$ of order $N-1$ in decending order if $\pi$ of order $N-1$ is an even permutation.
+The $Nth$ element is inserted into all positions of $\pi$ of order $N-1$ in ascending order if 
+$\pi$ of order $N-1$ is an odd permutation \cite{A25}. For $\pi$ of order $1$ we have $\pi=(1)$. Since 
+there are no inversions in $\pi=(1)$ it is even. Now insert $2$ in all positions in $\pi=(1)$
+in decending order. Thus we get $(1,2)$ followed by $(2,1)$. Since $(1,2)$ is 
+an even permutation, insert $3$ into all positions in decending order resulting in $(1,2,3)$,
+$(1,3,2)$ and $(3,1,2)$. Since $(2,1)$ is an odd permutation, insert $3$ 
+into all permutations in ascending order resulting in $(3,2,1)$, $(2,3,1)$ and $(2,1,3)$. 
+To see the Steinhaus-Johnston Trotter Algorithm please refer to Alg.\ref{Alg:SJT}
+
+\begin{algorithm}
+    \begin{algorithmic}[1]
+        \Function{SJT}{$\pi$, $currentElement$, $N$, $direction=[]$}
+            \If{$currentElement > N$}
+                \State $print(\pi)$
+                \State return
+            \EndIf
+            \For{$i \gets 1, i < currentElement, i \gets i+1$}
+                \State $SJT(\pi, currentElement+1, N)$
+                \State $index \gets $ index of $currentElement$ in $\pi$
+                \If{$direction[currentElement]=true$}
+                    \State $Swap(\pi_{index}, \pi_{index-1})$
+                \Else 
+                    \State $Swap(\pi_{index}, \pi_{index+1})$
+                \EndIf
+            \EndFor
+            \State $SJT(\pi, currentElement+1, N, direction)$
+            \State $direction[currentElement] \gets !(direction[currentElement])$
+        \EndFunction
+        
+    \end{algorithmic}
+    \caption{SJT Algorithm for listing $S_{N}$}
+    \label{Alg:SJT}
+\end{algorithm}
+
+
+Initialize $\pi$ to the identity permutation, initialize $currentElement$ to $2$, initialize 
+$N$ to $\pi_{max}$ and initialize all indecies of $direction$ to true. If $currentElement$ is greated than $N$, print $\pi$ 
+and return. Otherwise, begin a for loop that runs $i=[1 \dots N-1]$ times. 
+In the for loop, first make a recursive call with $currentElement$ increasing by one. 
+If $direction[currentElement]$ is true, then swap $currentElement$ in $\pi$ with its left neighbor. Else 
+$direction[currentElement]$ is false then swap the $currentElement$ in $\pi$ with its right neighbor.
+Once the for loop has exited, make one more recursive call with $currentElement+1$ outside the for loop; 
+this avoids an extra swap operation from occurring while still maintaining the correct number of recursive 
+calls. Lastly, negate $direction[currentElement]$, which effectively changes the direction of the $currentElement$ 
+for the next time it is to be swapped.
+
+\begin{lemma}
+    The time complexity of $SJT$ is $O(N!)$.
+\end{lemma}
+\begin{proof}
+    The algorithm lists all $N!$ permutations. Given a permutation of order $N-1$,
+    $N$ permutations of order $N$ are derived from this given permutation. Thus, the recurrence relation for $SJT(N)=N(SJT(N-1))$ with $SJT(1)=1$. 
+    If $currentElement = N$ then each recursive call outputs a new permutation. If $currentElement < N$ then the number of 
+    recusive calls that need to be made before a permutation is ouput is $N-currentElement+1$.
+\end{proof}
+
+
+
+%%Paragraph 
+\subsection{Effler Rusky Algorithm}
+
+In their paper, \textbf{A CAT Algorithm for Generating Permutations with a Fixed Number of Inversions}, the authors provide a 
+\emph{constant amortized time} algorithm for generating all permutations of order $N$ witk $k$ inversions \cite{A26}. \emph{Constant amortized time}
+refers to the average time taken per operation over many operations, given that worst case scenarios are rare. 
+The algorithm is also a \emph{BEST} algorithm (backtracking esnures success at terminals), meaning that when the algorithm backtracks, 
+the back-tracking leads to a successful result \cite{A26}. The algorithm moves from right to left and 
+is based off of placing  an element $x \in [1 \dots N]$ at the next index in $\pi$ from right to left. The placement of $x$ in $\pi$ 
+reduces $k$. Let $Pos(x)$ be the position of element $x$ in an ordered list of remaining elements of $[N]$. The remaining elements 
+are defined as the elements of $[N]$ that have yet to be added to $\pi$.
+For example,  let $N=4$. Let the current state of $\pi=(\underline{},\underline{},\underline{},2)$. Let the remaining elements be ascending in $L=[1 \dots 4] - \{2\}$. 
+Assume element $x=3$ is to be placed at position $N'=3$ in $\pi$. Assume the current value of $K=2$. 
+$Pos(3)$ in $L$ is two. Thus, $k$ is reduced by $N'-Pos(x)=3-2=1$; $K = K -1=1$. 
+Meaning that by placing element $3$ in position three in $\pi$, the remaining number of inversions to be created in $\pi$ is $K=1$.
+To see the algorithm please refer to Alg.\ref{Alg:KInv}. 
+\begin{algorithm}
+    \begin{algorithmic}[1]
+        \Function{KInversions}{$\pi$, $N$, $k$, $list$}
+            \If{$N = 0$ and $k = 0$}
+                \State $Print(\pi)$
+            \Else
+                \For{$x \in list$}
+                    \If{$N - pos(x) \leq k \leq {N-1\choose k} + n - pos(x)$}
+                        $\pi_{N} \gets x$
+                        \State remove $x$ from $list$ 
+                        \State $KInversions(\pi, N-1, k \gets k - (N - Pos(x)), list)$
+                        \State insert $x$ in $list$ at correct position.
+                    \EndIf
+                \EndFor
+            \EndIf
+        \EndFunction
+        
+    \end{algorithmic}
+    \caption{Generate all permutations with $k$ inversions}
+    \label{Alg:KInv}
+\end{algorithm}
+
