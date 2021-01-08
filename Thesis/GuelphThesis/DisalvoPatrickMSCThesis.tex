@@ -29,12 +29,13 @@
 \usepackage{subcaption}
 \usepackage{titlesec}
 \usepackage[font=small,labelfont=bf]{caption}
+\usepackage{longtable}
+
 %\usepackage{algorithm2e}
 %\SetAlFnt{\small}
 %%\SetAlCapFnt{\large}
 %\SetAlCapNameFnt{\large}
 %%\usepackage{algorithmic}
-
 
 %%\usepackage[dvipsnames]{xcolor}
 
@@ -42,18 +43,18 @@
 \newcounter{appendixNum}
 % redefine \VerbatimInput
 \RecustomVerbatimCommand{\VerbatimInput}{VerbatimInput}%
-{\fontsize=\footnotesize,
+{fontsize=\footnotesize,
  %
  frame=lines,  % top and bottom rule only
- framed=2em, % separation between frame and text
+ framesep=2em, % separation between frame and text
 %% rulecolor=\color{Gray},
  %
  label=\fbox{MinLadders.txt},
  labelposition=topline,
  %
- commands=\|\(\), % escape character and argument delimiters for
+ commandchars=\|\(\), % escape character and argument delimiters for
                       % commands within the verbatimX
- commend=*        % comment character
+ commentchar=*        % comment character
 }
 
 % \RecustomVerbatimCommand{\VerbatimInputTwo}{VerbatimInput}
@@ -71,7 +72,7 @@
 %  commentchar=*        % comment character
 % }
 
-\usetikzlibrary{calf,trees,positioning,arrows,fit,shapes,call}
+\usetikzlibrary{calc,trees,positioning,arrows,fit,shapes,calc}
 
 
 %Set the depth level to 4
@@ -111,11 +112,11 @@
 
 %%tree 
 \tikzset{
-  trended/.style = {shape=rectangle, rounded corners,
+  treenode/.style = {shape=rectangle, rounded corners,
                      draw, align=center,
                      top color=white, bottom color=blue!20},
-  root/.style     = {trendier, font=\small, bottom color=red!30},
-  ENE/.style      = {trendy, font=\ttfamily\small},
+  root/.style     = {treenode, font=\small, bottom color=red!30},
+  env/.style      = {treenode, font=\ttfamily\small},
   dummy/.style    = {circle,draw}
 }
 
@@ -136,7 +137,7 @@
 
 \type{Thesis}   
 
-\degree{Masc}     % Change degree/field to PHD if appropriate
+\degree{MSc}     % Change degree/field to PHD if appropriate
 \field{Computer Science}  	
 
 %\degree{Doctor of Philosophy} 	
@@ -144,8 +145,7 @@
 
 
 \advisorLabel{Advisor}		% set to Advisors if multiple
-\advisor{Dr. Joe Sawada}
-\advisorS{Dr. Charlie Obimbo}	        		% if there is a co-advisor, add here
+\advisor{Dr. Joseph Sawada}
 
 \degreemonth{December}
 \degreeyear{2020}
@@ -158,14 +158,14 @@
 
 \begin{abstract}
 
-Amtrak, or ladder-lotteries in English, are an abstract mathematical object which correspond to permutations. First written about in 2010, ladder-lotteries 
-are a relatively new mathematical object. They are of interest to the field of theoretical computer science because of their similarities to other 
+Amidakuji, or ladder lotteries in English, are an abstract mathematical object which correspond to permutations. 
+They are of interest to the field of theoretical computer science because of their similarities to other 
 mathematical objects such as primitive sorting networks.
-This thesis provides an overview of ladder-lotteries along with solutions to three problems pertaining to ladder-lotteries;
-these problems are known as the counting problem, the listing problem and the minimal height problem. The solutions to these problems come in the form 
-of novel algorithms, recurrence relations and formulas. The study of ladder-lotteries 
-falls under the sub-discipline of theoretical computer science. The potential applications for ladder-lotteries is also discussed in this thesis, 
-along with the similarities between ladder-lotteries and other mathematical objects.
+This thesis provides an overview of ladder lotteries along with solutions to two problems pertaining to ladder lotteries;
+these problems are known as the listing problem and the minimal height problem respectively. 
+The solutions to these problems come in the form of novel algorithms, recurrence relations and formulas. 
+The potential applications for ladder lotteries is also discussed in this thesis, 
+along with a discussion of open problems related to ladder lotteries.
 
 \medskip
 
@@ -199,8 +199,8 @@ along with the similarities between ladder-lotteries and other mathematical obje
 
 %--- BIBLIOGRAPHY  ------
 \ssp
-  \bibliographystyle{abbrev}
-  \bibliography{my bib}
+  \bibliographystyle{abbrv}
+  \bibliography{mybib}
 \dsp
 
 %--- APPENDIX  ------

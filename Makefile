@@ -42,7 +42,7 @@ makemin: BIN INCLUDE SRC OBJ LIB
 	$(CC) $(CFLAGS) -Iinclude src/*.c test/MinLadder.c -lm -o bin/min
 
 runmin: makemin
-	cd bin; ./min
+	cd bin; ./min > ../assets/MinLaddersPrint.txt
 
 min: runmin
 

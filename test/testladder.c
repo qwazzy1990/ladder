@@ -18,7 +18,7 @@
 #include "GrayCode.h"
 #include "HashMap.h"
 //for the mid ladder problem
-bool DEBUG0 = true;
+bool DEBUG0 = false;
 bool DEBUG1 = false;
 //for the enumeration problem
 bool DEBUG7 = false;
@@ -30,6 +30,7 @@ bool DEBUG9 = false;
 bool DEBUG10 = false;
 //for the gray code problem using all 4 algorithms
 bool DEBUG11 = false;
+bool DEBUG12 = true;
 int memSize = 1;
 int numDig = 0;
 
@@ -38,10 +39,67 @@ void getInput(int **perm, char *s);
 void testDriverSJT(int n);
 
 void runMinLadderExperiment(int start, int end, int numRuns, int mapSize);
+char **readFile(FILE *fp);
 
+void writeTexTable(char **s);
 
+int kInversions(int *perm, int numDig);
+int kInversions(int *perm, int numDig)
+{
+    int count = 0;
+    for (int i = 0; i < numDig - 1; i++)
+    {
+        for (int j = i + 1; j < numDig; j++)
+        {
+            if (perm[i] > perm[j])
+            {
+                count++;
+            }
+        }
+    }
+    return count;
+}
 
+char *permToString(int *perm, int numDig)
+{
+    char *s = calloc(20, sizeof(char));
+    forall(numDig)
+    {
+        char temp[10] = "";
+        sprintf(temp, "%d ", perm[x]);
+        strcat(s, temp);
+    }
+    return s;
+}
 
+void writeTexTable(char **s)
+{
+
+    FILE *fp = fopen("textTable.txt", "w");
+    fprintf(fp, "\\begin{table} ");
+    fprintf(fp, "\\begin{tabular}{ |p{5cm}||p{2cm}|p{2cm}|p{3cm}| }\\hline \\multicolumn{4}{|c|}{All OptL{$\\pi_{5}$} ordered by k inversions}\\\\ \\hline ");
+    fprintf(fp, "Permutation & number & k & $|OptL{\\pi}|$\\\\ \\hline ");
+    forall(120)
+    {
+        //get the
+        int *perm = NULL;
+        getInput(&perm, s[x]);
+        int k = kInversions(perm, 5);
+        char *s = permToString(perm, 5);
+        saveAllLadders(perm, 5);
+        fprintf(fp, "%s & ", s);
+        fprintf(fp, "%d & ", x + 1);
+        fprintf(fp, "%d & ", k);
+        fprintf(fp, "%d\\\\ ", allLadders->length);
+        numDig = 0;
+        freeList(allLadders);
+    }
+    fprintf(fp, "\\hline ");
+    fprintf(fp, "\\end{tabular} ");
+    fprintf(fp, "\\label{table:KInvOptL} ");
+    fprintf(fp, "\\end{table}");
+    fclose(fp);
+}
 
 int main(int argc, char *argv[])
 {
@@ -136,6 +194,17 @@ int main(int argc, char *argv[])
 
         grayCodeDriver(n);
     }
+    /**
+     * For creating a LaTex table with the size of OptL{pi} for each 
+     * pi of order 5. The permutations are ordered by the number of inversions from 0 to choose(5, 2)
+     * */
+    if (DEBUG12)
+    {
+        FILE *fp = fopen("KInversions.txt", "r");
+        char **s = readFile(fp);
+        fclose(fp);
+        writeTexTable(s);
+    }
 }
 
 void getInput(int **perm, char *s)
@@ -176,4 +245,30 @@ void getInput(int **perm, char *s)
     //         *perm = (int *)realloc(*perm, memSize * sizeof(int));
     //     }
     // }
+}
+
+char **readFile(FILE *fp)
+{
+    char **s = calloc(200, sizeof(char *));
+    forall(200)
+    {
+        s[x] = calloc(20, 1);
+    }
+    int row = 0;
+    int col = 0;
+    while (!feof(fp))
+    {
+        char c = fgetc(fp);
+        if (c == '\n')
+        {
+            row++;
+            col = 0;
+        }
+        else
+        {
+            s[row][col] = c;
+            col++;
+        }
+    }
+    return s;
 }

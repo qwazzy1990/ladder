@@ -1,80 +1,80 @@
-\section{Introduction To The Problem}
-Let the \emph{height} of a ladder be the number of rows that a ladder has. 
-Let $MinL\{\pi\} \subseteq OptL\{\pi\}$ such that the ladders in $MinL\{\pi\}$ are the shortest ladders from 
-$OptL\{\pi\}$. Therefore  $MinL\{\pi\}\subset OptL\{\pi\}$.  Let \emph{a minimal ladder} be a ladder from $MinL\{\pi\}$. The \emph{Minimum Height Problem} asks, 
-given a permutation $\pi$, is there an algorithm for generating a minimal ladder
+\section{Introduction to the Problem}
+Let the \emph{height} of a ladder be the number of rows that a ladder has with at least one bar. 
+Let $MinL\{\pi\} \subseteq OptL\{\pi\}$ such that the ladders in $MinL\{\pi\}$ are the ladders of shortest height from 
+$OptL\{\pi\}$.  Let \emph{a minimal ladder} be a ladder from $MinL\{\pi\}$. The \emph{Minimum Height Problem} asks, 
+given a permutation $\pi$, is there an algorithm for creating a minimal ladder
 from $MinL\{\pi\}$?\par  
-Two tangential questions that result from this problem are the following. Let $MinL\{\pi_{N}\}$ 
-be the set of all $MinL\{\pi\}$ for each permutation of order $N$. Recall that $OptL\{\pi_{N}\}$ is the set of all 
-$OptL\{\pi\}$ of order $N$. Thus, $MinL\{\pi_{N}\} \subseteq OptL\{\pi_{N}\}$.  The first tangential question is, 
-what are the upper and lower bounds for the heights of ladders in $MinL\{\pi_{N}\}$? 
-Let \emph{ladders of order N} pertain to ladders derived from some $\pi$ with $N$ elements.
-The second tangential question is what ladders of order $N$ have a height of zero or one? \par 
+Two tangential questions that result from this problem are the following. Let $MinL\{\pi_{n}\}$ 
+be the set of all $MinL\{\pi\}$ for each permutation of order $n$. Recall that $OptL\{\pi_{n}\}$ is the set of all 
+$OptL\{\pi\}$ of order $n$. Thus, $MinL\{\pi_{n}\} \subseteq OptL\{\pi_{n}\}$.  The first tangential question is, 
+what are the upper and lower bounds for the heights of ladders in $MinL\{\pi_{n}\}$? 
+Let \emph{ladders of order n} pertain to ladders derived from some $\pi$ with $n$ elements.
+The second tangential question is what ladders of order $n$ have a height of zero or one? \par 
 
 
-
-Firstly I will address the tangential questions in the introduction. Following the tangential questions, 
-I will provide a heuristic algorithm for generating one ladder from $MinL\{\pi\}$ in the procedures section. 
-In the results section I will provide a table with the heights of the ladder from the heuristic algorithm in comparison to the heights of the ladders
+I will address the tangential questions in the introduction. Following the tangential questions, 
+I will provide a number of algorithms for generating one ladder from $MinL\{\pi\}$ in the procedures section; one 
+of which is a heuristic algorithm. 
+In the results section I will provide a table with the heights of the ladder from the heuristic 
+algorithm in comparison to the heights of the ladders
 in $MinL\{\pi\}$. Finally, in the analysis section there will be a discussion 
 about the efficacy of the heuristic algorithm along with some applications of the algorithm.\par 
 
 
 %%Upper and lower bounds question
-\subsection{Upper and Lower Bounds of the heights of the Ladders in each $MinL\{\pi_{N}\}$}
-In this section the upper and lower bounds for the heights of the ladders in $MinL\{\pi_{N}\}$ will be determined;
-not the upper and lower bounds for the heights of the ladders in $OptL\{\pi_{N}\}$. Seeing as $MinL\{\pi_{N}\}\subseteq OptL\{\pi_{N}\}$, 
-by determining the lower bound for the height of $MinL\{\pi_{N}\}$, the lower bound for the height of $OptL\{\pi_{N}\}$ will also be determined. 
+\subsection{Upper and Lower Bounds of the heights of the Ladders in each $MinL\{\pi_{n}\}$}
+In this section the upper and lower bounds for the heights of the ladders in $MinL\{\pi_{n}\}$ will be determined;
+not the upper and lower bounds for the heights of the ladders in $OptL\{\pi_{n}\}$. Seeing as $MinL\{\pi_{n}\}\subseteq OptL\{\pi_{n}\}$, 
+by determining the lower bound for the height of $MinL\{\pi_{n}\}$, the lower bound for the height of $OptL\{\pi_{n}\}$ will also be determined. 
 \begin{lemma}
-    The lower bound for the height of a ladder $MinL\{\pi_{N}\}$ is zero
+    The lower bound for the height of a ladder $MinL\{\pi_{n}\}$ is zero
 \end{lemma} 
 \begin{proof}
-    If $\pi_{N}$ is the sorted permutation of order $N$ then there are no 
+    If $\pi_{n}$ is the sorted permutation of order $n$ then there are no 
     bars in its ladder. Recall that a bar swaps an adjacent inversion in $\pi$.
     Seeing as there are no adjacent inversions in the sorted permutation of 
-    order $N$, then there are no bars that need to be added to its corresponding 
+    order $n$, then there are no bars that need to be added to its corresponding 
     ladder. Since a ladder with no bars requires no rows, then the lower 
-    bound for the height of a ladder from $MinL{\pi_{N}}$ is zero. This is 
-    the ladder belonging to $OptL\{\pi_{ID_{N}}\}$.End of Proof.
+    bound for the height of a ladder from $MinL{\pi_{n}}$ is zero. 
 \end{proof}\par 
-The upper bound for the heights of the ladders in $MinL\{\pi_{N}\}$ is more difficult to prove than the lower bound. 
-The lower bound is unique seeing as there is only one ladder of order $N$ with zero bars. 
+The upper bound for the heights of the ladders in $MinL\{\pi_{n}\}$ is more difficult to prove than the lower bound. 
+The lower bound is unique seeing as there is only one ladder of order $n$ with zero bars. 
 With the upper bound however, it has yet to be shown if there is an upper bound for 
-$MinL\{\pi_{N}\}$. Before proving the upper bound for $MinL\{\pi_{N}\}$ it must be shown how to 
-derive the ladder with minimal height from the root ladder of the reverse permutation of order $N$.
-Refer to this ladder as $MinL(Rev(\pi_{N}))$.
-Once we have established how to derive $MinL(Rev(\pi_{N}))$ from the root ladder 
-of the reverse permutation of order $N$, it will be relatively easy to prove the upper bound 
-for $MinL\{\pi_{N}\}$.\par 
- Let $Rev(\pi_{N})$ be the reverse permutation of order 
- $N$.
- Let $RootL(Rev(\pi_{N}))$ be the root ladder for $Rev(\pi_{N})$. Recall that the root ladder is the ladder such 
-    that no bar of a lesser element has crossed the route of a greater element. $RootL(Rev(\pi_{N}))$ requires 
-    $2(N-1)-1$ rows. See proof --Insert reference\par 
+$MinL\{\pi_{n}\}$. Before proving the upper bound for $MinL\{\pi_{n}\}$ it must be shown how to 
+derive the ladder with minimal height from the root ladder of the reverse permutation of order $n$.
+Refer to this ladder as $MinL(Rev(\pi_{n}))$.
+Once we have established how to derive $MinL(Rev(\pi_{n}))$ from the root ladder 
+of the reverse permutation of order $n$, it will be relatively easy to prove the upper bound 
+for $MinL\{\pi_{n}\}$.\par 
+ Let $Rev(\pi_{n})$ be the reverse permutation of order 
+ $n$.
+ Let $RootL(Rev(\pi_{n}))$ be the root ladder for $Rev(\pi_{n})$. Recall that the root ladder is the ladder such 
+    that no bar of a lesser element has crossed the route of a greater element. $RootL(Rev(\pi_{n}))$ requires 
+    $2(n-1)-1$ rows. See theorem~\ref{Theorem:One}.\par 
    
-   In order to create $MinL(Rev(\pi_{N}))$, one simply needs to 
-   take $RootL(Rev(\pi_{N}))$ and modify it. In order to modify $RootL(Rev(\pi_{N}))$ correctly, consider what happens when 
-   the bars of lesser elements are right swapped above the routes of greater elements. Of course, if this is done to $RootL(Rev(\pi_{N}))$ then 
-   the ladder is no longer $RootL(Rev(\pi_{N}))$. Nonetheless, when the $N-1th$ route is swapped above the $Nth$ route, 
-   this frees up an extra row in the ladder for the $N-2th$ route. This is the row where the last bar of the $N-1th$ element resided
-   before it was swapped above the $Nth$ route. Now, the first bar of the $N-1th$ route will begin in column $2$ and end at column $N-1$. 
-   Furthermore, a new row will need to be added to the top of the ladder in order to accomodate the first bar of the $N-1th$ route. Now the route 
-   of the $N-2th$ element can be raised up a row seeing as its last bar will still be in column $N-3$ and the row/column 
-   that was previously occupied by the last bar of the $N-1th$ element will be free. Then the $N-3$ route can be swapped above 
-   the route of elements $N-2 \dots N$. The route of $N-3$ will begin at column $4$ and span to column $N-1$. 
-   Since a new row was already added above route $N$ for element $N-1$, 
-   the first bar of element $N-3$ begins at the 
-   same row as the first bar for element $N-1$. By  swapping 
-   all the  $N-Jth$, $1 \leq J < (N-1)$ and $J=2K+1$, routes above the routes of elements 
-   $(N-J)+1 \dots N$ in $RootL(Rev(\pi_{N}))$, the ladder is reconfigured to $MinL(Rev(\pi_{N}))$. The height of $MinL(Rev(\pi_{N}))$ is $N$ 
-   because the $Nth$ element still requires $N-1$ rows, and the $N-1th$ element requires one additional row to be added above 
-   the row for the first bar of the $Nth$ element. Please refer 
-   to Fig.\ref{Fig:RootToMinLadder} for an example of modifying $R_{5,4,3,2,1}$ to $MinL_{5,4,3,2,1}$. 
-   Please refer to Alg.\ref{Alg:MinRevLadder} to see the algorithm for creating $MinL(Rev(\pi_{N}))$. Alg.\ref{Alg:MinRevLadder} 
-   creates $MinL(Rev(\pi_{N}))$ irrespective of $RootL(Rev(\pi_{N}))$.\pagebreak
+   In order to create $MinL(Rev(\pi_{n}))$, one simply needs to 
+   take $RootL(Rev(\pi_{n}))$ and modify it. In order to modify $RootL(Rev(\pi_{n}))$ correctly, consider what happens when 
+   the bars of lesser elements are right swapped above the routes of greater elements. Of course, if this is done to $RootL(Rev(\pi_{n}))$ then 
+   the ladder is no longer $RootL(Rev(\pi_{n}))$. Nonetheless, when the $n-1th$ route is swapped above the $nth$ route, 
+   this frees up an extra row in the ladder for the $n-2th$ route. This is the row where the last bar of the $n-1th$ element resided
+   before it was swapped above the $nth$ route. Now, the first bar of the $n-1th$ route will begin in column $2$ and end at column $n-1$. 
+   Furthermore, a new row will need to be added to the top of the ladder in order to accommodate the first bar of the $n-1th$ route. Now the route 
+   of the $n-2th$ element can be raised up a row seeing as its last bar will still be in column $n-3$ and the row/column 
+   that was previously occupied by the last bar of the $n-1th$ element will be free. Then the $n-3$ route can be swapped above 
+   the route of elements $n-2 \dots n$. The route of $n-3$ will begin at column $4$ and span to column $n-1$. 
+   Since a new row was already added above route $n$ for element $n-1$, 
+   the first bar of element $n-3$ begins at the 
+   same row as the first bar for element $n-1$. By swapping 
+   all the $n-jth$, $1 \leq J < (n-1)$ and $j=2k+1$, routes above the routes of elements 
+   $(n-j)+1 \dots n$ in $RootL(Rev(\pi_{n}))$, the ladder is reconfigured to $MinL(Rev(\pi_{n}))$. The height of $MinL(Rev(\pi_{n}))$ is $n$ 
+   because the $nth$ element still requires $n-1$ rows, and the $n-1th$ element requires one additional row to be added above 
+   the row for the first bar of the $nth$ element. Please refer 
+   to Figure \ref{Fig:RootToMinLadder} for an example of modifying $RootL(5,4,3,2,1)$ to $MinL(5,4,3,2,1)$.
+   Now that $MinL(Rev(\pi))$ has been established, we can prove the upper bound for
+   $MinL\{\pi_{n}\}$.  
+   %%Please refer to Algorithm \ref{Alg:MinRevLadder} to see the algorithm for creating $MinL(Rev(\pi_{n}))$ irrespective of $RootL(Rev(\pi_{n}))$.\pagebreak
 
-
-   \begin{center}
+    \begin{center}
         \begin{figure}[!htp]
             \begin{minipage}{.4\textwidth}
                 \begin{tikzpicture}
@@ -169,43 +169,47 @@ for $MinL\{\pi_{N}\}$.\par
     
                 \end{tikzpicture}
             \end{minipage}
-            \caption{The ladder to the left is $R_{5,4,3,2,1}$. The ladder to the left is $MinL_{5,4,3,2,1}$. Note that $N=5=2K+1$, thus 
-            by swapping routes $2$ and $4$ above route $5$ whilst leaving route $3$ below route $5$ in $R_{5,4,3,2,1}$, we get 
-            $MinL_{5,4,3,2,1}$. The height of $MinL_{5,4,3,2,1}$ is $5$. There is no way to reduce the height seeing as route $5$ still needs 
+            \caption{The ladder to the left is $Root(5,4,3,2,1)$. The ladder to the left is $MinL(5,4,3,2,1)$. Note that $n=5=2K+1$, thus 
+            by swapping routes $2$ and $4$ above route $5$ whilst leaving route $3$ below route $5$ in $Root(5,4,3,2,1)$, we get 
+            $MinL(5,4,3,2,1)$. There is no way to reduce the height further seeing as route $5$ still needs 
             $4$ rows and route $4$ needs one extra row for its first bar.}
             \label{Fig:RootToMinLadder}
         \end{figure}   
 
    \end{center}
-   Now that $MinL_{Degen_{\pi_{N}}}$ has been established, we can prove the upper bound for
-   $MinL\{\pi_{N}\}$. 
+   
    \begin{lemma}
-       The upper bound for $MinL\{\pi_{N}\}$ is $N$.
+       The upper bound for $MinL\{\pi_{n}\}$ is $n$.
    \end{lemma}
    \begin{proof}
-       We shall use a proof by contradiction. Suppose that the upper bound for the height of $MinL\{\pi_{N}\}$ was greater than $N$. (It cannot be less than $N$ because 
-       we have already demonstrated that the minimal height of the ladder for the reverse permutation is $N$). Let $MinL_{Degen_{N}}$ be the 
-       minimal ladder for the reverse permutation of order $N$. Refer to Fig. \ref{Fig:RootToMinLadder} for an example of $MinL_{5,4,3,2,1}$. It will be shown that one 
-       $MinL\{\pi\}$ of order $N$ can be derived from $MinL_{Degen_{N}}$.
-       Recall that a bar univerts an inversion in a permutation. By removing bars from $MinL_{Degen_{N}}$, that is effectively removing 
-       inversions from $Degen_{\pi_{N}}$. Of course, when a bar is removed from  $MinL_{Degen_{N}}$, the ladder ceases to be  $MinL_{Degen_{N}}$. 
-       Let $K$ be the number of bars in the current state of the ladder, with $MinL_{Degen_{N}}$, $K=(N(N-1))/2$. For each subsequent 
-       ladder, $0 \leq K < (N(N-1))/2$. Thus, to create the minimal ladders with $K=((N(N-1))/2)-1$ bars, simply remove one of the correct bars from $MinL_{Degen_{N}}$. 
-       Once all the minimal ladders with  $K=((N(N-1))/2)-1$ bars have been created, simply remove the correct bar from each of these ladders with 
-        $K=(N(N-1))/2-1$ bars to get all minimal ladders with  $K=((N(N-1))/2)-2$ bars.
-       This process continues until each minimal ladder of order $N$ has been created. Since bars are only being removed from ladders, no more rows 
-       will be added to the ladder. Removing a bar does not necessarily remove a row, but removing a bar definitely does not add a row to the ladder. Earlier we stated that 
-       the height of $MinL_{Degen_{N}}$ is $N$, and at the same time we stated that we could create one minimal ladder order $N$ from each $MinL\{\pi\}$ of order $N$
-       by deriving it from $MinL_{Degen_{N}}$ 
+       We shall use a proof by contradiction. Suppose that the upper bound for the height of $MinL\{\pi_{n}\}$ was greater than $n$. (It cannot be less than $n$ because 
+       we have already demonstrated that the minimal height of the ladder for the reverse permutation is $n$). Let $MinL(Rev(n))$ be the 
+       minimal ladder for the reverse permutation of order $n$. Refer to Figure~\ref{Fig:RootToMinLadder} for an example of $MinL(5,4,3,2,1)$. 
+       It will be shown that for each permutation of order $n$, one of its minimal ladders can be derived from $MinL(Rev(n))$.
+       Recall that a bar uninverts an inversion in a permutation. By removing bars from $MinL(Rev(n))$, that is effectively removing 
+       inversions from $Rev(\pi(n))$. Of course, when a bar is removed from  $MinL(Rev(n))$, the ladder ceases to be $MinL(Rev(n))$. 
+       Let $k$ be the number of bars in the current state of the ladder, with $MinL(Rev(n))$, $k=(n(n-1))/2$. For each subsequent 
+       ladder, $0 \leq k < (n(n-1))/2$. Thus, to create the minimal ladders with $k=((n(n-1))/2)-1$ bars, 
+       simply remove one of the correct bars from $MinL(Rev(n))$. 
+       Once all the minimal ladders with  $k=((n(n-1))/2)-1$ bars have been created, simply remove the correct bar from each of these ladders with 
+        $k=(n(n-1))/2-1$ bars to get all minimal ladders with  $k=((n(n-1))/2)-2$ bars.
+       This process continues until each minimal ladder of order $n$ has been created. 
+       Since bars are only being removed from ladders, no more rows 
+       will be added to the ladder. 
+       Removing a bar does not necessarily remove a row, but removing a bar definitely does not add a row to the ladder. 
+       Earlier we stated that 
+       the height of $MinL(Rev(n))$ is $n$, and at the same time we stated that we could create one minimal ladder order $n$ 
+       from each $MinL\{\pi\}$ of order $n$
+       by deriving it from $MinL(Rev(n))$ 
        through removing bars. Yet at the beginning of the proof, 
-       we supposed the upper bound was greater than $N$ which contradicts the claim that by removing bars from  
-       $MinL_{Degen_{N}}$ the height of  $MinL_{Degen_{N}}$ will not increase. Thus, the upper bound for $MinL_\{\pi_{N}\}$ is $N$. 
-       Please refer to Fig. \ref{Fig:RemovalSequence} for the removal sequence which lists $MinL\{\pi_{4}\}$. 
+       we supposed the upper bound was greater than $n$ which contradicts the claim that by removing bars from  
+       $MinL(Rev(n))$ the height of $MinL(Rev(n))$ will not increase. Thus, the upper bound for $MinL_\{\pi_{n}\}$ is $n$. 
+       Please refer to Figure~\ref{Fig:RemovalSequence} for the removal sequence which lists $MinL\{\pi_{4}\}$. 
 
    \end{proof}\pagebreak
 
-   \begin{center}
         \begin{figure}[!htp]
+            \centering
             %%L1
             \begin{tikzpicture}
                 \draw(0, -50) to (0, -51);
@@ -460,56 +464,58 @@ for $MinL\{\pi_{N}\}$.\par
              \draw(9.3, -48.2) to (9.3, -49.2);
         \end{tikzpicture}
 
-         \caption{Removal sequence of bars from the minimal ladder for $(4,3,2,1)$ resulting in $MinL\{\pi_{N}\}$}
+         \caption{Removal sequence of bars from the minimal ladder for $(4,3,2,1)$ resulting in $MinL\{\pi_{n}\}$}
         \label{Fig:RemovalSequence}
         \end{figure}
        
-   \end{center}
    %%End upper and lower bounds section
 
 
    %%Ladders with a height of zero or one section
-   \subsection{Minimal Ladders of Order $N$ with Heights of Zero or One}
-   There are some ladders of order $N$ which have a height of zero or one.
-   There is only one permutation of order $N$ which results in a minimal ladder with a height of zero, 
+   \subsection{Minimal Ladders of Order $n$ with Heights of Zero or One}
+   There are some ladders of order $n$ which have a height of zero or one.
+   There is only one permutation of order $n$ which results in a minimal ladder with a height of zero, 
    namely the identity permutation. This point has already been proven in the lemma for the lower bound of the 
-   minimal height. What is more interesting is ladders of order $N$ with a height of one. 
+   minimal height. What is more interesting is ladders of order $n$ with a height of one. 
    One may be tempted to assume that if the identity permutation results in a minimal ladder 
-   with a height of zero, then all permutations of order $N$ with exactly one inversion result in minimal ladders with a height of one.
-   Although this is true, it is only partially true. There are permutations of order $N$ with more than one inversion 
+   with a height of zero, then all permutations of order $n$ with exactly one inversion result in minimal ladders with a height of one.
+   Although this is true, it is only partially true. There are permutations of order $n$ with more than one inversion 
    which result in minimal ladders with a height of one. Below will be presented one algorithm, one recurrence relation and one formula pertaining 
-   to ladders of order $N$ with a height of one. The algrithm lists all ladders of order $N$ with a height of one. The recurrence relation
-   counts all ladders of order $N$ with a height. The formula is the closed 
-   form solution to the recurrence relation. The similarities between ladders of order $N$ with a height of one and other mathematical 
+   to ladders of order $n$ with a height of one. The algorithm lists all ladders of order $n$ with a height of one. The recurrence relation
+   counts all ladders of order $n$ with a height. The formula is the closed 
+   form solution to the recurrence relation. The similarities between ladders of order $n$ with a height of one and other mathematical 
    objects will also be analyzed.\par 
 
-   \subsubsection{Listing Algorithm for all Ladders of Order $N$ with a Height of One}
+   \subsubsection{Listing Algorithm for all Ladders of Order $n$ with a Height of One}
+   Let $ladder$ be a two dimensional array with $n-1$ columns and $1$ row.
+   Lat $col$ be initialized to $n-1$. Algorithm~\ref{Alg:GenHeightOne} generates 
+   all ladders of order $n$ with a height of one.
    \begin{algorithm}
-        \caption{Listing Algorithm For All Ladders of Order $N$ with a height of $1$}
+        \caption{Listing Algorithm For All Ladders of Order $n$ with a height of $1$}
         \begin{algorithmic}[1]
-            \Function{GenHeightOne}{$Ladder[1][K=N-1]$, $Col=N-1$}
-                \If{$Col<1$}
-                    \State return
+            \Function{GenHeightOne}{$ladder[1][k=n-1]$, $col=n-1$}
+                \If{$col<1$}
+                    \State \textbf{return}
                 \EndIf
-                \State Ladder[1][$Col$] $\gets$ $1$
-                \State $GENHEIGHTONE(Ladder, Col-2)$
-                \State Ladder[1][$Col$] $\gets$ $0$
-                \State $GENHEIGHTONE(Ladder, Col-1)$
+                \State $ladder[1][col] \gets 1$
+                \State {\sc GenHeightOne}$(ladder, col-2)$
+                \State $ladder[1][col] \gets 0$
+                \State {\sc GenHeightOne}$(ladder, col-1)$
 
 
             \EndFunction
-        \end{algorithmic}    
+        \end{algorithmic}   
+        \label{Alg:GenHeightOne} 
    \end{algorithm}
 
-   Let $Ladder$ be a two dimensional array initialized as the identity ladder of order $N$. Let $Col$ be initialized to $N-1$ indiciating the 
-   current column. When a $1$ is inserted at $Ladder[1][Col]$ that indicates a bar has been added to row $1$, $Col$. When a $0$ is 
-   inserted at $Ladder[1][Col]$ that indicates a bar has been removed from row $1$, $Col$. Since no two endpoints of two bars can be touching, 
+   In {\sc GenHeightOne}, when a $1$ is inserted at $ladder[1][col]$ that indicates a bar has been added to row $1$, $col$. When a $0$ is 
+   inserted at $ladder[1][col]$ that indicates a bar has been removed from row $1$, $col$. Since no two endpoints of two bars can be touching, 
    the function moves two columns to the 
    left on the first recursive call. This ensures that the next bar added will be two columns away from the current bar that was just added. 
-   Once the $Col$ is less than $1$ the function returns to the previous value of $Col$ and removes the bar that was at $Ladder[1][Col]$. 
-   This now frees the column that is one away from the  value of $Col$. Thus, the function makes a second recursive call, this time reducing $Col$ by one. 
-   Each call to the function produces a unique ladder. To see the tree of all ladders with a height of one for $N=5$ please refer to Fig. 
-   \ref{Fig:GenHeightOne}\pagebreak
+   Once the $col$ is less than $1$ the function returns to the previous value of $col$ and removes the bar that was at $ladder[1][col]$. 
+   This now frees the column that is one column to the left of the current column. 
+   Thus, the function makes a second recursive call, this time reducing $col$ by one. 
+   Each call to the function produces a unique ladder. To see the tree of all ladders with a height of one for $n=5$ please refer to Figure~\ref{Fig:GenHeightOne}.\pagebreak
 
    \begin{figure}[!htp]
         \begin{center}
@@ -585,52 +591,67 @@ for $MinL\{\pi_{N}\}$.\par
                 \draw(.9, -3.5) to (.9, -4.5);
             \end{tikzpicture}
         \end{center}
-        \caption{All $7$ ladders of order $5$ with a height of one listed by the function $GenHeightOne$}
+        \caption{All $7$ ladders of order $5$ with a height of one listed by the function {\sc GenHeightOne}}
         \label{Fig:GenHeightOne}
    \end{figure}
 
-   \subsubsection{Recurrence Relation for Counting the Number of Ladders of Order $N$ with a Height of One}
-   The recurrence relation of the number of ladders of order $N$ is the same recurrence relation for 
-   other combinatorial objects such as the number of binary strings of length $N-1$ with no consecutive $1s$ 
-   and at least one $1$.\cite{A8}\cite{A11}. The recurrence relation is used to prove the veracity of the $GenHeightOne$ algorithm.\par 
+   \subsubsection{Recurrence Relation for Counting the Number of Ladders of Order $n$ with a Height of One}
+   The recurrence relation of the number of ladders of order $n$ is the same recurrence relation for 
+   other combinatorial objects such as the number of binary strings of length $n-1$ with no consecutive $1s$ 
+   and at least one $1$~\cite{A8}\cite{A11}. The recurrence relation is used to prove the veracity of the {\sc GenHeightOne} algorithm.\par 
    
    \begin{theorem}
-       The recurrence relation for the number of ladders of order $N$ with a height of $1$ is:
+       The recurrence relation for the number of ladders of order $n$ with a height of $1$ is:
       \[   \left\{
         \begin{array}{ll}
-        L_{count}(0) = 0 & N = 0 \\
-        L_{count}(1) = 0 & N=1 \\
-        L_{count}(N) = L_{count}(N-1) + L_{count}(N-2) + 1 & N \geq 2 
+        L_{count}(0) = 0 & n = 0 \\
+        L_{count}(1) = 0 & n=1 \\
+        L_{count}(n) = L_{count}(n-1) + L_{count}(n-2) + 1 & n \geq 2 
         \end{array} 
     \right. \]
    \end{theorem}
 \begin{proof}
-    We shall do a combinatoial proof to demonstrate the above theorem. Suppose we want to count all binary strings of length $N$ such that there 
-    can be no consecutive $1s$ and there must be at least one $1$ in the string. Suppose we are counting $1s$ from right to left. Suppose the first $1$ in a binary string of length $N$ is at position $N$, 
-    then the second $1$ can appear at position $N-2$, thus we have binary 
-    strings of length $N$ with the first $1$ appearing at position $N$ and the second one appearing at position $N-2$; let $M=$ the number of binary strings of length $N$ such that there is a $1$ 
-    at position $N-2$. Next, suppose a binary string of length $N$ has a $0$ at position $N$, then
-    the first $1$ can appear at position $N-1$ or position $N-2$. If it appears at position $N-2$ we have binary strings of length $N$ with a $1$ at position $N-2$. 
-    We already designated this number as $M$, so we get $2(M)$. 
-    Still supposing we are considering binary strings of length $N$ with a $0$ at position $N$, consider all binary strings of length $N-1$ with 
-    no consecutive $1s$. Let $K=$ the number of binary strings of length $N-1$ with no consecutive $1s$ and at least one $1$.
-    Let the first $1$ in the binary string of length $N$ appears at postion $N-1$, then we have $2(M)+K$. Still assuming a $0$ at position $N$
-    in binary strings of length $N$, if there is also a $0$ at position $N-1$, then the first $1$ can appear at position $N-2$. The number of 
-    binary strings of length $N$ with a $1$ at position $N$ was designated as $M$. Thus we have $2(M)+M=3M$
-    Yet we have already counted $M$ under the conditions that the first $1$ in binary strings of length $N$ appears at position $N-2$. Therefore we subtract 
-    $M$ from $K$ thus leaving us with $J=$ the number of binary strings of length $N$ with the first $1$ appearing at position $N-1$. 
-    Now we have $2(M)+J$. Then consider all binary strings of length $N$ such that from positions $1\dots N-1$ there are 
-    only $0s$. Therefore there must be a $1$ at position $N$ seeing as we are considering all binary strings of length $N$ with at least one $1$. 
-    Since only one such binary string of length $N$ exists we add one. Thus we get $2(M)+(K-M)+1=2(M)+J+1=$ the number of binary strings of length $N$ with at least one $1$ and 
+    We shall do a combinatorial proof to demonstrate the above theorem. 
+    Suppose we want to count all binary strings of length $n$ such that there 
+    can be no consecutive $1s$ and there must be at least one $1$ in the string. Suppose we are counting $1s$ from right to left. Suppose the first $1$ in a binary string of length $n$ is at position $n$, 
+    then the second $1$ can appear at position $n-2$, thus we have binary 
+    strings of length $n$ with the first $1$ appearing at position $n$ and the second one appearing at position $n-2$; 
+    let $m=$ the number of binary strings of length $n$ such that there is a $1$ 
+    at position $n-2$. Next, suppose a binary string of length $n$ has a $0$ at position $n$, then
+    the first $1$ can appear at position $n-1$ or position $n-2$. 
+    If it appears at position $n-2$ we have binary strings of length $n$ with a $1$ at position $n-2$. 
+    We already designated this number as $m$, so we get $2(m)$. 
+    Still supposing we are considering binary strings of length $n$ with a $0$ at position $n$, consider all binary strings of length $n-1$ with 
+    no consecutive $1s$. Let $k=$ the number of binary strings of length $n-1$ with no consecutive $1s$ and at least one $1$.
+    Let the first $1$ in the binary string of length $n$ appears at position $n-1$, then we have $2(m)+k$. 
+    Still assuming a $0$ at position $n$
+    in binary strings of length $n$, if there is also a $0$ at position $n-1$, then the first $1$ can appear at position $n-2$. 
+    The number of 
+    binary strings of length $n$ with a $1$ at position $n$ was designated as $m$. 
+    Thus we have $2(m)+m=3m$
+    Yet we have already counted $m$ 
+    under the conditions that the first $1$ in binary strings of length $n$ appears at position $n-2$. 
+    Therefore we subtract 
+    $m$ from $k$ thus leaving us with $j=$ the number of binary strings of length $n$ with the first $1$ appearing at position $n-1$. 
+    Now we have $2(m)+j$. T
+    hen consider all binary strings of length $n$ such that from positions $1\dots n-1$ there are 
+    only $0s$. Therefore, there must be a $1$ at position $n$ seeing as we are considering all binary strings of length $n$ with at least one $1$. 
+    Only one such binary string of length $n$ exists, therefore we add one. We get $2(m)+(k-m)+1=2(m)+j+1=$ 
+    the number of binary strings of length $n$ with at least one $1$ and 
     no consecutive $1s$.\par 
-    Now consder a ladder, $L$, with $N+1$ lines. The number of columns in $L$ is $N$ and the height of $L$ is one. Note that the end points 
-    of no two bars can be touching which is to say that there can be no adjacent bars on the same row. For example, if there is a bar at row $1$, column $N$ then 
-    the next consecutive bar in row $1$ can appear at most at column $N-2$. Knowing this, we can easily see how this scenario models all binary strings of length $N$ with no 
-    consecutive $1s$ and having at least one $1$. Let a bar in $L$ be represented as a $1$ in a binary string of length $N$. 
-    Knowing that a ladder with zero bars has a height of zero, it must be the case that $L$ has at least one bar. Thus we get the same recurrence relation for the number of 
-    ladders of order $N+1$ where $M$ is the number of ladders with a bar appearing in column $N-2$, $(K-M)=J$ being the number of ladders with the first bar in column $N-1$ minus 
-    ladders with a bar appearing at $N-2$. Lastly is the $+1$ for all ladders of order $N+1$ where the only bar appears at column $N$.
-    See Fig. \ref{Fig:MapBinToLadder} for the mapping of binary strings of length $N=5$ with no consecutive $1s$ and at least one $1$ to ladders of order $6$ with a height of one.\pagebreak
+    Now consider a ladder, $L$, with $n+1$ lines. The number of columns in $L$ is $n$ and the height of $L$ is one. Note that the end points 
+    of no two bars can be touching which is to say that there can be no adjacent bars on the same row. For example, 
+    if there is a bar at row $1$, column $n$ then 
+    the next consecutive bar in row $1$ can appear at most at column $n-2$. 
+    Knowing this, we can easily see how this scenario models all binary strings of length $n$ with no 
+    consecutive $1s$ and having at least one $1$. Let a bar in $l$ be represented as a $1$ in a binary string of length $n$. 
+    Knowing that a ladder with zero bars has a height of zero, it must be the case that $l$ has at least one bar. 
+    Thus, we get the same recurrence relation for the number of 
+    ladders of order $n+1$ where $m$ is the number of ladders with a bar appearing in column $n-2$, $(k-m)=j$ 
+    being the number of ladders with the first bar in column $n-1$ minus 
+    ladders with a bar appearing at $n-2$. Lastly is the $+1$ for all ladders of order $n+1$ where the only bar appears at column $n$.
+    See Figure~\ref{Fig:MapBinToLadder} for the mapping of binary strings of length $n=5$ with no consecutive $1s$ and at 
+    least one $1$ to ladders of order $6$ with a height of one.\pagebreak
 
 \end{proof}
 
@@ -865,34 +886,45 @@ for $MinL\{\pi_{N}\}$.\par
 
 
 
-\subsubsection{Closed form Formula for Ladders of Order $N$ with a Height of One}
-Before providing the closed form formula for the number of ladders with a height of one, it is important to connect ladders with a height of one to other 
-mathematical phenomena because ladders with a height follow the same pattern as these other mathematical phenomena. \cite{A12} One of these phenomena include 
-the number of involutions in the Symmetric Group $S_{N}$.\cite{A13} The connection between the Symmetric Group, $S_{N}$ and ladders of order $N$ with a height 
+\subsubsection{Closed form Formula for Ladders of Order $n$ with a Height of One}
+Before providing the closed form formula for the number of ladders with a height of one, it is important to connect ladders with a height of one 
+to other mathematical phenomena because ladders with a height follow the same pattern as these other mathematical phenomena~\cite{A12}.
+One of these phenomena include the number of involutions in the Symmetric Group $S_{n}$~\cite{A13}. 
+The connection between the Symmetric Group, $S_{n}$ and ladders of order $n$ with a height 
 of zero or one will be analyzed followed by the closed form formula.\par 
 
-A \emph{group} is a finite set along with a binary operation on the elements of the set such that the binary operation on two elements in the set 
-produces a result that is also in the set. The stipulations of a group are the following. Firstly, the group must have \emph{closure} which means the 
-result of the binary operation produces a result in the set; this stipulation was already addressed in the definition of a group. Secondly, the group must 
-be associative, meaning the rearrangement of priority of the order of application of the binary operation across $2 \leq K$ $\leq N$ elements in the set 
-does not change the result; associativity means the order of application of the binary operation across multiple elements in the set does not change the result. The third stipulation 
-is that the set has the identity element. The identity element is the element such that when the binary operation is applied to an element, $x$, with the identity element, $ID$, 
-the result is $X$. The fourth stipulation is the \emph{inverse element} which is the property that for any element in the set, $X$, when the binary operation is applied to $X$ and 
-its inverse element $Y$, 
-the result is $X$.\cite{A14}\par 
+A \emph{group} is a finite set along with a binary operation on the elements of the set such that the binary operation on two 
+elements in the set produces a result that is also in the set. 
+The stipulations of a group are the following. Firstly, the group must have \emph{closure} which means the 
+result of the binary operation produces a result in the set; this stipulation was already addressed in the definition of a group. 
+Secondly, the group must 
+be associative, meaning the rearrangement of priority of the order of application of the binary operation across $2 \leq k$ $\leq n$ 
+elements in the set 
+does not change the result; associativity means the order of application of the binary operation across multiple elements in the set does 
+not change the result. The third stipulation 
+is that the set has the identity element. 
+The identity element is the element such that when the binary operation is applied to an element, $x$, with the identity element
+the result is $x$. The fourth stipulation is the \emph{inverse element} 
+which is a relation between two elements, $x$ and $y$ such that when the binary operation is applied to $x$ and 
+its inverse element $y$, 
+the result is $x$~\cite{A14}.\par 
 
-A \emph{symmetric group of order $N$/$S_{N}$} is finite group whose elements are all $N!$ permutations of order $N$, the binary operation 
+A \emph{symmetric group of order $n$/$S_{n}$} is finite group whose elements are all $n!$ permutations of order $n$, the binary operation 
 is permutation composition, applying the composition forms a bijection between all elements in the set. When a permutation is written in 
 cycle notation, the \emph{orbit} is defined as the transposition of elements on the identity permutation. For example, 
 let $\pi=(3,2,1,6,4,5,7)$ be written as $(1,3)(4,5,6)$ in cycle notation. There are two orbits, one of size two, namely $(1,3)$ and 
-one of size three, namely $(4,5,6)$. \cite{A15}. There Let an \emph{involution} 
-be defined as a composition of a permutation with itself such that the result of the composition is the identity permutation. \cite{A13} 
-For example, $X=\{1, 2, 3\}$. Let $S_{X} = S_{N} = \{(1,2,3),(1,3,2),(2,1,3),(2,3,1),(3,1,2),(3,2,1)\}$. The involutions of $S_{N}=\{(2,1,3),(1,3,2),(1,2,3)\}$.
-The reason these are the involutions is because when we define a permutation as a bijective function on the identity permutation, we can see the the composition 
-of an involution with itself returns the identity permutation. Let $(1,2,3)=F$, let $(2,1,3)=G$ and let $(1,3,2)=H$ then we have $F \circ F=(1,2,3)$,
-$G \circ G = (1,2,3)$ and $H \circ H=(1,2,3)$. The orbit(s) of an involution are of size two and 
+one of size three, namely $(4,5,6)$~\cite{A15}. There Let an \emph{involution} 
+be defined as a composition of a permutation with itself such that the result of the composition is the identity permutation~\cite{A13}. 
+For example, $X=\{1, 2, 3\}$. Let $S_{X} = S_{n} = \{(1,2,3),(1,3,2),(2,1,3),(2,3,1),(3,1,2),(3,2,1)\}$. 
+The involutions of $S_{n}=\{(2,1,3),(1,3,2),(1,2,3)\}$.
+The reason these are the involutions is because when we define a permutation as a bijective function on the identity permutation, 
+we can see the the composition 
+of an involution with itself returns the identity permutation. Let $(1,2,3)=F$, let $(2,1,3)=G$ and let $(1,3,2)=H$ 
+then we have $F \circ F=(1,2,3)$,
+$G \circ G = (1,2,3)$ and 
+$H \circ H=(1,2,3)$. The orbit(s) of an involution are of size two and 
 the orbits are transitive, meaning the elements composing the orbit(s) are adjacent in the identity permutation.
-To see an example of the mapping of the composition of $(2,1,3)$ with itself see Fig. \ref{Fig:InvolutionExample}\newline 
+To see an example of the mapping of the composition of $(2,1,3)$ with itself see Figure~\ref{Fig:InvolutionExample}\newline 
 
 
 \begin{figure}
@@ -930,44 +962,68 @@ To see an example of the mapping of the composition of $(2,1,3)$ with itself see
 \end{figure}
 
 \begin{theorem}
-    There is a bijectie function between ladders of order $N$ with a height of zero or one and the involution set of $S_{N}$.
+    There is a bijective function between ladders of order $n$ with a height of zero or one and the involution set of $S_{n}$.
 \end{theorem}
 \begin{proof}
-    The involution set of $S_{N}$ consists of all permutations of order $N$ such that when composed with themselves, the result of the composition is the identity permutation. 
-    If a permutation is an involution it either has no inversions or for each pair of inversions, the inversion pairs are pairwise disjoint. That is to say, no element in the 
-    involution set forms more than $1$ inversion. When an involution is applied to the identity permutation, each element in the identity is 
-    rotated by one or zero positions. If an element from the identity permutation is rotated two times over over a span of two positions, the element returns to its original position in the identity permutation.
-    Thus, applying an involution to itself either rotates an element zero times or it rotates an element twice over a span of two positions, thus placing the element in its 
-    original position in the identity permutation. The \emph{orbit} in $\pi$ refers to the transposition of an element. When writing $\pi$  \par 
-    A ladder of order $N$ with a height of one consists only of bars such that each element in $\pi$ is uninverted zero or one times. Suppose an element $X$
-    needed to be swappped more than once in $L_{\pi}$ to reach its position in the identity permutation. This would mean the route of $X>1$. If that is the case then the height of the ladder would 
+    The involution set of $S_{n}$ consists of all permutations of order $n$ 
+    such that when any permutation is composed with itself, the result of the composition is the identity permutation. 
+    If a permutation is an involution then it either has no inversions or for each pair of inversions, the inversion pairs are pairwise disjoint. 
+    That is to say, no element in the 
+    permutation forms more than $1$ inversion. 
+    When an involution is applied to the identity permutation, each element in the identity is 
+    rotated by one or zero positions. 
+    If an element from the identity permutation is rotated two times over over a span of two positions, 
+    the element returns to its original position in the identity permutation.
+    Thus, applying an involution to itself either rotates an element zero times or it rotates an element twice over a span of two positions, 
+    thus placing the element in its 
+    original position in the identity permutation.\par 
+    A ladder of order $n$ with a height of one consists only of bars such that no element crosses more than one of these bars. 
+    Suppose an element $x$
+    needed to be cross more than one bar. This would mean the route of $x>1$. If that is the case then the height of the ladder would 
     be greater than one, which contradicts the claim that the ladder has a height of one.
-    Then it must be the case that for all ladders of order $N$ with a height of one, each bar in any of these given ladders uninverts a pair of elments in $\pi$ exactly once and no two bars 
-    uninvert the same element. It follows that each bar places an element in $\pi$ to its correct position 
-    in the idetity permutation.  We know that each ladder with a height of zero or one is unique, in that they all sort different permutations, because the only way to get 
-    two or more ladders to sort the same permutation is to perform a swap operation on bar(s) in a ladder to get another ladder that sorts the same permutation.
+    Then it must be the case that for all ladders of order $n$ with a height of one, each bar in any of these given ladders 
+    uninverts a pair of elements in $\pi$ exactly once and no two bars 
+    have the same element crossing them. It follows that each bar places an element in $\pi$ to its correct position 
+    in the identity permutation.  
+    We know that each ladder with a height of zero or one is unique, in that they all sort different permutations,
+    because the only way to get 
+    two or more ladders to sort the same permutation is to perform a swap operation on bar(s) in a ladder to get 
+    another ladder in $OptL\{\pi\}$.
     Yet with ladders of height zero or one, no swap operation can be performed.\par
-    Let $F_{L_{N}}$ be the representation of a ladder as a function. We have already established that an involution can be thought of as a function. Let $G$ be the represetation of an 
-    involution as a function. We know that $G \circ G(ID)=ID$. I propose that for each $G$ there is a corresponding $F_{L_{N}}$
-    such that $F_{L_{N}} \circ G(ID) = ID$ where each $F_{L_{N}}$ and $G$ are unique. 
-    This shall be proven by way of contradiction. Suppose there exists a $G$ of order $N$ such that  $F_{L_{N}} \circ G(ID) \neq ID$ for every $F_{L_{N}}$.
-    Let this $G$ be known as $K$. 
-    We know that the number of ladders with a height of zero or one of order $N$ equals the number of involutions of order $N$. We also know that each bar in $F_{L_{N}}$ of order one uninverts an inversion in $\pi$ 
-    We know that each $G$ is unique seeing as the involution set $\subset$ all $N!$ permutations and all 
-    $N!$ permutations are unique. Thus, if $F_{L_{N}} \circ K(ID) \neq ID$ for every $F_{L_{N}}$ of a height of zero or one that means either there is a 
-    $F_{L_{N}}$ of height zero or one that does not map $K$ to $ID$ when composed with $K$ or there exists at least two $F_{L_{N}}$ of height zero or one that map the 
-    same $G \neq K$ to $ID$ when composed with $G$. In the first case this would mean that there is some involution, $K$, that could not be sorted into the identity 
-    permutation by any $F_{L_{N}}$ of height zero or one. Yet if that is the case then there is an $F_{L_{N}}$ of height zero or one such that there exists 
-    a bar in $F_{L_{N}}$ that does not place the element crossing it into its correct position in $ID$. But if that is the case then $F_{L_{N}}$ does not 
-    have a height of zero or one which is a contradiction. In the second case, this would mean that there are two $F_{L_{N}}$ with a height of zero or one, 
-    let us call them $A$ and $B$, and some $G\neq K$, such that $A\circ G(ID) = B\circ G(ID)=ID$ and $A \neq B$. Yet we know that the only way for two unique ladders 
-    to sort the same permutation is by right/left swapping the bars of one ladder to get the configuration of the bars in the other ladder. Yet a bar cannot be 
-    right/left swapped in a ladder with a height of zero or one because there is no bar of one element's route above/below the bar of another element's route. Thus if 
-    $A\circ G(ID) = B\circ G(ID)=ID$ it must be the case that $A=B$ which is a contradiction. Therefore for each $G$ there exists an $F_{L_{N}}$ such that 
-     $F_{L_{N}} \circ G(ID) = ID$ where each $F_{L_{N}}$ and $G$ are unique. To see the bijective mapping 
-     between ladders of order $4$ with a height of zero or one and the involution set of $S_{4}$ please refer to \ref{Fig:BijectiveMapping}\pagebreak
-\end{proof}
-\begin{figure}
+    Let $F(L_{n})$ be the representation of a ladder as a function. We have already established that an 
+    involution can be thought of as a function. Let $G$ be the representation of an 
+    involution as a function. We know that $G \circ G(\pi_{ID})=\pi_{ID}$. I propose that for each $G$ there is a corresponding $F(L_{n})$
+    such that $F(L_{n}) \circ G(\pi_{ID}) = \pi_{ID}$ where each $F(L_{n})$ and $G$ are unique. 
+    This shall be proven by way of contradiction. Suppose there exists a $G$ of order $n$ such that  $F(L_{n}) \circ G(\pi_{ID}) \neq \pi_{ID}$ 
+    for every $F(L_{n})$.
+    Let this $G$ be known as $k$. 
+    We know that the number of ladders with a height of zero or one of order $n$ equals the number of involutions of order $n$. 
+    We also know that each bar in $F(L_{n})$ of order one uninverts an inversion in $\pi$ 
+    We know that each $G$ is unique seeing as the involution set $\subset$ all $n!$ permutations and all 
+    $n!$ permutations are unique. Thus, if $F(L_{n}) \circ K(\pi_{ID}) \neq \pi_{ID}$ for every $F(L_{n})$ 
+    of a height of zero or one that means either there is a 
+    $F(L_{n})$ of height zero or one that does not map $K$ to $pi_{ID}$ when composed with $K$ or there exists at least two $F(L_{n})$ 
+    of height zero or one that map the 
+    same $G \neq K$ to $\pi_{ID}$ when composed with $G$. 
+    In the first case this would mean that there is some involution, $K$, that could not be sorted into the identity 
+    permutation by any $F(L_{n})$ of height zero or one. Yet if that is the case then there is an $F(L_{n})$ 
+    of height zero or one such that there exists 
+    a bar in $F(L_{n})$ that does not place the element crossing it into its correct position in $ID$. 
+    But if that is the case then $F(L_{n})$ does not 
+    have a height of zero or one which is a contradiction. 
+    In the second case, this would mean that there are two $F(L_{n})$ with a height of zero or one, 
+    let us call them $A$ and $B$, and some $G\neq K$, such that $A\circ G(\pi_{ID}) = B\circ G(\pi_{ID})=\pi_{ID}$ and $A \neq B$. 
+    Yet we know that the only way for two unique ladders 
+    to sort the same permutation is by right/left swapping the bars of one ladder to get the configuration of the bars in the other ladder. 
+    Yet a bar cannot be 
+    right/left swapped in a ladder with a height of zero or one. Thus, if 
+    $A\circ G(\pi_{ID}) = B\circ G(\pi_{ID})=\pi_{ID}$ it must be the case that $A=B$ which is a contradiction. Therefore, 
+    for each $G$ there exists an $F(L_{n})$ such that 
+     $F(L_{n}) \circ G(\pi_{ID}) = \pi_{ID}$ where each $F(L_{n})$ and $G$ are unique. 
+     To see the bijective mapping 
+     between ladders of order $4$ with a height of zero or one and the involution set of $S_{4}$ please refer to Figure~\ref{Fig:BijectiveMapping}.
+\end{proof}\pagebreak
+\begin{figure}[ht]
     \centering
         \begin{tikzpicture}[ele/.style={fill=black,circle,minimum width=.8pt,inner sep=1pt},every fit/.style={ellipse,draw,inner sep=-1pt}]
         %%1
@@ -1152,62 +1208,63 @@ To see an example of the mapping of the composition of $(2,1,3)$ with itself see
         \label{Fig:BijectiveMapping}
 \end{figure}
 \pagebreak
-So far we have demostarated that ladders of order $N$ with a height of one are congruent with binary strings of length $N-1$ 
-with no consecutive ones and at least one $1$ and the involution set of $S_{N}$. The final mathematical phenomena to be discussed 
-is the \emph{Fibonacci sequence}. The Fibonacci sequence is the sequence $0,1,1,2,3,5,8,13, \dots$. It is defined by the piecewise 
+So far we have demonstrated that ladders of order $n$ with a height of one are congruent with binary strings of length $n-1$ 
+with no consecutive ones and at least one $1$ and the involution set of $S_{n}$. The final mathematical phenomena to be discussed 
+is the \emph{Fibonacci sequence}. The Fibonacci sequence is the sequence $0,1,1,2,3,5,8,13, \dots$. It is defined by the
 recurrence relation:\cite{A12}
 
  \[   
      \left\{
        \begin{array}{ll}
-        Fib(0) = 0 & N = 0 \\
-        Fib(1) = 1 & N=1 \\
-        Fib(N) = Fib(N-1) + Fib(N-2) & N \geq 2 
+        Fib(0) = 0 & n = 0 \\
+        Fib(1) = 1 & n=1 \\
+        Fib(n) = Fib(n-1) + Fib(n-2) & n \geq 2 
         \end{array} 
     \right.
 \]
 
 
-The Fibonacci sequence is considered famous for its ocurrence in natural phenomena such as the structure of a pine cone, the number of petals 
+The Fibonacci sequence is considered famous for its occurrence in natural phenomena such as the structure of a pine cone, the number of petals 
 on sunflowers and the spiral of the shells of ammonites which are a prehistoric crustaceans. The Fibonacci sequence was first discovered by an 
-Indian mathematician named Pingala at some time between 450 - 200 BCE. \cite{A16} It was then introduced to Western cultures in 1202 by the 
+Indian mathematician named Pingala at some time between 450 - 200 BCE~\cite{A16}. It was then introduced to Western cultures in 1202 by the 
 Italian mathematician, Fibonacci. The recurrence relation for the Fibonacci numbers should look familiar to the recurrence 
-relation for the number of ladders of order $N$ with a height of one. The difference between the two is the recurrence relation 
-for the number of ladders of order $N$ with a height of one has an additional $+1$ because of the single ladder of 
-order $N$ in which the first $N-2$ columns have a $0$ in row one and the last column has a $1$ in row one. Other than the additional 
-$+1$, the sequences are the same. Please refer to Fig. \ref{Fig:FibLadderSequence} to see the sequences together.\newline
+relation for the number of ladders of order $n$ with a height of one. The difference between the two is the recurrence relation 
+for the number of ladders of order $n$ with a height of one has an additional $+1$ because of the single ladder of 
+order $n$ in which the first $n-2$ columns have a $0$ in row one and the last column has a $1$ in row one. Other than the additional 
+$+1$, the sequences are the same. Please refer to Figure~\ref{Fig:FibLadderSequence} to see the sequences together.\newline
     
 \begin{figure}[!htp]
     \centering
     $Fib: \qquad 00,01,01,02,03,05,08,13,21,34,55, \dots$\newline
     $L_{count}: \quad   00,00,01,02,04,07,12,20,33,54,88, \dots$\newline
-    $ N=: \qquad   00,01,02,03,04,05,06,07,08,09,10, \dots$\newline
+    $n: \qquad   00,01,02,03,04,05,06,07,08,09,10, \dots$\newline
     \caption{The Fibonacci sequence lined up with the sequence for the number of ladders with a height of one.}
     \label{Fig:FibLadderSequence}
 
 \end{figure}
 
-From looking at the sequences in Fig. \ref{Fig:FibLadderSequence}, it is interesting to note that\newline 
-\small{$L_{count}(N)=Fib(N+1)-1$}.
- There is a well known equation for the Fibonacci sequence which is the following: 
+From looking at the sequences in Figure~\ref{Fig:FibLadderSequence}, it is interesting to note that\newline
+$L_{count}(n)=Fib(n+1)-1$. 
+There is a well known equation for the Fibonacci sequence which is the following: 
 
 \begin{equation*}
-   Fib(N)=1/\sqrt{5}((1+\sqrt{5}/2)^{n})((1-\sqrt{5}/2)^{n}))
+   Fib(n)=1/\sqrt{5}((1+\sqrt{5}/2)^{n})((1-\sqrt{5}/2)^{n}))
 \end{equation*}\cite{A12}
-From the Fibonacci equation along with the equation $L_{count}(N)=Fib(N+1)-1$, it is fairly straightforward to derive the 
-equation for $L_{count}(N)$
+From the Fibonacci equation along with the equation $L_{count}(n)=Fib(n+1)-1$, it is fairly straightforward to derive the 
+equation for $L_{count}(n)$
 \begin{center}
 \begin{equation*}
-    L_{count}(N)=1/\sqrt{5} ((1+\sqrt{5}/2)^{n+1})((1-\sqrt{5}/2)^{n+1}))-1
+    L_{count}(n)=1/\sqrt{5} ((1+\sqrt{5}/2)^{n+1})((1-\sqrt{5}/2)^{n+1}))-1
 \end{equation*}
 \end{center}
-The equation is simply the closed form formula for the $N+1th$ Fibonacci number minus $1$.\par 
+The equation is simply the closed form formula for the $n+1th$ Fibonacci number minus $1$.\par 
 
-We have examined the congruency between ladders of a height of one with three other mathematical phenomena. The three being 
-binary strings of lenth $N-1$ with at least one $1$ and no consecutive $1s$, the involution set of the symmetric group $S_{N}$
+We have examined the congruence between ladders of a height of one with three other mathematical phenomena. The three being 
+binary strings of length $n-1$ with at least one $1$ and no consecutive $1s$, the involution set of the symmetric group $S_{n}$
 and the Fibonacci sequence. The similarities between these mathematical phenomena is of theoretical interest because it has been 
 shown that the set containing all mathematical phenomena that follow the sequence $0,0,1,2,4,7,12,20\dots$ also contains 
 ladders with a height of one.
+
 
 
 

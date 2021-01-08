@@ -1,0 +1,37 @@
+
+In Chapter 2 we will provide a more comprehensive analysis of the existing research surrounding ladder lotteries. 
+We will also go through the foundational concepts, algorithms and proofs that act as the backbone for the 
+results in Chapter 3 and Chapter 4. We have already defined $\pi$ in the introduction and we have already 
+discussed a ladder lottery as a concept. 
+Let $n$ be the number of elements in $\pi$. Let the \emph{ladder data structure}, or \emph{ladder} for short, be a two dimensional array 
+with$0 \leq k \leq {n\choose 2}$ rows and $n-1$ columns. The number of rows in ladder is zero if $\pi$ is in ascending order.
+The number of rows in ladder is ${n\choose 2}$ if $\pi$ is in descending order. The number of columns is always $n-1$ 
+seeing as the columns represent gaps between lines. Thus, given $n$ lines, there are $n-1$ columns in ladder. 
+Let $\tau(p_{i},p_{j})$ be an adjacent transposition of an adjacent inversion $(p_{i},p_{j})\in \pi$.
+Throughout the thesis a number of algorithms are presented. Many of these algorithms use the following auxiliary functions: 
+\begin{enumerate}
+    \item {\sc Print(x)}: Prints x.
+    \item {\sc Swap(x,y)}: Swaps x and y.
+    \item {\sc Sort(x)}: Sorts x in ascending order.
+    \item {\sc Max(x)}: Returns the maximum element in x.
+    \item {\sc Min(x)}: Returns the minimum element in x.
+\end{enumerate}
+
+The study of ladder lotteries as mathematical objects began in 2010, in the paper
+Efficient Enumeration of Ladder Lotteries and its Application, written by Matsui, Nakada, Nakano Uehara and Yamanaka~\cite{A1}. 
+In this paper the authors present the first algorithm for generating $OptL\{\pi\}$ for some  
+arbitrary permutation $\pi$. Since this paper emerged, there have been 
+a number of other papers written about ladder lotteries.
+These papers include The Ladder Lottery Realization Problem,
+Optimal Reconfiguration of Optimal Ladder Lotteries, 
+Efficient Enumeration of all Ladder Lotteries with K Bars,
+Coding Ladder Lotteries and
+Enumeration, Counting, and Random Generation of Ladder Lotteries. It is in these papers that the aforementioned 
+problems related to ladder lotteries are solved. Thus, a comprehensive analysis of these papers 
+is required for getting the full breadth of the literature surrounding ladder lotteries. 
+This thesis is also heavily influenced by Efficient Enumeration of Ladder Lotteries and its Application. 
+Some of the foundational concepts, algorithms and proofs will be 
+discussed in the subsection pertaining to Efficient Enumeration of Ladder Lotteries and its Application seeing as 
+the background information for this thesis 
+is intricately related to the findings in the paper Efficient Enumeration of Ladder Lotteries and its Application.\par 
+

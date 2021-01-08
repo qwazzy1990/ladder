@@ -1,62 +1,23 @@
 \section{Introduction to the Problem}
-Listing problems are common problems in cambinatorics. In general, listing problems 
+Listing problems are common problems in combinatorics. In general, listing problems 
 focus on enumerating the objects of a given finite set in some specific order. The listing problem in this thesis 
 will be termed \emph{The Canonical Ladder Listing Problem}. The problem is stated as follows: Let 
-$S_{N}$ be the set of all $N!$ permutations of order $N$. To see $S_{4}$ please refer to table \ref{table:aa}. 
-Let $\pi$ be a permutation from $S_{N}$. 
-Let \emph{the canonical ladder} be a unique ladder from each permutation's $OptL\{\pi\}$. Let $CanL\{\pi_{N}\}$ be the set of all 
-canonical ladders for each $\pi$ in $S_{N}$. Let $L_{i}$ be some arbitrary canonical ladder from $CanL\{\pi_{N}\}$. A \emph{change} 
-is defined as the insertion or deletion of one or more bar(s) to get from $L_{i}$ to $L{j}$ or the relocation of one or more bars 
-in $L_{i}$ to get to $L_{j}$. The \emph{relocation} of a bar is defined as moving a bar from a given row and column 
+$S_{n}$ be the set of all $n!$ permutations of order $n$. Let $CanL\{\pi_{n}\}$ be the corresponding 
+set of all $n!$ ladders of order $n$. Note, given a ladder $l$ in $CanL\{\pi_{n}\}$ and its corresponding 
+permutation $\pi$ in $S_{n}$, $l$ belongs 
+$OptL\{\pi\}$. Thus, each ladder in $CanL\{\pi_{n}\}$ is \emph{a canonical ladder}, meaning each ladder in $CanL\{\pi_{n}\}$
+is chosen from each $OptL\{\pi\}$ of order $n$ based on the minimal amount of change 
+to transition from one canonical ladder to the next. A \emph{change} 
+is defined as the insertion or deletion of one or more bar(s) to get from $l_{i}$ to $l_{j}$ \textbf{or} the relocation of one or more bars 
+in $l_{i}$ to get to $l_{j}$. The \emph{relocation} of a bar is defined as moving a bar from a given row and column 
 to a new row and/or column in the ladder under the following conditions.
-The relocation cannot be a right/left swap operation. If the relocation of the bar moves the bar to a new row, but not a new column, then the endpoint 
-of the bar being moved must cross the endpoint of a bar not being moved. To see examples of the relocation of a bar please refer to Fig.\ref{fig:bar-relocation}   
-The canonical listing problem asks, given all $S_{N}$, is there an efficient way to generate $CanL\{\pi_{N}\}$? Efficiency is defined as 
-using minimal change to transition from $L_{i}$ to $L_{j}$. For example, let $N=4$, then $|S_{N}|=24$ 
-Since each permutation has at least one ladder in its respective $OptL\{\pi\}$, then $|CanL\{\pi_{4}\}=24|$. $CanL\{\pi\}$ consists 
-of a canonical representative from each $OptL\{\pi\}$. 
+The relocation cannot be a right/left swap operation. 
+If the relocation of the bar moves the bar to a new row, but not a new column, then the endpoint 
+of the bar being moved must cross the endpoint of a bar not being moved. To see examples of the relocation of a bar please refer to 
+Figure~\ref{fig:bar-relocation}.
 
-\begin{center}
-\begin{table}[ht]
-    \caption{Table for all 4!, 24, permutations of order 4} 
-
-    \centering
-       \begin{tabular}{|c |c |c |c |}
-        \hline
-        1234 & 1243 & 1324 & 1342 \\ \hline
-        1423 & 1432 & 2143 & 2134 \\ \hline 
-        2314 & 2341 & 2413 & 2431 \\ \hline 
-        3124 & 3142 & 3214 & 3241 \\ \hline 
-        3412 & 3421 & 4123 & 4132 \\ \hline 
-        4213 & 4231 & 4312 & 4321 \\ \hline 
-        
-    \end{tabular}
-    \label{table:aa}
- \end{table}
-\end{center}
-
-
-\begin{theorem}
-    In order to transition from canonical ladder $L_{i}$ to canonical ladder $L_{j}$, at least one bar has to be added or 
-    removed from $L_{i}$ or at least one bar has to be relocated in $L_{i}$.
-\end{theorem}
-\begin{proof}
-    We begin this proof by contradiction. Suppose $L_{i}$ is some arbitrary canonical ladder for some arbitrary permutation, $\pi$, of 
-    order $N$. Suppose that $L_{j}$ is the next canonical ladder in the set of canonical ladders for some other arbitrary permutation $\pi+1$ 
-    of order $N$. Suppose a bar does not need to be added or removed from $L_{i}$ to get to $L_{j}$ nor does a bar need to be relocated to get to $L_{i}$ to 
-    $L_{j}$. We know that each bar in $L_{i}$ uninverts a single inversion in $\pi_{i}$. We know that each bar in $L_{j}$ 
-    uninverts a single inversion in $\pi_{j}$. We know that $\pi_{i} \neq \pi_{j}$. Therefore we know that $L_{i} \neq L_{j}$. Two ladders corresponding to 
-    two different permutations differ from each other in three ways. The first way is by the number of lines, the second way is by the number of 
-    bars, and the third way is the location of bars. Note that two ladders can differ in more than one of the three ways. In the case 
-    of $L_{i}$ and $L_{j}$, they have the same number of lines seeing as they are ladders of order $N$. Therefore they cannot differ in terms 
-    of the number of lines. We also assumed that $L_{i}$ and $L_{j}$ have the same number of bars and the same location of bars. Which means 
-    that the ladders are the same. But we already stated that $L_{i} \neq L_{j}$. Therefore we have a contradiction. Which means that 
-    either a bar needs to be added/removed from $L_{i}$ to get to $L_{j}$ or a bar needs to be relocated in $L_{i}$ to get to $L_{j}$. End of proof.
-\end{proof}
-
-
-\begin{figure}[!htp]
-    \centering
+\begin{figure}[h]
+   \centering
     \begin{tikzpicture}
         \node at(.5, 2.8){\small{$x$}};
         \draw(0, 0) to (0, 3);
@@ -100,23 +61,53 @@ of a canonical representative from each $OptL\{\pi\}$.
     \caption{Example of relocating bar $x$}
     \label{fig:bar-relocation}   
 \end{figure}
+ 
+The canonical listing problem asks, given all $S_{n}$, is there an efficient way to generate $CanL\{\pi_{n}\}$? Efficiency is defined as 
+using minimal change to transition from $l_{i}$ to $l_{j}$. For example, let $n=4$, then $|S_{n}|=24$. 
+Since each permutation has at least one ladder in its respective $OptL\{\pi\}$, then $|CanL\{\pi_{4}\}=24|$. $CanL\{\pi_{4}\}$ consists 
+of $24$ ladders such that the amount of change to get from $l_{i}$ to $l_{j}$ is minimal. 
+
+
+
+\begin{theorem}
+    In order to transition from canonical ladder $l_{i}$ to canonical ladder $l_{j}$, at least one bar has to be added or 
+    removed from $l_{i}$ or at least one bar has to be relocated in $l_{i}$.
+\end{theorem}
+\begin{proof}
+    We begin this proof by contradiction. Suppose $l_{i}$ is some canonical ladder in $CanL\{\pi_{n}\}$. 
+    Suppose that $l_{j}$ is the next canonical ladder in $CanL\{\pi_{n}\}$. 
+    Suppose a bar does not need to be added or removed from $l_{i}$ to get to $l_{j}$ nor does a bar need to be relocated to get to $l_{i}$ to 
+    $l_{j}$. We know that each bar in $l_{i}$ uninverts a single inversion in $p_{i}$. We know that each bar in $l_{j}$ 
+    uninverts a single inversion in $p_{j}$. We know that $p_{i} \neq p_{j}$. Therefore we know that $l_{i} \neq l_{j}$. 
+    Two ladders corresponding to 
+    two different permutations differ from each other in three ways. The first way is by the number of lines, the second way is by the number of 
+    bars, and the third way is the location of bars. Note that two ladders can differ in more than one of the three ways. In the case 
+    of $l_{i}$ and $l_{j}$, they have the same number of lines seeing as they are ladders of order $n$. Therefore, they cannot differ in terms 
+    of the number of lines. We also assumed that $l_{i}$ and $l_{j}$ have the same number of bars and the same location of bars. Which means 
+    that the ladders are the same. But we already stated that $l_{i} \neq L_{j}$. Therefore we have a contradiction. Which means that 
+    either a bar needs to be added/removed from $l_{i}$ to get to $l_{j}$ or a bar needs to be relocated in $l_{i}$ to get to $l_{j}$.
+\end{proof}
+
+
 
 In this thesis, two listing algorithms are used to list the canonical 
-ladders for each $CanL\{\pi_{N}\}$. The first of these listing algorithms 
-is a modification of the Steinhaus-Johnson-Trotter permutation listing algorithm. 
+ladders for each $CanL\{\pi_{n}\}$. The first of these listing algorithms 
+is a modification of the |{\sc Steinhaus-Johnson-Trotter} permutation listing algorithm. 
 The second listing algorithm is influenced by Effler and Ruskey's algorithm in their paper 
 A CAT Algorithm for Generating Permutations with a Fixed number of Inversions. 
-It is termed the cyclic-bar algorithm. Both of these algorithms will 
+This second listing algorithm is termed the {\sc CyclicBar} algorithm. Both of these algorithms will 
 be described, explained and analyzed throughout the remainder of the chapter.\par
 
 Before proceeding, the selection process for choosing the canonical ladder will be explained.
-In general, the canonical represeantive from $OptL{\pi_{N}}$ is chosen based on a tree structure. 
-The root of the tree is the only ladder from $OptL\{\pi=(1, 2, \dots  ,N)\}$.
-Proceeding from the root ladder, for every canonical ladder $L_{j}$, it 
-is chosen based on the minimal amount of change required to get from $L_{i}$ where $j=i+1$. 
-Since the minimal amount of change is defined as the insertion or deletion of one bar 
-or the relocation of a bar, then the canonical representative, $L_{j}$, is equal 
-to $L_{i}$ plus the minimal amount of change. The exception to this rule is 
+In general, the canonical representative from $OptL{\pi_{n}}$ is chosen based on a tree structure. 
+The root of the tree is the \emph{identity ladder} which is the only ladder 
+corresponding to $\pi=(1,2 \dots ,n)$.
+Proceeding from the root ladder, for every canonical ladder $l_{i}$, it 
+is chosen based on the minimal amount of change required to get from $l_{i-1}$ to $l_{i}$. 
+Since the minimal amount of change is defined as the insertion or deletion of a single bar 
+or the relocation of a single bar, then the canonical representative, $l_{i}$ 
+is derived from $l_{i-1}$ by applying the minimal amount of change. The exception to this rule is 
 in the cyclic-bar algorithm in which transitioning between trees in the forest 
 structure generated by the algorithm.
+
 

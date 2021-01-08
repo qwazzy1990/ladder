@@ -1,13 +1,17 @@
 \section{Results}
-    In the results section, the runtimes of the two algorithms will be provided. The run times are done without printing the ladders. When the ladders are printed, the runtime increases by a substantial amount. 
-    The runtime for each algorithm for $N=10$ will be provided in Table \ref{Table:ListingResults}. In the analysis section, the table will be further analyzed along with 
+    In the results section, the runtimes of the two algorithms will be provided. The run times are done without printing the ladders. 
+    When the ladders are printed, the runtime increases by a substantial amount. 
+    The runtime for each algorithm for $n=12$ will be provided in table~\ref{Table:ListingResults}. 
+    In the analysis section, the table will be further analyzed along with 
     the time and space complexity for each algorithm.
+ \begin{center}
     \begin{table}
+        \centering
     \begin{tabular}{ |p{3cm}||p{3cm}|p{3cm}|}
         \hline
-        \multicolumn{3}{|c|}{Runtimes for generating $CanL\{\pi_{N}\}$ in seconds} \\
+        \multicolumn{3}{|c|}{Runtimes for generating $CanL\{\pi_{n}\}$ in seconds} \\
         \hline
-            $N$ value& Cyclic Inversion & Modified SJT\\
+            $n$ value& Cyclic Bar & Modified SJT\\
         \hline
             1   & 0.000000    &0.000000\\
             \hline
@@ -36,6 +40,7 @@
             12 & 174.312500 & 2.781250\\
         \hline
     \end{tabular}
-    \caption{The table with the runtimes for listing $CanL\{\pi_{N}\}$ using the Cyclic Inversion Algorithm and Modified SJT Algorithm.}
+    \caption{The table with the runtimes for listing $CanL\{\pi_{n}\}$ using the Cyclic Bar Algorithm and Modified SJT Algorithm.}
     \label{Table:ListingResults}
-    \end{table}\pagebreak
+    \end{table}
+\end{center}\pagebreak

@@ -554,7 +554,7 @@ void printPerm(int *perm, int size)
 {
     forall(size)
     {
-        printf("%d     ", perm[x]);
+        printf("%d  ", perm[x]);
     }
     printf("\n");
 }
@@ -1770,13 +1770,15 @@ void saveAllLadders(int *perm, int numDig)
     allLadders = initializeList(dummy_print, destroyClone, dummy_compare);
     SAVEALL = true;
     driver(perm, numDig);
+    if(PRINT)
     for (Node *h = allLadders->head; h != NULL; h = h->next)
     {
         Ladder *l = h->data;
         printLadder(l);
     }
-    freeList(allLadders);
+    //freeList(allLadders);
     SAVEALL = false;
+    ladderCount = 1;
 }
 
 void encodingDriver(int *perm, int numDig, int mode)

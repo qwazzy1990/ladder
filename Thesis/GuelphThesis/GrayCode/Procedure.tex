@@ -1,3 +1,5 @@
+
+
 \section{Procedure}
 
 So far, the problem has been introduced and the required terminology has been defined. Recall that there are two 
@@ -6,125 +8,96 @@ However, there has yet to be discussion regarding the two
 listing algorithms. In the procedure section 
 we look at each of the algorithms and explain what 
 each of the algorithms are doing. The goal is to transition from 
-$L_{i}$ to $L_{i+1}$ in $CanL{\pi_{N}}$ with minimal change, which means adding or removing 
-the least number of bars to get from $L_{i}$ to $L_{i+1}$ or relocating 
-the least number of bars to get from $L_{i}$ to $L_{i+1}$.\par 
+$l_{i}$ to $l_{i+1}$ in $CanL{\pi_{n}}$ with minimal change, which means adding or removing 
+the least number of bars to get from $l_{i}$ to $l_{i+1}$ or relocating 
+the least number of bars to get from $l_{i}$ to $l_{i+1}$.\par 
 
-The reason that the modified SJT and CI algorithms were chosen is because they allow 
-for minimal change from $L_{i}$ to $L_{i+1}$. While conducting this research, modifications 
-to the permutation listing algorithms mentioned in chapter one were applied for listing $CanL\{\pi_{N}\}$. Recall that 
+The reason that the {\sc ModifiedSJT} and {\sc Cyclic Bar} algorithms were chosen is because they allow 
+for minimal change from $l_{i}$ to $l_{i+1}$. While conducting this research, modifications 
+to the permutation listing algorithms mentioned in chapter one were applied for listing $CanL\{\pi_{n}\}$. Recall that 
 these listing algorithms were Zaks, Heaps, and Lexicographic. These listing algorithms 
-did not allow for minimal change when transitioning from $L_{i}$ to $L_{i+1}$.
+did not allow for minimal change when transitioning from $l_{i}$ to $l_{i+1}$.
 %%section SJT
-\subsection{Steinhaus-Johnson-Trotter}
+\subsection{The Modified Steinhaus-Johnson-Trotter Algorithm}
+
+For the initial conditions of {\sc ModifiedSJT} assume the following. 
+Let be the $ladder$ be initialized a two dimensional binary array of only $0's$.
+ Let a $1$ at $row=i,col=j$ 
+indicate a bar at  $row=i,col=j$. Let a $0$ at $row=i,col=j$ 
+indicate the absence of a bar at  $row=i,col=j$.
+Let $n$ be the maximum element. Let $direction$ be a one 
+indexed array set to left for all indexes. Let left indicate that a bar is to be added to the ladder; bars 
+are added left to right. Let right indicate a bar is to be removed from the ladder; bars 
+are removed right to left. Let $route$ be initialized to $2$. On each recursive call 
+$route$ is incremented by $1$ from $2,3 \dots n$.
 \begin{algorithm}
-  \caption{modified SJT algorithm for processing at $=N$}
   \begin{algorithmic}[1]
-    \Function{modifiedSjt}{$N$, $ladder[2(N-1)-1][N-1]$, $arr[N-1]$, $direction[N]$}
-
-
-      \State $print(Ladder)$
-
-      %%base case
-      \If{$GlobalCount = N!$}
-        \State return
+    \Function{ModifiedSJT}{$n$, $ladder$, $route$, $direction$}
+     %%base case
+      \If{$route > n$}
+        \State {\sc print}($ladder$)
+        \State \textbf{return}
       \EndIf
-
-     
       %%swap the nth element n-1 times
-      \For{$i \gets 1$,$i < N$, $i \gets i+1$}
-        
-        \If{$direction[N] = left$}
-            \State $row \gets (N) - i$
-            \State $col \gets row$
+      \For{$i$ \textbf{from} $0$ \textbf{to} $route-1$}
+        \If{$i = 0$}
+          \State {\sc ModifiedSJT}($n$, $ladder$, $route+1$, $direction$)
+        \Else 
+          \If{$direction[route]=$ left}
+            \State $row \gets (n) + (n - route) - (i);$
+            \State $col \gets route - i$
             \State $ladder[row][col] \gets 1$
-        \Else
-            \State $row \gets i$
-            \State $col \gets row$
-            \State $ladder[row][col] \gets 0$
-        \EndIf
-        \State $GlobalCount \gets GlobalCount+1$
-        \State $print(Ladder)$
-
-      \EndFor
-      \State $direction[N] \gets !(direction[N])$
-      \State $k \gets N-1$
-      \State $HELPERSJT(k, N, ladder, arr, direction)$
-      \State $MODIFIEDSJT(n,  Ladder, arr, direction)$
-
-    \EndFunction
-  \end{algorithmic}
-\end{algorithm}
-
-%%helper algorithm
-\begin{algorithm}
-  \caption{Helper SJT algorithm for processing when $2 \leq k < N$}
-  \begin{algorithmic}[1]
-    \Function{helpersjt}{$N$, $k=(N-1)$, $ladder[2(N-1)-1][N-1]$, $arr[N-1]$, $direction[N]$}
-
-      \For{$i \gets k$, $i \geq 1$, $i \gets i-1$}
-        \If{$arr[k] < k$}
-        \State $GlobalCount \gets GlobalCount + 1$
-
-          \If{$direction[k] = left$}
-            \State $row \gets (N-1) + (N-k) - arr[k]$
-            \State $col \gets k - arr[k]$
-            \State $ladder[row][col] \gets 1$
-
           \Else
-            \State $row \gets  (N-1) + (N-k) + arr[k] - (k-2)$
-            \State $col \gets arr[k]$
+            \State $col \gets i$
+            \State $row \gets 2(n - route) + (i)$
             \State $ladder[row][col] \gets 0$
           \EndIf
-          \State $arr[k]\gets arr[k]+1$
-          \State return
-        \Else 
-          \State $arr[k] \gets 0$
-          \State $direction[k] \gets !(direction[k])$
         \EndIf
-        $k \gets k-1$
+        \State {\sc ModifiedSJT}($n$, $ladder$, $route+1$, $direction$)
       \EndFor
-      \EndFunction
+      \If{$direction[route] =$ left}
+        \State $direction[route] \gets$ right
+      \Else
+        \State $direction[route] \gets$ left
+      \EndIf
+    \EndFunction
   \end{algorithmic}
+  \caption{Modification of the {\sc SJT} algorithm for listing $CanL\{\pi_{n}\}$}
+  \label{Alg:ModSJT}
 \end{algorithm}
+
+
 \pagebreak
 
-Let the \emph{identity ladder} be the ladder for the sorted permutation from $[1 \dots N]$.
-Let the initial conditions of the algorithm be the fallowing. The $ladder= 2D array$ initialized to the identity ladder,  
-let $N \geq 1$, let $arr$ be a one indexed array initialized to zero for all indexes. Let $direction$ be a one 
-indexed array set to false for all indexes. The principles of the algorithm are the following, if the direction for a 
-given route is false, then bars will be added for that given route, from right to left, bottom to top, until no more bars can be added. Let a 
-$1$ at $ladder[row][col]$ indicate a bar has been added to the ladder at the given row and column.
-If the direction for a given route is true, then bars will be removed for that given route, left to right, top to bottom, until 
-no more bars can be removed. Let a $0$ at $ladder[row][col]$ indicate a bar has been removed from the ladder 
-at the given row and column. Let $k$ be the value of some given route where $1 < k < N$. Note that element one has no route.
-The number of bars for a given route is $1 \leq k < N-1$. This is because the maximum number of inversions 
-the $kth$ element can make is $k-1$, therefore the $kth$ route can have at most $N-2$, if $k=N-1$, and 
-at least $1$ bar if $k=2$. Once all the bars for the $kth$ route have been added 
-or removed, the direction for the $kth$ route is switched, indicating that its bars will be removed if they 
-were added, or added if they were removed. Once all the bars for the $kth$ route have been added or removed, 
-the next bar of the $k-1th$ route will be added or removed. Once this is done, the bars of route $k$ will 
-then be added if they were previously removed or removed if previously added. Repeat this process until all
-$N!$ ladders have been generated.
 
-\subsubsection{Proof} 
-Since the alorithm is a modification of the Steinhaus-Johnson-Trotter algorithm, a similar proof for the SJT algorithm 
-can be applied to the modified SJT algorithm for ladder lotteries. Suppose we want to generate all ladders 
-of order $N$ using the modified SJT algorithm. Suppose we had all ladders of order $N-1$, then for 
-each ladder of order $N-1$, add a line to the ladder of order $N-1$ to get a ladder of order $N$. Call these ladders 
-$L(N-1)+1)$. For each $L(N-1)+1$, if it is an odd numbered ladder, then add a bar to each column from bottom right 
-to top left. This can be done $(N-1)$ times resulting in $N$ ladders derived from the odd numbered 
-$L((N-1)+1)$ ladder; the first ladder equals odd numbered $L((N-1)+1)$. 
-If it is an even numbered ladder, then add $(N-1)$ bars from top left to bottom right to get the first ladder 
-of order $N$ from the even numbered $L((N-1)+1)$. Then proceed to remove the $(N-1)$ bars from top left to bottom right. 
-Removing $(N-1)$ bars results in $N$ ladders derived from the even numbered ladder $L((N-1)+1)$ ladder; the first ladder 
-is $L((N-1)+1)$ with the $(N-1)$ ladders added to it from top left to bottom right. Also note that the last ladder derived from 
-the odd $L_{(N-1)+1}$ is the same as the first ladder derived from the subsequent even numbered $L((N-1)+1)$ with the exception 
-of an additional bar in the subsequent even $L((N-1)+1)$. Thus, the last ladder of order $N$ derived from 
-the odd numbered $L((N-1)+1)$ requires one bar insertion to get to the first ladder of order $N$ derived from the subsequent 
-even numbered $L((N-1)+1)$. Continue this process for all $L((N-1)+1)$ and string the results together, thus 
-listing all ladders of order $N$. To see an example for $N=4$ please refer to Fig.\ref{Fig:CanLSJT}.\pagebreak
+The principles of the algorithm are the following. Given $route=k$, add or remove a bar for route $k$, then add or remove 
+all bars for $route=k+1$. Once all bars for route $k+1$ have been added or removed, 
+proceed to add or remove the next bar from $route=k$. Repeat until all $k-1$ bars have been added or removed from route $k$.
+If $direction[route]$ is left, then bars of $route$ will be added to 
+$ladder$ from right to left, bottom to top, until no more bars to $route$ can be added.
+If $direction[route]$ is right, then bars will be removed from $ladder$, right to left, top to bottom, until 
+no more bars from $route$ can be removed. Once all the bars for $route$ have 
+been added or removed, then $direction[route]$ is reversed,
+indicating that the opposite operation will be applied to the bars of the route when 
+$route$ is next processed. The maximum number of bars for a given $route=k$ is $k-1$ and the minimum number of 
+bars is $1$. On each recursive call, $route$ is 
+incremented by $1$. When $route$ is greater than $n$, print the ladder 
+and return. 
 
+
+\begin{lemma}
+  {\sc ModifiedSJT} produces $CanL\{\pi_{n}\}$
+\end{lemma}
+\begin{proof}
+  Since the algorithm is a modification of the Steinhaus-Johnson-Trotter algorithm, a similar proof for the SJT algorithm 
+can be applied to the {\sc ModifiedSJT} algorithm. Suppose we want to list all $n!$ ladders 
+of order $n$. Suppose we have all $n-1!$ ladders of order $n-1$, then for 
+each ladder of order $n-1$ add a new column to the right; this results in $n-1$ columns seeing as 
+the number of columns is one less than the number of elements. For each of the $n-1!$ ladders with $n-1$ columns 
+add $0 \dots n-1$ bars beginning at column $n-1$ and ending 
+at column $1$. Doing so results in $(n-1)!n=n!$ ladders of order $n$. To see 
+an example of the proof please refer to Figure~\ref{Fig:CanLSJT}.
+\end{proof}
 %%prove the dimensions of the datastructure
 \begin{center}
 \begin{figure}[!htp]
@@ -132,7 +105,7 @@ listing all ladders of order $N$. To see an example for $N=4$ please refer to Fi
   %%First tree
   \begin{minipage}{.9\textwidth}
   
-  \resizebox{.9\textwidth}{.45\textheight}{
+ ~\resizebox{.9\textwidth}{.45\textheight}{
   \begin{tikzpicture}
    
   %%t1
@@ -282,7 +255,7 @@ listing all ladders of order $N$. To see an example for $N=4$ please refer to Fi
   \begin{minipage}{.9\textwidth}
   
   
-  \resizebox{.9\textwidth}{.45\textheight}{
+ ~\resizebox{.9\textwidth}{.45\textheight}{
   \begin{tikzpicture}
    
   %%t1
@@ -448,314 +421,97 @@ listing all ladders of order $N$. To see an example for $N=4$ please refer to Fi
 
 
 
-  \caption{$CanL\{\pi_{4}\}$ generated by the modified SJT algorithm. The algorithm inserts or removes a bar from the previous 
+  \caption{$CanL\{\pi_{4}\}$ generated by the {\sc ModifiedSJT} algorithm. The algorithm inserts or removes a bar from the previous 
   ladder at the leaf nodes in the tree, the tree is used to prove the veracity of the algorithm}
   \label{Fig:CanLSJT}
 \end{figure}
-\end{center}
-
-
-
+\end{center}\pagebreak
 
 \begin{theorem}
-  The number of rows required for the ladder data-structure is $2(N-1) - 1$ and the number of columns required for 
-  the ladder is $N-1$.
+  If the algorithm being applied is {\sc ModifiedSJT} then the number of rows required for the ladder data-structure is $2(n-1) - 1$ 
+  and the number of columns required for the ladder is $n-1$.
 \end{theorem}
 \begin{proof}
-  The number of columns is fairly straighforward. Seeing as there are always $N$ elements in $\pi_{N}$, 
-  a column represents a gap between lines in the corresponding ladder lottery. Each ladder of order $N$ has $N$ lines, 
-  one for each element in $\pi_{N}$. Therefore each ladder of order $N$ has $N-1$ columns.\par 
-  The number of rows for the ladder data-structure is calculated a follows, given $\pi_{N}$, the minimal 
-  number of rows required is when $\pi_{N}$ is sorted. In this case there are zero rows because there are 
-  zero bars added to the ladder. This ladder is $L(ID)$ and is 
-  the first ancestor in $CanL\{\pi_{N}\}$. When a bar is added to the ladder it can be added to an already existing row 
-  or to a new row. If the current state of the ladder is $L(ID)$ then adding the first bar creates the second ladder in
-  $CanL\{\pi_{N}\}$. Since the bars are being added bottom right to top left, and the first bar to be added belongs 
-  to the $Nth$ route, then it must be added to $row=N-1$, $col=N-1$. As bars of the $Nth$ route get 
+  The number of columns is fairly straightforward. Seeing as there are always $n$ elements in $\pi_{n}$, 
+  a column represents a gap between lines in the corresponding ladder lottery. Each ladder of order $n$ has $n$ lines, 
+  one for each element in $\pi_{n}$. Therefore each ladder of order $n$ has $n-1$ columns.\par 
+  The number of rows for the ladder data-structure is calculated a follows, given $\pi_{n}$, the minimal 
+  number of rows required is when $\pi_{n}$ is sorted. In this case there are zero rows because there are 
+  zero bars added to the ladder. When a bar is added to the ladder it can be added to an already existing row 
+  or to a new row. If the current state of the ladder is empty then adding the first bar produces the second ladder in
+  $CanL\{\pi_{n}\}$. Since the bars are being added bottom right to top left, and the first bar to be added belongs 
+  to the $nth$ route, then it must be added to $row=n-1$, $col=n-1$. As bars of the $nth$ route get 
   continuously added to the ladder, each bar is added a row above the previous bar and to a column 
   to the left of the column of the previous bar.
-  Since no two bars of the $Nth$ route can be on the same row, this will require $N-1$ rows. Note, if they were added to the same 
+  Since no two bars of the $nth$ route can be on the same row, this will require $n-1$ rows. Note, if they were added to the same 
   row, then the left end point of the right bar would be touching the right end point of the left bar which is disallowed. Once the 
-  bars of the $Nth$ element are added, the bars of the $N-1th$ route will be added. The $N-1th's$ first bar 
-  will be added to the $N-2$ column, otherwise it would be directly below the first bar of the $Nth$ route, which is a violation. 
-  Since the first bar of the $N-1$'s element is added to column $N-2$, then it must be given a new row, otherwise its right end point 
-  will be touching  the left end point of the first bar of route $N$. The remaining $N-2$ bars of element $N-1$
-  will be added bottom right to top left, but none of their end points will touch the end points of element $N$ seeing as they will 
-  always be two columns apart from any bar in $N's$ route. The same logic applies to element $N-2$, it will require one extra row for its 
-  first bar, in order not to touch the first bar of element $N-1$, but the remainder of its bars will always be two columns away from 
-  the remainder of the bars for $N-1$, etc. Therefore there are $N-1$ rows required for the $Nth$ element and each subsequent 
-  element, $k$ requires only one new row. Since $2 \leq k < N$, then there are $(N-2)$ additional rows required for the ladder. Note that element 
-  $1$ has no bars in its route. Therefore there are $(N-1)$ rows required for element $N's$ bars  plus $(N-2)$ rows required for 
-  all the remaining $2 \leq k < N$ routes. In conclusion the number of rows required is $(N-1) + (N-2) = 2(N-1)-1$. 
+  bars of the $nth$ element are added, the bars of the $n-1th$ route will be added. The $n-1th's$ first bar 
+  will be added to the $n-2$ column, otherwise it would be directly below the first bar of the $nth$ route, which is a violation. 
+  Since the first bar of the $n-1$'s element is added to column $n-2$, then it must be given a new row, otherwise its right end point 
+  will be touching  the left end point of the first bar of route $n$. The remaining $n-2$ bars of element $n-1$
+  will be added bottom right to top left, but none of their end points will touch the end points of element $n$ seeing as they will 
+  always be two columns apart from any bar in $n's$ route. The same logic applies to element $n-2$, it will require one extra row for its 
+  first bar, in order not to touch the first bar of element $n-1$, but the remainder of its bars will always be two columns away from 
+  the remainder of the bars for $n-1$, etc. Therefore there are $n-1$ rows required for the $nth$ element and each subsequent 
+  element, $k$ requires only one new row. Since $2 \leq k < n$, then there are $(n-2)$ additional rows required for the ladder. Note that element 
+  $1$ has no bars in its route. Therefore there are $(n-1)$ rows required for element $n's$ bars  plus $(n-2)$ rows required for 
+  all the remaining $2 \leq k < n$ routes. In conclusion the number of rows required is $(n-1) + (n-2) = 2(n-1)-1$. 
   See figure for the tree of ladders 
-  generated by modified SJT for $N=4$. Note that the maximum number of rows required is $2(N-1)-1=2(3)-1=5$.
+  generated by {\sc ModifiedSJT} for $n=4$. Note that the maximum number of rows required is $2(n-1)-1=2(3)-1=5$.
 \end{proof}
 
 
 
 %%end proof
-
-
-From Fig.\ref{Fig:CanLSJT} it should be clear that the canonical representative from $CanL{\pi_{N}}$ when using the 
-Modified SJT algorithm is also the root ladder from each $OptL{\pi_{N}}$. Recall that the root ladder is the 
+From looking at Figure~\ref{Fig:CanLSJT} it should be clear that the canonical representative from $CanL\{\pi_{n}\}$ when using the 
+{\sc ModifiedSJT} algorithm is also the root ladder from each $OptL\{\pi_{n}\}$. Recall that the root ladder is the 
 ladder whose bars of a lesser route have not crossed the bars of a greater route. In the case of the 
-Modified SJT algorithm, transitioning from $L_{i}$ to $L_{i+1}$ involves simply inserting a new bar 
+{\sc ModifiedSJT} algorithm, transitioning from $l_{i}$ to $l_{i+1}$ involves simply inserting a new bar 
 or removing a bar for a given route. Let $k$ be the current route. If a new bar being added belongs to 
-route $k$, then the addition of the bar does not violate the property of the root ladder. If the new bar to
-be added belongs to route $k-1$, then the bar is added below $k's$ bars, still not violating the property of 
-the root ladder. When a bar is removed, that implies it has already been added. Let $L_{i}$ be a 
-ladder whose bar is about to be removed, thus transitioning to $L_{i+1}$. Let $L_{i}$ be a root ladder, 
-then removing a bar from $L_{i}$ cannot make $L_{i+1}$ a non-root ladder, because 
-removing a bar from $L_{i}$ does not allow the bar of a lesser element to cross the bars of a greater element.
-Thus, the canonical representative for $CanL{\pi_{N}}$ is always the root ladder from each $OptL{\pi_{N}}$.\par 
+route $k$, the bar is added below the route of $k+1$ and above the route of $k-1$, therefore 
+adding a bar does not violate the constraint of the root ladder. Let $l_{i}$ be the current ladder.
+Let $l_{i+1}$ be the next ladder in the sequence. 
+Then removing a bar from $l_{i}$ cannot make $l_{i+1}$ a non-root ladder, because 
+removing a bar from $l_{i}$ does not allow the bar of a lesser element to cross the bars of a greater element.
+Thus, the canonical representative for $CanL\{\pi_{n}\}$ is always the root ladder from each $OptL\{\pi_{n}\}$.\par 
 
 
 
 %%Beging the cases
 The calculations for the row and column for the bar 
-depend on several factors. The first factor is whether the row and column is being calculated for $route=N$ or 
-if $route < N$. If $route=N$, then the row and column are calculated using the main function, ModifiedSJT. The second factor 
-is whether a bar is being removed from the ladder or a bar is being added to the ladder. Therefore, there are eight cases 
-to consider. The cases are the following: 
+depend on whether the bar is being added or removed. Thus, there are
+four cases to consider. The cases are the following: 
 \begin{caseof}
-  \case{$Route = N$}{Bar is being added. Row is being calculated.}
-  \case{$Route = N$}{Bar is being added. Column is being calculated.}
-  \case{$Route = N$}{Bar is being removed. Row is being calculated.}
-  \case{$Route = N$}{Bar is being removed. Column is being calculated.}
-  \case{$Route < N$}{Bar is being added. Row is being calculated.}
-  \case{$Route < N$}{Bar is being added. Column is being calculated.}
-  \case{$Route < N$}{Bar is being removed. Row is being calculated.}
-  \case{$Route < N$}{Bar is being removed. Column is being calculated.}
+ ~\case{Bar is being added}{Row is being calculated.}
+ ~\case{Bar is being added}{Column is being calculated.}
+ ~\case{Bar is being removed}{Row is being calculated.}
+ ~\case{Bar is being removed.}{Column is being calculated.}
 \end{caseof}
 
 %%End the cases
 
 %%proof 1
 \begin{lemma}
-  Let $route=N$. Let $i=$ the current number of bars in the ladder belonging to route $N$. 
-  Assume a bar is being added. Then the $row=(N-1)-I$.
-\end{lemma}
-\begin{proof}
-  Keeping in mind we are only dealing with root ladders, then the bars of the $Nth$ route will be above the bars of 
-  any other route. The bars are added bottom right to top left, and no two bars of the $Nth$ route can be on the same row.
-  There are a total of $N-1$ rows requried for the bars of the $Nth$ route. $i$ is incremented for each bar that is added 
-  to the $Nth$ route. The first bar to be added will be at row $N-1$, once it is added $i$ is incremented by one, the second 
-  bar of the $Nth$ route will be added to row $N-2$, which equals $N-1-I$. Then $i$ is incremented again. This continues 
-  until all bars of the $Nth$ route are added. Refer to Fig.\ref{fig:SJTcase1} for an example of row calulation when adding a bar 
-  for the $Nth$ route.
-\end{proof}
-\begin{figure}[!htp]
-  \begin{center}
-    \begin{tikzpicture}
-      \draw(0, 0) to (0, 6);
-      \draw(2, 0) to (2, 6);
-        \node at(3, 4.7){4,2};
-        \draw(2, 4.5) to (4, 4.5);
-      \draw(4, 0) to (4, 6);
-        \node at(5, 3.7){4,3};
-        \draw(4, 3.5) to (6, 3.5);
-      \draw(6, 0) to (6, 6);
-
-      \node at(-2, 5.5){R1};
-      \node at(-2, 4.5){R2};
-      \node at(-2, 3.5){R3};
-      \node at(-2, 2.5){R4};
-      \node at(-2, 1.5){R5};
-
-      \node at(0, 6.2){1};
-      \node at(2, 6.2){4};
-      \node at(4, 6.2){2};
-      \node at(6, 6.2){3};
-
-      \draw (1,5.5) ellipse (1cm and .4cm);
-
-    \end{tikzpicture}
-  \end{center}
-  \caption{The row of the last bar to be added for element $4$ is row $1$. $row=1=3-2=(N-1)-I$}
-  \label{fig:SJTcase1}
-\end{figure}
-
-%%end proof 1
-
-
-%%Prove case 2
-\begin{lemma}
-  Let $route=N$. Let $i=$ the current number of bars in the ladder belonging to route $N$. 
-  Assume a bar is being added. Then the $column=(N-1)-i$.
-\end{lemma}
-\begin{proof}
-  Keeping in mind we are only dealing with root ladders, then the bars of the $Nth$ route will be above the bars of 
-  any other route. The bars are added bottom right to top left. The ladder has a total of $N-1$ columns, seeing as 
-  the $Nth$ element has $N-1$ bars, each requiring their own column. If two bars of the $Nth$ element were 
-  in the same column, then this would violate one of two constraints. Either the two bars would be directly 
-  above/below each other, in which case the ladder would not be optimal seeing as the two elements that crossed the 
-  top bar would then cross the bottom bar, which means the ladder has an extra bar. The second case can be discredited as 
-  follows. Let the top bar belonging to route $N$ be designated as $x$, let the bottom bar belonging to route $N$ be 
-  designated as $y$. Assume $x$ and $y$ are in the same column.
-  Then there is some third bar $z$, not belonging to route $N$ and not in the same column 
-  as $x$ and $y$ such that $z$ is in the column directly to the left or right of the column of $x$ and $y$. But if that 
-  is the case, then $z$ is above bar $y$ which violates the definition of the root ladder. Therefore, every bar 
-  belonging to route $N$ requires its own column. The first bar to be added to route $N$ goes in the rightmost column which 
-  equals column $N-1$, then $i$ is incremented by one. The second bar is in column $(N-1)-1=(N-1)-i$ and $i$ is incremented 
-  by one. The process continues until all $(N-1)$ bars of the $Nth$ route have been added. See figure\ref{fig:SJTcase2} for an example 
-  of column calculation.
-\end{proof}
-
-\begin{figure}[!htp]
-  \begin{center}
-    \begin{tikzpicture}
-       \draw(0, 0) to (0, 6);
-      \draw(2, 0) to (2, 6);
-        \node at(3, 4.7){4,2};
-        \draw(2, 4.5) to (4, 4.5);
-      \draw(4, 0) to (4, 6);
-        \node at(5, 3.7){4,3};
-        \draw(4, 3.5) to (6, 3.5);
-      \draw(6, 0) to (6, 6);
-
-      \node at(1, -0.3){Col 1};
-      \node at(3, -0.3){Col 2};
-      \node at(5, -0.3){Col 3};
-
-      \node at(0, 6.2){1};
-      \node at(2, 6.2){4};
-      \node at(4, 6.2){2};
-      \node at(6, 6.2){3};
-
-      \draw (1,5.5) ellipse (1cm and .4cm);
-
-
-      
-    \end{tikzpicture}
-  \end{center}
-  \caption{The column of the last bar to be added for element $4$ is $1$. $column=1=3-2=(N-1)-I$}
-  \label{fig:SJTcase2}
-\end{figure}
-%%End proof of case 2
-
-
-%%Proof of case 3
-\begin{lemma}
-  Let $route=N$. Let $i=$ the current number of bars that have been removed from route $N$. Assume a bar is being removed. 
-  Then the $row=I+1$
-\end{lemma}
-\begin{proof}
-  Keeping in mind we are dealing with root ladders and bars are removed from left to right, top to bottom, then the first bar to 
-  be removed from route $N$ is at row one. Since no bars have been removed, $i$ currently equals zero, 
-  thus row $1=i+1$. Once removed, $i$ is increased by one, indicating a bar has been removed. The next bar is at row two, 
-  which again equals $i+1$. Continue until all bars of the $Nth$ route have been removed. See Fig.\ref{fig:SJTcase3} for an example 
-  of row calculation when removing a bar for the $Nth$ element.
-\end{proof}
-\begin{figure}[!htp]
-  \begin{center}
-    \begin{tikzpicture}
-      \draw(0, 0) to (0, 6);
-        \draw [dashed] (0,5.5) -- (2,5.5);
-      \draw(2, 0) to (2, 6);
-        \node at(3, 4.7){4,2};
-        \draw(2, 4.5) to (4, 4.5);
-      \draw(4, 0) to (4, 6);
-        \node at(5, 3.7){4,3};
-        \draw(4, 3.5) to (6, 3.5);
-      \draw(6, 0) to (6, 6);
-
-      \node at(-2, 5.5){R1};
-      \node at(-2, 4.5){R2};
-      \node at(-2, 3.5){R3};
-      \node at(-2, 2.5){R4};
-      \node at(-2, 1.5){R5};
-
-      \node at(0, 6.2){1};
-      \node at(2, 6.2){4};
-      \node at(4, 6.2){2};
-      \node at(6, 6.2){3};
-
-      \draw (3,4.5) ellipse (1cm and .4cm);
-
-    \end{tikzpicture}
-  \end{center}
-  \caption{The row of the second bar to be removed from element $4's$ route is row $2$. The dashed bar indicates that it has already been 
-  removed from $4's$ route. $i$ is the number of bars currently removed from $4's$ route, which is currently $1$. Therefore $row=2=i+1$}
-  \label{fig:SJTcase3}
-\end{figure}
-
-%%End of proof of case 3
-
-
-%%Proof Case 4
-\begin{lemma}
-  Let $route=N$. Let $i=$ the current number of bars that have been removed from route $N$. Assume a bar is being removed.
-  Then the $column=i+1$.
-\end{lemma}
-\begin{proof}
-  Keeping in mind we are dealing with root ladders and bars are removed from left to right, top to bottom, then the first bar to 
-  be removed from route $N$ is at column one. Since no bars have been removed, $i$ currently equals zero, 
-  thus column $1=I+1$. Once removed, $i$ is increased by one, indicating a bar has been removed. The next bar is at column two, 
-  which again equals $i+1$. Continue until all bars of the $Nth$ route have been removed. See figure \ref{fig:SJTcase4} for an example 
-  of column calculation when removing a bar from the $Nth$ route.
-\end{proof}
-
-\begin{figure}[!htp]
-  \begin{center}
-    \begin{tikzpicture}
-      \draw(0, 0) to (0, 6);
-        \draw [dashed] (0,5.5) -- (2,5.5);
-
-      \draw(2, 0) to (2, 6);
-        \node at(3, 4.7){4,2};
-        \draw(2, 4.5) to (4, 4.5);
-      \draw(4, 0) to (4, 6);
-        \node at(5, 3.7){4,3};
-        \draw(4, 3.5) to (6, 3.5);
-      \draw(6, 0) to (6, 6);
-
-      \node at(1, -0.3){Col 1};
-      \node at(3, -0.3){Col 2};
-      \node at(5, -0.3){Col 3};
-
-      \node at(0, 6.2){1};
-      \node at(2, 6.2){4};
-      \node at(4, 6.2){2};
-      \node at(6, 6.2){3};
-
-      \draw (3,4.5) ellipse (1cm and .4cm);
-
-
-      
-    \end{tikzpicture}
-  \end{center}
-  \caption{The column of the second bar to be removed from element $4's$ route is row $2$. The dashed bar indicates that it has already been 
-  removed from $4's$ route. $i$ is the number of bars currently removed from $4's$ route, which currently is $1$. Therefore $column=2=i+1$}
-
-  \label{fig:SJTcase4}
-\end{figure}
-%%End of proof of case 4
-
-
-
-%%Proof of case 5
-\begin{lemma}
-  Let $arr$ be a one indexed array. Let $k=route < N$. Let $2 \leq K < N$ be the $kth$ element to have a bar added to its route. 
-  Let $arr[k]$ represent the number of bars for route $k$ that are currently in the 
-  ladder. Let $L_{i}$ be a two dimensional, one indexed array representing the current ladder.
-  The the row for the current bar to be added for route $k$ is $row=(N-1) + (N-k) - arr[k]$.
+  Assume a bar is being added. Let $i$ be the current number of bars in the ladder for $route=k[2 \dots n]$.
+  Then the $row=(n-1)+(n-route)-i$.
 \end{lemma}
 \begin{proof}
    It must be noted that we are listing only root ladders. So when transitioning from 
-$L_{i}$ to $L_{i+1}$ in $CanL{\pi_{N}}$ both are root ladders. Recall that the root ladder is the ladder such that no  
-route of any lesser value in $\pi$ has crossed the route of a greater value. With this in mind, one can say that the 
-number of rows required for the $Nth$ value is $N-1$ seeing as the $Nth$ value can have at most $N-1$ bars in its route, each requiring  their own 
-row. Since bars are added right to left, bottom, up, then the first bar of route $k$ will be added to the row 
-just  below the last bar of the previous route. The reason $N-1$ is added is because the $Nth$ element requires 
-$N-1$ rows in $L$. If $k$ is one less than $N$ then 
-the first bar of $k$ will be added one row below the last bar of $N$. If $k$ is two less than $N$ then the first bar 
-of $k$ will be added two rows below the last bar of $N$, etc. The $(N-k)$ is added because 
-the difference between $N$ and $k$ is the offset of the difference in rows between the lowest/first bar of $N$ 
-and the lowest/first bar of $k$. When a bar is added to $k's$ route, the $arr[k]$ is incremented by one. This value is subtracted in 
-order to effectively move up the ladder as bars are added to $k's$ route from bottom right to top left. See figure \ref{Fig:SJTcase5}for an example of 
-row calculation when adding a bar for $k < N$.
-\end{proof}\pagebreak
-
+$l_{j}$ to $l_{j+1}$ in $CanL{\pi_{n}}$ both are root ladders. With this in mind, one can say that the 
+number of rows required for $route=n$ is $n-1$ seeing as the $nth$ value can have at most $n-1$ bars in its route, 
+each requiring  their own 
+row. Thus, the $(n-1)$ term in the equation in included for the $n-1$ bars of 
+$route=n$. The $(n-route)$ term is added to $(n-1)$ indicating 
+an offset value for the first bar of the $route$; this term calculates 
+the difference in rows between the first bar of $route=n$ 
+and the first bar of $route=k$. If $route=n$ 
+then $offset=0$, if $route=n-1$ then $offset=1$, if $route=n-2$ then $offset=2$, etc.
+Since bars are added right to left, bottom, up, then the first bar of $route=k$ will be added 
+at $row=(n-1)+(n-route)$. When a bar is added to $route=k$ route, the $i$ value is incremented by one. This value is subtracted in 
+order to effectively move up the ladder as bars are added to $route=k$. Since bars are added 
+bottom to top, $row$ needs to be decremented for each new bar to be added. Refer to Figure~\ref{Fig:SJTcase1} for an example of 
+row calculation when adding a bar.
+\end{proof}
 \begin{figure}[!htp]
   \begin{center}
     
@@ -789,32 +545,36 @@ row calculation when adding a bar for $k < N$.
   \end{tikzpicture}
 
 \end{center}
-\caption{The second bar of route 3 goes will go in row 5, column 1. $5 = (5-1)+(5-3)-1 = (N-1)+(N-k)-arr[k]$.}
-\label{Fig:SJTcase5}
+\caption{The second bar of route 3 goes will go in row 5, column 1. $5 = (5-1)+(5-3)-1 = (n-1)+(n-route)-i$.}
+\label{Fig:SJTcase1}
 \end{figure}
-%%End of prof of case 5
+\pagebreak
+%%end proof 1
 
 
-%%Proof of case 6
+%%Prove case 2
 \begin{lemma}
-  Let $arr$ be a one indexed array. Let $route=k |k < N$. Let $2 \leq K < N$ be the $kth$ element to have a bar added to its route. 
-  Let $arr[k]$ represent the number of bars for route $k$ that are currently in $L$. 
-  The the column for the current bar to be added for route $k$ is $column=(K-1)-arr[k]$.
+  Assume a bar is being added. Let $i$ be the current number of bars in the ladder for $route=k[2 \dots n]$.
+  Then the $col=route-1-i$.
 \end{lemma}
 \begin{proof}
-  The total number of bars required for route $k$ is $k-1$, each requring their own column. The reason each 
-  bar requires its own column is the same for when the route equals $N$. See the proof for lemma 3.1.5. The 
-  bars are added right to left and when a bar is added $arr[k]$ is incremented by one. The initial column to add the first bar 
-  of route $k$ is column $k-1$. This is because the first bar of the $kth$ route is the left child bar of the 
-  lowest bar of the $k+1th$ route. Denote the first bar to be added of the $kth$ route as $y$ and the 
-  lowest bar of the $k+1th$ route as $x$. $x$ is the parent bar of $y$ and $y$ is the left child bar of 
-  $x$ for the following reasosn. If $y$ was directly below $x$, then the ladder would have redundant bars, thus making it 
+  The total number of bars required for $route=k$ is $k-1$, each requiring their own column. The columns 
+  span from $1 \dots k-1$. The 
+  bars are added right to left and when a bar is added $i$ is incremented by one. 
+  Since bars are 
+  added right to left, the first bar 
+  of $route=k$ is inserted at column $k-1$. This is because the first bar of the $kth$ route is the left child bar of the 
+  lowest bar of the $k+1th$ route. Let $y$ be the first bar to be added for $route=k$ and let $x$ be 
+  the 
+  lowest bar of the $route=k+1$. $x$ is the parent bar of $y$ and $y$ is the left child of 
+  $x$ for the following reasons. If $y$ was directly below $x$, then the ladder would have redundant bars, thus making it 
   non-optimal. If $y$ was to the right of $x$, then $y$ would either be above $x$, thus violating the property of the root ladder, 
   or if $y$ were below $x$ and to the right of $x$ then $y$ would be part of the route for $k+1$, yet this is a contradiction 
   seeing as we said $y$ belongs to $k's$ route. Therefore, $y$ must be in a column to the left of $x$. As bars are added 
-  to $k's$ route, $arr[k]$ is incremented for each bar. It is subtracted from the original column, $k-1$, effectively moving 
-  to the next column to the left in $L$. See figure \ref{Fig:SJTcase6} for an example of column calculation when adding a bar for $k<N$.
+  to $k's$ route, $i$ is incremented for each bar. $i$ is subtracted from the original column, $k-1$, effectively moving 
+  to the next column to the left in $ladder$. See Figure~\ref{Fig:SJTcase2} for an example of column calculation when adding a bar for $k<n$.
 \end{proof}
+
 \begin{figure}[!htp]
   \begin{center}
     
@@ -844,32 +604,44 @@ row calculation when adding a bar for $k < N$.
     \node at(7, -2.3){Col 4};
   \end{tikzpicture}
 \end{center} 
-\caption{The second bar of route $k=3$ goes will go in column 1. Since one bar has been added, $arr[3]=1$. $col=1=2-1=(K-1)-arr[k]$.}
+\caption{The second bar of route $k=3$ goes will go in column 1. Since one bar has been added, $i=1$. $col=1=3-1-1=route-1-i$.}
 
-\label{Fig:SJTcase6}
+\label{Fig:SJTcase2}
 \end{figure}
+%%End proof of case 2
+
+
+
 
 %%End of proof of case 6
 
 
 %%Proof of case 7
 \begin{lemma}
-  Let $arr$ be a one indexed array. Let $route=k | k < N$. Let $2 \leq k < N$ be the $kth$ element to have a bar removed from its route. 
-  Let $arr[k]$ represent the number of bars for route $k$ that have currently been removed from the ladder. 
-  The the row for the current bar to be removed for route $k$ is $Row=(N-1) + (N-k) + arr[k] - (k-2)$.
+  Assume a bar is being removed from $route=k[2 \dots n]$. 
+  Let $i$ represent the number of bars that have currently been removed from $route=k$. 
+  Then $row=2*(n-route) + (i)+1$.
 \end{lemma}
 \begin{proof}
   When removing a bar the row is calculated as follows. Keeping in mind bars are removed from top to bottom, left to right.
-  The $Nth$ element requries the first $(N-1)$ rows. Which is why $(N-1)$ is added. The last bar to be removed of the $kth$ route is $(N-k)$
-  rows below row $(N-1)$ which is why $(N-k)$ is added. $arr[k]$ is added to effectively move down the ladder 
-  for each remaining bar of the $kth$ route in the ladder left to be removed. Since the first bar of the $kth$ route 
-  to be removed is highest up the ladder, every subsequent bar to be removed from the $kth$ route requires 
-  moving down the ladder from the row of first bar of the $kth$ route; this is accomplished by adding $array[k]$ which 
-  indicates how many bars are currently removed from the $kth$ route. Lastly, $(k-2)$  is subtracted in order to 
-  get to the row of the first bar of the $kth$ route. The difference between the row of the last bar of the $kth$ route and 
-  the first bar of the $kth$ route is $k-2$. Seeing as the $kth$ route has at most $k-1$ bars, each requiring their own row, then the 
-  first bar of the $kth$ route is $k-2$ rows higher than the last bar of the $kth$ route. See figure \ref{fig:SJTcase7} for 
-  an example of removing a bar.\pagebreak
+  The leftmost bar of the $route=kth$ element is in the same column as the leftmost bar of the $route=k+1th$ element.
+  Thus, the first bar of the $route=kth$ element must be two rows below the leftmost bar 
+  of the $route=k+1th$ element. Therefore, the following recurrence relation holds for calculating the row of the leftmost bar of $route=k$:
+  
+\begin{equation}
+  row(route=k)=\begin{cases}
+    row(route=k+1)+2 & \text{if $k<n$}.\\
+    0 & \text{if $k=n$}.
+  \end{cases}
+\end{equation}
+The recurrence relation simplifies to $2(n-route)$ which means that the difference between $n$ and $route=k$ 
+multiplied by $2$ is the same as the recurrence relation.\par 
+Every time a bar is removed from $route=k$, $i$ is incremented indicating a bar has been removed. 
+Since bars are removed from top to bottom, $i$ is added to $2(n-route)$ in order to effectively move 
+down the ladder by $i$ rows starting from $row=2(n-route)$. The $+1$ is added due to $ladder$ being a 
+$1$ indexed array; if $ladder$ were a $0$ indexed array as is true for most languages, the $+1$
+would be removed from the equation.
+See Figure~\ref{fig:SJTcase3} for an example of removing a bar.\pagebreak
 \end{proof}
 
 \begin{figure}[!htp]
@@ -914,27 +686,26 @@ row calculation when adding a bar for $k < N$.
     \end{tikzpicture}
   \end{center}
   \caption{The bar to be removed for route $k=4$ is (4, 1) which is at row 4. The dashed line indicates a bar 
-  from route $4$ has already been removed. $row= 4 = (5-1)+(5-4)+ 1 - (2) = (N-1)+(N-k) + arr[k] - (k-2)$.}
+  from route $4$ has already been removed. $row= 4 = 2(5-4)+1+1= 2(n-route)+i+1$.}
 
-  \label{fig:SJTcase7}
+  \label{fig:SJTcase3}
 \end{figure}
 %%End of proof of case 7
 
 %%Proof of case 8
 \begin{lemma}
-   Let $arr$ be a one indexed array. Let $route=k | k < N$. Let $2 \leq k < N$ be the $kth$ element to have a bar removed from its route. 
-  Let $arr[k]$ represent the number of bars for route $k$ that have currently been removed from the ladder. 
-  Then the column for the current bar to be removed for route $k$ is $column=arr[k]+1$.
+ Assume a bar is being removed from $route=k[2 \dots n]$. 
+  Let $i$ represent the number of bars that have currently been removed from $route=k$. 
+  Then $col(i)+1$.
 \end{lemma}
 \begin{proof}
-  The bars are removed left to right. The first bar to be removed is the leftmost bar belonging to route $k$ which 
-  is always at column $1$. This is because the number of columns required for the $k-1$ bars is $k-1$, terminating at 
-  column number $k-1$. Thus, the first bar to be removed must always be at column $1$ and the last bar to 
-  be removed is at column $k-1$. $arr[k]$ is incremented for each bar removed from the route of $k$. See Fig.\ref{Fig:SJTcase8}
+  The bars are removed left to right. The first bar to be removed is the leftmost bar belonging to $route=k$ which 
+  is always at column $1$. $i$ is incremented for each bar removed from the route of $k$. 
+  The $+1$ is added due to $ladder$ being a $1$ indexed array; if $ladder$ were a $0$ indexed array as is true for most languages, the $+1$
+  would be removed from the equation. See Figure~\ref{Fig:SJTcase4}
   for an example of column calculation when removing a bar.
 \end{proof}
-
-\begin{figure}[!htp]
+\begin{figure}[h]
   \begin{center}
     \begin{tikzpicture}
       \draw(0, 0) to (0, 8);
@@ -972,137 +743,119 @@ row calculation when adding a bar for $k < N$.
     \end{tikzpicture}
   \end{center}
   \caption{The bar to be removed for route $k=4$ is (4, 1) which is at column 2. The dashed line indicates a bar 
-  from route $4$ has already been removed. Since one bar from routr $4$ has been removed, $arr[4]=1$. $column= 2 = 1+1 = arr[k] + 1$.}
+  from route $4$ has already been removed. Since one bar from route $4$ has been removed, $i=1$. $column= 2 = 1+1 = i + 1$.}
 
-  \label{Fig:SJTcase8}
+  \label{Fig:SJTcase4}
 \end{figure}
+\pagebreak
 %%End of proof of case 8
-\subsection{Cyclic Inversion}
-\begin{algorithm}
-  \caption{First part of the algorithm Cyclic Inversion}
-  \begin{algorithmic}[1]
-    \Function{CyclicInversion}{$ladder[2(N-1)-1][N-1]$, $currentLimit$, $maxLimit$, $N$, $k$}
+\subsection{The Cyclic Bar Algorithm}
+
+The {\sc CyclicBar} algorithm is influenced by the CAT algorithm for generating all permutations with $k$ inversions~\cite{A26}.
+The algorithm lists $CanL\{\pi_{n}\}$ by listing all ladders with $n$ lines and $x$ bars before listing all ladders with 
+$n$ lines and $x+1$ bars for $x=0,1, \dots ,{n \choose 2}$. The initial conditions of {\sc CyclicBar} are the following: 
+Let be the $ladder$ be initialized a two dimensional binary array of only $0's$.
+ Let a $1$ at $row=i,col=j$ 
+indicate a bar at  $row=i,col=j$. Let a $0$ at $row=i,col=j$ 
+indicate the absence of a bar at  $row=i,col=j$. Let $currentLimit$
+be the current number of bars to be added to $ladder$; $currentLimit$ is equivalent to aforementioned $x$.
+Let $maxLimit={n \choose 2}$. Let $n$ be the number of lines in $ladder$. Let $k$ be the current route initialized 
+to $2$. 
 
 
-      
-      %%base case
-      \If{the number of bars in $ladder=currentLimit$}
-        \State $print(Ladder)$
-        \State return
-      \EndIf
+ \begin{algorithm}
+   \caption{First part of the algorithm Cyclic Bar}
+   \begin{algorithmic}[1]
+     \Function{CyclicBar}{$ladder$, $currentLimit$, $maxLimit$, $n$, $k$}
+     
+       %%If k=n
+      \If{$k=n$}
+       \State $m \gets 0$
+       \State $row \gets k-1$
+       \State $col \gets k-1$
+       \State $numBars \gets$ current number of bars in $ladder$
+       %%While
+       \While{$numBars < currentLimit$ \textbf{and} $m < k-1$}
+         \State $ladder[row][col] \gets 1$
+         \State $row \gets row-1$
+         \State $col \gets col-1$
+         \State $m \gets m+1$
+         \State $numBars \gets numBars+1$
+       \EndWhile
+       %%End while
+       \If{$numBars = currentLimit$}
+         \State {\sc Print($ladder$)}
+         \State remove upper leftmost bar from route $k=n$
+       \EndIf
+       \State \textbf{return}
+     \EndIf
+     \algstore{aaa}
+   \end{algorithmic}
+ \end{algorithm}
+  \begin{algorithm}
+     \caption{Cyclic Bar Continued}
+       \begin{algorithmic}[1]
+             \algrestore{aaa}
+       \If{$k < n$}
+         \State $count \gets 0$
+         \For{$i$ \textbf{from} $0$ \textbf{to} $k-1$}
+           \If{$i = 0$}
+             \State {\sc CyclicBar}$(ladder, currentLimit, maxLimit, n, k+1)$
+           \Else
+             \State $row \gets (n-1) + (n-k) - count$
+             \State $column \gets (k-1)-arr[k]$
+             \State $ladder[row][column] \gets 1$
+             \State $count \gets count + 1$
+             \State {\sc CyclicBar}$(ladder, currentLimit, maxLimit, n, k+1)$
+           \EndIf
+         \EndFor
+         \State remove all $k-1$ bars from $k's$ route.
+       \EndIf
+       \EndFunction
+     \end{algorithmic}
+   \end{algorithm}
+   \begin{algorithm}
+     \caption{Driver for the Cyclic Bar Algorithm}
+     \begin{algorithmic}[1]
+       \Function{CyclicBarDriver}{$ladder$, $n$}
+         \State $maxLimit \gets {n \choose 2}$
+         \State $k \gets 2$
+         \For{$i$ \textbf{from} $0$ to \textbf{maxLimit}}
+           \State {\sc CyclicBar}($ladder$, $i$, $maxLimit$, $n$, $k$)
+         \EndFor
+       \EndFunction
+     \end{algorithmic}
+   \end{algorithm}\pagebreak
 
-      %%
-      \If{$currentLimit > maxLimit$}
-        \State return
-      \EndIf
-
-      %%If K=N
-     \If{$k=N$}
-
-      \State {$m \gets 0$}
-      \State $row \gets k-1$
-      \State $col \gets k-1$
-      \State $numBars \gets$ current number of bars in $ladder$
-      %%While
-      \While{$mumBars < currentLimit$ AND $m < k-1$}
-        \State $ladder[row][col] \gets 1$
-        \State $row \gets row-1$
-        \State $col \gets col-1$
-        \State $m \gets m+1$
-        \State $numBars \gets numBars+1$
-      \EndWhile
-      %%End while
-
-      \If{$numBars = currentLimit$}
-        \State $Print(Ladder)$
-      \EndIf
-      \State remove all bars belonging to $k's$ route.
-      \State return
-    \EndIf
-
-    \algstore{aaa}
-
-  \end{algorithmic}
-\end{algorithm}
-
-\begin{algorithm}
-  \caption{Cyclic Inversion Continued}
-    \begin{algorithmic}[1]
-          \algrestore{aaa}
-
-    \If{$k < N$}
-      \State $count \gets 0$
-      \For{$i \gets 0$, $i < k$, $i \gets i+1$}
-       \If{the number of bars in $ladder=currentLimit$}
-            \State break
-        \EndIf
-
-        \If{$i = 0$}
-          \State $CyclicInversion(ladder, currentLimit, maxLimit, N, k+1)$
-      
-       
-        
-        \Else
-          \State $row \gets (N-1) + (N-k) - count$
-          \State $column \gets (k-1)-arr[k]$
-          \State $ladder[row][column] \gets 1$
-          \State $count \gets count + 1$
-          \State $CyclicInversion(Ladder, CurrentLimit, maxLimit, N, k+1)$
-        \EndIf
-      \EndFor
-      \State remove all bars from $k's$ route.
-
-    \EndIf
-    \EndFunction
-  \end{algorithmic}
-\end{algorithm}
-
-
-\begin{algorithm}
-  \caption{Driver for the Cyclic Inversion Algorithm}
-  \begin{algorithmic}[1]
-    \Function{Cylclic Inversion Driver}{$ladder[2(N-1)-1][N-1]$, $N$}
-      \State $maxLimit \gets (N(N-1))/2$
-      \State $k \gets 2$
-      \For{$i \gets 0, i <= maxLimit, i \gets i+1$}
-        \State CyclicInversion($ladder$, $currentLimit \gets i$, $maxLimit$, $N$, $k$)
-
-      \EndFor
-
-    \EndFunction
-  \end{algorithmic}
-\end{algorithm}\pagebreak
-
-The initial conditions for the algorithm are the following. Let $ladder$ be initialized as a two dimensional array with $2(N-1)-1$ rows and $(N-1)$ columns.  Let $N$ be initialized to the maximal element in $\pi_{N}$. 
-Let $k$ be initialized to $2$.
-Let the $maxLimit$ be initialized to $(N(N-1))/2$.Let the $currentLimit$ be initialized to zero. 
-
-The tree structure is created as follows. The $currentLimit$ 
-represents the number of bars to be inserted into $ladder$. Once all ladders with $currentLimit$ bars have been created, the $currentLimit$ is increased by one 
-and the algorithm repeats until $currenLimit > maxLimit$. This creates all ladders in $CanL{\pi_{N}}$. The ladders are generated as a forest structure,
- with each value of $currentLimit$ creating its own tree of ladders. See figure --fig for the 
-forest of ladders for $N=4$. The forest of ladders is all the ladders in $CanL{\pi_{N}}$. 
-
-On each recursive call to the function, $k$ is increased by one until $k=N$. When $k=N$ all the remaining bars that need to 
-be added to the ladder are added to $k=N's$ route. The remaing bars equals the $currentLimit$ minus the number of bars in the ladder.
-Once all of the remaining $k=N's$ bars are added, the algorithm 
+The {\sc CyclicBar} algorithm produces a tree of ladders with $currentLimit$ bars in each ladder where $currentLimit$
+is a value between $0,1, \dots, {n \choose 2}$. The parent to child relation of the tree structure 
+is defined as follows. Let $x$ be the parent ladder of $y$ and let $y$ be the 
+child of $x$. Let $k$ be the route of the bars to be added to $x$. Let $k-1$ be 
+the route of the bars to be added to $y$. To go from $x$  
+to $y$, relocate $1$ or more bars from $k$ to $k-1$ starting from 
+the top leftmost bar of $k$. To go from $y$ to $x$, 
+relocate $1$ or more bars from $k-1$ to $k$ starting 
+from the bottom rightmost bar of $k-1$. 
+On each recursive call to the function, $k$ is increased by one until $k=n$. When $k=n$ all the remaining bars that need to 
+be added to the ladder are added to $k=n's$ route. The remaining bars equals the $currentLimit$ minus the number of bars in the ladder.
+Once all of the remaining $k=n's$ bars are added, the algorithm 
 checks if the number of bars in the ladder equals $currentLimit$. If it does, then the ladder is printed, but if it 
-does not then a dead-end is reached seeeing there are not enough bars in the ladder.\par 
-When $k < N$ a for loop is implented for $0 \dots k-1$ indicating the range for the number of bars 
+does not then a dead-end is reached seeing there are not enough bars in the ladder.\par 
+When $k < n$ a for loop is implemented for $0 \dots k-1$ indicating the range for the number of bars 
 to be added for $k's$ route. On each iteration of the for loop a bar is added to $k's$ route followed by a 
 recursive call with $k$ incrementing by one. Once all of the bars for $k's$ route have been added, all 
-the bars from $k's$ route are removed. This process repeats itself until all ladders of order $N$ with 
-$currentLimit$ bars have been added. It should be noted that the row and column calculations are the same as with the Modified SJT algorithm. 
-
-
+the bars from $k's$ route are removed. This process repeats itself until all ladders of order $n$ with 
+$currentLimit$ bars have been added.\par  
+The {\sc CyclicBarDriver} algorithm creates a forest of ladders where each tree in the forest is 
+one of the trees produced from the {\sc CyclicBar} algorithm.
 The forest structure is created as follows. Simply call the algorithm for the tree structure in a for loop 
-ranging from $0 \dots N(N-1)/2$. This will increment the current limit for each call to the tree structure 
+ranging from $0 \dots {n \choose 2}$. This will increment the current limit for each call to the tree structure 
 resulting in the forest structure.
 Each combination of bars into the $ladder$ 
-data structure creates the root ladder from each $OptL{\pi_{N}}$, thus adding one more ladder to $CanL{\pi_{N}}$.
-Once complete, the tree of ladders terminates, and the $currentLimit$ increases, thus creating a new tree in the forest for 
-$CanL{\pi_{N}}$. To see the forest created by the Cyclic Inversion Algorithm for $N=4$ please refer to 
-figure \ref{Fig:CanLForest}\pagebreak
+data structure produces the root ladder from each $OptL\{\pi_{n}\}$, thus adding one more ladder to $CanL\{\pi_{n}\}$.
+Once complete, the tree of ladders terminates, and the $currentLimit$ increases, thus producing a new tree in the forest for 
+$CanL{\pi_{n}}$. To see the forest produced by the {\sc CyclicBar} and {\sc CyclicBarDriver} algorithms for $n=4$ please refer to 
+Figure~\ref{Fig:CanLForest}\pagebreak
 \begin{center}
 \begin{figure}[!htp]
   %%first tree
@@ -1110,8 +863,8 @@ figure \ref{Fig:CanLForest}\pagebreak
       
      
     \begin{minipage}{.45\textwidth}
-      \centering
-      \resizebox{.5\textwidth}{.03\textheight}{
+     ~\centering
+     ~\resizebox{.5\textwidth}{.03\textheight}{
       \begin{tikzpicture}
         
       \node at(0, .5)(a){\small{$b=0$}};
@@ -1129,8 +882,8 @@ figure \ref{Fig:CanLForest}\pagebreak
       \end{tikzpicture}}
   \end{minipage}
    \begin{minipage}{.45\textwidth}
-    \centering
-      \resizebox{.5\textwidth}{.1\textheight}{\begin{tikzpicture}
+   ~\centering
+     ~\resizebox{.5\textwidth}{.1\textheight}{\begin{tikzpicture}
         
       \node at(0, .5)(a){\small{$b=1$}};
         \draw(1, 0) to (1, 1);
@@ -1186,8 +939,8 @@ figure \ref{Fig:CanLForest}\pagebreak
       
     \end{minipage}
     \begin{minipage}{.45\textwidth}
-      \centering
-      \resizebox{.5\textwidth}{.2\textheight}{\begin{tikzpicture}
+     ~\centering
+     ~\resizebox{.5\textwidth}{.2\textheight}{\begin{tikzpicture}
       \node at(0, 5.5){\small{$b=2$}};  
       %%t1
       \draw(1, 5) to (1, 6);
@@ -1274,8 +1027,8 @@ figure \ref{Fig:CanLForest}\pagebreak
     \end{tikzpicture}}
   \end{minipage}
   \begin{minipage}{.45\textwidth}
-    \centering
-    \resizebox{.5\textwidth}{.25\textheight}{\begin{tikzpicture}
+   ~\centering
+   ~\resizebox{.5\textwidth}{.25\textheight}{\begin{tikzpicture}
       \node at(0, 5.5){\small{$b=3$}};
         %%t1
         \draw(1, 5) to (1, 6);
@@ -1389,8 +1142,8 @@ figure \ref{Fig:CanLForest}\pagebreak
     \end{tikzpicture}}
   \end{minipage}
    \begin{minipage}{.45\textwidth}
-    \centering
-    \resizebox{.5\textwidth}{.25\textheight}{\begin{tikzpicture}
+   ~\centering
+   ~\resizebox{.5\textwidth}{.25\textheight}{\begin{tikzpicture}
       \node at(0, 5.5){\small{$b=4$}};
         %%t1
         \draw(1, 5) to (1, 6);
@@ -1517,8 +1270,8 @@ figure \ref{Fig:CanLForest}\pagebreak
     \end{tikzpicture}}
   \end{minipage}
   \begin{minipage}{.45\textwidth}
-    \centering
-    \resizebox{.5\textwidth}{.25\textheight}{\begin{tikzpicture}
+   ~\centering
+   ~\resizebox{.5\textwidth}{.25\textheight}{\begin{tikzpicture}
       \node at(0, 5.5){\small{$b=5$}};
         %%t1
         \draw(1, 5) to (1, 6);
@@ -1649,8 +1402,8 @@ figure \ref{Fig:CanLForest}\pagebreak
     \end{tikzpicture}}
   \end{minipage}
    \begin{minipage}{.45\textwidth}
-    \centering
-    \resizebox{.5\textwidth}{.25\textheight}{\begin{tikzpicture}
+   ~\centering
+   ~\resizebox{.5\textwidth}{.25\textheight}{\begin{tikzpicture}
       \node at(0, 5.5){\small{$b=6$}};
         %%t1
         \draw(1, 5) to (1, 6);
@@ -1785,52 +1538,50 @@ figure \ref{Fig:CanLForest}\pagebreak
   
 
      
-  \caption{The forest for all ladders in $CanL\{\pi_{4}\}$ generated by the Cyclic Inversion Algorithm. The leaf nodes present a possibly correct candiate ladder. 
+  \caption{The forest for all ladders in $CanL\{\pi_{4}\}$ generated by the Cyclic Bar Algorithm. The leaf nodes present a possibly correct candidate ladder. 
   If the ladder in the leaf has enough bars, then it is a legitimate ladder in the tree.}
   \label{Fig:CanLForest}
 \end{figure}
-\end{center}\pagebreak
+\end{center}
+It has been stated that the forest produced by the Cyclic Bar algorithm generates
+$CanL\{\pi_{n}\}$. This claim will be proven below.
 
-
-
-
-It has been stated that the forest created by the Cyclic Inversion algorithm generates $CanL\{\pi_{N}\}$. This claim has 
-yet to have been proven, so the following theorem will prove this claim.
 
 \begin{theorem}
-  
-  The forest created by the Cyclic Inversion algorithm generates $CanL\{\pi_{N}\}$
+  \small{The forest produced by the Cyclic Bar algorithm generates $CanL\{\pi_{n}\}$}
 \end{theorem}
+
+
 \begin{proof}
   The proof is done by way of a combinatorial proof and induction. Rather than list ladders, we shall list permutations using the same method.  
-  Let $List(N, k)$ be the listing of permutations of order $N$ with $k$ inversions. The hypothesis is that $List(N, k)=\sum_{m=0}^{k} List(N-1, m)$ 
-  given $N>1$ and $k \geq 0$.
-  The base case is $N=2$ and $k=0$. We know that the identity permutation of order $1$ has no inversions. We know that the list containing the identity 
+  Let $List(n, k)$ be the listing of permutations of order $n$ with $k$ inversions. The hypothesis is that $List(n, k)=\sum_{m=0}^{k} List(n-1, m)$ 
+  given $n>1$ and $k \geq 0$.
+  The base case is $n=2$ and $k=0$. We know that the identity permutation of order $1$ has no inversions. We know that the list containing the identity 
   permutation of order $1$ is of length one. We know that the list containing the identity permutation of order $2$ is of length one. By appending the 
   value $2$ to the only permutation in the list $List(1, 0)$ we get the only permutation in the list $List(2, 0)$. Therefore the base case checks out.
   
-  Suppose we have the list of permutations for $List(N-1, 0) \dots List(N-1, k)$. We want to show that we can insert the $Nth$ element into each of the
-  permutations in each of these lists such that the resulting permutations have $N$ elements with $k$ inversions. Partition $k$ into $k'$ and $k''$. Note that 
-  $k'+k''=K$.
-  Let $k'$ equal the number of inversions formed by the $Nth$ element. Let $k''$ equal the number of elements not formed by the $Nth$ element.
-  We can look at the $List(N-1, 0) \dots List(N-1, k)$ as lists of permutations with $k''$ inversions. So we write 
-  $List(N-1, 0) \dots List(N-1, k)$ as $List(N-1, k''=0) \dots List(N-1, k''=k)$. When $k''=0$ we know $List(N-1, 0)$ has one permutation, thus $k'=K$.
-  The $Nth$ element must be positioned $k'$ positions to the left of the $Nth$ position in this one permutation from $List(N-1, 0)$ to form a permutation of order $N$ with $k$ inversions. 
-  In general, we can say that for each of the permutations from each of the $List(N-1, k'')$, we know that the $Nth$ element must be postioned $k-k''$ to the left of the $Nth$ position in order to 
-  create a permutation of length $N$ with $k$ inversions. Thus, by exhaustively inserting the $Nth$ element in all $k-k''=k'$ positions to the left of the $Nth$ position 
-  in all permutations from all $List(N-1, k'')$, we get all permutations of order $N$ with $k$ inversions. 
-  Therefore $List(N, k) = List(N, k') + \sum_{k''=0}^{k} List(N-1, k'') $.
+  Suppose we have the list of permutations for $List(n-1, 0) \dots List(n-1, k)$. We want to show that we can insert the $nth$ element into each of the
+  permutations in each of these lists such that the resulting permutations have $n$ elements with $k$ inversions. Partition $k$ into $k'$ and $k''$. Note that 
+  $k'+k''=k$.
+  Let $k'$ equal the number of inversions formed by the $nth$ element. Let $k''$ equal the number of elements not formed by the $nth$ element.
+  We can look at the $List(n-1, 0) \dots List(n-1, k)$ as lists of permutations with $k''$ inversions. So we write 
+  $List(n-1, 0) \dots List(n-1, k)$ as $List(n-1, k''=0) \dots List(n-1, k''=k)$. When $k''=0$ we know $List(n-1, 0)$ has one permutation, thus $k'=k$.
+  The $nth$ element must be positioned $k'$ positions to the left of the $nth$ position in this one permutation from $List(n-1, 0)$ to form a permutation of order $n$ with $k$ inversions. 
+  In general, we can say that for each of the permutations from each of the $List(n-1, k'')$, we know that the $nth$ element must be positioned $k-k''$ to the left of the $nth$ position in order to 
+  ce a permutation of length $n$ with $k$ inversions. Thus, by exhaustively inserting the $nth$ element in all $k-k''=k'$ positions to the left of the $nth$ position 
+  in all permutations from all $List(n-1, k'')$, we get all permutations of order $n$ with $k$ inversions. 
+  Therefore $List(n, k) = List(n, k') + \sum_{k''=0}^{k} List(n-1, k'') $.
   Seeing as an inversion in a permutation corresponds to a bar in 
   a ladder, then by using this same proof on ladders, we can generate all ladders with $k$ bars. 
-  Which is to say that $ladders(N, k) = Ladders(N, k') + \sum_{k''=0}^{k} Ladders(N-1, k'')$.
-  In order to list $CanL\{\pi_{N}\}$ simply apply this same logic for all $k$ bars for $0 \leq K \leq N(N-1)/2$. To see an example of the above proof for $List(4, 2)$ refer to Table \ref{Table:List4,2}.
+  Which is to say that $ladders(n, k) = Ladders(n, k') + \sum_{k''=0}^{k} Ladders(n-1, k'')$.
+  In order to list $CanL\{\pi_{n}\}$ simply apply this same logic for all $k$ bars for $0 \leq k \leq n(n-1)/2$. To see an example of the above proof for $List(4, 2)$ refer to Table~\ref{Table:List4,2}.
 
 \end{proof}
 
 \begin{table}
   \begin{tabular}{|p{2cm}||p{2cm}||p{2cm}||p{2cm} ||p{2cm} ||p{2cm}||}
      \hline
-        \small{$N$ value}& \small{$k$ value} & \small{$k''$ value} & \small{$k'$ value} &\small{$L($N-1$, k'')$} & \small{$L(N, k)$}\\
+        \small{$n$ value}& \small{$k$ value} & \small{$k''$ value} & \small{$k'$ value} &\small{$L($n-1$, k'')$} & \small{$L(n, k)$}\\
         \hline
         \small{$4$} & \small{$2$} & \small{$0$} & \small{$2$} & \small{$(1,2,3)$} & \small{$(1,4,2,3)$} \\
         \hline
@@ -1844,7 +1595,5 @@ yet to have been proven, so the following theorem will prove this claim.
   \caption{The table showing all $List(4, 2)$ derived from $List(3, 0) \dots List(3, 2) + List(4, k')$}
   \label{Table:List4,2}
 \end{table}
-
-
 
 
