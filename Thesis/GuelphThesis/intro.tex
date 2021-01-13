@@ -271,27 +271,209 @@ the number of ladders in each of the 120 $OptL\{\pi\}$ of order $5$ is presented
 	\label{Fig:OptL3421}
 \end{figure}
 
-Research on ladder lotteries falls under research in \emph{combinatorial generation}. Combinatorial 
+Research on ladder lotteries pertains to research in \emph{combinatorial generation}. Combinatorial 
 generation is a subfield of theoretical computer science which pertains to listing 
 all combinatorial objects such as permutations, combinations, sets, subsets and graphs. Gray codes are a 
 special type of combinatorial generation in which a minimal amount of constant change 
 is required to get from one object to the next. For example, a single swap operation,
-a single rotation, or a single bit negation is used to get from one object to the next. Some examples of Gray Codes 
-are the Binary Reflected Gray Code, De Bruijn sequence, Steinhaus-Johnson-Trotter's algorithm and 
-Snake-in-the-box codes.\par 
+a single rotation, or a single bit flip is used to get from one object to the next. Some examples of Gray Codes 
+are the Binary Reflected Gray Code and Steinhaus-Johnson-Trotter's algorithm.\par 
 Much research has been done on combinatorial generation, especially 
 in regards to generating permutations. Throughout the course of this thesis,
-a number of permutation generating algorithms were researched~\cite{A18}\cite{A19}\cite{A21}\cite{A24}\cite{A25}\cite{A26}\cite{A31}\cite{A34}\cite{A35}s.
+a number of permutation generating algorithms were researched~\cite{A18}\cite{A19}\cite{A21}\cite{A24}\cite{A25}\cite{A26}\cite{A31}\cite{A34}\cite{A35}\cite{A36}\cite{A37}.
 After considering these algorithms, two were considered the most beneficial for this thesis. 
-These algorithms are the Effler-Ruskey algorithm and the Steinhaus-Johnson–Trotter algorithm found in~\cite{A26}\cite{A25}.
-The reason these two algorithms were considered the most beneficial is because of 
-their efficiency. The Effler-Ruskey algorithm is a backtracking algorithm and the Steinhaus-Johnson-Trotter 
+These algorithms are the Effler-Ruskey algorithm and the Steinhaus-Johnson-Trotter algorithm found in~\cite{A26}\cite{A25}. 
+The Effler-Ruskey algorithm is a backtracking algorithm and the Steinhaus-Johnson-Trotter algorithm
 is a Gray Code. In this thesis, modifications to these algorithms are done such that the 
 modified algorithms are applied to ladder lotteries. Thus, this thesis provides further knowledge 
 in the field of combinatorial generation by providing novel algorithms for generating ladder lotteries.\par 
 The motivation for this thesis is to provide more knowledge to the field of combinatorics and combinatorial 
 generation. In this thesis, the aforementioned permutation listing algorithms are modified in order to 
 list $n!$ ladder lotteries, each of which corresponds to one of the $n!$ permutations of order $n$.
+To see all $24$ ladders listed for $n=4$ please refer to Figure \ref{Fig:TwentyFour}. 
+\begin{figure}[!htp]
+	\centering
+	\begin{tikzpicture}
+	\draw(0.00,5.90) to (0.00,7.10);
+	\draw(0.20,5.90) to (0.20,7.10);
+	\draw(0.40,5.90) to (0.40,7.10);
+	\draw(0.60,5.90) to (0.60,7.10);
+	\draw(1.00,5.90) to (1.00,7.10);
+	\draw(1.20,5.90) to (1.20,7.10);
+	\draw(1.40,5.90) to (1.40,7.10);
+	\draw(1.60,5.90) to (1.60,7.10);
+	\draw(1.40, 7.00) to (1.60, 7.00);
+	\draw(2.00,5.90) to (2.00,7.10);
+	\draw(2.20,5.90) to (2.20,7.10);
+	\draw(2.40,5.90) to (2.40,7.10);
+	\draw(2.60,5.90) to (2.60,7.10);
+	\draw(2.20, 7.00) to (2.40, 7.00);
+	\draw(3.00,5.90) to (3.00,7.10);
+	\draw(3.20,5.90) to (3.20,7.10);
+	\draw(3.40,5.90) to (3.40,7.10);
+	\draw(3.60,5.90) to (3.60,7.10);
+	\draw(3.40, 7.00) to (3.60, 7.00);
+	\draw(3.20, 6.80) to (3.40, 6.80);
+	\draw(4.00,5.90) to (4.00,7.10);
+	\draw(4.20,5.90) to (4.20,7.10);
+	\draw(4.40,5.90) to (4.40,7.10);
+	\draw(4.60,5.90) to (4.60,7.10);
+	\draw(4.20, 7.00) to (4.40, 7.00);
+	\draw(4.40, 6.80) to (4.60, 6.80);
+	\draw(5.00,5.90) to (5.00,7.10);
+	\draw(5.20,5.90) to (5.20,7.10);
+	\draw(5.40,5.90) to (5.40,7.10);
+	\draw(5.60,5.90) to (5.60,7.10);
+	\draw(5.20, 7.00) to (5.40, 7.00);
+	\draw(5.40, 6.80) to (5.60, 6.80);
+	\draw(5.20, 6.60) to (5.40, 6.60);
+	
+	\draw(0.00,4.40) to (0.00,5.60);
+	\draw(0.20,4.40) to (0.20,5.60);
+	\draw(0.40,4.40) to (0.40,5.60);
+	\draw(0.60,4.40) to (0.60,5.60);
+	\draw(0.00, 5.50) to (0.20, 5.50);
+	\draw(1.00,4.40) to (1.00,5.60);
+	\draw(1.20,4.40) to (1.20,5.60);
+	\draw(1.40,4.40) to (1.40,5.60);
+	\draw(1.60,4.40) to (1.60,5.60);
+	\draw(1.00, 5.50) to (1.20, 5.50);
+	\draw(1.40, 5.50) to (1.60, 5.50);
+	\draw(2.00,4.40) to (2.00,5.60);
+	\draw(2.20,4.40) to (2.20,5.60);
+	\draw(2.40,4.40) to (2.40,5.60);
+	\draw(2.60,4.40) to (2.60,5.60);
+	\draw(2.20, 5.50) to (2.40, 5.50);
+	\draw(2.00, 5.30) to (2.20, 5.30);
+	\draw(3.00,4.40) to (3.00,5.60);
+	\draw(3.20,4.40) to (3.20,5.60);
+	\draw(3.40,4.40) to (3.40,5.60);
+	\draw(3.60,4.40) to (3.60,5.60);
+	\draw(3.40, 5.50) to (3.60, 5.50);
+	\draw(3.20, 5.30) to (3.40, 5.30);
+	\draw(3.00, 5.10) to (3.20, 5.10);
+	\draw(4.00,4.40) to (4.00,5.60);
+	\draw(4.20,4.40) to (4.20,5.60);
+	\draw(4.40,4.40) to (4.40,5.60);
+	\draw(4.60,4.40) to (4.60,5.60);
+	\draw(4.20, 5.50) to (4.40, 5.50);
+	\draw(4.00, 5.30) to (4.20, 5.30);
+	\draw(4.40, 5.30) to (4.60, 5.30);
+	\draw(5.00,4.40) to (5.00,5.60);
+	\draw(5.20,4.40) to (5.20,5.60);
+	\draw(5.40,4.40) to (5.40,5.60);
+	\draw(5.60,4.40) to (5.60,5.60);
+	\draw(5.20, 5.50) to (5.40, 5.50);
+	\draw(5.40, 5.30) to (5.60, 5.30);
+	\draw(5.20, 5.10) to (5.40, 5.10);
+	\draw(5.00, 4.90) to (5.20, 4.90);
+	
+	\draw(0.00,2.90) to (0.00,4.10);
+	\draw(0.20,2.90) to (0.20,4.10);
+	\draw(0.40,2.90) to (0.40,4.10);
+	\draw(0.60,2.90) to (0.60,4.10);
+	\draw(0.00, 4.00) to (0.20, 4.00);
+	\draw(0.20, 3.80) to (0.40, 3.80);
+	\draw(1.00,2.90) to (1.00,4.10);
+	\draw(1.20,2.90) to (1.20,4.10);
+	\draw(1.40,2.90) to (1.40,4.10);
+	\draw(1.60,2.90) to (1.60,4.10);
+	\draw(1.00, 4.00) to (1.20, 4.00);
+	\draw(1.40, 4.00) to (1.60, 4.00);
+	\draw(1.20, 3.80) to (1.40, 3.80);
+	\draw(2.00,2.90) to (2.00,4.10);
+	\draw(2.20,2.90) to (2.20,4.10);
+	\draw(2.40,2.90) to (2.40,4.10);
+	\draw(2.60,2.90) to (2.60,4.10);
+	\draw(2.00, 4.00) to (2.20, 4.00);
+	\draw(2.20, 3.80) to (2.40, 3.80);
+	\draw(2.00, 3.60) to (2.20, 3.60);
+	\draw(3.00,2.90) to (3.00,4.10);
+	\draw(3.20,2.90) to (3.20,4.10);
+	\draw(3.40,2.90) to (3.40,4.10);
+	\draw(3.60,2.90) to (3.60,4.10);
+	\draw(3.00, 4.00) to (3.20, 4.00);
+	\draw(3.40, 4.00) to (3.60, 4.00);
+	\draw(3.20, 3.80) to (3.40, 3.80);
+	\draw(3.00, 3.60) to (3.20, 3.60);
+	\draw(4.00,2.90) to (4.00,4.10);
+	\draw(4.20,2.90) to (4.20,4.10);
+	\draw(4.40,2.90) to (4.40,4.10);
+	\draw(4.60,2.90) to (4.60,4.10);
+	\draw(4.20, 4.00) to (4.40, 4.00);
+	\draw(4.00, 3.80) to (4.20, 3.80);
+	\draw(4.40, 3.80) to (4.60, 3.80);
+	\draw(4.20, 3.60) to (4.40, 3.60);
+	\draw(5.00,2.90) to (5.00,4.10);
+	\draw(5.20,2.90) to (5.20,4.10);
+	\draw(5.40,2.90) to (5.40,4.10);
+	\draw(5.60,2.90) to (5.60,4.10);
+	\draw(5.20, 4.00) to (5.40, 4.00);
+	\draw(5.00, 3.80) to (5.20, 3.80);
+	\draw(5.40, 3.80) to (5.60, 3.80);
+	\draw(5.20, 3.60) to (5.40, 3.60);
+	\draw(5.00, 3.40) to (5.20, 3.40);
+	
+	\draw(0.00,1.40) to (0.00,2.60);
+	\draw(0.20,1.40) to (0.20,2.60);
+	\draw(0.40,1.40) to (0.40,2.60);
+	\draw(0.60,1.40) to (0.60,2.60);
+	\draw(0.00, 2.50) to (0.20, 2.50);
+	\draw(0.20, 2.30) to (0.40, 2.30);
+	\draw(0.40, 2.10) to (0.60, 2.10);
+	\draw(1.00,1.40) to (1.00,2.60);
+	\draw(1.20,1.40) to (1.20,2.60);
+	\draw(1.40,1.40) to (1.40,2.60);
+	\draw(1.60,1.40) to (1.60,2.60);
+	\draw(1.00, 2.50) to (1.20, 2.50);
+	\draw(1.20, 2.30) to (1.40, 2.30);
+	\draw(1.40, 2.10) to (1.60, 2.10);
+	\draw(1.20, 1.90) to (1.40, 1.90);
+	\draw(2.00,1.40) to (2.00,2.60);
+	\draw(2.20,1.40) to (2.20,2.60);
+	\draw(2.40,1.40) to (2.40,2.60);
+	\draw(2.60,1.40) to (2.60,2.60);
+	\draw(2.00, 2.50) to (2.20, 2.50);
+	\draw(2.20, 2.30) to (2.40, 2.30);
+	\draw(2.00, 2.10) to (2.20, 2.10);
+	\draw(2.40, 2.10) to (2.60, 2.10);
+	\draw(3.00,1.40) to (3.00,2.60);
+	\draw(3.20,1.40) to (3.20,2.60);
+	\draw(3.40,1.40) to (3.40,2.60);
+	\draw(3.60,1.40) to (3.60,2.60);
+	\draw(3.00, 2.50) to (3.20, 2.50);
+	\draw(3.20, 2.30) to (3.40, 2.30);
+	\draw(3.40, 2.10) to (3.60, 2.10);
+	\draw(3.20, 1.90) to (3.40, 1.90);
+	\draw(3.00, 1.70) to (3.20, 1.70);
+	\draw(4.00,1.40) to (4.00,2.60);
+	\draw(4.20,1.40) to (4.20,2.60);
+	\draw(4.40,1.40) to (4.40,2.60);
+	\draw(4.60,1.40) to (4.60,2.60);
+	\draw(4.00, 2.50) to (4.20, 2.50);
+	\draw(4.20, 2.30) to (4.40, 2.30);
+	\draw(4.00, 2.10) to (4.20, 2.10);
+	\draw(4.40, 2.10) to (4.60, 2.10);
+	\draw(4.20, 1.90) to (4.40, 1.90);
+	\draw(5.00,1.40) to (5.00,2.60);
+	\draw(5.20,1.40) to (5.20,2.60);
+	\draw(5.40,1.40) to (5.40,2.60);
+	\draw(5.60,1.40) to (5.60,2.60);
+	\draw(5.00, 2.50) to (5.20, 2.50);
+	\draw(5.20, 2.30) to (5.40, 2.30);
+	\draw(5.00, 2.10) to (5.20, 2.10);
+	\draw(5.40, 2.10) to (5.60, 2.10);
+	\draw(5.20, 1.90) to (5.40, 1.90);
+	\draw(5.00, 1.70) to (5.20, 1.70);
+	
+	\end{tikzpicture}
+	\caption{All $24$ ladders listed in lexicographic order.}
+	\label{Fig:TwentyFour}
+\end{figure}
+	
+
+
+
 The second problem which this thesis focuses on is the so called Minimum Height Problem which is an optimization 
 problem. Optimization problems are widely studied in computer science. Optimization problems are found in 
 the fields of artificial intelligence, theory of computation and machine learning. Let the 
@@ -310,47 +492,37 @@ ladder has the minimal height with a height of $4$.
 	This problem asks, given all $n!$ permutations of order $n$, is there an efficient algorithm for listing 
 	one optimal ladder per permutation? In other words, 
 	is there an easy way to transition from one ladder to the next until all $n!$ ladders 
-	have been listed? Efficiency is defined as relocating the minimal number of bars in $ladder_{i}$ 
-	to get to $ladder_{i+1}$ or add/removing the minimal number of bars in $ladder_{i}$
-	to get to $ladder_{i+1}$. This thesis provides two such algorithms for solving the Canonical
-	Ladder Listing Problem. The first is a modification of the Steinhaus-Johnson-Trotter Gray Code. The second 
-	is a modification of the Effler-Ruskey algorithm.\par  
+	have been listed?
 	The second problem is the so called Minimum Height 
-    Problem which asks, given all the ladders in $OptL\{\pi\}$, which ladder(s) are 
+    Problem which asks, given all the ladders in $OptL\{\pi\}$, which ladders are 
     the shortest? That is to say, which ladders have the least number of rows? Furthermore, given some arbitrary $\pi$, 
-	is there an efficient algorithm to create a ladder for $\pi$ with minimal height? Efficiency is defined as 
-	$O(n^{2})$. This thesis provides an upper and lower bound for the minimal height of ladders along with an efficient heuristic algorithm 
-	for creating a ladder with minimal height. The heuristic algorithm uses the properties of bar compression and zig-zagginess 
-	in order to create a ladder with minimal height.
+	is there an efficient algorithm to create a ladder for $\pi$ with minimal height? 
+
+\section{Contributions}
+	For the Canonical Ladder Listing Problem, this thesis provides 
+	two algorithms for listing all $n!$ ladders. 
+	Let a \emph{minimal change} be defined as adding or removing a bar from one ladder to get to the 
+	next ladder. Both algorithms use minimal change to transition from one ladder to the next. 
+	The first is a modification of the Steinhaus-Johnson-Trotter algorithm. The second is a modification of the Effler-Ruskey algorithm.
+
+	For The Minimum Height Problem, this thesis provides an upper and lower bound for the minimal height of ladders. 
+	Let efficiency is defined as 
+	$O(n^{2})$. This thesis provides two efficient algorithms for solving the Minimum Height Problem. The first is a heuristic algorithm 
+	for creating a ladder with minimal height given any permutation of order $n$. 
+	The second is an exact algorithm for creating a ladder with minimal height given the descending permutation 
+	of order $n$.
 	
 \section{Overview of Thesis}
 This thesis is broken down into several sections. In Chapter 2, a literature
 review of ladder lotteries will be provided along with background information pertinent to this thesis. 
-The literature review focuses on solved problems pertaining 
-to ladder lotteries along with the commonalities between ladder lotteries and 
-other mathematical objects. In Chapter 3, The Canonical Ladder Listing Problem is provided. 
+In Chapter 3, The Canonical Ladder Listing Problem is provided. 
 Chapter 3 is broken down into four subsections. The first subsection is the introduction to the problem, 
 the second is a methodology subsection, the third is a results 
-subsection and the fourth is a conclusion/analysis subsection. The introduction subsection introduces the problem to the reader, providing the necessary 
-definitions and concepts. The methodology subsection provides the modified SJT algorithm and the modified Effler-Ruskey algorithm pertaining 
-to listing ladder lotteries. 
-Following the methodology subsection, the results generated by the algorithms will be presented.
-In the results subsection there will be proofs and formulas for certain propositions made in regards to the Ladder Lottery Listing Problem. 
-Following the results subsection, an analysis of the results will be presented along with a summary of future work. 
+subsection and the fourth is a conclusion/analysis subsection. 
 In Chapter 4, The Minimum Height Problem is provided. Chapter 4 is broken down into four subsections.
 The first subsection is the introduction to the problem, 
 the second is a methodology subsection, the third is a results 
-subsection and the fourth is a conclusion/analysis subsection.
-The introduction subsection introduces the problem to the reader, providing the necessary concepts and definitions. The 
-introduction subsection also connects ladders of minimum height to a number of other mathematical objects such as 
-involutions and binary strings; details can be found in Chapter 4 subsection introduction. The second subsection 
-is the procedure subsection which provides a number of algorithms for solving the minimum height problem. One is an exact 
-algorithm for solving the minimum height problem given a descending permutation of order $n$. The second is a heuristic 
-algorithm for solving the minimum height problem for an arbitrary permutation of order $n$. There are also a number 
-of lemmas and proofs in the procedure subsection pertaining to the Minimum Height Problem. In the results subsection, 
-the results of the heuristic algorithm for solving the Minimum 
-Height Problem are provided. In the analysis subsection, the results of the heuristic algorithm are compared with the results of the brute 
-force algorithm. 
+subsection and the fourth is a conclusion/analysis subsection. 
 
 \section{Summary of Past Known Results}
 To the best of my knowledge, the first paper written on ladder lotteries is titled Efficient Enumeration of 

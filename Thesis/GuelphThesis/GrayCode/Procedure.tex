@@ -2,21 +2,11 @@
 
 \section{Procedure}
 
-So far, the problem has been introduced and the required terminology has been defined. Recall that there are two 
-changes; the insertion/deletion of bars or relocation of bars.
-However, there has yet to be discussion regarding the two 
-listing algorithms. In the procedure section 
-we look at each of the algorithms and explain what 
-each of the algorithms are doing. The goal is to transition from 
-$l_{i}$ to $l_{i+1}$ in $CanL{\pi_{n}}$ with minimal change, which means adding or removing 
-the least number of bars to get from $l_{i}$ to $l_{i+1}$ or relocating 
-the least number of bars to get from $l_{i}$ to $l_{i+1}$.\par 
-
-The reason that the {\sc ModifiedSJT} and {\sc Cyclic Bar} algorithms were chosen is because they allow 
-for minimal change from $l_{i}$ to $l_{i+1}$. While conducting this research, modifications 
-to the permutation listing algorithms mentioned in chapter one were applied for listing $CanL\{\pi_{n}\}$. Recall that 
-these listing algorithms were Zaks, Heaps, and Lexicographic. These listing algorithms 
-did not allow for minimal change when transitioning from $l_{i}$ to $l_{i+1}$.
+So far, the problem has been introduced and the required terminology has been defined. In the procedure section,
+ the details of {\sc ModifiedSJT} and {\sc CyclicBar} are provided. These details include the pseudocode for 
+ each of the algorithms, the initial conditions for each of the algorithms, the structures produced by each 
+ of the algorithms, and a number of lemmas and proofs for each of the two algorithms. In the procedure section, 
+ the algorithms are assessed independently of each other.
 %%section SJT
 \subsection{The Modified Steinhaus-Johnson-Trotter Algorithm}
 
@@ -62,7 +52,7 @@ $route$ is incremented by $1$ from $2,3 \dots n$.
       \EndIf
     \EndFunction
   \end{algorithmic}
-  \caption{Modification of the {\sc SJT} algorithm for listing $CanL\{\pi_{n}\}$}
+  \caption{Modification of the {\sc SJT} algorithm for listing $L_{n}$}
   \label{Alg:ModSJT}
 \end{algorithm}
 
@@ -86,7 +76,7 @@ and return.
 
 
 \begin{lemma}
-  {\sc ModifiedSJT} produces $CanL\{\pi_{n}\}$
+  {\sc ModifiedSJT} produces $L_{n}$
 \end{lemma}
 \begin{proof}
   Since the algorithm is a modification of the Steinhaus-Johnson-Trotter algorithm, a similar proof for the SJT algorithm 
@@ -100,329 +90,231 @@ an example of the proof please refer to Figure~\ref{Fig:CanLSJT}.
 \end{proof}
 %%prove the dimensions of the datastructure
 \begin{center}
-\begin{figure}[!htp]
-
-  %%First tree
-  \begin{minipage}{.9\textwidth}
-  
- ~\resizebox{.9\textwidth}{.45\textheight}{
+ \begin{figure}[!htp]
+  \centering
   \begin{tikzpicture}
-   
-  %%t1
-  \draw(0, 5) to (0, 7);
-  \draw(.5, 5) to (.5, 7);
-
-  \draw[->, line width = .3mm](.6, 7) to (1.6, 9);
-  \draw[->, line width = .3mm](.6, 6) to (1.6, 6);
-  \draw[->, line width = .3mm](.6, 5) to (1.6, 3);
-
-    \draw(1.7, 10) to (1.7, 8);
-    \draw(2.2, 10) to (2.2, 8);
-    \draw(2.7, 10) to (2.7, 8);
-
-      \draw[->, line width = .3mm](2.8, 10) to (4.8, 11);
-      \draw[->, line width = .3mm](2.8, 9.5) to (4.8, 10);
-      \draw[->, line width = .3mm](2.8, 9) to (4.8, 8.5);
-      \draw[->, line width = .3mm](2.8, 8.5) to (4.8, 8);
-
-        \draw(5, 10.5) to (5, 11.5);
-        \draw(5.3, 10.5) to (5.3, 11.5);
-        \draw(5.6, 10.5) to (5.6, 11.5);
-        \draw(5.9, 10.5) to (5.9, 11.5);
-
-        \draw(5, 10.3) to (5, 9.3);
-        \draw(5.3, 10.3) to (5.3, 9.3);
-        \draw(5.6, 10.3) to (5.6, 9.3);
-          \draw(5.6, 9.7) to (5.9, 9.7);
-        \draw(5.9, 10.3) to (5.9, 9.3);
-
-        \draw(5, 9.1) to (5, 8.1);
-        \draw(5.3, 9.1) to (5.3, 8.1);
-          \draw(5.3, 8.9) to (5.6, 8.9);
-        \draw(5.6, 9.1) to (5.6, 8.1);
-          \draw(5.6, 8.7) to (5.9, 8.7);
-        \draw(5.9, 9.1) to (5.9, 8.1);
-
-        \draw(5, 8) to (5, 7);
-          \draw(5, 7.8) to (5.3, 7.8);
-        \draw(5.3, 8) to (5.3, 7);
-          \draw(5.3, 7.6) to (5.6, 7.6);
-        \draw(5.6, 8) to (5.6, 7);
-          \draw(5.6, 7.4) to (5.9, 7.4);
-        \draw(5.9, 8) to (5.9, 7);
-  %%t2
-  \draw(1.7, 5) to (1.7, 7);
-  \draw(2.2, 5) to (2.2, 7);
-    \draw(2.2, 6) to (2.7, 6);
-  \draw(2.7, 5) to (2.7, 7);
-    
-    \draw[->, line width = .3mm](2.8, 7) to (3.5, 7);
-    \draw[->, line width = .3mm](2.8, 6) to (4.8, 6);
-    \draw[->, line width = .3mm](2.8, 6) to (4.8, 5);
-    \draw[->, line width = .3mm](2.8, 5.5) to (3.5, 4.7);
-
-      \draw(3.6, 7.5) to (3.6, 6.5);
-        \draw(3.6, 7.3) to (3.9, 7.3);
-      \draw(3.9, 7.5) to (3.9, 6.5);
-        \draw(3.9, 6.7) to (4.2, 6.7);
-        \draw(3.9, 7.1) to (4.2, 7.1); 
-      \draw(4.2, 7.5) to (4.2, 6.5);
-        \draw(4.2, 6.9) to (4.5, 6.9);
-      \draw(4.5, 7.5) to (4.5, 6.5);
-
-      
-      \draw(5, 6.4) to (5, 5.4);
-      \draw(5.3, 6.4) to (5.3, 5.4);
-        \draw(5.3, 6.1) to (5.6, 6.1);
-        \draw(5.3, 5.7) to (5.6, 5.7);
-      \draw(5.6, 6.4) to (5.6, 5.4);
-        \draw(5.6, 5.9) to (5.9, 5.9);
-      \draw(5.9, 6.4) to (5.9, 5.4);
-
-  
-      \draw(5, 5.3) to (5, 4.3);
-      \draw(5.3, 5.3) to (5.3, 4.3);
-        \draw(5.3, 4.5) to (5.6, 4.5);
-      \draw(5.6, 5.3) to (5.6, 4.3);
-        \draw(5.6, 4.7) to (5.9, 4.7);
-      \draw(5.9, 5.3) to (5.9, 4.3);
-
-  
-      \draw(3.6, 4.7) to (3.6, 3.7);
-      \draw(3.9, 4.7) to (3.9, 3.7);
-        \draw(3.9, 3.9) to (4.2, 3.9);
-      \draw(4.2, 4.7) to (4.2, 3.7);
-      \draw(4.5, 4.7) to (4.5, 3.7);
-
-  %%t3
-
- 
-  
-  \draw(1.7, 4) to (1.7, 2);
-    \draw(1.7, 3) to (2.2, 3);
-  \draw(2.2, 4) to (2.2, 2);
-    \draw(2.2, 2.5) to (2.7, 2.5);
-  \draw(2.7, 4) to (2.7, 2);
-    
-    \draw[->, line width = .3mm](2.8, 3) to (4.8, 3.7);
-    \draw[->, line width = .3mm](2.8, 3) to (4.8, 2.5);
-    \draw[->, line width = .3mm](2.8, 3) to (4.8, 1);
-    \draw[->, line width = .3mm](2.8, 2.5) to (4.8, .2);
-
-  \draw(5, 3.9) to (5, 2.9);
-    \draw(5, 3.3) to (5.3, 3.3);
-  \draw(5.3, 3.9) to (5.3, 2.9);
-    \draw(5.3, 3.1) to (5.6, 3.1);
-  \draw(5.6, 3.9) to (5.6,2.9);
-  \draw(5.9, 3.9) to (5.9, 2.9);
-    
-
-  \draw(5, 2.8) to (5, 1.8);
-    \draw(5, 2.4) to (5.3, 2.4);
-  \draw(5.3, 2.8) to (5.3, 1.8);
-    \draw(5.3, 2.2) to (5.6, 2.2);
-  \draw(5.6, 2.8) to (5.6,1.8);
-    \draw(5.6, 2.4) to (5.9, 2.4);
-  \draw(5.9, 2.8) to (5.9, 1.8);
-  
-
-  \draw(5, 1.5) to (5, .5);
-    \draw(5, .9) to (5.3, .9);
-  \draw(5.3, 1.5) to (5.3, .5);
-    \draw(5.3, .7) to (5.6, .7);
-    \draw(5.3, 1.1) to (5.6, 1.1);
-  \draw(5.6, 1.5) to (5.6,.5);
-    \draw(5.6, .9) to (5.9, .9);
-  \draw(5.9, 1.5) to (5.9, .5);
-  
-
-  \draw(5, .4) to (5, -.6);
-    \draw(5, .2) to (5.3, .2);
-    \draw(5, -.2) to (5.3, -.2);
-  \draw(5.3, .4) to (5.3, -.6);
-    \draw(5.3, 0) to (5.6, 0);
-    \draw(5.3, -.4) to (5.6, -.4);
-  \draw(5.6, .4) to (5.6,-.6);
-    \draw(5.6, -.2) to (5.9, -.2);
-  \draw(5.9, .4) to (5.9, -.6);
+\draw(0.00,5.90) to (0.00,7.10);
+\draw(0.20,5.90) to (0.20,7.10);
+\draw(0.40,5.90) to (0.40,7.10);
+\draw(0.60,5.90) to (0.60,7.10);
 
 
-
-  \end{tikzpicture}}
-  \end{minipage}
-
-   %%Second tree
-  \begin{minipage}{.9\textwidth}
-  
-  
- ~\resizebox{.9\textwidth}{.45\textheight}{
-  \begin{tikzpicture}
-   
-  %%t1
-  \draw(0, 5) to (0, 7);
-    \draw(0, 6) to (.5, 6);
-  \draw(.5, 5) to (.5, 7);
-
-  \draw[->, line width = .3mm](.6, 7) to (1.6, 9);
-  \draw[->, line width = .3mm](.6, 6) to (1.6, 6);
-  \draw[->, line width = .3mm](.6, 5) to (1.6, 3);
-
-    \draw(1.7, 10) to (1.7, 8);
-      \draw(1.7, 9.5) to (2.2, 9.5);
-      \draw(1.7, 8.5) to (2.2, 8.5);
-    \draw(2.2, 10) to (2.2, 8);
-      \draw(2.2, 9) to (2.7, 9);
-    \draw(2.7, 10) to (2.7, 8);
-
-      \draw[->, line width = .3mm](2.8, 10) to (4.8, 11);
-      \draw[->, line width = .3mm](2.8, 9.5) to (4.8, 10);
-      \draw[->, line width = .3mm](2.8, 9) to (4.8, 8.5);
-      \draw[->, line width = .3mm](2.8, 8.5) to (4.8, 8);
-
-        \draw(5, 10.5) to (5, 11.5);
-          \draw(5, 11.4) to (5.3, 11.4);
-          \draw(5, 11) to (5.3, 11);
-          \draw(5, 10.6) to (5.3, 10.6);
-        \draw(5.3, 10.5) to (5.3, 11.5);
-          \draw(5.3, 11.2) to (5.6, 11.2);
-          \draw(5.3, 10.8) to (5.6, 10.8);
-        \draw(5.6, 10.5) to (5.6, 11.5);
-          \draw(5.6, 11) to (5.9, 11);
-        \draw(5.9, 10.5) to (5.9, 11.5);
-
-        \draw(5, 10.3) to (5, 9.3);
-          \draw(5, 9.9) to (5.3, 9.9);
-          \draw(5, 9.4) to (5.3, 9.4);
-        \draw(5.3, 10.3) to (5.3, 9.3);
-          \draw(5.3, 10.1) to (5.6, 10.1);
-          \draw(5.3, 9.7) to (5.6, 9.7);
-        \draw(5.6, 10.3) to (5.6, 9.3);
-          \draw(5.6,  9.9) to (5.9, 9.9);
-        \draw(5.9, 10.3) to (5.9, 9.3);
-
-        \draw(5, 9.1) to (5, 8.1);
-          \draw(5, 8.7) to (5.3, 8.7);
-          \draw(5, 8.3) to (5.3, 8.3);
-        \draw(5.3, 9.1) to (5.3, 8.1);
-          \draw(5.3, 8.5) to (5.6, 8.5);
-        \draw(5.6, 9.1) to (5.6, 8.1);
-          \draw(5.6, 8.7) to (5.9, 8.7);
-        \draw(5.9, 9.1) to (5.9, 8.1);
-
-        \draw(5, 8) to (5, 7);
-          \draw(5, 7.5) to (5.3, 7.5);
-          \draw(5, 7.1) to (5.3, 7.1);
-        \draw(5.3, 8) to (5.3, 7);
-          \draw(5.3, 7.3) to (5.6, 7.3);
-        \draw(5.6, 8) to (5.6, 7);
-        \draw(5.9, 8) to (5.9, 7);
-  %%t2
-  \draw(1.7, 5) to (1.7, 7);
-    \draw(1.7, 5.5) to (2.2, 5.5);
-  \draw(2.2, 5) to (2.2, 7);
-    \draw(2.2, 6) to (2.7, 6);
-  \draw(2.7, 5) to (2.7, 7);
-    
-    \draw[->, line width = .3mm](2.8, 7) to (3.5, 7);
-    \draw[->, line width = .3mm](2.8, 6) to (4.8, 6);
-    \draw[->, line width = .3mm](2.8, 6) to (4.8, 5);
-    \draw[->, line width = .3mm](2.8, 5.5) to (3.5, 4.7);
-
-      \draw(3.6, 7.5) to (3.6, 6.5);
-        \draw(3.6, 6.7) to (3.9, 6.7);
-      \draw(3.9, 7.5) to (3.9, 6.5);
-        \draw(3.9, 6.9) to (4.2, 6.9);
-      \draw(4.2, 7.5) to (4.2, 6.5);
-      \draw(4.5, 7.5) to (4.5, 6.5);
-
-      
-      \draw(5, 6.4) to (5, 5.4);
-        \draw(5, 5.5) to (5.3, 5.5);
-      \draw(5.3, 6.4) to (5.3, 5.4);
-        \draw(5.3, 5.7) to (5.6, 5.7);
-      \draw(5.6, 6.4) to (5.6, 5.4);
-        \draw(5.6, 5.9) to (5.9, 5.9);
-      \draw(5.9, 6.4) to (5.9, 5.4);
-
-  
-      \draw(5, 5.3) to (5, 4.3);
-        \draw(5, 4.4) to (5.3, 4.4);
-      \draw(5.3, 5.3) to (5.3, 4.3);
-        \draw(5.3, 4.6) to (5.6, 4.6);
-        \draw(5.3, 5) to (5.6, 5);
-      \draw(5.6, 5.3) to (5.6, 4.3);
-        \draw(5.6, 4.8) to (5.9, 4.8); 
-      \draw(5.9, 5.3) to (5.9, 4.3);
-
-  
-      \draw(3.6, 4.7) to (3.6, 3.7);
-        \draw(3.6, 4.6) to (3.9, 4.6);
-        \draw(3.6, 3.8) to (3.9, 3.8);
-      \draw(3.9, 4.7) to (3.9, 3.7);
-        \draw(3.9, 4.4) to (4.2, 4.4);
-        \draw(3.9, 4) to (4.2, 4);
-      \draw(4.2, 4.7) to (4.2, 3.7);
-        \draw(4.2, 4.2) to (4.5, 4.2);
-      \draw(4.5, 4.7) to (4.5, 3.7);
-
-  %%t3
+\draw(1.00,5.90) to (1.00,7.10);
+\draw(1.20,5.90) to (1.20,7.10);
+\draw(1.40,5.90) to (1.40,7.10);
+\draw(1.60,5.90) to (1.60,7.10);
+\draw(1.40, 6.60) to (1.60, 6.60);
 
 
-
-  \draw(1.7, 4) to (1.7, 2);
-    \draw(1.7, 2.4) to (2.2, 2.4);
-  \draw(2.2, 4) to (2.2, 2);
-  \draw(2.7, 4) to (2.7, 2);
-    
-    \draw[->, line width = .3mm](2.8, 3) to (4.8, 3.7);
-    \draw[->, line width = .3mm](2.8, 3) to (4.8, 2.5);
-    \draw[->, line width = .3mm](2.8, 3) to (4.8, 1);
-    \draw[->, line width = .3mm](2.8, 2.5) to (4.8, .2);
-
-  \draw(5, 3.9) to (5, 2.9);
-    \draw(5, 3) to (5.3, 3);
-    \draw(5, 3.8) to (5.3, 3.8);
-  \draw(5.3, 3.9) to (5.3, 2.9);
-    \draw(5.3, 3.6) to (5.6, 3.6);
-  \draw(5.6, 3.9) to (5.6,2.9);
-    \draw(5.6, 3.4) to (5.9, 3.4);
-  \draw(5.9, 3.9) to (5.9, 2.9);
-    
-
-  \draw(5, 2.8) to (5, 1.8);
-    \draw(5, 1.9) to (5.3, 1.9);
-  \draw(5.3, 2.8) to (5.3, 1.8);
-    \draw(5.3, 2.3) to (5.6, 2.3);
-  \draw(5.6, 2.8) to (5.6,1.8);
-        \draw(5.6, 2.1) to (5.9, 2.1);
-  \draw(5.9, 2.8) to (5.9, 1.8);
-  
-
-  \draw(5, 1.5) to (5, .5);
-    \draw(5, .6) to (5.3, .6);
-  \draw(5.3, 1.5) to (5.3, .5);
-  \draw(5.6, 1.5) to (5.6, .5);
-    \draw(5.6, 1) to (5.9, 1);
-  \draw(5.9, 1.5) to (5.9, .5);
-  
-
-  \draw(5, .4) to (5, -.6);
-    \draw(5, -.5) to (5.3, -.5);
-  \draw(5.3, .4) to (5.3, -.6);
-  \draw(5.6, .4) to (5.6,-.6);
-  \draw(5.9, .4) to (5.9, -.6);
-  
+\draw(2.00,5.90) to (2.00,7.10);
+\draw(2.20,5.90) to (2.20,7.10);
+\draw(2.40,5.90) to (2.40,7.10);
+\draw(2.60,5.90) to (2.60,7.10);
+\draw(2.20, 6.80) to (2.40, 6.80);
+\draw(2.40, 6.60) to (2.60, 6.60);
 
 
+\draw(3.00,5.90) to (3.00,7.10);
+\draw(3.20,5.90) to (3.20,7.10);
+\draw(3.40,5.90) to (3.40,7.10);
+\draw(3.60,5.90) to (3.60,7.10);
+\draw(3.00, 7.00) to (3.20, 7.00);
+\draw(3.20, 6.80) to (3.40, 6.80);
+\draw(3.40, 6.60) to (3.60, 6.60);
 
-  \end{tikzpicture}}
-  \end{minipage}
+
+\draw(4.00,5.90) to (4.00,7.10);
+\draw(4.20,5.90) to (4.20,7.10);
+\draw(4.40,5.90) to (4.40,7.10);
+\draw(4.60,5.90) to (4.60,7.10);
+\draw(4.00, 7.00) to (4.20, 7.00);
+\draw(4.20, 6.80) to (4.40, 6.80);
+\draw(4.40, 6.60) to (4.60, 6.60);
+\draw(4.20, 6.40) to (4.40, 6.40);
+
+
+\draw(5.00,5.90) to (5.00,7.10);
+\draw(5.20,5.90) to (5.20,7.10);
+\draw(5.40,5.90) to (5.40,7.10);
+\draw(5.60,5.90) to (5.60,7.10);
+\draw(5.20, 6.80) to (5.40, 6.80);
+\draw(5.40, 6.60) to (5.60, 6.60);
+\draw(5.20, 6.40) to (5.40, 6.40);
+
+
+\draw(0.00,4.40) to (0.00,5.60);
+\draw(0.20,4.40) to (0.20,5.60);
+\draw(0.40,4.40) to (0.40,5.60);
+\draw(0.60,4.40) to (0.60,5.60);
+\draw(0.40, 5.10) to (0.60, 5.10);
+\draw(0.20, 4.90) to (0.40, 4.90);
+
+
+\draw(1.00,4.40) to (1.00,5.60);
+\draw(1.20,4.40) to (1.20,5.60);
+\draw(1.40,4.40) to (1.40,5.60);
+\draw(1.60,4.40) to (1.60,5.60);
+\draw(1.20, 4.90) to (1.40, 4.90);
+
+
+\draw(2.00,4.40) to (2.00,5.60);
+\draw(2.20,4.40) to (2.20,5.60);
+\draw(2.40,4.40) to (2.40,5.60);
+\draw(2.60,4.40) to (2.60,5.60);
+\draw(2.00, 5.10) to (2.20, 5.10);
+\draw(2.20, 4.90) to (2.40, 4.90);
+
+
+\draw(3.00,4.40) to (3.00,5.60);
+\draw(3.20,4.40) to (3.20,5.60);
+\draw(3.40,4.40) to (3.40,5.60);
+\draw(3.60,4.40) to (3.60,5.60);
+\draw(3.00, 5.10) to (3.20, 5.10);
+\draw(3.40, 5.10) to (3.60, 5.10);
+\draw(3.20, 4.90) to (3.40, 4.90);
+
+
+\draw(4.00,4.40) to (4.00,5.60);
+\draw(4.20,4.40) to (4.20,5.60);
+\draw(4.40,4.40) to (4.40,5.60);
+\draw(4.60,4.40) to (4.60,5.60);
+\draw(4.20, 5.30) to (4.40, 5.30);
+\draw(4.00, 5.10) to (4.20, 5.10);
+\draw(4.40, 5.10) to (4.60, 5.10);
+\draw(4.20, 4.90) to (4.40, 4.90);
+
+
+\draw(5.00,4.40) to (5.00,5.60);
+\draw(5.20,4.40) to (5.20,5.60);
+\draw(5.40,4.40) to (5.40,5.60);
+\draw(5.60,4.40) to (5.60,5.60);
+\draw(5.00, 5.50) to (5.20, 5.50);
+\draw(5.20, 5.30) to (5.40, 5.30);
+\draw(5.00, 5.10) to (5.20, 5.10);
+\draw(5.40, 5.10) to (5.60, 5.10);
+\draw(5.20, 4.90) to (5.40, 4.90);
+
+
+\draw(0.00,2.90) to (0.00,4.10);
+\draw(0.20,2.90) to (0.20,4.10);
+\draw(0.40,2.90) to (0.40,4.10);
+\draw(0.60,2.90) to (0.60,4.10);
+\draw(0.00, 4.00) to (0.20, 4.00);
+\draw(0.20, 3.80) to (0.40, 3.80);
+\draw(0.00, 3.60) to (0.20, 3.60);
+\draw(0.40, 3.60) to (0.60, 3.60);
+\draw(0.20, 3.40) to (0.40, 3.40);
+\draw(0.00, 3.20) to (0.20, 3.20);
+
+
+\draw(1.00,2.90) to (1.00,4.10);
+\draw(1.20,2.90) to (1.20,4.10);
+\draw(1.40,2.90) to (1.40,4.10);
+\draw(1.60,2.90) to (1.60,4.10);
+\draw(1.20, 3.80) to (1.40, 3.80);
+\draw(1.00, 3.60) to (1.20, 3.60);
+\draw(1.40, 3.60) to (1.60, 3.60);
+\draw(1.20, 3.40) to (1.40, 3.40);
+\draw(1.00, 3.20) to (1.20, 3.20);
+
+
+\draw(2.00,2.90) to (2.00,4.10);
+\draw(2.20,2.90) to (2.20,4.10);
+\draw(2.40,2.90) to (2.40,4.10);
+\draw(2.60,2.90) to (2.60,4.10);
+\draw(2.00, 3.60) to (2.20, 3.60);
+\draw(2.40, 3.60) to (2.60, 3.60);
+\draw(2.20, 3.40) to (2.40, 3.40);
+\draw(2.00, 3.20) to (2.20, 3.20);
+
+
+\draw(3.00,2.90) to (3.00,4.10);
+\draw(3.20,2.90) to (3.20,4.10);
+\draw(3.40,2.90) to (3.40,4.10);
+\draw(3.60,2.90) to (3.60,4.10);
+\draw(3.00, 3.60) to (3.20, 3.60);
+\draw(3.20, 3.40) to (3.40, 3.40);
+\draw(3.00, 3.20) to (3.20, 3.20);
+
+
+\draw(4.00,2.90) to (4.00,4.10);
+\draw(4.20,2.90) to (4.20,4.10);
+\draw(4.40,2.90) to (4.40,4.10);
+\draw(4.60,2.90) to (4.60,4.10);
+\draw(4.20, 3.40) to (4.40, 3.40);
+\draw(4.00, 3.20) to (4.20, 3.20);
+
+
+\draw(5.00,2.90) to (5.00,4.10);
+\draw(5.20,2.90) to (5.20,4.10);
+\draw(5.40,2.90) to (5.40,4.10);
+\draw(5.60,2.90) to (5.60,4.10);
+\draw(5.40, 3.60) to (5.60, 3.60);
+\draw(5.20, 3.40) to (5.40, 3.40);
+\draw(5.00, 3.20) to (5.20, 3.20);
+
+
+\draw(0.00,1.40) to (0.00,2.60);
+\draw(0.20,1.40) to (0.20,2.60);
+\draw(0.40,1.40) to (0.40,2.60);
+\draw(0.60,1.40) to (0.60,2.60);
+\draw(0.20, 2.30) to (0.40, 2.30);
+\draw(0.40, 2.10) to (0.60, 2.10);
+\draw(0.20, 1.90) to (0.40, 1.90);
+\draw(0.00, 1.70) to (0.20, 1.70);
+
+
+\draw(1.00,1.40) to (1.00,2.60);
+\draw(1.20,1.40) to (1.20,2.60);
+\draw(1.40,1.40) to (1.40,2.60);
+\draw(1.60,1.40) to (1.60,2.60);
+\draw(1.00, 2.50) to (1.20, 2.50);
+\draw(1.20, 2.30) to (1.40, 2.30);
+\draw(1.40, 2.10) to (1.60, 2.10);
+\draw(1.20, 1.90) to (1.40, 1.90);
+\draw(1.00, 1.70) to (1.20, 1.70);
+
+
+\draw(2.00,1.40) to (2.00,2.60);
+\draw(2.20,1.40) to (2.20,2.60);
+\draw(2.40,1.40) to (2.40,2.60);
+\draw(2.60,1.40) to (2.60,2.60);
+\draw(2.00, 2.50) to (2.20, 2.50);
+\draw(2.20, 2.30) to (2.40, 2.30);
+\draw(2.40, 2.10) to (2.60, 2.10);
+\draw(2.00, 1.70) to (2.20, 1.70);
+
+
+\draw(3.00,1.40) to (3.00,2.60);
+\draw(3.20,1.40) to (3.20,2.60);
+\draw(3.40,1.40) to (3.40,2.60);
+\draw(3.60,1.40) to (3.60,2.60);
+\draw(3.20, 2.30) to (3.40, 2.30);
+\draw(3.40, 2.10) to (3.60, 2.10);
+\draw(3.00, 1.70) to (3.20, 1.70);
+
+
+\draw(4.00,1.40) to (4.00,2.60);
+\draw(4.20,1.40) to (4.20,2.60);
+\draw(4.40,1.40) to (4.40,2.60);
+\draw(4.60,1.40) to (4.60,2.60);
+\draw(4.40, 2.10) to (4.60, 2.10);
+\draw(4.00, 1.70) to (4.20, 1.70);
+
+
+\draw(5.00,1.40) to (5.00,2.60);
+\draw(5.20,1.40) to (5.20,2.60);
+\draw(5.40,1.40) to (5.40,2.60);
+\draw(5.60,1.40) to (5.60,2.60);
+\draw(5.00, 1.70) to (5.20, 1.70);
 
 
 
 
-  \caption{$CanL\{\pi_{4}\}$ generated by the {\sc ModifiedSJT} algorithm. The algorithm inserts or removes a bar from the previous 
-  ladder at the leaf nodes in the tree, the tree is used to prove the veracity of the algorithm}
+
+
+\end{tikzpicture}
+  \caption{$L_{4}$ generated by the {\sc ModifiedSJT} algorithm. The algorithm inserts or removes a bar between any two successive ladders.}
   \label{Fig:CanLSJT}
 \end{figure}
 \end{center}\pagebreak
@@ -439,7 +331,7 @@ an example of the proof please refer to Figure~\ref{Fig:CanLSJT}.
   number of rows required is when $\pi_{n}$ is sorted. In this case there are zero rows because there are 
   zero bars added to the ladder. When a bar is added to the ladder it can be added to an already existing row 
   or to a new row. If the current state of the ladder is empty then adding the first bar produces the second ladder in
-  $CanL\{\pi_{n}\}$. Since the bars are being added bottom right to top left, and the first bar to be added belongs 
+  $L_{n}$. Since the bars are being added bottom right to top left, and the first bar to be added belongs 
   to the $nth$ route, then it must be added to $row=n-1$, $col=n-1$. As bars of the $nth$ route get 
   continuously added to the ladder, each bar is added a row above the previous bar and to a column 
   to the left of the column of the previous bar.
@@ -463,17 +355,17 @@ an example of the proof please refer to Figure~\ref{Fig:CanLSJT}.
 
 
 %%end proof
-From looking at Figure~\ref{Fig:CanLSJT} it should be clear that the canonical representative from $CanL\{\pi_{n}\}$ when using the 
-{\sc ModifiedSJT} algorithm is also the root ladder from each $OptL\{\pi_{n}\}$. Recall that the root ladder is the 
+From looking at Figure~\ref{Fig:CanLSJT} it should be clear that the canonical representative from $L_{n}$ when using the 
+{\sc ModifiedSJT} algorithm is also the root ladder from each $OptL\{\pi\}$. Recall that the root ladder is the 
 ladder whose bars of a lesser route have not crossed the bars of a greater route. In the case of the 
-{\sc ModifiedSJT} algorithm, transitioning from $l_{i}$ to $l_{i+1}$ involves simply inserting a new bar 
-or removing a bar for a given route. Let $k$ be the current route. If a new bar being added belongs to 
+{\sc ModifiedSJT} algorithm, transitioning from one ladder to the next involves simply inserting a new bar 
+or removing a bar. Let $k$ be the current route. If a new bar being added belongs to 
 route $k$, the bar is added below the route of $k+1$ and above the route of $k-1$, therefore 
 adding a bar does not violate the constraint of the root ladder. Let $l_{i}$ be the current ladder.
 Let $l_{i+1}$ be the next ladder in the sequence. 
 Then removing a bar from $l_{i}$ cannot make $l_{i+1}$ a non-root ladder, because 
 removing a bar from $l_{i}$ does not allow the bar of a lesser element to cross the bars of a greater element.
-Thus, the canonical representative for $CanL\{\pi_{n}\}$ is always the root ladder from each $OptL\{\pi_{n}\}$.\par 
+Thus, the canonical representative for $L_{n}$ is always the root ladder from each $OptL\{\pi\}$.\par 
 
 
 
@@ -497,7 +389,7 @@ four cases to consider. The cases are the following:
 \end{lemma}
 \begin{proof}
    It must be noted that we are listing only root ladders. So when transitioning from 
-$l_{j}$ to $l_{j+1}$ in $CanL{\pi_{n}}$ both are root ladders. With this in mind, one can say that the 
+$l_{j}$ to $l_{j+1}$ in $L_{n}$ both are root ladders. With this in mind, one can say that the 
 number of rows required for $route=n$ is $n-1$ seeing as the $nth$ value can have at most $n-1$ bars in its route, 
 each requiring  their own 
 row. Thus, the $(n-1)$ term in the equation in included for the $n-1$ bars of 
@@ -629,8 +521,8 @@ row calculation when adding a bar.
   of the $route=k+1th$ element. Therefore, the following recurrence relation holds for calculating the row of the leftmost bar of $route=k$:
   
 \begin{equation}
-  row(route=k)=\begin{cases}
-    row(route=k+1)+2 & \text{if $k<n$}.\\
+  row(k)=\begin{cases}
+    row(k+1)+2 & \text{if $k<n$}.\\
     0 & \text{if $k=n$}.
   \end{cases}
 \end{equation}
@@ -644,7 +536,7 @@ would be removed from the equation.
 See Figure~\ref{fig:SJTcase3} for an example of removing a bar.\pagebreak
 \end{proof}
 
-\begin{figure}[!htp]
+\begin{figure}[h]
   \begin{center}
     \begin{tikzpicture}
       \draw(0, 0) to (0, 8);
@@ -752,7 +644,7 @@ See Figure~\ref{fig:SJTcase3} for an example of removing a bar.\pagebreak
 \subsection{The Cyclic Bar Algorithm}
 
 The {\sc CyclicBar} algorithm is influenced by the CAT algorithm for generating all permutations with $k$ inversions~\cite{A26}.
-The algorithm lists $CanL\{\pi_{n}\}$ by listing all ladders with $n$ lines and $x$ bars before listing all ladders with 
+The algorithm lists $L_{n}$ by listing all ladders with $n$ lines and $x$ bars before listing all ladders with 
 $n$ lines and $x+1$ bars for $x=0,1, \dots ,{n \choose 2}$. The initial conditions of {\sc CyclicBar} are the following: 
 Let be the $ladder$ be initialized a two dimensional binary array of only $0's$.
  Let a $1$ at $row=i,col=j$ 
@@ -852,9 +744,9 @@ The forest structure is created as follows. Simply call the algorithm for the tr
 ranging from $0 \dots {n \choose 2}$. This will increment the current limit for each call to the tree structure 
 resulting in the forest structure.
 Each combination of bars into the $ladder$ 
-data structure produces the root ladder from each $OptL\{\pi_{n}\}$, thus adding one more ladder to $CanL\{\pi_{n}\}$.
+data structure produces the root ladder from each $OptL\{\pi_{n}\}$, thus adding one more ladder to $L_{n}$.
 Once complete, the tree of ladders terminates, and the $currentLimit$ increases, thus producing a new tree in the forest for 
-$CanL{\pi_{n}}$. To see the forest produced by the {\sc CyclicBar} and {\sc CyclicBarDriver} algorithms for $n=4$ please refer to 
+$L_{n}$. To see the forest produced by the {\sc CyclicBar} and {\sc CyclicBarDriver} algorithms for $n=4$ please refer to 
 Figure~\ref{Fig:CanLForest}\pagebreak
 \begin{center}
 \begin{figure}[!htp]
@@ -1538,17 +1430,17 @@ Figure~\ref{Fig:CanLForest}\pagebreak
   
 
      
-  \caption{The forest for all ladders in $CanL\{\pi_{4}\}$ generated by the Cyclic Bar Algorithm. The leaf nodes present a possibly correct candidate ladder. 
+  \caption{The forest for all ladders in $L_{4}$ generated by the Cyclic Bar Algorithm. The leaf nodes present a possibly correct candidate ladder. 
   If the ladder in the leaf has enough bars, then it is a legitimate ladder in the tree.}
   \label{Fig:CanLForest}
 \end{figure}
 \end{center}
 It has been stated that the forest produced by the Cyclic Bar algorithm generates
-$CanL\{\pi_{n}\}$. This claim will be proven below.
+$L_{n}$. This claim will be proven below.
 
 
 \begin{theorem}
-  \small{The forest produced by the Cyclic Bar algorithm generates $CanL\{\pi_{n}\}$}
+  The forest produced by {\sc CyclicBar} generates $L_{n}$
 \end{theorem}
 
 
@@ -1574,7 +1466,7 @@ $CanL\{\pi_{n}\}$. This claim will be proven below.
   Seeing as an inversion in a permutation corresponds to a bar in 
   a ladder, then by using this same proof on ladders, we can generate all ladders with $k$ bars. 
   Which is to say that $ladders(n, k) = Ladders(n, k') + \sum_{k''=0}^{k} Ladders(n-1, k'')$.
-  In order to list $CanL\{\pi_{n}\}$ simply apply this same logic for all $k$ bars for $0 \leq k \leq n(n-1)/2$. To see an example of the above proof for $List(4, 2)$ refer to Table~\ref{Table:List4,2}.
+  In order to list $L_{n}$ simply apply this same logic for all $k$ bars for $0 \leq k \leq n(n-1)/2$. To see an example of the above proof for $List(4, 2)$ refer to Table~\ref{Table:List4,2}.
 
 \end{proof}
 

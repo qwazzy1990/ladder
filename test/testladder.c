@@ -27,10 +27,10 @@ bool DEBUG8 = false;
 //for counting degenerative triadic subsequences
 bool DEBUG9 = false;
 //for heaps ladders
-bool DEBUG10 = false;
+bool DEBUG10 = true;
 //for the gray code problem using all 4 algorithms
 bool DEBUG11 = false;
-bool DEBUG12 = true;
+bool DEBUG12 = false;
 int memSize = 1;
 int numDig = 0;
 
@@ -100,6 +100,49 @@ void writeTexTable(char **s)
     fprintf(fp, "\\end{table}");
     fclose(fp);
 }
+
+void printLadderTikz(int *perm, Ladder *l, float *cA, float cB)
+{
+    //    printf("\\begin{figure}[!htp]");
+    //   printf("\\begin{tikzpicture}");
+
+    float c1 = *cA;
+    float c2 = cB;
+    for (int i = 0; i <= l->numCols; i++)
+    {
+        printf("\\draw(%.2f,%.2f) to (%.2f,%.2f);", c1, c2 -.1, c1, c2 + 1.1);
+        printf("\n");
+        c1 += 0.2;
+    }
+    c1 = *cA;
+    c2 = c2 + 1.0;
+    for (int i = 0; i <= l->depth; i++)
+    {
+         for (int j = 0; j < l->numCols; j++)
+         {
+             if (l->ladder[i][j] > 0)
+             {
+                 printf("\\draw(%.2f, %.2f) to (%.2f, %.2f);", c1, c2, c1 + .2, c2);
+                 printf("\n");
+             }
+             c1 += .2;
+         }
+         c2 -= .2;
+         c1 = *cA;
+    }
+    // c1 = *cA;
+    // forall(numDig)
+    // {
+    //     printf("\\node at(%.2f,%.2f){\\tiny{%d}};", c1, (*cB) + .4, perm[x]);
+    //     c1 += .2;
+    // }
+
+    //printf("\\end{tikzpicture}");
+    //printf("\\end{figure}");
+    *cA += 1;
+    //*cB += -1.5;
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -183,10 +226,43 @@ int main(int argc, char *argv[])
         new_object(int *, perm, 4);
         forall(n) perm[x] = x + 1;
 
-        heaps(l, perm, n, n - 1);
-        printAllPerms(l, n);
+        //Swithc to lex
+        orderedPerms(l, perm, 24, 1, n);
+
+        float c1 = 0.0;
+        float c2 = 6.0;
+        Node* node = l->head;
+        FILE* fp = fopen("nfactorial.txt", "w");
+        printf("\\begin{figure}[!htp]");
+        printf("\n");
+        printf("\\centering");
+        printf("\n");
+        printf("\\begin{tikzpicture}");
+        printf("\n");
+        for(int i = 0; i < 4; i++)
+        {
+            for(int j = 0; j < 6; j++)
+            {
+                Ladder* root = newLadder(4);
+                initLadder(root);
+                createRoot(root, node->data, 4, 0);
+                printLadderTikz(node->data, root, &c1, c2);
+                node = node->next;
+                destroyLadder(root);
+            }
+            printf("\n");
+            c1 = 0.0;
+            c2 = c2 - 1.5;
+        }
+        printf("\\end{tikzpicture}");
+        printf("\n");
+        printf("\\label{Fig:TwentyFour}");
+        printf("\n");
+        printf("\\end{figure}");
+        printf("\n");
         freeList(l);
         free(perm);
+        fclose(fp);
     }
     if (DEBUG11)
     {

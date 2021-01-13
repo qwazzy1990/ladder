@@ -4,8 +4,8 @@ each ladder form $OptL\{\pi\}$ sorts $\pi$. The so called Listing Problem is one
 In brief, this problem is about how to list all $n!$ ladders efficiently. The research for this problem is highly influenced 
 by permutation enumeration research. Knuth describes a number of 
 permutation enumeration algorithms in The Art of Computer Programming~\cite{A18}. Since this book, many algorithms for 
-enumerating $n!$ permutations have been created. During my research for the Listing Problem, I investigated nine of these 
-enumeration algorithms\cite{A18}\cite{A19}\cite{A21}\cite{A24}\cite{A25}\cite{A26}\cite{A31}\cite{A34}\cite{A35}. 
+enumerating $n!$ permutations have been created. During the research for the Listing Problem, twelve of these 
+enumeration algorithms were investigated~\cite{A18}\cite{A19}\cite{A21}\cite{A24}\cite{A25}\cite{A26}\cite{A31}\cite{A34}\cite{A35}\cite{A36}\cite{A37}. 
 The first is the lexicographic algorithm which orders all $n!$ permutations from smallest to largest. The lexicographic 
 algorithm generates each permutation with an amortized time of $O(n^{2}log(n))$~\cite{A21}. The second of which is the 
 colexicographic algorithm which orders all $n!$ permutations from largest to smallest. The colexicographic 
@@ -13,393 +13,45 @@ algorithm generates each permutation with an amortized time of $O(n^{2}log(n))$~
 algorithm which generates all $n!$ permutations by reversing a suffix in one permutation to get to the next 
 permutation. The time complexity of Zak's algorithm is amortized time of $O(n^{2})$~\cite{A31}.
 The fourth of which is Heap's algorithm which is a decrease and conquer algorithm.  
-The algorithm is based on rotating elements in an array such that the $nth$ position 
-is occupied by the $nth$ element for all permutations of the $(n-1)$ objects. 
-Then the $nth$ element is swapped with one of the elements of in the first $(n-1)$ positions.
-The process repeats itself until all of the $n$ elements have occupied the $nth$ position exactly once. 
 The time complexity of Heap's algorithm is {\sc CAT}, constant amortized time of $O(1)$ per permutation~\cite{A24}.
-The fifth algorithm is Corbett's algorithm which rotates a prefix of the first possible length in 
-$n$,$2$,$n-1$,$3$,$n-2$,$4$, etc.~\cite{A34}. The sixth algorithm is 
-the algorithm using star transpositions that always swaps the first element of the permutation with some other element. 
-It was discovered by Gideon Ehrlich and is described as Algorithm E in Knuth's book~\cite{A18}.
-The seventh algorithm is the derangement ordering in which no two consecutive permutations have any elements 
-in the same position~\cite{A35}. The Steinhaus-Johnson-Trotter algorithm generates $S_{n}$ by performing adjacent swap operations 
+The fifth algorithm is the Steinhaus-Johnson-Trotter algorithm which generates $S_{n}$ by performing adjacent swap operations 
 on the permutation resulting in the next permutation. Thus, each permutation in $S_{n}$ differs 
-from it predecessor by a single swap operation~\cite{A25}.
-Effler and Ruskey's algorithm lists permutations by groups of $k$ inversions. Their algorithm has 
+from it predecessor by a single swap operation~\cite{A25}. To go From any two successive permutations, 
+the time complexity is $O(1)$~\cite{A25}.
+The sixth algorithm is the algorithm using star transpositions that always swaps the first element of the permutation 
+with some other element. It was discovered by Gideon Ehrlich and is described as Algorithm E in Knuth's book~\cite{A18}.
+The seventh algorithm is the derangement ordering in which no two consecutive permutations have any elements 
+in the same position. It was first discussed by Savage in~\cite{A35}. 
+The eighth algorithm is the Single Track listing algorithm. Each column in the list of permutations 
+is a cyclic shift of the first column~\cite{A36}. The computation for each successive permutation 
+is CAT~\cite{A36}.
+The ninth algorithm is the Single Track Gray Code listing algorithm. The properties of the Single Track 
+listing algorithm hold. Furthermore, any two successive permutations differing by at most two transpositions~\cite{A36}.
+The tenth listing algorithm is found in Knuth's book. At each step, it either rotates the permutation to the left by one 
+or swaps the first two elements~\cite{A37}. The problem as to whether such a listing algorithm exists for all $n$ 
+is posed as an open problem in Knuth's book~\cite{A37}. It was solved by Sawada and Williams in their paper 
+A Hamiltonian Path for the Sigma-Tau Problem~\cite{A38}.
+The eleventh algorithm is Corbett's algorithm which rotates a prefix of the first possible length in 
+$n$,$2$,$n-1$,$3$,$n-2$,$4$, etc.~\cite{A34}. 
+The twelfth algorithm is Effler and Ruskey's algorithm which lists permutations by groups of $k$ inversions. Their algorithm has 
 constant amortized time algorithm for generating permutations of order $n$ with $k$ inversions~\cite{A26} meaning 
 the time it takes to generate each permutation is bounded by a constant.
 The algorithm is also a \emph{BEST} algorithm (backtracking ensures success at terminals), meaning that when the algorithm backtracks, 
-the back-tracking leads to a successful result~\cite{A26}.\par 
+the back-tracking leads to a successful result~\cite{A26}. Please refer to \includegraphics{11perms} to see eleven of the twelve 
+listings of permutations for $n=4$.\par 
 In Chapter 1, it was already stated that Algorithms~\cite{A25}\cite{A26} were the most conducive for The Listing Problem. 
 These are the Steinhaus-Johnson-Trotter and Effler-Ruskey algorithms respectively. Each of these two algorithms are 
-advantageous for differing reasosns. The reason that the SJT algorithm is beneficial is because it generates each 
+advantageous for differing reasons. The reason that the SJT algorithm is beneficial is because it generates each 
 permutation in $O(1)$ per ladder; thus making it extremely efficient. In Chapter 3, the SJT 
 algorithm is modified to create ladders instead of permutations while still maintaining the same efficiency.
 The reason that the Effler-Ruskey algorithm 
 is beneficial is because it has a nice ordering property in which the permutations are listed by the number of inversions.
 The algorithm is still fairly efficient due to it being BEST and CAT. In Chapter 3, the Effler-Ruskey algorithm 
-is modified to create ladders by $k$ bars, though in doing so it loses some of the efficiency of permutation listing algorithm.
-Below, the details of the SJT and Effler-Ruskey algorithms for permutations will be analyzed in detail.
-
-\subsection{Lexicographic Algorithms}
-
-%%
-\subsubsection{Basic Lexicographic Algorithm}
-The lexicographic algorithm enumerates permutations from smallest to largest. The lexicographic order for $S_{3}$ is $(1,2,3),(1,3,2),(2,1,3),(2,3,1),(3,1,2),(3,2,1)$.
-This is the same way the words in a dictionary are ordered in the sense that $a < b < c \dots y < z$.
-There are many algorithms for enumerating permutations lexicographically~\cite{A19, A20, A21, A22, A23}. 
-Several will be discussed in this thesis. The first of which is the basic lexicographic ordering algorithm.
-Please refer to Algorithm~\ref{Alg:BasicLex} to see the basic lexicographic listing algorithm.\pagebreak
-\begin{algorithm}
-    \begin{algorithmic}[1]
-        \Function{Basic Lex}{$\pi$, $n$}
-            \For{$i$ \textbf{from} $n$ \textbf{to} $1$}
-                \If{$p_{i} > p_{i-1}$}
-                    \State \small{$v \gets$ the index of the minum value greater than $p_{i-1}$ and
-                    to the right of $p_{i-1}$}
-                    \State {\sc Swap}$(p_{i-1}, p_{v})$
-                    \State {\sc Sort}$(p_{i},p_{i+1} \dots p_{n})$
-                    \State {\sc BaiscLex($\pi$, $n$)}
-                   
-                \EndIf
-            \EndFor
-          
-
-        \EndFunction
-        
-    \end{algorithmic}
-    \caption{The Basic Lexicographic Algorithm}
-    \label{Alg:BasicLex}
-\end{algorithm}
-This algorithm works by beginning with the identity permutation of order $n$. Then going right to left, 
-it finds an increasing substring of size two. Once found, the algorithm finds the index of the smallest value greater than the 
-value at index $i-1$ in $\pi$ to the right of index $i-1$; let this index be known as $v$. 
-Then the algorithm swaps $v$ and $p_{i-1}$ in $\pi$. The algorithm sorts $\pi$ from index $i$ to index $n$ and a recursive call is made.
-The algorithm terminates when $\pi$ is in descending order. The 
-algorithm generates each permutation with an amortized time of 
-$O(n^{2}log(n))$. The for loop runs between $0$ to $n$ times per function call which accounts for the $n$ factor. 
-The right portion of the permutation needs to be sorted on every function call. Sorting is done in $nlog_{n}$ time. 
-$n*nlog_{n}$ is simplified to $n^{2}log_{n}$.
-
-
-
-
-%%p2
-\subsubsection{Alternating Lexicographic Algorithm}
-In the paper Generating Alternating Permutations Lexicographically, written by Bauslaugh and Ruskey, the authors provide an algorithm 
-for generating permutations in lexicographic ordering such that the permutations form a zig-zag pattern. 
-The zig-zag pattern is formally defined as follows, given $\pi$ of order $n$:  If $n = 2K$ then 
-zig-zag = $p_{1} < p_{2} > p_{3} < p_{4} \dots p_{n-1} < p_{n}$. 
-If $n= 2K+1$ then zig-zag = $p_{1} < p_{2} > p_{3} < p_{4} \dots p_{n-1} > p_{n}$~\cite{A19}.
-Please refer to Algorithm~\ref{Alg:AltLex} to see the Alternating Lexicographic Algorithm.
-The initial values for the function are $m=n$, $val=1$, $level=0$ and $S = \{1 \dots n\}$ and $\pi=()$.
-
-
-\begin{algorithm}
-    \begin{algorithmic}[1]
-        \Function{AlternatingLex}{$m$,$val$,$level$, $S=\{1 \dots n\}$, $\pi$}
-            \State $p_{level} \gets val$
-            \State $S \gets S-\{val\}$
-            \If{$m = 1$}
-                \State {\sc print($\pi$)}
-                \State \textbf{return}
-            \EndIf
-            \State $T \gets \{\}$
-            \If{$level=2k+1$}
-                \State $T \gets \{x \in S | x < S_{max}$ \textbf{and} $x < val\}$
-            \Else 
-                \State $T \gets \{x \in S | x > S_{min}$ \textbf{and} $x > val\}$
-            \EndIf
-            \For{$x \in T$}
-                \State {\sc AlternatingLex($m-1$, $x$, $level+1$, $S - \{x\}$, $\pi$)}
-            \EndFor
-        \EndFunction
-        
-    \end{algorithmic}
-    \caption{Alternating Lexicographic Enumeration Algorithm}
-    \label{Alg:AltLex}
-\end{algorithm}
-
-
-On each function call $val$ is inserted into $\pi$ at $level$. Then $val$ is removed from $S$.
-If $level$ is odd then the set $T$ gets every value from $S$ less than the max value in $S$ and 
-less than $val$. If  $level$ is even then $T$ gets every value from $S$ greater than  the min value 
-in $S$ and greater than $val$. Then, for each $x$ in $T$, the function makes a recursive call 
-with $m$ equal to $m-1$, $k$ equal to $x$, $level$ equal to $level+1$ and $S$ equal to $S$ without 
-element $x$. To see the permutations of order $5$ generated by the alternating lexicographic algorithm, 
-please refer to Table~\ref{Table:AltPerms}.
-
-\begin{center}
-\begin{table}
-\begin{tabular}{ |p{3cm}||p{3cm}|p{3cm}|p{3cm}|  }
- \hline
- \multicolumn{4}{|c|}{Alternating Permutations of order $5$} \\
- \hline
- \hline
- 13254   & 14253    &14352&  15243\\\hline
- 15342&  23154  & 24153   &24351\\\hline
- 25143 &25341 & 34152&  34251\\\hline
- 35142    &35241 & 45132&  45231\\
- \hline
-\end{tabular}
-\label{Table:AltPerms}
-\end{table}
-\end{center}
-
-The authors state that the algorithm is constant amortized time which means the total amount of
-computation done in generating all the objects, divided by the number of objects, is
-bounded by a constant. On the average and up to a constant factor no algorithm can
-run faster~\cite{A19}. The constant refers to the number of function calls before the algorithm terminates. It is defined as follows. 
-Let $AL$ denote the recurrence relation for the Alternating Lexicographic algorithm, let $k$ denote the 
-first element in $\pi$ and let $n$ denote the number of elements in the set. 
-If $n=1$ and $K=1$ then $AL(n, K)=0$. If $n=n$ and $K=n-1$ then $AL(n,K)= 1 + AL(n-1,1)$ For all other cases, 
-then $AL(n, K) = AL(n, K+1) + A(n-1, n-K)$~\cite{A19}.
-
-% \subsubsection{Parallelized Lexicographic Algorithms}
-% The lexicographic listing algorithm can be improved by parallelizing the process. There are a number of algorithms for 
-% parallelizing the lexicographic listing problem. These algorithms are found in the following papers~\cite{A21, A22, A23, A24}.
-% Rather than go through these papers one by one, a more general approach to parallelized solutions of the 
-% lexicographic listing problem will be provided.\par 
-% The general solution to the problem is to partition the $n$ elements into $M$ procecssors, then have each processor 
-% list $(n/M)!$ subsets of elements. Though these algorithms are interesting, the analysis of these algorithms was not 
-% pertinent to the research in this thesis, seeing as the Listing Problem runs on a single processor.
-
-\subsection{Heap's Algorithm}
-Heap's algorithm was developed by B.R. Heap in 1963~\cite{A24}. 
-The algorithm is based on rotating elements in an array such that the $nth$ position 
-is occupied by the $nth$ element for all permutations of the $(n-1)$ objects. 
-Then the $nth$ element is swapped with one of the elements of in the first $(n-1)$ positions.
-The process repeats itself until all of the $n$ elements have occupied the $nth$ position exactly once. 
-The element occupying the $nth$ position is swapped with the element in the first position if $n$ 
-is even. The element occupying the $nth$ position is swapped with $p_{i}$ if $n$ is odd.
-To see Heap's algorithm please refer to Algorithm~\ref{Alg:Heaps}. The initial conditions 
-for {\sc Heaps} are the following. Let $\pi$ be initialized to the identity permutation 
-of order $n$. Let $n$ be the number of elements in $\pi$ from $[1 \dots n]$. $n$ is 
-reduced by $1$ on each recursive call until $n=1$. On each function call the length of 
-$\pi$ is reduced by one such that the first $n-1$ elements of $\pi$ are considered and the 
-$nth$ element of $\pi$ is ignored.
-
-\begin{algorithm}
-    \begin{algorithmic}[1]
-        \Function{Heaps}{$\pi$, $n$}
-            \If{$n=1$}
-                \State \textbf{return}
-            \Else 
-                \For{$i$ \textbf{from} $1$ \textbf{to} $n$}
-                    \State {\sc Heaps($\pi$, $n-1$)}
-                    \State {\sc Print($\pi$)}
-                    \If{$n = 2k+1$}
-                        \State {\sc Swap($p_{1}$, $p_{n}$)}
-                    \Else 
-                        \State {\sc Swap($p_{i}$, $p_{n}$)}
-                    \EndIf
-                \EndFor
-            \EndIf
-        \EndFunction
-        
-    \end{algorithmic}
-    \caption{Heaps Algorithm for Generating all $n!$ Permutations}
-    \label{Alg:Heaps}
-\end{algorithm}
-
-The time complexity for {\sc Heaps} algorithm is $O(1)$ constant amortized time per permutation. For each value of $n=[1 \dots n]$, 
-the algorithm makes $n$ recursive calls, each of which produces all $(n-1)!$ permutations of 
-order $(n-1)$ in $O(1)$ time per permutation. The exception is prior to outputting the first permutation, in which 
-the function produces $n=${\sc Max($\pi$)} recursive calls before the first permutation is output.
-
-
-\subsection{Zak's Algorithm}
-Zak's Algorithm was first written about by Shmuel Zak's in the paper A new Algorithm For
-Generation Of Permutations~\cite{A31}.The algorithm is based on reversing suffixes in a permutation 
-of different sizes until all $n!$ permutations have been listed. The algorithm makes 
-use of a \emph{suffix vector} which is a vector for holding all the suffix sizes to be reversed. 
-Since there are $n!$ permutations, there are $n!$ non-unique suffix sizes held in the suffix vector.
-The recurrence relation for the suffix sizes is as follows. Let $S(n)$ denote the suffix of size $n$. 
-Then we get the following recurrence relation for $S(n)$. If $n=2$ then $S(n)=2$, else 
-$S(n)=(S(n-1)n)^{n-1}S(n-1)$. Let \emph{suffixVector} be initialized to an empty vector holding integers. If $n$ equals 
-two, append $2$ to \emph{suffixVector}, else append \emph{suffixVector[n-1]} to 
-\emph{suffixVector}, followed by appending $n$ to \emph{suffixVector}, $n-1$ times. 
-Lastly, append \emph{suffixVector} at $n-1$ to \emph{suffixVector}~\cite{A31}
- Once the \emph{suffixVector} has been created, for each integer in the \emph{suffixVector}, reverse 
-the suffix of that size in $\pi$. To see Zak's Algorithm for creating the suffix vector please refer to 
-Algorithm~\ref{Alg:Zaks}\pagebreak
-\begin{algorithm}[t]
-    
-    \begin{algorithmic}[1]
-        \Function{SuffixVector}{\textit{suffixVector}, $n$}
-        \If{$n=2$}
-           \State append $2$ to \textit{suffixVector}
-        
-        \Else 
-            \For{$i$ \textbf{from} $1$ \textbf{to} $n$}
-                \State append {\sc SuffixVector(\textit{suffixVector}, $n-1$)} to \textit{suffixVector}
-                \State append $n$ to \textit{suffixVector}
-            \EndFor
-            \State append {\sc SuffixVector(\textit{suffixVector}, $n-1$)} to \textit{suffixVector}
-        \EndIf
-        \EndFunction
-    \end{algorithmic}
-    \begin{algorithmic}[1]
-        \Function{Zaks}{\textit{suffixVector}, $\pi$}
-            \For{\textbf{each} $x$ $\in$ \textit{suffixVector}}
-                \State {\sc Print($\pi$)}
-                \State reverse suffix of size$=x$ in $\pi$
-            \EndFor
-            \State {\sc Print($\pi$)}
-        \EndFunction
-    \end{algorithmic}
-    \caption{Zaks algorithm for creating all $n!$ permutations.}
-    \label{Alg:Zaks}
-\end{algorithm}
-
-
-
-
-%Paragraph SJT
-\subsection{Steinhaus-Johnson-Trotter Algorithm}
-The Steinhaus-Johnson-Trotter algorithm generates $S_{n}$ by performing adjacent swap operations 
-on the permutation resulting in the next permutation. Thus, each permutation in $S_{n}$ differs 
-from it predecessor by a single swap operation~\cite{A25}. This makes the SJT algorithm a very efficient 
-algorithm for listing $S_{n}$. Let an \emph{even permutation} be defined as a permutation 
-with an even number of inversion. Let an \emph{odd permutation} be defined as a 
-permutation with an odd number of inversions. The $nth$ element is inserted into all 
-positions of $\pi$ of order $n-1$ in descending order if $\pi$ of order $n-1$ is an even permutation.
-The $nth$ element is inserted into all positions of $\pi$ of order $n-1$ in ascending order if 
-$\pi$ of order $n-1$ is an odd permutation~\cite{A25}. For $\pi$ of order $1$ we have $\pi=(1)$. Since 
-there are no inversions in $\pi=(1)$ it is even. Now insert $2$ in all positions in $\pi=(1)$
-in descending order. Thus we get $(1,2)$ followed by $(2,1)$. Since $(1,2)$ is 
-an even permutation, insert $3$ into all positions in descending order resulting in $(1,2,3)$,
-$(1,3,2)$ and $(3,1,2)$. Since $(2,1)$ is an odd permutation, insert $3$ 
-into all permutations in ascending order resulting in $(3,2,1)$, $(2,3,1)$ and $(2,1,3)$.
-Initialize $\pi$ to the identity permutation, initialize $currentElement$ to $2$, initialize 
-$n$ to $p_{max}$. Let $direction$ be a Boolean array of size $n$ initialized to $true/right$ for indices. 
-If $currentElement$ is greater than $n$, print $\pi$ 
-and return. Otherwise, begin a for loop that runs $i=[1 \dots n-1]$ times. 
-In the for loop, first make a recursive call with $currentElement$ increasing by one. 
-If $direction[currentElement]$ is $right$, then swap $currentElement$ in $\pi$ with its left neighbor. Else 
-if $direction[currentElement]$ is $left$ then swap the $currentElement$ in $\pi$ with its right neighbor.
-Once the for loop has exited, make one more recursive call with $currentElement+1$ outside the for loop; 
-this avoids an extra swap operation from occurring while still maintaining the correct number of recursive 
-calls. Lastly, negate $direction[currentElement]$, which effectively changes the direction of the $currentElement$ 
-in $direction$ for the next time $currentElement$ is to be swapped. 
-To see the Steinhaus-Johnson-Trotter algorithm please refer to Algorithm~\ref{Alg:SJT}.
-
-\begin{algorithm}
-    \begin{algorithmic}[1]
-        \Function{SJT}{$\pi$, $currentElement$, $n$, $direction$}
-            \If{$currentElement > n$}
-                \State {\sc Print$(\pi)$}
-                \State \textbf{return}
-            \EndIf
-            \For{$i$ \textbf{from} $1$ \textbf{to} $currentElement-1$}
-                \State {\sc SJT($\pi$, $currentElement+1$, $n$)}
-                \State $index \gets $ index of $currentElement$ in $\pi$
-                \If{$direction[currentElement]=right$}
-                    \State $Swap(p_{index}, p_{index-1})$
-                \Else 
-                    \State $Swap(p_{index}, p_{index+1})$
-                \EndIf
-            \EndFor
-            \State {\sc SJT}($\pi$, $currentElement+1$, $n$, $direction$)
-            \If{$direction[currentElement]=right$}
-                \State $direction[currentElement] \gets left$
-            \Else 
-                \State $direction[currentElement] \gets right$
-            \EndIf
-        \EndFunction
-        
-    \end{algorithmic}
-    \caption{SJT Algorithm for listing $S_{n}$}
-    \label{Alg:SJT}
-\end{algorithm}
-
-The Steinhaus-Johnson-Trotter algorithm is a Gray Code, meaning that in order to transition 
-between any two subsequent permutations in $S_{n}$, there is a minimal amount of constant 
-change required. The algorithm simply swaps two elements in order to transition between 
-permutations. Each recursive call creates a new permutation with the exception of the 
-initial call to the function in which $n$ recursive calls need to be made before the 
-first permutation is printed. The amortized time to transition between permutations is $O(1)$.
-
-
-
-
-%%Paragraph 
-\subsection{Effler-Ruskey Algorithm}
-%%%%%%%%%%FIX ME %%%%%%%%%%%%%%%%
-In the paper A CAT Algorithm for Generating Permutations with a Fixed Number of Inversions, written by Effler and Ruskey, the authors provide a 
-constant amortized time algorithm for generating all permutations of order $n$ with $k$ inversions~\cite{A26} meaning 
-the time it takes to generate each permutation is bounded by a constant.
-The algorithm is also a \emph{BEST} algorithm (backtracking ensures success at terminals), meaning that when the algorithm backtracks, 
-the back-tracking leads to a successful result~\cite{A26}. 
-Let the initial conditions of the algorithm be the following. Let $\pi$ be the empty permutation of order $n$. Let $n$
-be initialized as the elements $[1 \dots n]$. Let $k$ be initialized to an integer between $[0 \dots {n \choose 2}]$. 
-Let $list$ be initialized to the list of $n$ elements in strictly descending order. 
-Let $i$ be the index of element $x$ in $list$. $n-i$ 
-indicates the number of inversions formed with $x$ when inserting $x$ into position $n$ in $\pi$.
-The algorithm works as follows.
-Going right to left in the $list$, each element, $x$, in $list$ is inserted into $p_{n}$
-only if inserting $x$ into position $n$ in $\pi$ does not exceed the current number of inversions, $k$. I.E. only 
-if $k- (n-i) \geq 0$.
-If $x$ is inserted into $\pi$ at position $n$ then $x$ is removed from $list$, a recursive call is made such that $n$ is reduced by 
-$1$ and $k$ is reduced by $(n-i)$. When the function returns from its recursive call, element $x$ is placed back into the list 
-at its original position. To see the algorithm please refer to Algorithm~\ref{Alg:KInv}.\pagebreak
-\begin{algorithm}[t]
-    \begin{algorithmic}[1]
-        \Function{KInversions}{$\pi$, $n$, $k$, $list$}
-            \If{$n = 0$ and $k = 0$}
-                \State {\sc Print}($\pi$)
-            \Else
-                \For{$i$ \textbf{from} length \textbf{of} $list$ \textbf{to} $1$}
-                    \State $x \gets list_{i}$
-                    \If{$n-i \leq k \leq {n-1\choose k} + (n-i)$}
-                        \State $p_{n} \gets x$
-                        \State remove $x$ from $list$ 
-                        \State $k \gets k - (n-i)$
-                        \State {\sc KInversions}$(\pi, n-1, k, list)$
-                        \State insert $x$ in $list$ at correct position.
-                    \EndIf
-                \EndFor
-            \EndIf
-        \EndFunction
-        
-    \end{algorithmic}
-    \caption{Generate all permutations with $k$ inversions}
-    \label{Alg:KInv}
-\end{algorithm} 
-
-Below is an example of how the algorithm creates one permutation of order $4$ with $2$ inversions.
-\begin{enumerate}
-    \item Initial Call: {\sc KInversions}($\pi$=(\underline{ },\underline{ },\underline{ },\underline{ }),$n=4$,$k=2$,$list=[1,2,3,4]$):\newline 
-    given $\pi$=(\underline{ },\underline{ },\underline{ },\underline{ }), $n=4$, $k=2$, $list=[1,2,3,4]$, $i=2$ and $x=3$ 
-    then inserting $x$ into position $n=4$ would form $4-3=1$ 
-    inversion(s). Specifically, the inversion $(4,3)$. Thus, $k$ would be reduced by $1$ in the recursive call 
-    and $n$ would be reduced by $1$ in the recursive call. 
-
-    \item First recursive call: {\sc KInversions}($\pi$=(\underline{ },\underline{ },\underline{ },\underline{3}),$n=3$,$k=1$,$list=[1,2,4]$):\newline 
-    given $\pi$=(\underline{ },\underline{ },\underline{ },\underline{3}),$n=3$,$k=1$,$list=[1,2,4]$,$i=3$ and $x=4$
-    then inserting $x$ into position $3$ would form $3-3=0$ inversions. Thus, $k$ would be reduced by $0$ in the 
-    recursive call and $n$ would be reduced by $1$ in the recursive call.
-
-    \item Second recursive call: {\sc KInversions}($\pi$=(\underline{ },\underline{ },\underline{4},\underline{3}),$n=2$,$k=1$,$list=[1,2]$):\newline 
-    given $\pi$=(\underline{ },\underline{ },\underline{4},\underline{3}),$n=2$,$k=1$,$list=[1,2]$,$i=1$ and $x=1$
-    then inserting $x$ into position $1$ would form $2-1=1$ inversion. Thus, $k$ would be reduced by $1$ to $0$ in the 
-    recursive call and $n$ would be reduced by $1$ in the recursive call.
-
-    \item Third recursive call: {\sc KInversions}($\pi$=(\underline{ },\underline{1},\underline{4},\underline{3}),$n=1$,$k=0$,$list=[2]$):
-    \newline given $\pi$=(\underline{ },\underline{1},\underline{4},\underline{3}), $n=1$, $k=0$, $list=[2]$ $i=1$ and $x=2$
-    then inserting $x$ into position $1$ would form $1-1=0$ inversions. Thus, $k$ would be reduced by $0$
-    and $n$ would be reduced by $1$.
-
-    \item Fourth recursive call: {\sc KInversions}($\pi$=(\underline{2},\underline{1},\underline{4},\underline{3}),$n=0$,$k=0$,$list=[]$):\newline 
-    Given $n=0$ and $k=0$ the algorithm {\sc Prints}($\pi$) and returns.
-\end{enumerate}
-
-
-
-
-
-
+is modified to create ladders by $k$ bars, though in doing so it loses some of the efficiency of the permutation listing algorithm.
+When the SJT and Effler-Ruskey algorithms are modified for ladders, it is always the root ladder from each 
+$OptL\{\pi\}$ which is listed by each of the algorithms. This allows for simplicity when 
+listing all $n!$ ladders. It is for these aforementioned reasons that the SJT algorithm and Effler-Ruskey 
+algorithms were chosen to solve the Canonical Listing Problem in Chapter 3.
 
 
 

@@ -28,7 +28,7 @@ makeladder: BIN INCLUDE SRC OBJ TEST LIB
 
 
 runladder: makeladder
-	cd bin; ./ladder 
+	cd bin; ./ladder > nfactorial.txt 
 
 makedisalvo: BIN INCLUDE SRC OBJ LIB
 	$(CC) $(CFLAGS) -Iinclude src/*.c test/DisalvoGrayCode.c -o bin/disalvo
@@ -48,4 +48,14 @@ min: runmin
 
 
 clean: 
-	if [ -d "bin" ]; then rm -rf ./bin/; fi; \
+	if [ -d "bin" ]; then rm -rf ./bin/; fi; 
+
+sjt: runsjt
+
+runsjt: makesjt
+	cd bin; ./sjt > sjtprint.txt
+
+makesjt: BIN INCLUDE SRC OBJ LIB
+	$(CC) $(CFLAGS) -Iinclude src/*.c test/SjtMain.c -lm -o bin/sjt
+
+

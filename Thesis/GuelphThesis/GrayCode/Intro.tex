@@ -1,113 +1,24 @@
-\section{Introduction to the Problem}
 Listing problems are common problems in combinatorics. In general, listing problems 
 focus on enumerating the objects of a given finite set in some specific order. The listing problem in this thesis 
-will be termed \emph{The Canonical Ladder Listing Problem}. The problem is stated as follows: Let 
-$S_{n}$ be the set of all $n!$ permutations of order $n$. Let $CanL\{\pi_{n}\}$ be the corresponding 
-set of all $n!$ ladders of order $n$. Note, given a ladder $l$ in $CanL\{\pi_{n}\}$ and its corresponding 
-permutation $\pi$ in $S_{n}$, $l$ belongs 
-$OptL\{\pi\}$. Thus, each ladder in $CanL\{\pi_{n}\}$ is \emph{a canonical ladder}, meaning each ladder in $CanL\{\pi_{n}\}$
-is chosen from each $OptL\{\pi\}$ of order $n$ based on the minimal amount of change 
-to transition from one canonical ladder to the next. A \emph{change} 
-is defined as the insertion or deletion of one or more bar(s) to get from $l_{i}$ to $l_{j}$ \textbf{or} the relocation of one or more bars 
-in $l_{i}$ to get to $l_{j}$. The \emph{relocation} of a bar is defined as moving a bar from a given row and column 
-to a new row and/or column in the ladder under the following conditions.
-The relocation cannot be a right/left swap operation. 
-If the relocation of the bar moves the bar to a new row, but not a new column, then the endpoint 
-of the bar being moved must cross the endpoint of a bar not being moved. To see examples of the relocation of a bar please refer to 
-Figure~\ref{fig:bar-relocation}.
-
-\begin{figure}[h]
-   \centering
-    \begin{tikzpicture}
-        \node at(.5, 2.8){\small{$x$}};
-        \draw(0, 0) to (0, 3);
-            \draw(0, 2.5) to (1, 2.5);
-            \draw(0, 1.5) to (1, 1.5);
-        \draw(1, 0) to (1, 3);
-            \draw(1, 2) to (2, 2);
-            \draw(1, 1) to (2, 1);
-        \draw(2, 0) to (2, 3);
-            \draw(2, .5) to (3, .5);
-        \draw(3, 0) to (3,3);
-
-        \draw[->, line width = .3mm](-.5, -.5) to (-1.5, -1.5);
-        \draw[->, line width =.3mm](3.5, -.5) to (4.5, -1.5);
-
-        \draw(-2.5, -1.8) to (-2.5, -4.8);
-            \draw(-2.5, -3) to (-1.5, -3);
-                \node at(-2, -3.8){\small{$x$}};
-            \draw(-2.5, -4) to (-1.5, -4);
-        \draw(-1.5, -1.8) to (-1.5, -4.8);
-            \draw(-1.5, -2.5) to (-.5, -2.5);
-            \draw(-1.5, -3.5) to (-.5, -3.5);
-        \draw(-.5, -1.8) to (-.5, -4.8);
-            \draw(-.5, -4) to (.5, -4);
-        \draw(.5, -1.8) to (.5,-4.8);
-
-        
-        \draw(2.5, -1.8) to (2.5, -4.8);
-            \draw(2.5, -3.3) to (3.5, -3.3);
-                \node at(5, -2.1){\small{$x$}};
-            \draw(4.5, -2.3) to (5.5, -2.3);
-        \draw(3.5, -1.8) to (3.5, -4.8);
-            \draw(3.5, -2.8) to (4.5, -2.8);
-            \draw(3.5, -3.8) to (4.5, -3.8);
-        \draw(4.5, -1.8) to (4.5, -4.8);
-            \draw(4.5, -4.3) to (5.5, -4.3);
-        \draw(5.5, -1.8) to (5.5,-4.8);
-
-
-    \end{tikzpicture} 
-    \caption{Example of relocating bar $x$}
-    \label{fig:bar-relocation}   
-\end{figure}
- 
-The canonical listing problem asks, given all $S_{n}$, is there an efficient way to generate $CanL\{\pi_{n}\}$? Efficiency is defined as 
-using minimal change to transition from $l_{i}$ to $l_{j}$. For example, let $n=4$, then $|S_{n}|=24$. 
-Since each permutation has at least one ladder in its respective $OptL\{\pi\}$, then $|CanL\{\pi_{4}\}=24|$. $CanL\{\pi_{4}\}$ consists 
-of $24$ ladders such that the amount of change to get from $l_{i}$ to $l_{j}$ is minimal. 
-
-
-
-\begin{theorem}
-    In order to transition from canonical ladder $l_{i}$ to canonical ladder $l_{j}$, at least one bar has to be added or 
-    removed from $l_{i}$ or at least one bar has to be relocated in $l_{i}$.
-\end{theorem}
-\begin{proof}
-    We begin this proof by contradiction. Suppose $l_{i}$ is some canonical ladder in $CanL\{\pi_{n}\}$. 
-    Suppose that $l_{j}$ is the next canonical ladder in $CanL\{\pi_{n}\}$. 
-    Suppose a bar does not need to be added or removed from $l_{i}$ to get to $l_{j}$ nor does a bar need to be relocated to get to $l_{i}$ to 
-    $l_{j}$. We know that each bar in $l_{i}$ uninverts a single inversion in $p_{i}$. We know that each bar in $l_{j}$ 
-    uninverts a single inversion in $p_{j}$. We know that $p_{i} \neq p_{j}$. Therefore we know that $l_{i} \neq l_{j}$. 
-    Two ladders corresponding to 
-    two different permutations differ from each other in three ways. The first way is by the number of lines, the second way is by the number of 
-    bars, and the third way is the location of bars. Note that two ladders can differ in more than one of the three ways. In the case 
-    of $l_{i}$ and $l_{j}$, they have the same number of lines seeing as they are ladders of order $n$. Therefore, they cannot differ in terms 
-    of the number of lines. We also assumed that $l_{i}$ and $l_{j}$ have the same number of bars and the same location of bars. Which means 
-    that the ladders are the same. But we already stated that $l_{i} \neq L_{j}$. Therefore we have a contradiction. Which means that 
-    either a bar needs to be added/removed from $l_{i}$ to get to $l_{j}$ or a bar needs to be relocated in $l_{i}$ to get to $l_{j}$.
-\end{proof}
-
-
-
-In this thesis, two listing algorithms are used to list the canonical 
-ladders for each $CanL\{\pi_{n}\}$. The first of these listing algorithms 
-is a modification of the |{\sc Steinhaus-Johnson-Trotter} permutation listing algorithm. 
-The second listing algorithm is influenced by Effler and Ruskey's algorithm in their paper 
-A CAT Algorithm for Generating Permutations with a Fixed number of Inversions. 
-This second listing algorithm is termed the {\sc CyclicBar} algorithm. Both of these algorithms will 
+will be termed \emph{The Canonical Ladder Listing Problem}. This problem asks, given all $n!$ permutations of order $n$, is there an efficient algorithm for listing 
+one optimal ladder per permutation? In other words, is there an easy way to transition from one ladder to the next until all $n!$ ladders 
+have been listed? The problem is stated as follows: Let $S_{n}$ be the set of all $n!$ permutations of order $n$. 
+Let the \emph{canonical representative} be the root ladder from each permutation's corresponding $OptL\{\pi\}$. Let $L_{n}$ be the set of 
+all $n!$ root ladders. A minimal \emph{change} 
+is defined as the insertion or deletion of at most two bars between any two subsequent ladders in $L_{n}$. The goal is 
+to create $L_{n}$ with minimal change in an efficient manner.\par
+In this thesis, two listing algorithms are used to list $L_{n}$. The first of these listing algorithms 
+is a modification of the {\sc Steinhaus-Johnson-Trotter} permutation listing algorithm~\cite{A25}.
+This algorithm is termed {\sc ModifiedSJT}.
+The second listing algorithm is influenced by Effler and Ruskey's algorithm~\cite{A26}. 
+This second ladder listing algorithm is termed the {\sc CyclicBar} algorithm. Both of these algorithms will 
 be described, explained and analyzed throughout the remainder of the chapter.\par
-
 Before proceeding, the selection process for choosing the canonical ladder will be explained.
-In general, the canonical representative from $OptL{\pi_{n}}$ is chosen based on a tree structure. 
-The root of the tree is the \emph{identity ladder} which is the only ladder 
-corresponding to $\pi=(1,2 \dots ,n)$.
-Proceeding from the root ladder, for every canonical ladder $l_{i}$, it 
-is chosen based on the minimal amount of change required to get from $l_{i-1}$ to $l_{i}$. 
-Since the minimal amount of change is defined as the insertion or deletion of a single bar 
-or the relocation of a single bar, then the canonical representative, $l_{i}$ 
-is derived from $l_{i-1}$ by applying the minimal amount of change. The exception to this rule is 
-in the cyclic-bar algorithm in which transitioning between trees in the forest 
-structure generated by the algorithm.
-
+The reason the root ladder is chosen to be the canonical representative is because 
+when transitioning between root ladders, a minimal amount of change is required 
+to go from one ladder to the next. Also, the root ladder is unique to each 
+$OptL\{\pi\}$ seeing as it is the only ladder in $OptL\{\pi\}$ with a clean level of one. 
+Furthermore, is the root of the tree generated by {\sc FindAllChildren}, 
+thus making it the most important ladder in the tree. All these factors make the root ladder 
+the ideal candidate for the canonical representative.
 

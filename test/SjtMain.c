@@ -17,17 +17,98 @@ bool _DEBUG2 = false;
 bool _DEBUG3 = false;
 bool DEBUG4 = true;
 
+float xAxis = 0.0;
+float yAxis = 6.0;
+
+int rowCounter = 0;
 
 
 void sjtMod(Ladder *l, int count, int n, bool *dir);
+void printLadderTikz(Ladder *l);
+int calcDepth(Ladder* l);
+int calcDepth(Ladder* l)
+{
+    int i = 0;
+    int j = 0;
+    bool flag = true;
+    while(1)
+    {
+        for(int i = 0; i < l->numCols; i++)
+        {
+            if(l->ladder[j][i] == 1)
+            {
+                flag = false;
+                break;
+            }
+        }
+        if(flag == true)
+            return j+1;
+        else{
+            flag = true;
+            j++;
+        }
+
+    }
+}
+
+
+
+void printLadderTikz(Ladder *l)
+{
+    //    printf("\\begin{figure}[!htp]");
+    //   printf("\\begin{tikzpicture}");
+
+    float c1 = xAxis;
+    float c2 = yAxis;
+    for (int i = 0; i <= l->numCols; i++)
+    {
+        printf("\\draw(%.2f,%.2f) to (%.2f,%.2f);", c1, c2 -.1, c1, c2 + 1.1);
+        printf("\n");
+        c1 += 0.2;
+    }
+    c1 = xAxis;
+    c2 = c2 + 1.0;
+    for (int i = 0; i <= 2*(l->numCols)-1; i++)
+    {
+         for (int j = 0; j < l->numCols; j++)
+         {
+             if (l->ladder[i][j] > 0)
+             {
+                 printf("\\draw(%.2f, %.2f) to (%.2f, %.2f);", c1, c2, c1 + .2, c2);
+                 printf("\n");
+             }
+             c1 += .2;
+         }
+         c2 -= .2;
+         c1 = xAxis;
+    }
+    // c1 = *cA;
+    // forall(numDig)
+    // {
+    //     printf("\\node at(%.2f,%.2f){\\tiny{%d}};", c1, (*cB) + .4, perm[x]);
+    //     c1 += .2;
+    // }
+
+    //printf("\\end{tikzpicture}");
+    //printf("\\end{figure}");
+    xAxis += 1.0;
+    //*cB += -1.5;
+}
+
 
 void sjtMod(Ladder *l, int count, int n, bool *dir)
 {
     //if count > than max value=n
     if (count > n)
     {
-        printLadderSjt(l);
+        if(rowCounter % 6 == 0 && rowCounter > 0)
+        {
+            xAxis = 0.0;
+            yAxis -= 1.5;
+        }
+        printLadderTikz(l);
         printf("\n\n");
+        rowCounter++;
         return;
     }
 
@@ -172,7 +253,7 @@ int main()
     }
     if (DEBUG4)
     {
-        int n = 5;
+        int n = 4;
         bool *dir = calloc(n, sizeof(bool));
         for (int i = 2; i <= n; i++)
         {

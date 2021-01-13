@@ -1,13 +1,13 @@
 
 \section{Analysis}
 From looking at the table in the results section, it is clear that the {\sc modifiedSJT} algorithm performs 
-better than the  |{\sc CyclicBar} algorithm. The reason(s) for this disparity in performance 
+better than the  |{\sc CyclicBar} algorithm. The reasons for this disparity in performance 
 will be analyzed. Following this analysis, areas of application and practical relevance for the Listing Problem 
 will be discussed along with concluding remarks.
 
 \subsection{Performance Analysis}
     As $n \geq 9$ there is a noticeable difference between the runtimes of the two algorithms by a sizable order 
-    of magnitude. Clearly the {\sc ModifiedSJT} algorithm performs better than the {\sc CyclicBar} algorithm. The reason(s) 
+    of magnitude. Clearly the {\sc ModifiedSJT} algorithm performs better than the {\sc CyclicBar} algorithm. The reasons 
     for this improved performance are the difference in time complexities between the two algorithms.
     The time complexity for the {\sc ModifiedSJT} algorithm is constant amortized time per ladder. The time will be proven in the following lemma.
     \begin{lemma}
@@ -35,13 +35,13 @@ will be discussed along with concluding remarks.
     are $(2(n-1)-1)(n-1)$. Therefore the space complexity for the algorithms is $O(n^{2})$.
 
     \subsection{Applications}
-    The applications for generating $CanL\{\pi_{n}\}$ are currently unknown to me insofar as this problem has yet to be solved to my knowledge. 
-    However, if I am to be granted some speculation, I could provide some hypothetical scenarios in which listing $CanL\{\pi_{n}\}$ could 
+    The applications for generating $L_{n}$ are currently unknown to me insofar as this problem has yet to be solved to my knowledge. 
+    However, if I am to be granted some speculation, I could provide some hypothetical scenarios in which listing $L_{n}$ could 
     be of interest. The first hypothetical application would be to model an \emph{oblivious sorting system} for $n!$ permutations. An oblivious 
     sorting system is a system such that the sorting operations are done irrespective of the data being passed to the system~\cite{A7}. Recall 
     that a bar in a ladder simply swaps two adjacent elements in a permutation. Due to the static nature of each ladder, the swap operation 
     resulting from two elements in a permutation crossing a bar is unchanging. 
-    Seeing as each ladder in $CanL\{\pi_{n}\}$ sorts the corresponding permutation of order $n$, one can implement all of $CanL\{\pi_{n}\}$ 
-    for some arbitrary $n$ value and then pass each permutation of order $n$ through its respective ladder from $CanL\{pi_{n}\}$ 
-    resulting in each permutation being sorted. The ladders from $CanL\{\pi_{n}\}$ only need to be generated once and saved to disk 
+    Seeing as each ladder in $L_{n}$ sorts the corresponding permutation of order $n$, one can implement all of $L_{n}$ 
+    for some arbitrary $n$ value and then pass each permutation of order $n$ through its respective ladder from $L_{n}$ 
+    resulting in each permutation being sorted. The ladders from $L_{n}$ only need to be generated once and saved to disk 
     or implemented in hardware. 
