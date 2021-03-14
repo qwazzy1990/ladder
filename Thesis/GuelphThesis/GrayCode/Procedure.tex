@@ -1,14 +1,12 @@
 
 
-\section{Procedure}
-
-So far, the problem has been introduced and the required terminology has been defined. In the procedure section,
- the details of {\sc ModifiedSJT} and {\sc CyclicBar} are provided. These details include the pseudocode for 
- each of the algorithms, the initial conditions for each of the algorithms, the structures produced by each 
- of the algorithms, and a number of lemmas and proofs for each of the two algorithms. In the procedure section, 
- the algorithms are assessed independently of each other.
+\section{Modified Steinhaus-Johnson-Trotter Algorithm}
+In order to generate $L_{n}$, we could use the naive algorithm for creating a root ladder which runs in $O(n^{2})$ per ladder. 
+However, doing so is rather inefficient seeing as $|L_{n}|=n!$. With that being said, we modify the Steinhaus-Johnson-Trotter algorithm 
+to produce root ladders rather than permutations. 
+One of the main results of this thesis is {\sc ModifiedSJT} produces $L_{n}$ in Gray Code order in CAT. With the {\sc ModifiedSJT} algorithm, we make a minimal amount of change between subsequent root ladders in $L_{n}$
+ in $O(1)$ time. At each step, we compute the location of the bar to where it will be added to or where it will be removed from. 
 %%section SJT
-\subsection{The Modified Steinhaus-Johnson-Trotter Algorithm}
 
 For the initial conditions of {\sc ModifiedSJT} assume the following. 
 Let be the $ladder$ be initialized a two dimensional binary array of only $0's$.
@@ -25,7 +23,9 @@ $route$ is incremented by $1$ from $2,3 \dots n$.
     \Function{ModifiedSJT}{$n$, $ladder$, $route$, $direction$}
      %%base case
       \If{$route > n$}
-        \State {\sc print}($ladder$)
+        \If{number of bars in $ladder$ equals $0$}
+          \State {\sc Print}($ladder$)
+        \EndIf
         \State \textbf{return}
       \EndIf
       %%swap the nth element n-1 times
@@ -42,8 +42,10 @@ $route$ is incremented by $1$ from $2,3 \dots n$.
             \State $row \gets 2(n - route) + (i)$
             \State $ladder[row][col] \gets 0$
           \EndIf
+          \State {\sc Print}($ladder$)
+          \State {\sc ModifiedSJT}($n$, $ladder$, $route+1$, $direction$)
         \EndIf
-        \State {\sc ModifiedSJT}($n$, $ladder$, $route+1$, $direction$)
+        
       \EndFor
       \If{$direction[route] =$ left}
         \State $direction[route] \gets$ right
@@ -89,275 +91,317 @@ at column $1$. Doing so results in $(n-1)!n=n!$ ladders of order $n$. To see
 an example of the proof please refer to Figure~\ref{Fig:CanLSJT}.
 \end{proof}
 %%prove the dimensions of the datastructure
+
 \begin{center}
- \begin{figure}[!htp]
+\begin{figure}[!htp]
   \centering
   \begin{tikzpicture}
-\draw(0.00,5.90) to (0.00,7.10);
-\draw(0.20,5.90) to (0.20,7.10);
-\draw(0.40,5.90) to (0.40,7.10);
-\draw(0.60,5.90) to (0.60,7.10);
+
+    \draw(0.00,9.70) to (0.00,13.00);
+\draw(0.40,9.70) to (0.40,13.00);
+\draw(0.80,9.70) to (0.80,13.00);
+\draw(1.20,9.70) to (1.20,13.00);
+\node at(0.00,13.30){\tiny{1}};
+\node at(0.40,13.30){\tiny{2}};
+\node at(0.80,13.30){\tiny{3}};
+\node at(1.20,13.30){\tiny{4}};
+
+\draw(2.00,9.70) to (2.00,13.00);
+\draw(2.40,9.70) to (2.40,13.00);
+\draw(2.80,9.70) to (2.80,13.00);
+\draw(3.20,9.70) to (3.20,13.00);
+\draw(2.80, 11.60) to (3.20, 11.60);
+\node at(2.00,13.30){\tiny{1}};
+\node at(2.40,13.30){\tiny{2}};
+\node at(2.80,13.30){\tiny{4}};
+\node at(3.20,13.30){\tiny{3}};
+
+\draw(4.00,9.70) to (4.00,13.00);
+\draw(4.40,9.70) to (4.40,13.00);
+\draw(4.80,9.70) to (4.80,13.00);
+\draw(5.20,9.70) to (5.20,13.00);
+\draw(4.40, 12.20) to (4.80, 12.20);
+\draw(4.80, 11.60) to (5.20, 11.60);
+\node at(4.00,13.30){\tiny{1}};
+\node at(4.40,13.30){\tiny{4}};
+\node at(4.80,13.30){\tiny{2}};
+\node at(5.20,13.30){\tiny{3}};
+
+\draw(6.00,9.70) to (6.00,13.00);
+\draw(6.40,9.70) to (6.40,13.00);
+\draw(6.80,9.70) to (6.80,13.00);
+\draw(7.20,9.70) to (7.20,13.00);
+\draw(6.00, 12.80) to (6.40, 12.80);
+\draw(6.40, 12.20) to (6.80, 12.20);
+\draw(6.80, 11.60) to (7.20, 11.60);
+\node at(6.00,13.30){\tiny{4}};
+\node at(6.40,13.30){\tiny{1}};
+\node at(6.80,13.30){\tiny{2}};
+\node at(7.20,13.30){\tiny{3}};
+
+\draw(8.00,9.70) to (8.00,13.00);
+\draw(8.40,9.70) to (8.40,13.00);
+\draw(8.80,9.70) to (8.80,13.00);
+\draw(9.20,9.70) to (9.20,13.00);
+\draw(8.00, 12.80) to (8.40, 12.80);
+\draw(8.40, 12.20) to (8.80, 12.20);
+\draw(8.80, 11.60) to (9.20, 11.60);
+\draw(8.40, 11.00) to (8.80, 11.00);
+\node at(8.00,13.30){\tiny{4}};
+\node at(8.40,13.30){\tiny{1}};
+\node at(8.80,13.30){\tiny{3}};
+\node at(9.20,13.30){\tiny{2}};
+
+\draw(10.00,9.70) to (10.00,13.00);
+\draw(10.40,9.70) to (10.40,13.00);
+\draw(10.80,9.70) to (10.80,13.00);
+\draw(11.20,9.70) to (11.20,13.00);
+\draw(10.40, 12.20) to (10.80, 12.20);
+\draw(10.80, 11.60) to (11.20, 11.60);
+\draw(10.40, 11.00) to (10.80, 11.00);
+\node at(10.00,13.30){\tiny{1}};
+\node at(10.40,13.30){\tiny{4}};
+\node at(10.80,13.30){\tiny{3}};
+\node at(11.20,13.30){\tiny{2}};
+
+\draw(0.00,5.70) to (0.00,9.00);
+\draw(0.40,5.70) to (0.40,9.00);
+\draw(0.80,5.70) to (0.80,9.00);
+\draw(1.20,5.70) to (1.20,9.00);
+\draw(0.80, 7.60) to (1.20, 7.60);
+\draw(0.40, 7.00) to (0.80, 7.00);
+\node at(0.00,9.30){\tiny{1}};
+\node at(0.40,9.30){\tiny{3}};
+\node at(0.80,9.30){\tiny{4}};
+\node at(1.20,9.30){\tiny{2}};
+
+\draw(2.00,5.70) to (2.00,9.00);
+\draw(2.40,5.70) to (2.40,9.00);
+\draw(2.80,5.70) to (2.80,9.00);
+\draw(3.20,5.70) to (3.20,9.00);
+\draw(2.40, 7.00) to (2.80, 7.00);
+\node at(2.00,9.30){\tiny{1}};
+\node at(2.40,9.30){\tiny{3}};
+\node at(2.80,9.30){\tiny{2}};
+\node at(3.20,9.30){\tiny{4}};
+
+\draw(4.00,5.70) to (4.00,9.00);
+\draw(4.40,5.70) to (4.40,9.00);
+\draw(4.80,5.70) to (4.80,9.00);
+\draw(5.20,5.70) to (5.20,9.00);
+\draw(4.00, 7.60) to (4.40, 7.60);
+\draw(4.40, 7.00) to (4.80, 7.00);
+\node at(4.00,9.30){\tiny{3}};
+\node at(4.40,9.30){\tiny{1}};
+\node at(4.80,9.30){\tiny{2}};
+\node at(5.20,9.30){\tiny{4}};
+
+\draw(6.00,5.70) to (6.00,9.00);
+\draw(6.40,5.70) to (6.40,9.00);
+\draw(6.80,5.70) to (6.80,9.00);
+\draw(7.20,5.70) to (7.20,9.00);
+\draw(6.00, 7.60) to (6.40, 7.60);
+\draw(6.80, 7.60) to (7.20, 7.60);
+\draw(6.40, 7.00) to (6.80, 7.00);
+\node at(6.00,9.30){\tiny{3}};
+\node at(6.40,9.30){\tiny{1}};
+\node at(6.80,9.30){\tiny{4}};
+\node at(7.20,9.30){\tiny{2}};
+
+\draw(8.00,5.70) to (8.00,9.00);
+\draw(8.40,5.70) to (8.40,9.00);
+\draw(8.80,5.70) to (8.80,9.00);
+\draw(9.20,5.70) to (9.20,9.00);
+\draw(8.40, 8.20) to (8.80, 8.20);
+\draw(8.00, 7.60) to (8.40, 7.60);
+\draw(8.80, 7.60) to (9.20, 7.60);
+\draw(8.40, 7.00) to (8.80, 7.00);
+\node at(8.00,9.30){\tiny{3}};
+\node at(8.40,9.30){\tiny{4}};
+\node at(8.80,9.30){\tiny{1}};
+\node at(9.20,9.30){\tiny{2}};
+
+\draw(10.00,5.70) to (10.00,9.00);
+\draw(10.40,5.70) to (10.40,9.00);
+\draw(10.80,5.70) to (10.80,9.00);
+\draw(11.20,5.70) to (11.20,9.00);
+\draw(10.00, 8.80) to (10.40, 8.80);
+\draw(10.40, 8.20) to (10.80, 8.20);
+\draw(10.00, 7.60) to (10.40, 7.60);
+\draw(10.80, 7.60) to (11.20, 7.60);
+\draw(10.40, 7.00) to (10.80, 7.00);
+\node at(10.00,9.30){\tiny{4}};
+\node at(10.40,9.30){\tiny{3}};
+\node at(10.80,9.30){\tiny{1}};
+\node at(11.20,9.30){\tiny{2}};
+
+\draw(0.00,1.70) to (0.00,5.00);
+\draw(0.40,1.70) to (0.40,5.00);
+\draw(0.80,1.70) to (0.80,5.00);
+\draw(1.20,1.70) to (1.20,5.00);
+\draw(0.00, 4.80) to (0.40, 4.80);
+\draw(0.40, 4.20) to (0.80, 4.20);
+\draw(0.00, 3.60) to (0.40, 3.60);
+\draw(0.80, 3.60) to (1.20, 3.60);
+\draw(0.40, 3.00) to (0.80, 3.00);
+\draw(0.00, 2.40) to (0.40, 2.40);
+\node at(0.00,5.30){\tiny{4}};
+\node at(0.40,5.30){\tiny{3}};
+\node at(0.80,5.30){\tiny{2}};
+\node at(1.20,5.30){\tiny{1}};
+
+\draw(2.00,1.70) to (2.00,5.00);
+\draw(2.40,1.70) to (2.40,5.00);
+\draw(2.80,1.70) to (2.80,5.00);
+\draw(3.20,1.70) to (3.20,5.00);
+\draw(2.40, 4.20) to (2.80, 4.20);
+\draw(2.00, 3.60) to (2.40, 3.60);
+\draw(2.80, 3.60) to (3.20, 3.60);
+\draw(2.40, 3.00) to (2.80, 3.00);
+\draw(2.00, 2.40) to (2.40, 2.40);
+\node at(2.00,5.30){\tiny{3}};
+\node at(2.40,5.30){\tiny{4}};
+\node at(2.80,5.30){\tiny{2}};
+\node at(3.20,5.30){\tiny{1}};
+
+\draw(4.00,1.70) to (4.00,5.00);
+\draw(4.40,1.70) to (4.40,5.00);
+\draw(4.80,1.70) to (4.80,5.00);
+\draw(5.20,1.70) to (5.20,5.00);
+\draw(4.00, 3.60) to (4.40, 3.60);
+\draw(4.80, 3.60) to (5.20, 3.60);
+\draw(4.40, 3.00) to (4.80, 3.00);
+\draw(4.00, 2.40) to (4.40, 2.40);
+\node at(4.00,5.30){\tiny{3}};
+\node at(4.40,5.30){\tiny{2}};
+\node at(4.80,5.30){\tiny{4}};
+\node at(5.20,5.30){\tiny{1}};
+
+\draw(6.00,1.70) to (6.00,5.00);
+\draw(6.40,1.70) to (6.40,5.00);
+\draw(6.80,1.70) to (6.80,5.00);
+\draw(7.20,1.70) to (7.20,5.00);
+\draw(6.00, 3.60) to (6.40, 3.60);
+\draw(6.40, 3.00) to (6.80, 3.00);
+\draw(6.00, 2.40) to (6.40, 2.40);
+\node at(6.00,5.30){\tiny{3}};
+\node at(6.40,5.30){\tiny{2}};
+\node at(6.80,5.30){\tiny{1}};
+\node at(7.20,5.30){\tiny{4}};
+
+\draw(8.00,1.70) to (8.00,5.00);
+\draw(8.40,1.70) to (8.40,5.00);
+\draw(8.80,1.70) to (8.80,5.00);
+\draw(9.20,1.70) to (9.20,5.00);
+\draw(8.40, 3.00) to (8.80, 3.00);
+\draw(8.00, 2.40) to (8.40, 2.40);
+\node at(8.00,5.30){\tiny{2}};
+\node at(8.40,5.30){\tiny{3}};
+\node at(8.80,5.30){\tiny{1}};
+\node at(9.20,5.30){\tiny{4}};
+
+\draw(10.00,1.70) to (10.00,5.00);
+\draw(10.40,1.70) to (10.40,5.00);
+\draw(10.80,1.70) to (10.80,5.00);
+\draw(11.20,1.70) to (11.20,5.00);
+\draw(10.80, 3.60) to (11.20, 3.60);
+\draw(10.40, 3.00) to (10.80, 3.00);
+\draw(10.00, 2.40) to (10.40, 2.40);
+\node at(10.00,5.30){\tiny{2}};
+\node at(10.40,5.30){\tiny{3}};
+\node at(10.80,5.30){\tiny{4}};
+\node at(11.20,5.30){\tiny{1}};
+
+\draw(0.00,-2.30) to (0.00,1.00);
+\draw(0.40,-2.30) to (0.40,1.00);
+\draw(0.80,-2.30) to (0.80,1.00);
+\draw(1.20,-2.30) to (1.20,1.00);
+\draw(0.40, 0.20) to (0.80, 0.20);
+\draw(0.80, -0.40) to (1.20, -0.40);
+\draw(0.40, -1.00) to (0.80, -1.00);
+\draw(0.00, -1.60) to (0.40, -1.60);
+\node at(0.00,1.30){\tiny{2}};
+\node at(0.40,1.30){\tiny{4}};
+\node at(0.80,1.30){\tiny{3}};
+\node at(1.20,1.30){\tiny{1}};
+
+\draw(2.00,-2.30) to (2.00,1.00);
+\draw(2.40,-2.30) to (2.40,1.00);
+\draw(2.80,-2.30) to (2.80,1.00);
+\draw(3.20,-2.30) to (3.20,1.00);
+\draw(2.00, 0.80) to (2.40, 0.80);
+\draw(2.40, 0.20) to (2.80, 0.20);
+\draw(2.80, -0.40) to (3.20, -0.40);
+\draw(2.40, -1.00) to (2.80, -1.00);
+\draw(2.00, -1.60) to (2.40, -1.60);
+\node at(2.00,1.30){\tiny{4}};
+\node at(2.40,1.30){\tiny{2}};
+\node at(2.80,1.30){\tiny{3}};
+\node at(3.20,1.30){\tiny{1}};
+
+\draw(4.00,-2.30) to (4.00,1.00);
+\draw(4.40,-2.30) to (4.40,1.00);
+\draw(4.80,-2.30) to (4.80,1.00);
+\draw(5.20,-2.30) to (5.20,1.00);
+\draw(4.00, 0.80) to (4.40, 0.80);
+\draw(4.40, 0.20) to (4.80, 0.20);
+\draw(4.80, -0.40) to (5.20, -0.40);
+\draw(4.00, -1.60) to (4.40, -1.60);
+\node at(4.00,1.30){\tiny{4}};
+\node at(4.40,1.30){\tiny{2}};
+\node at(4.80,1.30){\tiny{1}};
+\node at(5.20,1.30){\tiny{3}};
+
+\draw(6.00,-2.30) to (6.00,1.00);
+\draw(6.40,-2.30) to (6.40,1.00);
+\draw(6.80,-2.30) to (6.80,1.00);
+\draw(7.20,-2.30) to (7.20,1.00);
+\draw(6.40, 0.20) to (6.80, 0.20);
+\draw(6.80, -0.40) to (7.20, -0.40);
+\draw(6.00, -1.60) to (6.40, -1.60);
+\node at(6.00,1.30){\tiny{2}};
+\node at(6.40,1.30){\tiny{4}};
+\node at(6.80,1.30){\tiny{1}};
+\node at(7.20,1.30){\tiny{3}};
+
+\draw(8.00,-2.30) to (8.00,1.00);
+\draw(8.40,-2.30) to (8.40,1.00);
+\draw(8.80,-2.30) to (8.80,1.00);
+\draw(9.20,-2.30) to (9.20,1.00);
+\draw(8.80, -0.40) to (9.20, -0.40);
+\draw(8.00, -1.60) to (8.40, -1.60);
+\node at(8.00,1.30){\tiny{2}};
+\node at(8.40,1.30){\tiny{1}};
+\node at(8.80,1.30){\tiny{4}};
+\node at(9.20,1.30){\tiny{3}};
+
+\draw(10.00,-2.30) to (10.00,1.00);
+\draw(10.40,-2.30) to (10.40,1.00);
+\draw(10.80,-2.30) to (10.80,1.00);
+\draw(11.20,-2.30) to (11.20,1.00);
+\draw(10.00, -1.60) to (10.40, -1.60);
+\node at(10.00,1.30){\tiny{2}};
+\node at(10.40,1.30){\tiny{1}};
+\node at(10.80,1.30){\tiny{3}};
+\node at(11.20,1.30){\tiny{4}};
 
 
-\draw(1.00,5.90) to (1.00,7.10);
-\draw(1.20,5.90) to (1.20,7.10);
-\draw(1.40,5.90) to (1.40,7.10);
-\draw(1.60,5.90) to (1.60,7.10);
-\draw(1.40, 6.60) to (1.60, 6.60);
-
-
-\draw(2.00,5.90) to (2.00,7.10);
-\draw(2.20,5.90) to (2.20,7.10);
-\draw(2.40,5.90) to (2.40,7.10);
-\draw(2.60,5.90) to (2.60,7.10);
-\draw(2.20, 6.80) to (2.40, 6.80);
-\draw(2.40, 6.60) to (2.60, 6.60);
-
-
-\draw(3.00,5.90) to (3.00,7.10);
-\draw(3.20,5.90) to (3.20,7.10);
-\draw(3.40,5.90) to (3.40,7.10);
-\draw(3.60,5.90) to (3.60,7.10);
-\draw(3.00, 7.00) to (3.20, 7.00);
-\draw(3.20, 6.80) to (3.40, 6.80);
-\draw(3.40, 6.60) to (3.60, 6.60);
-
-
-\draw(4.00,5.90) to (4.00,7.10);
-\draw(4.20,5.90) to (4.20,7.10);
-\draw(4.40,5.90) to (4.40,7.10);
-\draw(4.60,5.90) to (4.60,7.10);
-\draw(4.00, 7.00) to (4.20, 7.00);
-\draw(4.20, 6.80) to (4.40, 6.80);
-\draw(4.40, 6.60) to (4.60, 6.60);
-\draw(4.20, 6.40) to (4.40, 6.40);
-
-
-\draw(5.00,5.90) to (5.00,7.10);
-\draw(5.20,5.90) to (5.20,7.10);
-\draw(5.40,5.90) to (5.40,7.10);
-\draw(5.60,5.90) to (5.60,7.10);
-\draw(5.20, 6.80) to (5.40, 6.80);
-\draw(5.40, 6.60) to (5.60, 6.60);
-\draw(5.20, 6.40) to (5.40, 6.40);
-
-
-\draw(0.00,4.40) to (0.00,5.60);
-\draw(0.20,4.40) to (0.20,5.60);
-\draw(0.40,4.40) to (0.40,5.60);
-\draw(0.60,4.40) to (0.60,5.60);
-\draw(0.40, 5.10) to (0.60, 5.10);
-\draw(0.20, 4.90) to (0.40, 4.90);
-
-
-\draw(1.00,4.40) to (1.00,5.60);
-\draw(1.20,4.40) to (1.20,5.60);
-\draw(1.40,4.40) to (1.40,5.60);
-\draw(1.60,4.40) to (1.60,5.60);
-\draw(1.20, 4.90) to (1.40, 4.90);
-
-
-\draw(2.00,4.40) to (2.00,5.60);
-\draw(2.20,4.40) to (2.20,5.60);
-\draw(2.40,4.40) to (2.40,5.60);
-\draw(2.60,4.40) to (2.60,5.60);
-\draw(2.00, 5.10) to (2.20, 5.10);
-\draw(2.20, 4.90) to (2.40, 4.90);
-
-
-\draw(3.00,4.40) to (3.00,5.60);
-\draw(3.20,4.40) to (3.20,5.60);
-\draw(3.40,4.40) to (3.40,5.60);
-\draw(3.60,4.40) to (3.60,5.60);
-\draw(3.00, 5.10) to (3.20, 5.10);
-\draw(3.40, 5.10) to (3.60, 5.10);
-\draw(3.20, 4.90) to (3.40, 4.90);
-
-
-\draw(4.00,4.40) to (4.00,5.60);
-\draw(4.20,4.40) to (4.20,5.60);
-\draw(4.40,4.40) to (4.40,5.60);
-\draw(4.60,4.40) to (4.60,5.60);
-\draw(4.20, 5.30) to (4.40, 5.30);
-\draw(4.00, 5.10) to (4.20, 5.10);
-\draw(4.40, 5.10) to (4.60, 5.10);
-\draw(4.20, 4.90) to (4.40, 4.90);
-
-
-\draw(5.00,4.40) to (5.00,5.60);
-\draw(5.20,4.40) to (5.20,5.60);
-\draw(5.40,4.40) to (5.40,5.60);
-\draw(5.60,4.40) to (5.60,5.60);
-\draw(5.00, 5.50) to (5.20, 5.50);
-\draw(5.20, 5.30) to (5.40, 5.30);
-\draw(5.00, 5.10) to (5.20, 5.10);
-\draw(5.40, 5.10) to (5.60, 5.10);
-\draw(5.20, 4.90) to (5.40, 4.90);
-
-
-\draw(0.00,2.90) to (0.00,4.10);
-\draw(0.20,2.90) to (0.20,4.10);
-\draw(0.40,2.90) to (0.40,4.10);
-\draw(0.60,2.90) to (0.60,4.10);
-\draw(0.00, 4.00) to (0.20, 4.00);
-\draw(0.20, 3.80) to (0.40, 3.80);
-\draw(0.00, 3.60) to (0.20, 3.60);
-\draw(0.40, 3.60) to (0.60, 3.60);
-\draw(0.20, 3.40) to (0.40, 3.40);
-\draw(0.00, 3.20) to (0.20, 3.20);
-
-
-\draw(1.00,2.90) to (1.00,4.10);
-\draw(1.20,2.90) to (1.20,4.10);
-\draw(1.40,2.90) to (1.40,4.10);
-\draw(1.60,2.90) to (1.60,4.10);
-\draw(1.20, 3.80) to (1.40, 3.80);
-\draw(1.00, 3.60) to (1.20, 3.60);
-\draw(1.40, 3.60) to (1.60, 3.60);
-\draw(1.20, 3.40) to (1.40, 3.40);
-\draw(1.00, 3.20) to (1.20, 3.20);
-
-
-\draw(2.00,2.90) to (2.00,4.10);
-\draw(2.20,2.90) to (2.20,4.10);
-\draw(2.40,2.90) to (2.40,4.10);
-\draw(2.60,2.90) to (2.60,4.10);
-\draw(2.00, 3.60) to (2.20, 3.60);
-\draw(2.40, 3.60) to (2.60, 3.60);
-\draw(2.20, 3.40) to (2.40, 3.40);
-\draw(2.00, 3.20) to (2.20, 3.20);
-
-
-\draw(3.00,2.90) to (3.00,4.10);
-\draw(3.20,2.90) to (3.20,4.10);
-\draw(3.40,2.90) to (3.40,4.10);
-\draw(3.60,2.90) to (3.60,4.10);
-\draw(3.00, 3.60) to (3.20, 3.60);
-\draw(3.20, 3.40) to (3.40, 3.40);
-\draw(3.00, 3.20) to (3.20, 3.20);
-
-
-\draw(4.00,2.90) to (4.00,4.10);
-\draw(4.20,2.90) to (4.20,4.10);
-\draw(4.40,2.90) to (4.40,4.10);
-\draw(4.60,2.90) to (4.60,4.10);
-\draw(4.20, 3.40) to (4.40, 3.40);
-\draw(4.00, 3.20) to (4.20, 3.20);
-
-
-\draw(5.00,2.90) to (5.00,4.10);
-\draw(5.20,2.90) to (5.20,4.10);
-\draw(5.40,2.90) to (5.40,4.10);
-\draw(5.60,2.90) to (5.60,4.10);
-\draw(5.40, 3.60) to (5.60, 3.60);
-\draw(5.20, 3.40) to (5.40, 3.40);
-\draw(5.00, 3.20) to (5.20, 3.20);
-
-
-\draw(0.00,1.40) to (0.00,2.60);
-\draw(0.20,1.40) to (0.20,2.60);
-\draw(0.40,1.40) to (0.40,2.60);
-\draw(0.60,1.40) to (0.60,2.60);
-\draw(0.20, 2.30) to (0.40, 2.30);
-\draw(0.40, 2.10) to (0.60, 2.10);
-\draw(0.20, 1.90) to (0.40, 1.90);
-\draw(0.00, 1.70) to (0.20, 1.70);
-
-
-\draw(1.00,1.40) to (1.00,2.60);
-\draw(1.20,1.40) to (1.20,2.60);
-\draw(1.40,1.40) to (1.40,2.60);
-\draw(1.60,1.40) to (1.60,2.60);
-\draw(1.00, 2.50) to (1.20, 2.50);
-\draw(1.20, 2.30) to (1.40, 2.30);
-\draw(1.40, 2.10) to (1.60, 2.10);
-\draw(1.20, 1.90) to (1.40, 1.90);
-\draw(1.00, 1.70) to (1.20, 1.70);
-
-
-\draw(2.00,1.40) to (2.00,2.60);
-\draw(2.20,1.40) to (2.20,2.60);
-\draw(2.40,1.40) to (2.40,2.60);
-\draw(2.60,1.40) to (2.60,2.60);
-\draw(2.00, 2.50) to (2.20, 2.50);
-\draw(2.20, 2.30) to (2.40, 2.30);
-\draw(2.40, 2.10) to (2.60, 2.10);
-\draw(2.00, 1.70) to (2.20, 1.70);
-
-
-\draw(3.00,1.40) to (3.00,2.60);
-\draw(3.20,1.40) to (3.20,2.60);
-\draw(3.40,1.40) to (3.40,2.60);
-\draw(3.60,1.40) to (3.60,2.60);
-\draw(3.20, 2.30) to (3.40, 2.30);
-\draw(3.40, 2.10) to (3.60, 2.10);
-\draw(3.00, 1.70) to (3.20, 1.70);
-
-
-\draw(4.00,1.40) to (4.00,2.60);
-\draw(4.20,1.40) to (4.20,2.60);
-\draw(4.40,1.40) to (4.40,2.60);
-\draw(4.60,1.40) to (4.60,2.60);
-\draw(4.40, 2.10) to (4.60, 2.10);
-\draw(4.00, 1.70) to (4.20, 1.70);
-
-
-\draw(5.00,1.40) to (5.00,2.60);
-\draw(5.20,1.40) to (5.20,2.60);
-\draw(5.40,1.40) to (5.40,2.60);
-\draw(5.60,1.40) to (5.60,2.60);
-\draw(5.00, 1.70) to (5.20, 1.70);
-
-
-
-
-
-
-\end{tikzpicture}
+    
+    
+    
+  \end{tikzpicture}
   \caption{$L_{4}$ generated by the {\sc ModifiedSJT} algorithm. The algorithm inserts or removes a bar between any two successive ladders.}
   \label{Fig:CanLSJT}
 \end{figure}
-\end{center}\pagebreak
-
-\begin{theorem}
-  If the algorithm being applied is {\sc ModifiedSJT} then the number of rows required for the ladder data-structure is $2(n-1) - 1$ 
-  and the number of columns required for the ladder is $n-1$.
-\end{theorem}
-\begin{proof}
-  The number of columns is fairly straightforward. Seeing as there are always $n$ elements in $\pi_{n}$, 
-  a column represents a gap between lines in the corresponding ladder lottery. Each ladder of order $n$ has $n$ lines, 
-  one for each element in $\pi_{n}$. Therefore each ladder of order $n$ has $n-1$ columns.\par 
-  The number of rows for the ladder data-structure is calculated a follows, given $\pi_{n}$, the minimal 
-  number of rows required is when $\pi_{n}$ is sorted. In this case there are zero rows because there are 
-  zero bars added to the ladder. When a bar is added to the ladder it can be added to an already existing row 
-  or to a new row. If the current state of the ladder is empty then adding the first bar produces the second ladder in
-  $L_{n}$. Since the bars are being added bottom right to top left, and the first bar to be added belongs 
-  to the $nth$ route, then it must be added to $row=n-1$, $col=n-1$. As bars of the $nth$ route get 
-  continuously added to the ladder, each bar is added a row above the previous bar and to a column 
-  to the left of the column of the previous bar.
-  Since no two bars of the $nth$ route can be on the same row, this will require $n-1$ rows. Note, if they were added to the same 
-  row, then the left end point of the right bar would be touching the right end point of the left bar which is disallowed. Once the 
-  bars of the $nth$ element are added, the bars of the $n-1th$ route will be added. The $n-1th's$ first bar 
-  will be added to the $n-2$ column, otherwise it would be directly below the first bar of the $nth$ route, which is a violation. 
-  Since the first bar of the $n-1$'s element is added to column $n-2$, then it must be given a new row, otherwise its right end point 
-  will be touching  the left end point of the first bar of route $n$. The remaining $n-2$ bars of element $n-1$
-  will be added bottom right to top left, but none of their end points will touch the end points of element $n$ seeing as they will 
-  always be two columns apart from any bar in $n's$ route. The same logic applies to element $n-2$, it will require one extra row for its 
-  first bar, in order not to touch the first bar of element $n-1$, but the remainder of its bars will always be two columns away from 
-  the remainder of the bars for $n-1$, etc. Therefore there are $n-1$ rows required for the $nth$ element and each subsequent 
-  element, $k$ requires only one new row. Since $2 \leq k < n$, then there are $(n-2)$ additional rows required for the ladder. Note that element 
-  $1$ has no bars in its route. Therefore there are $(n-1)$ rows required for element $n's$ bars  plus $(n-2)$ rows required for 
-  all the remaining $2 \leq k < n$ routes. In conclusion the number of rows required is $(n-1) + (n-2) = 2(n-1)-1$. 
-  See figure for the tree of ladders 
-  generated by {\sc ModifiedSJT} for $n=4$. Note that the maximum number of rows required is $2(n-1)-1=2(3)-1=5$.
-\end{proof}
+\end{center}
+\pagebreak
 
 
 
 %%end proof
 From looking at Figure~\ref{Fig:CanLSJT} it should be clear that the canonical representative from $L_{n}$ when using the 
 {\sc ModifiedSJT} algorithm is also the root ladder from each $OptL\{\pi\}$. Recall that the root ladder is the 
-ladder whose bars of a lesser route have not crossed the bars of a greater route. In the case of the 
+ladder with a clean level of one. In the case of the 
 {\sc ModifiedSJT} algorithm, transitioning from one ladder to the next involves simply inserting a new bar 
 or removing a bar. Let $k$ be the current route. If a new bar being added belongs to 
 route $k$, the bar is added below the route of $k+1$ and above the route of $k-1$, therefore 
@@ -365,7 +409,8 @@ adding a bar does not violate the constraint of the root ladder. Let $l_{i}$ be 
 Let $l_{i+1}$ be the next ladder in the sequence. 
 Then removing a bar from $l_{i}$ cannot make $l_{i+1}$ a non-root ladder, because 
 removing a bar from $l_{i}$ does not allow the bar of a lesser element to cross the bars of a greater element.
-Thus, the canonical representative for $L_{n}$ is always the root ladder from each $OptL\{\pi\}$.\par 
+Thus, the canonical representative for $L_{n}$ is always the root ladder from each $OptL\{\pi\}$. The number of 
+rows required for the ladder data structure is $2(n-1)-1$. See Theorem \ref{Theorem:RootHeight} for details.\par 
 
 
 

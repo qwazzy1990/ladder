@@ -1886,3 +1886,87 @@ List *copyListOfLadders(List *ogList)
     }
     return newList;
 }
+
+
+
+
+
+
+
+
+//******************GRAY CODE HELPER FUNCTIONS****************************//
+
+/**
+ * N = the max element in a permutation
+ * x,y elements of a permutation such that x is > y
+ * posX = position of x in permutation
+ * posY = position of y in permutation
+ * rX = number of elements in pi that are less than x and to the left of x
+ * Returns the row and column of the bar to be added or removed
+ * */
+
+int* getBarCoordinates(int N, int x, int y, int posX, int posY, int* pi, int* rX)
+{
+    int* coordinates = calloc(2, sizeof(int));
+
+    int row = 0;
+    int col = 0;
+
+    //if x is to the right of left, then the elements are uninverted
+    //therfore, the elements will be inverted. Therefore add a bar
+    if(posX > posY)
+    {
+
+        for(int i = posY + 1; i < posX - 1; i++)
+        {
+            int z = pi[i];
+            //case 1: z < y and z < x. 
+            //r[x] ++ , r[y] --
+        }
+
+        //Account for the first N-1 rows for element N
+        row = (N-2);
+        //get the offset of N and x
+        row += (N-x);
+        //subtract the number of rows already assoiated with the route of x
+        row -= *rX;
+
+        //the starting column for element x must be column x-2
+        col = (x-2);
+        //subtract away the number of columns 
+        //already occupied by bars associated with the route of x
+        col -= *rX;
+        //increment rX because we are adding a bar
+        printf("Adding a bar\n");
+        (*rX)++;
+
+
+    }
+    //else we are removing a bar 
+    else 
+    {
+        //decrement rX because we are removing a bar
+        (*rX)--;
+        //start column for the route of x is x-2
+        col = x-2;
+        //subtrat the rX value from the column + 1 becase we ar removing a bar, add a 1 back in 
+        //to offset the rX value. Would be the same as decrementing rX first, and then subtracting it away
+        col = (x-2) - *rX;
+
+        //row 
+          //Account for the first N-1 rows for element N
+        row = (N-2);
+        //get the offset of N and x
+        row += (N-x);
+        row -=*rX;
+        printf("Removing a bar\n");
+
+        //decrement rX because we are removing a bar
+        
+
+    }
+    
+    coordinates[0] = row;
+    coordinates[1]  = col;
+    return coordinates;
+}

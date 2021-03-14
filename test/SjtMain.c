@@ -17,11 +17,57 @@ bool _DEBUG2 = false;
 bool _DEBUG3 = false;
 bool DEBUG4 = true;
 
+int _C_ = -1;
 float xAxis = 0.0;
-float yAxis = 6.0;
+float yAxis = 15.0;
+
+int myPerm[4]= {1,2,3,4};
 
 int rowCounter = 0;
 
+int calcOffset(Ladder *l);
+
+void __swap(int i, int j);
+void __swap(int i, int j)
+{
+    int temp = myPerm[i]; 
+    myPerm[i] = myPerm[j];
+    myPerm[j] = temp;
+}
+
+
+
+int calcOffset(Ladder *l)
+{
+    int offset = l->numCols;
+    offset = offset*2;
+    return offset+1;
+
+}
+
+
+
+void printLadderDisalvo(Ladder *l);
+
+void printLadderDisalvo(Ladder *l)
+{
+   
+    int offset = calcOffset(l);
+    printf("\n\n");
+    for (int i = 0; i < offset; i++)
+    {
+        for (int j = 0; j < l->numCols; j++)
+        {
+            printf("|");
+            if (l->ladder[i][j] == 1)
+                printf("-----");
+            else
+                printf("     ");
+        }
+        printf("|");
+        printf("\n");
+    }
+}
 
 void sjtMod(Ladder *l, int count, int n, bool *dir);
 void printLadderTikz(Ladder *l);
@@ -57,42 +103,53 @@ void printLadderTikz(Ladder *l)
 {
     //    printf("\\begin{figure}[!htp]");
     //   printf("\\begin{tikzpicture}");
+     _C_ ++;
+    if(_C_ % 6 == 0)
+    {
+        xAxis = 0.0;
+        yAxis -= 4;
+    }
 
     float c1 = xAxis;
     float c2 = yAxis;
     for (int i = 0; i <= l->numCols; i++)
     {
-        printf("\\draw(%.2f,%.2f) to (%.2f,%.2f);", c1, c2 -.1, c1, c2 + 1.1);
+        printf("\\draw(%.2f,%.2f) to (%.2f,%.2f);", c1, c2 -1.3, c1, c2 + 2);
         printf("\n");
-        c1 += 0.2;
+        c1 += 0.4;
     }
     c1 = xAxis;
-    c2 = c2 + 1.0;
+    c2 = c2 + 1.8;
     for (int i = 0; i <= 2*(l->numCols)-1; i++)
     {
          for (int j = 0; j < l->numCols; j++)
          {
              if (l->ladder[i][j] > 0)
              {
-                 printf("\\draw(%.2f, %.2f) to (%.2f, %.2f);", c1, c2, c1 + .2, c2);
+                 printf("\\draw(%.2f, %.2f) to (%.2f, %.2f);", c1, c2, c1 + .4, c2);
                  printf("\n");
              }
-             c1 += .2;
+             c1 += .4;
          }
-         c2 -= .2;
+         c2 -= .6;
          c1 = xAxis;
     }
+
+    c1 = xAxis;
+    c2 = yAxis + 2.3;
     // c1 = *cA;
-    // forall(numDig)
-    // {
-    //     printf("\\node at(%.2f,%.2f){\\tiny{%d}};", c1, (*cB) + .4, perm[x]);
-    //     c1 += .2;
-    // }
+    forall(l->numCols+1)
+    {
+         printf("\\node at(%.2f,%.2f){\\tiny{%d}};", c1, (c2), myPerm[x]);
+         printf("\n");
+         c1 += .4;
+    }
 
     //printf("\\end{tikzpicture}");
     //printf("\\end{figure}");
-    xAxis += 1.0;
+    xAxis += 2.0;
     //*cB += -1.5;
+    printf("\n");
 }
 
 
@@ -101,14 +158,10 @@ void sjtMod(Ladder *l, int count, int n, bool *dir)
     //if count > than max value=n
     if (count > n)
     {
-        if(rowCounter % 6 == 0 && rowCounter > 0)
+        if(l->numBars == 0)
         {
-            xAxis = 0.0;
-            yAxis -= 1.5;
+            printLadderTikz(l);
         }
-        printLadderTikz(l);
-        printf("\n\n");
-        rowCounter++;
         return;
     }
 
@@ -126,6 +179,9 @@ void sjtMod(Ladder *l, int count, int n, bool *dir)
                 int row = (n - 2) + (n - count) - (i);
                 int col = (count - 2) - (i);
                 l->ladder[row][col] = 1;
+                l->numBars++;
+               
+                __swap(myPerm[count-1], myPerm[count-2]);
             }
             //if removing a bar then go left to right
             else
@@ -133,8 +189,11 @@ void sjtMod(Ladder *l, int count, int n, bool *dir)
                 int col = (i);
                 int row = 2 * (n - count) + (i);
                 l->ladder[row][col] = 0;
+                l->numBars--;
+                __swap(myPerm[count-1], myPerm[count]);
             }
             //recursive call
+            printLadderTikz(l);
             sjtMod(l, count+1, n, dir);
         }
     }

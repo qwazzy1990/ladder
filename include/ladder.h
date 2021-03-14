@@ -332,4 +332,21 @@ void saveAllLadders(int* perm, int numDig);
 List* copyListOfLadders(List* ogList);
 
 
+
+
+
+//******************GRAY CODE HELPER FUNCTIONS****************************//
+
+/**
+ * N = the max element in a permutation
+ * x,y elements of a permutation such that x is > y
+ * posX = position of x in permutation
+ * posY = position of y in permutation
+ * rX = number of elements in pi that are less than x and to the left of x
+ * Returns the row and column of the bar to be added or removed
+ * */
+
+int* getBarCoordinates(int N, int x, int y, int posX, int posY, int* pi, int* rX);
+
+
 #endif

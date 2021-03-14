@@ -206,9 +206,8 @@ for $MinL\{\pi_{n}\}$.\par
        $MinL(Rev(n))$ the height of $MinL(Rev(n))$ will not increase. Thus, the upper bound for $MinL_\{\pi_{n}\}$ is $n$. 
        Please refer to Figure~\ref{Fig:RemovalSequence} for the removal sequence which lists $MinL\{\pi_{4}\}$. 
 
-   \end{proof}\pagebreak
-
-        \begin{figure}[!htp]
+   \end{proof}
+   \begin{figure}[h]
             \centering
             %%L1
             \begin{tikzpicture}
@@ -515,9 +514,8 @@ for $MinL\{\pi_{n}\}$.\par
    Once the $col$ is less than $1$ the function returns to the previous value of $col$ and removes the bar that was at $ladder[1][col]$. 
    This now frees the column that is one column to the left of the current column. 
    Thus, the function makes a second recursive call, this time reducing $col$ by one. 
-   Each call to the function produces a unique ladder. To see the tree of all ladders with a height of one for $n=5$ please refer to Figure~\ref{Fig:GenHeightOne}.\pagebreak
-
-   \begin{figure}[!htp]
+   Each call to the function produces a unique ladder. To see the tree of all ladders with a height of one for $n=5$ please refer to Figure~\ref{Fig:GenHeightOne}.
+   \begin{figure}[h]
         \begin{center}
             \begin{tikzpicture}
                 \draw(0, 0) to (0, 1);

@@ -27,10 +27,10 @@ bool DEBUG8 = false;
 //for counting degenerative triadic subsequences
 bool DEBUG9 = false;
 //for heaps ladders
-bool DEBUG10 = true;
+bool DEBUG10 = false;
 //for the gray code problem using all 4 algorithms
 bool DEBUG11 = false;
-bool DEBUG12 = false;
+bool DEBUG12 = true;
 int memSize = 1;
 int numDig = 0;
 
@@ -77,8 +77,11 @@ void writeTexTable(char **s)
 
     FILE *fp = fopen("textTable.txt", "w");
     fprintf(fp, "\\begin{table} ");
+    fprintf(fp, "\n");
     fprintf(fp, "\\begin{tabular}{ |p{5cm}||p{2cm}|p{2cm}|p{3cm}| }\\hline \\multicolumn{4}{|c|}{All OptL{$\\pi_{5}$} ordered by k inversions}\\\\ \\hline ");
+    fprintf(fp, "\n");
     fprintf(fp, "Permutation & number & k & $|OptL{\\pi}|$\\\\ \\hline ");
+    fprintf(fp, "\n");
     forall(120)
     {
         //get the
@@ -91,6 +94,7 @@ void writeTexTable(char **s)
         fprintf(fp, "%d & ", x + 1);
         fprintf(fp, "%d & ", k);
         fprintf(fp, "%d\\\\ ", allLadders->length);
+	fprintf(fp, "\n");
         numDig = 0;
         freeList(allLadders);
     }
@@ -180,7 +184,7 @@ int main(int argc, char *argv[])
             direction[x] = false;
             arr[x] = 0;
             perm[x] = x + 1;
-        }
+        
         List *perms = initializeList(dummy_print, free, dummy_compare);
         genPermsSJT(perms, perm, n, arr, direction);
         //printAllPerms(perms, n);
@@ -347,4 +351,7 @@ char **readFile(FILE *fp)
         }
     }
     return s;
+
+
+   
 }

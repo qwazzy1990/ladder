@@ -1,3 +1,5 @@
+
+\vspace{-10mm}
 Amidakuji is a custom in Japan which 
 allows for a pseudo-random assignment of children to prizes~\cite{A1}. 
 Usually done in Japanese schools, a teacher will draw $n$ vertical lines, 
@@ -9,9 +11,11 @@ the Amidakuji is. No two endpoints of two bars can be touching. Each student the
 their line, and whenever they encounter an end point of a bar along their line, 
 they must cross the bar and continue going down the adjacent line. 
 The student continues tracing down the lines and crossing bars 
-until they get to the end of the ladder lottery. The prize at the bottom of the ladder lottery 
+until they get to the end of the ladder lottery. We call such a tracing for a given student 
+a \emph{path}. For example, the path of Ryu is highlighted in red in Figure~\ref{fig:aa}. The prize at the bottom of the ladder lottery 
 is their prize~\cite{A1}. See Figure~\ref{fig:aa} for an example of a ladder lottery.
 \begin{center}
+\vspace{-5mm}
 \begin{figure}[h]
 	\centering
 		\begin{tikzpicture}
@@ -46,7 +50,7 @@ is their prize~\cite{A1}. See Figure~\ref{fig:aa} for an example of a ladder lot
 			\draw(4, 1.5) to (6, 1.5);
 			\draw(4, 3.75) to (6, 3.75);
 		\end{tikzpicture}
-\caption{\tiny{A ladder lottery where Ryu gets Puchao, Yui gets Dagashi, Riku gets Tonosama and Honoka gets Poki}}
+\caption{A ladder lottery where Ryu gets Puchao, Yui gets Dagashi, Riku gets Tonosama and Honoka gets Poki}
 \label{fig:aa}
 \end{figure}
 \end{center}
@@ -65,28 +69,119 @@ were willing to bet. The pieces of paper were folded in the shape of
 Amithaba's halo. Kuji is the Japanese word for lottery. Hence, the game 
 was termed Amidakuji. In English, Amidakuji translates to ladder lottery. 
 
-
 An interesting property about a ladder lottery is that it is  
-associated with a \emph{permutation}. A \emph{permutation} is a unique ordering of objects~\cite{A1}. 
-For the purposes of this paper, the objects of a permutation will be integers 
-ranging from $1,2, \dots ,n$. Consider a permutation $\pi=(p_{1},p_{2}, \dots ,p_{n})$.
-An \emph{inversion} is a relation between two elements in $\pi$, 
-$p_{i}$ and $p_{j}$, such that if $p_{i}>p_{j}$ and $i<j$ then $p_{i}$ and $p_{j}$ 
-form an inversion. 
-For example, given $\pi=(4,3,5,1,2)$, its set of inversions $=\{(4,3),(4,2),(4,1),(3,2),(3,1),(5,1),(5,2)\}$.
-An \emph{adjacent transposition} is defined as a swap of two adjacent elements in a permutation.
-Given $\pi=(4,3,5,1,2)$ any of the 
-following elements can be adjacently transposed in $\pi$; $(4,3),(5,1)$, each resulting in $(3,4,5,1,2)$, $(4,3,1,5,2)$ respectively. 
-A ladder lottery corresponds to a permutation if an only if:
+associated with a \emph{permutation}. A \emph{permutation} is a unique ordering of objects. 
+For the purposes of this thesis, the objects of a permutation are $1,2, \dots ,n$. 
+Consider a permutation $\pi=(p_{1},p_{2}, \dots ,p_{n})$.
+A pair of elements, $p_{i}$ and $p_{j}$, form an \emph{inversion} if $p_{i}>p_{j}$ and $i<j$. 
+For example, given $\pi=(4,3,5,1,2)$, its set of inversions is \newline $Inv=\{(4,3),(4,2),(4,1),(3,2),(3,1),(5,1),(5,2)\}$.
+A \emph{transposition} is a swap of two elements in $\pi$.
+An \emph{adjacent transposition} is defined as a swap of two adjacent elements in $\pi$.
+Given $\pi_{1}=(4,3,5,1,2)$ and $\pi_{2}=(3,4,5,1,2)$, they differ by the adjacent 
+transposition of the elements $(4,3)$.
+A ladder lottery corresponds to a permutation when:
 \begin{enumerate}
 	\item The $n$ elements of $\pi$ are listed at the top of the ladder lottery in the order that they appear in 
 	$\pi$; one element per line of the ladder lottery.
-	\item At the bottom of the ladder lottery are the $n$ elements of $\pi$ in strictly ascending order. 
-	\item Each bar in the ladder lottery performs an adjacent transposition on an adjacent inversion in $\pi$, 
-	thus transforming $\pi$ into some new permutation of order $n$. 
+	\item At the bottom of the ladder lottery are the $n$ elements of $\pi$ in strictly ascending order. For 
+	each element $x$ in $\pi$, $x$ goes down its path and ends up in the bottom $xth$ line. 
 \end{enumerate} 
 
-Let $k$ denote the number of inversions for some arbitrary $\pi$.
+\subsection{Representation}
+In this thesis, ladder lotteries are represented as a two dimensional array.
+Let $n$ be the number of elements in $\pi$. Let a \emph{column} be a gap 
+between lines in the ladder lottery. Each ladder lottery 
+represented as a two dimensional array has $n-1$ columns. Let a \emph{row} 
+be defined as a the horizontal span from column $1$ to column $n-1$ containing at least one bar. 
+Let a \emph{ghost row} be defined as the horizontal span from column $1$ to column $n-1$ containing zero bars.
+Let the \emph{height} of the ladder be defined as the number of 
+rows plus the number of ghost rows in the ladder.
+If two ladders are equivalent, then they sort $\pi$ with 
+the exact same bars. If two ladders are identical, 
+then they sort $\pi$ with the same exact same bars and with the same number of rows. 
+In Figure~\ref{Fig:equivLadders}, all three ladders are equivalent but only the leftmost ladder 
+and middle ladder are identical with two rows. The rightmost ladder 
+has three rows. 
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+		\draw(0, 0) to (0, 4);
+			\draw(0, 3) to (1, 3);
+		\draw(1, 0) to (1, 4);
+			\draw(1, 2) to (2, 2);
+		\draw(2, 0) to (2, 4);
+			\draw(2, 3) to (3, 3);
+		\draw(3, 0) to (3, 4);
+		
+		\draw(5, 0) to (5, 4);
+			\draw(5, 3) to (6, 3);
+		\draw(6, 0) to (6, 4);
+			\draw[dashed](5, 2)--(8, 2);
+			\draw(6, 1.5) to (7, 1.5);
+		\draw(7, 0) to (7, 4);
+			\draw(7, 3) to (8, 3);
+		\draw(8, 0) to (8, 4);
+
+
+		\draw(10, 0) to (10, 4);
+			\draw(10, 3) to (11, 3);
+		\draw(11, 0) to (11, 4);
+			\draw(11, 2) to (12, 2);
+		\draw(12, 0) to (12, 4);
+			\draw(12, 3.5) to (13, 3.5);
+		\draw(13, 0) to (13, 4);
+
+
+		\node at(0, 4.3){\small{$3$}};
+		\node at(1, 4.3){\small{$1$}};
+		\node at(2, 4.3){\small{$4$}};
+		\node at(3, 4.3){\small{$2$}};
+		
+		\node at(5, 4.3){\small{$3$}};
+		\node at(6, 4.3){\small{$1$}};
+		\node at(7, 4.3){\small{$4$}};
+		\node at(8, 4.3){\small{$2$}};
+		
+		\node at(10, 4.3){\small{$3$}};
+		\node at(11, 4.3){\small{$1$}};
+		\node at(12, 4.3){\small{$4$}};
+		\node at(13, 4.3){\small{$2$}};
+
+		\node at(0, -.3){\small{$1$}};
+		\node at(1, -.3){\small{$2$}};
+		\node at(2, -.3){\small{$3$}};
+		\node at(3, -.3){\small{$4$}};
+		
+		\node at(5, -.3){\small{$1$}};
+		\node at(6, -.3){\small{$2$}};
+		\node at(7, -.3){\small{$3$}};
+		\node at(8, -.3){\small{$4$}};
+		
+		\node at(10, -.3){\small{$1$}};
+		\node at(11, -.3){\small{$2$}};
+		\node at(12, -.3){\small{$3$}};
+		\node at(13, -.3){\small{$4$}};
+
+		\node at(-1, 3){\small{Row $1$}};
+		\node at(-1, 2){\small{Row $2$}};
+
+
+		\node at(4, 3){\small{Row $1$}};
+		\node at(4, 2){\small{Ghost Row $1$}};
+		\node at(4, 1.5){\small{Row $2$}};
+
+
+		\node at(9, 3.5){\small{Row $1$}};
+		\node at(9, 3){\small{Row $2$}};
+		\node at(9, 2){\small{Row $3$}};
+	\end{tikzpicture}
+	\caption{Three equivalent ladders. Leftmost and middle ladders are identical.}
+	\label{Fig:equivLadders}
+\end{figure}
+
+
+\subsection{Optimal Ladder Lotteries}
+Let $k$ denote the number of inversions for some permutation.
 An \emph{optimal ladder lottery} is a special case of ladder 
 lottery, corresponding to $\pi$, in which there are $k$ bars in the ladder; one for each \emph{inversion} in $\pi$ such that each 
 bar uninverts a single inversion in $\pi$ exactly once~\cite{A1}.
@@ -94,7 +189,7 @@ An optimal ladder lottery sorts $\pi$ in ascending order using exactly $k$ bars 
 $k$ adjacent transpositions on $k$ inversions in $\pi$.
 For example, given $\pi=(4,3,5,1,2)$ an optimal ladder lottery associated with $\pi$ would have 
 seven bars; one for each inversion in $\pi$. For each bar, two elements in $\pi$ that form 
-an inversion cross the bar which is effectively applying an adjacent transposition to the elements. 
+an inversion cross the given bar. 
 Once all elements have crossed their respective bars, $\pi$ is sorted in ascending order. The number of bars in an optimal ladder lottery 
 is the lower bound for the number of bars in a ladder lottery required to sort $\pi$. 
 To see an example of two ladder lotteries associated with 
@@ -191,23 +286,16 @@ $\pi=(4,3,5,1,2)$, one optimal and one non-optimal, please refer to Figure~\ref{
 	The bold  bars in the right ladder are redundant, thus the right ladder is non optimal.}
 	\label{fig:ab}
 \end{figure}
-Let $OptL\{\pi\}$ be defined as the set of optimal ladder lotteries that form an equivalence class 
-insofar as all ladders in $OptL\{\pi\}$ sort $\pi$ in ascending order with the least number of bars.
-Let $k$ be the number of bars in a ladder such that $k$ equals the number of inversions 
-in $\pi$.  Assume there is one row in the ladder for each of the $k$ bars; thus there are $k$ rows in the ladder. Let $\pi$ be of order $n$.
-There $n-1$ columns, gaps between lines, in the ladder to place bars. Hence, the dimensions of the ladder associated with $\pi$
-are $(n-1)$ by $(k)$. The total number of ladders with $(n-1)$ columns and $k$ rows is ${(n-1)(k) \choose k}$ which is finite. 
-For each optimal ladder lottery with $(n-1)$ columns and $k$ bars, their aggregation forms a subset of 
-all ${(n-1)(k) \choose k}$ ladder lotteries known as $OptL\{\pi\}$. Therefore, $OptL\{\pi\}$ is finite. 
-Generating $OptL\{\pi\}$ was essential for producing the sample data for this thesis. The first discussion of 
+Let $OptL\{\pi\}$ be defined as the set of optimal ladder lotteries that form an equivalence class, 
+insofar as all ladders in $OptL\{\pi\}$ sort $\pi$ in ascending order with the least number of bars. The first discussion of 
 $OptL\{\pi\}$ is in the paper Efficient Enumeration of Ladder Lotteries and its Application~\cite{A1}.
 In this paper, the authors provide an algorithm known as {\sc FindAllChildren}
 which generates $OptL\{\pi\}$; the details of the algorithm are discussed in Chapter 2.
 To see $OptL\{(4,3,5,1,2)\}$ please refer to Figure \ref{Fig:OptL3421}.
 Given that there are $n!$ permutations of order $n$, each of them 
-have their own $OptL\{\pi\}$. In Table~\ref{Table:125} found in the appendix, 
-the number of ladders in each of the 120 $OptL\{\pi\}$ of order $5$ is presented.
-\begin{figure}[h]
+have their own $OptL\{\pi\}$. In Table~\ref{table:KInvOptL} found in the appendix, 
+the number of ladders in each of the 120 $OptL\{\pi\}$ of order $5$ is presented.\pagebreak
+\begin{figure}[t]
 	\centering
 	\begin{tikzpicture}
 		\draw(0,0) to (0,2);
@@ -271,26 +359,18 @@ the number of ladders in each of the 120 $OptL\{\pi\}$ of order $5$ is presented
 	\label{Fig:OptL3421}
 \end{figure}
 
-Research on ladder lotteries pertains to research in \emph{combinatorial generation}. Combinatorial 
-generation is a subfield of theoretical computer science which pertains to listing 
-all combinatorial objects such as permutations, combinations, sets, subsets and graphs. Gray codes are a 
-special type of combinatorial generation in which a minimal amount of constant change 
+\subsection{Combinatorial Generation}
+Our research on ladder lotteries pertains to research in \emph{combinatorial generation}. Combinatorial 
+generation is a subfield of theoretical computer science which lists all instances of  
+combinatorial objects such as permutations, combinations, sets, subsets, graphs, and ladder lotteries. Gray codes are a 
+special type of combinatorial generation in which a constant amount of constant change 
 is required to get from one object to the next. For example, a single swap operation,
-a single rotation, or a single bit flip is used to get from one object to the next. Some examples of Gray Codes 
-are the Binary Reflected Gray Code and Steinhaus-Johnson-Trotter's algorithm.\par 
-Much research has been done on combinatorial generation, especially 
-in regards to generating permutations. Throughout the course of this thesis,
-a number of permutation generating algorithms were researched~\cite{A18}\cite{A19}\cite{A21}\cite{A24}\cite{A25}\cite{A26}\cite{A31}\cite{A34}\cite{A35}\cite{A36}\cite{A37}.
-After considering these algorithms, two were considered the most beneficial for this thesis. 
-These algorithms are the Effler-Ruskey algorithm and the Steinhaus-Johnson-Trotter algorithm found in~\cite{A26}\cite{A25}. 
-The Effler-Ruskey algorithm is a backtracking algorithm and the Steinhaus-Johnson-Trotter algorithm
-is a Gray Code. In this thesis, modifications to these algorithms are done such that the 
-modified algorithms are applied to ladder lotteries. Thus, this thesis provides further knowledge 
-in the field of combinatorial generation by providing novel algorithms for generating ladder lotteries.\par 
-The motivation for this thesis is to provide more knowledge to the field of combinatorics and combinatorial 
-generation. In this thesis, the aforementioned permutation listing algorithms are modified in order to 
-list $n!$ ladder lotteries, each of which corresponds to one of the $n!$ permutations of order $n$.
-To see all $24$ ladders listed for $n=4$ please refer to Figure \ref{Fig:TwentyFour}. 
+a single rotation, or a single bit flip is used to get from one object to the next. The term
+``Gray Code" comes from the Binary Reflected code for binary strings given by Frank Gray~\cite{A39}.
+There are many known algorithms for listing permutations of order $n$. Throughout the course of this thesis,
+a number of such algorithms were researched~\cite{A18,A19,A21,A24,A25,A26,A31,A34,A35,A36,A37}.
+Each of these algorithms will be reviewed in Chapter 2. 
+To see all $24$ ladders listed in lexicographic order please refer to Figure~\ref{Fig:TwentyFour}.
 \begin{figure}[!htp]
 	\centering
 	\begin{tikzpicture}
@@ -470,59 +550,32 @@ To see all $24$ ladders listed for $n=4$ please refer to Figure \ref{Fig:TwentyF
 	\caption{All $24$ ladders listed in lexicographic order.}
 	\label{Fig:TwentyFour}
 \end{figure}
-	
-
-
-
-The second problem which this thesis focuses on is the so called Minimum Height Problem which is an optimization 
-problem. Optimization problems are widely studied in computer science. Optimization problems are found in 
-the fields of artificial intelligence, theory of computation and machine learning. Let the 
-\emph{height of the ladder} be defined as the number of non-empty rows in the ladder data structure. We know 
-that with $OptL\{\pi\}$, the ladders in the set form an equivalence class. Thus, the goal is to create 
-the ladder from $OptL\{\pi\}$ with the minimum height; i.e. the minimum number of rows. The reason 
-for doing so is that the implementation of a ladder with the minimum height allows for equivalent behavior 
-as any other ladder in the set, while being the most space efficient. In Figure \ref{Fig:OptL3421}, the leftmost 
-ladder has the minimal height with a height of $4$.
-
 
 
 \section{Thesis Statement}
-  	This thesis considers two problems related 
-    to ladder lotteries. The first problem is the so called Canonical Ladder Listing Problem. 
+  	This thesis considers a combinatorial generation problem related 
+    to ladder lotteries. The problem is the so called Canonical Ladder Listing Problem. 
 	This problem asks, given all $n!$ permutations of order $n$, is there an efficient algorithm for listing 
 	one optimal ladder per permutation? In other words, 
 	is there an easy way to transition from one ladder to the next until all $n!$ ladders 
-	have been listed?
-	The second problem is the so called Minimum Height 
-    Problem which asks, given all the ladders in $OptL\{\pi\}$, which ladders are 
-    the shortest? That is to say, which ladders have the least number of rows? Furthermore, given some arbitrary $\pi$, 
-	is there an efficient algorithm to create a ladder for $\pi$ with minimal height? 
+	have been listed? In this thesis, 'N' of the aforementioned permutation listing algorithms are modified in order to 
+	list $n!$ ladder lotteries, each of which corresponds to one of the $n!$ permutations of order $n$. 
+	The first of these algorithms is a modification of the Steinhaus-Johnson-Trotter algorithm; SJT for short~\cite{A25}. 
+	
+	%%%Write a second part on ER if he decides you need it.
+
+	
+
+	
 
 \section{Contributions}
 	For the Canonical Ladder Listing Problem, this thesis provides 
-	two algorithms for listing all $n!$ ladders. 
-	Let a \emph{minimal change} be defined as adding or removing a bar from one ladder to get to the 
-	next ladder. Both algorithms use minimal change to transition from one ladder to the next. 
-	The first is a modification of the Steinhaus-Johnson-Trotter algorithm. The second is a modification of the Effler-Ruskey algorithm.
-
-	For The Minimum Height Problem, this thesis provides an upper and lower bound for the minimal height of ladders. 
-	Let efficiency is defined as 
-	$O(n^{2})$. This thesis provides two efficient algorithms for solving the Minimum Height Problem. The first is a heuristic algorithm 
-	for creating a ladder with minimal height given any permutation of order $n$. 
-	The second is an exact algorithm for creating a ladder with minimal height given the descending permutation 
-	of order $n$.
+	a number of algorithms for listing all $n!$ ladders. These algorithms are termed Algorithm~\ref{Alg:RootLadder} which 
+	can be found in Chapter 3, {\sc ModifiedSJT} which 
+	can be found in Chapter 3, Algorithm~\ref{Alg:ModSJT}, and {\sc CyclicBar} which can be found in Chapter 3 Algorithm~\ref{Alg:KInv}.
+	This thesis also provides a number of theorems and lemmas relating to The Canonical Ladder Listing Problem. Furthermore, we define the 
+	\emph{canonical representation of the root ladder} which can be found in Chapter 3.
 	
-\section{Overview of Thesis}
-This thesis is broken down into several sections. In Chapter 2, a literature
-review of ladder lotteries will be provided along with background information pertinent to this thesis. 
-In Chapter 3, The Canonical Ladder Listing Problem is provided. 
-Chapter 3 is broken down into four subsections. The first subsection is the introduction to the problem, 
-the second is a methodology subsection, the third is a results 
-subsection and the fourth is a conclusion/analysis subsection. 
-In Chapter 4, The Minimum Height Problem is provided. Chapter 4 is broken down into four subsections.
-The first subsection is the introduction to the problem, 
-the second is a methodology subsection, the third is a results 
-subsection and the fourth is a conclusion/analysis subsection. 
 
 \section{Summary of Past Known Results}
 To the best of my knowledge, the first paper written on ladder lotteries is titled Efficient Enumeration of 
@@ -561,3 +614,18 @@ solved problems will be provided.
 	\caption{Table of known solutions for problems related to ladder lotteries}
 	\label{Table:KnownProblems}
 \end{table}
+
+\section{Overview of Thesis}
+This thesis is broken down into several sections. In Chapter 2, a literature
+review of ladder lotteries will be provided along with background information pertinent to this thesis. 
+In Chapter 3, The canonical configuration of the root ladder is provided. 
+Chapter 3 is broken down into four subsections. The first subsection is the introduction to the problem, 
+the second is a methodology subsection, the third is a results 
+subsection and the fourth is a conclusion/analysis subsection. 
+In Chapter 4, The {\sc ModifiedSJT} algorithm is provided. Chapter 4 is broken down into four subsections.
+The first subsection is the introduction to the algorithm, 
+the second is a methodology subsection, the third is a results 
+subsection and the fourth is a conclusion/analysis subsection. In Chapter 5, The {\sc K-Bar Generation} algorithms 
+are provided. The first subsection is the introduction to the algorithms, 
+the second is a methodology subsection, the third is a results 
+subsection and the fourth is a conclusion/analysis subsection. 

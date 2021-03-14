@@ -28,13 +28,13 @@ makeladder: BIN INCLUDE SRC OBJ TEST LIB
 
 
 runladder: makeladder
-	cd bin; ./ladder > nfactorial.txt 
+	cd bin; ./ladder 
 
 makedisalvo: BIN INCLUDE SRC OBJ LIB
 	$(CC) $(CFLAGS) -Iinclude src/*.c test/DisalvoGrayCode.c -o bin/disalvo
 
 rundisalvo: makedisalvo
-	cd bin; ./disalvo
+	cd bin; ./disalvo 
 
 disalvo: rundisalvo
 ##runs the disalvo ladder generating algorithm
@@ -47,15 +47,37 @@ runmin: makemin
 min: runmin
 
 
-clean: 
-	if [ -d "bin" ]; then rm -rf ./bin/; fi; 
-
 sjt: runsjt
 
 runsjt: makesjt
-	cd bin; ./sjt > sjtprint.txt
+	cd bin; ./sjt > ../Thesis/GuelphThesis/CanLSJT.txt
 
 makesjt: BIN INCLUDE SRC OBJ LIB
 	$(CC) $(CFLAGS) -Iinclude src/*.c test/SjtMain.c -lm -o bin/sjt
+
+
+##Program to test the getCoordinates(x,y)
+
+coordinates: runcoordinates 
+
+runcoordinates: makecoordinates
+	cd bin; ./coordinates
+
+makecoordinates:  BIN INCLUDE SRC OBJ LIB
+	$(CC) $(CFLAGS) -Iinclude src/*.c test/testingCoordinates.c -lm -o bin/coordinates
+
+
+walsh: runwalsh
+
+runwalsh: makewalsh
+	cd bin; ./walsh
+
+makewalsh: BIN INCLUDE SRC OBJ LIB
+	$(CC) $(CFLAGS) -Iinclude test/Walsh.c -lm -o bin/walsh	
+
+clean: 
+	if [ -d "bin" ]; then rm -rf ./bin/; fi; 
+
+
 
 
