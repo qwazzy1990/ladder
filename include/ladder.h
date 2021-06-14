@@ -347,6 +347,10 @@ List* copyListOfLadders(List* ogList);
  * */
 
 int* getBarCoordinates(int N, int x, int y, int posX, int posY, int* pi, int* rX);
-
+int* getCoordinatesTwo(int n, int x, int posX, int posY);
+bool** newMatrix(int numRows, int numCols);
+void setMatrix(bool** matrix, int row, int col, bool symbol);
+void printMatrix(bool** matrix, int numRows, int numCols);
+int* cpyA(int* og, int x, int n);
 
 #endif

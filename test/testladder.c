@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
             direction[x] = false;
             arr[x] = 0;
             perm[x] = x + 1;
-        
+        }
         List *perms = initializeList(dummy_print, free, dummy_compare);
         genPermsSJT(perms, perm, n, arr, direction);
         //printAllPerms(perms, n);

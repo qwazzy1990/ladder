@@ -1,25 +1,25 @@
 \section{Enumeration, Counting, and Random Generation of \newline Ladder Lotteries}
 
-In the paper, Enumeration, Counting, and Random Generation of Ladder Lotteries, written by Nakano and Yamanaka 
+In the paper, Enumeration, Counting, and Random Generation of Ladder Lotteries~\cite{A6}, written by Nakano and Yamanaka 
 the authors consider the problem of enumeration, counting and 
-random generation of ladder lotteries with $n$ lines and $b$ bars~\cite{A6}. 
+random generation of ladder lotteries with $n$ lines and $b$ bars. 
 It is important to note that the authors considered both optimal and 
 non-optimal ladders for this paper. Nonetheless, the paper is still fruitful 
 for its modelling of the problems and insights into ladder lotteries.
 The authors use  the line-based encoding, $LC(l)$ for the representation of ladders 
-that was discussed in the review of Coding Ladder Lotteries.
+that was discussed in the review of Coding Ladder Lotteries~\cite{A5}.
 
 %%Section for enumeration
 \subsection{Enumeration}
 The authors denote a set of ladder lotteries with $n$ lines and 
 $b$ bars as $S_{n,b}$. The problem is how to enumerate all the 
-ladders in $S_{n,b}$~\cite{A6}. The authors use a \emph{forest structure}
+ladders in $S_{n,b}$. The authors use a \emph{forest structure}
 to model the problem. A \emph{forest structure} is a set of trees 
 such that each tree in the forest is disjoint union with every other 
 tree in the forest. Consider $S_{n,b}$ to be a tree in a forest.
 That is to say, a union disjoint subset of all ladders with $n$
 lines and $b$ bars. Then $F_{n,b}$, or the forest of all $S_{n,b}$,
-is the union of all disjoint trees of ladders with $n$ lines and $b$ bars~\cite{A6}. 
+is the union of all disjoint trees of ladders with $n$ lines and $b$ bars. 
 %For an example 
 % of a forest for $F_{3,2}$ refer to Figure~\ref{fig:forest3,2}.\pagebreak %figure number.
 % \begin{figure}[t]
@@ -213,14 +213,13 @@ is the union of all disjoint trees of ladders with $n$ lines and $b$ bars~\cite{
 %%section for counting
 \subsection{Counting}
 The authors provide a method and algorithm to count all ladders 
-with $n$ lines and $b$ bars. According to the authors, the enumeration algorithm is 
-much slower than the counting algorithm~\cite{A6}. The counting algorithm 
+with $n$ lines and $b$ bars. The counting algorithm 
 works by dividing ladders into four types of sub-ladders.
 For sub-ladder, $r$, its type is a tuple $t(n,h,p,q)$ where 
 $n$ is the number of lines, $h$ is the number of half bars, 
 $p$ is the number of unmatched end-points on line $n-1$ and 
 $q$ is the number of unmatched end-points on line $n$. From this 
-type there are four sub-divisions of sub-ladders.\cite{A6}
+type, the authors are able to count all ladders with $n$ lines and $b$ bars. 
 % \subsubsection{ $h < p+q$ or $n<2$}
 % There are zero ladders because it is impossible for the 
 % root sub-ladder to have less than two lines. It is also 

@@ -1,19 +1,20 @@
 
-\vspace{-10mm}
+\vspace{-5mm}
 Amidakuji is a custom in Japan which 
 allows for a pseudo-random assignment of children to prizes~\cite{A1}. 
 Usually done in Japanese schools, a teacher will draw $n$ vertical lines, 
 hereby known as \emph{lines}, where $n$ is the number of students in class. 
 At the bottom of each line will be a unique prize. At the top of each line will be the name of one of the students.  
 The teacher will then draw 0 or more horizontal lines, hereby known as \emph{bars}, 
-connecting two adjacent lines. The more bars there are the more complicated (and fun) 
-the Amidakuji is. No two endpoints of two bars can be touching. Each student then traces 
+connecting two adjacent lines. No two endpoints of two bars can be touching. 
+The more bars there are the more complicated (and fun) 
+the Amidakuji is. Each student then traces 
 their line, and whenever they encounter an end point of a bar along their line, 
 they must cross the bar and continue going down the adjacent line. 
 The student continues tracing down the lines and crossing bars 
 until they get to the end of the ladder lottery. We call such a tracing for a given student 
-a \emph{path}. For example, the path of Ryu is highlighted in red in Figure~\ref{fig:aa}. The prize at the bottom of the ladder lottery 
-is their prize~\cite{A1}. See Figure~\ref{fig:aa} for an example of a ladder lottery.
+a \emph{path}. For example, the path of Ryu in the ladder lottery depicted in Figure~\ref{fig:aa} is highlighted in red. 
+%%The prize at the bottom of the ladder lottery, at the end of a student's path, is their prize. 
 \begin{center}
 \vspace{-5mm}
 \begin{figure}[h]
@@ -54,32 +55,34 @@ is their prize~\cite{A1}. See Figure~\ref{fig:aa} for an example of a ladder lot
 \label{fig:aa}
 \end{figure}
 \end{center}
-The game of Amidakuji has an interesting history. Amida is the Japanese name 
+The term ``Amidakuji" has an interesting history. Amida is the Japanese name 
 for Amithaba, the supreme Buddha of the Western Paradise. Amithaba
 was a Buddha from India and there was a cult based around him. The cult 
 of Amida, otherwise known as Amidism, believed that by worshiping Amithaba, they would 
-enter into his Western Paradie. Amidism began in India in the fourth century,
+enter into his Western paradise~\cite{A0}. Amidism began in India in the fourth century,
 made its way to China and Korea in the fifth century, and finally came 
-to Japan in ninth century~\cite{A0}. Amidakuji began in Japan during 
+to Japan in ninth century. Kuji is the Japanese word for lottery. Hence, the game 
+was termed Amidakuji. In English, Amidakuji translates to ladder lottery.\par 
+The game Amidakuji began in Japan during 
 the Muromachi period, which spanned from
-1336 to 1573~\cite{A0}. During the Muromachi period, the game was played by having
+1336 to 1573. During the Muromachi period, the game was played by having
 players draw their names at the top of the lines, and at the bottom 
 of the lines were pieces of paper that had the amount the players
 were willing to bet. The pieces of paper were folded in the shape of 
-Amithaba's halo. Kuji is the Japanese word for lottery. Hence, the game 
-was termed Amidakuji. In English, Amidakuji translates to ladder lottery. 
+Amithaba's halo~\cite{A0}.
+\begin{figure}[ht]
+	\centering 
+	\resizebox{.3\textwidth}{.3\textheight}{
+		\includegraphics{220px-Buddha_Amithaba.jpg}
+	}
+	\caption{Buddha Amida}
+	\label{Fig:Amida}
+\end{figure}
 
 An interesting property about a ladder lottery is that it is  
 associated with a \emph{permutation}. A \emph{permutation} is a unique ordering of objects. 
 For the purposes of this thesis, the objects of a permutation are $1,2, \dots ,n$. 
-Consider a permutation $\pi=(p_{1},p_{2}, \dots ,p_{n})$.
-A pair of elements, $p_{i}$ and $p_{j}$, form an \emph{inversion} if $p_{i}>p_{j}$ and $i<j$. 
-For example, given $\pi=(4,3,5,1,2)$, its set of inversions is \newline $Inv=\{(4,3),(4,2),(4,1),(3,2),(3,1),(5,1),(5,2)\}$.
-A \emph{transposition} is a swap of two elements in $\pi$.
-An \emph{adjacent transposition} is defined as a swap of two adjacent elements in $\pi$.
-Given $\pi_{1}=(4,3,5,1,2)$ and $\pi_{2}=(3,4,5,1,2)$, they differ by the adjacent 
-transposition of the elements $(4,3)$.
-A ladder lottery corresponds to a permutation when:
+A ladder lottery corresponds to a unique permutation when:
 \begin{enumerate}
 	\item The $n$ elements of $\pi$ are listed at the top of the ladder lottery in the order that they appear in 
 	$\pi$; one element per line of the ladder lottery.
@@ -87,113 +90,105 @@ A ladder lottery corresponds to a permutation when:
 	each element $x$ in $\pi$, $x$ goes down its path and ends up in the bottom $xth$ line. 
 \end{enumerate} 
 
-\subsection{Representation}
-In this thesis, ladder lotteries are represented as a two dimensional array.
-Let $n$ be the number of elements in $\pi$. Let a \emph{column} be a gap 
-between lines in the ladder lottery. Each ladder lottery 
-represented as a two dimensional array has $n-1$ columns. Let a \emph{row} 
-be defined as a the horizontal span from column $1$ to column $n-1$ containing at least one bar. 
-Let a \emph{ghost row} be defined as the horizontal span from column $1$ to column $n-1$ containing zero bars.
-Let the \emph{height} of the ladder be defined as the number of 
-rows plus the number of ghost rows in the ladder.
-If two ladders are equivalent, then they sort $\pi$ with 
-the exact same bars. If two ladders are identical, 
-then they sort $\pi$ with the same exact same bars and with the same number of rows. 
-In Figure~\ref{Fig:equivLadders}, all three ladders are equivalent but only the leftmost ladder 
-and middle ladder are identical with two rows. The rightmost ladder 
-has three rows. 
-\begin{figure}[h]
-	\centering
-	\begin{tikzpicture}
-		\draw(0, 0) to (0, 4);
-			\draw(0, 3) to (1, 3);
-		\draw(1, 0) to (1, 4);
-			\draw(1, 2) to (2, 2);
-		\draw(2, 0) to (2, 4);
-			\draw(2, 3) to (3, 3);
-		\draw(3, 0) to (3, 4);
+% \begin{figure}[h]
+% 	\centering
+% 	\begin{tikzpicture}
+% 		\draw(0, 0) to (0, 4);
+% 			\draw(0, 3) to (1, 3);
+% 		\draw(1, 0) to (1, 4);
+% 			\draw(1, 2) to (2, 2);
+% 		\draw(2, 0) to (2, 4);
+% 			\draw(2, 3) to (3, 3);
+% 		\draw(3, 0) to (3, 4);
 		
-		\draw(5, 0) to (5, 4);
-			\draw(5, 3) to (6, 3);
-		\draw(6, 0) to (6, 4);
-			\draw[dashed](5, 2)--(8, 2);
-			\draw(6, 1.5) to (7, 1.5);
-		\draw(7, 0) to (7, 4);
-			\draw(7, 3) to (8, 3);
-		\draw(8, 0) to (8, 4);
+% 		\draw(5, 0) to (5, 4);
+% 			\draw(5, 3) to (6, 3);
+% 		\draw(6, 0) to (6, 4);
+% 			\draw[dashed](5, 2)--(8, 2);
+% 			\draw(6, 1.5) to (7, 1.5);
+% 		\draw(7, 0) to (7, 4);
+% 			\draw(7, 3) to (8, 3);
+% 		\draw(8, 0) to (8, 4);
 
 
-		\draw(10, 0) to (10, 4);
-			\draw(10, 3) to (11, 3);
-		\draw(11, 0) to (11, 4);
-			\draw(11, 2) to (12, 2);
-		\draw(12, 0) to (12, 4);
-			\draw(12, 3.5) to (13, 3.5);
-		\draw(13, 0) to (13, 4);
+% 		\draw(10, 0) to (10, 4);
+% 			\draw(10, 3) to (11, 3);
+% 		\draw(11, 0) to (11, 4);
+% 			\draw(11, 2) to (12, 2);
+% 		\draw(12, 0) to (12, 4);
+% 			\draw(12, 3.5) to (13, 3.5);
+% 		\draw(13, 0) to (13, 4);
 
 
-		\node at(0, 4.3){\small{$3$}};
-		\node at(1, 4.3){\small{$1$}};
-		\node at(2, 4.3){\small{$4$}};
-		\node at(3, 4.3){\small{$2$}};
+% 		\node at(0, 4.3){\small{$3$}};
+% 		\node at(1, 4.3){\small{$1$}};
+% 		\node at(2, 4.3){\small{$4$}};
+% 		\node at(3, 4.3){\small{$2$}};
 		
-		\node at(5, 4.3){\small{$3$}};
-		\node at(6, 4.3){\small{$1$}};
-		\node at(7, 4.3){\small{$4$}};
-		\node at(8, 4.3){\small{$2$}};
+% 		\node at(5, 4.3){\small{$3$}};
+% 		\node at(6, 4.3){\small{$1$}};
+% 		\node at(7, 4.3){\small{$4$}};
+% 		\node at(8, 4.3){\small{$2$}};
 		
-		\node at(10, 4.3){\small{$3$}};
-		\node at(11, 4.3){\small{$1$}};
-		\node at(12, 4.3){\small{$4$}};
-		\node at(13, 4.3){\small{$2$}};
+% 		\node at(10, 4.3){\small{$3$}};
+% 		\node at(11, 4.3){\small{$1$}};
+% 		\node at(12, 4.3){\small{$4$}};
+% 		\node at(13, 4.3){\small{$2$}};
 
-		\node at(0, -.3){\small{$1$}};
-		\node at(1, -.3){\small{$2$}};
-		\node at(2, -.3){\small{$3$}};
-		\node at(3, -.3){\small{$4$}};
+% 		\node at(0, -.3){\small{$1$}};
+% 		\node at(1, -.3){\small{$2$}};
+% 		\node at(2, -.3){\small{$3$}};
+% 		\node at(3, -.3){\small{$4$}};
 		
-		\node at(5, -.3){\small{$1$}};
-		\node at(6, -.3){\small{$2$}};
-		\node at(7, -.3){\small{$3$}};
-		\node at(8, -.3){\small{$4$}};
+% 		\node at(5, -.3){\small{$1$}};
+% 		\node at(6, -.3){\small{$2$}};
+% 		\node at(7, -.3){\small{$3$}};
+% 		\node at(8, -.3){\small{$4$}};
 		
-		\node at(10, -.3){\small{$1$}};
-		\node at(11, -.3){\small{$2$}};
-		\node at(12, -.3){\small{$3$}};
-		\node at(13, -.3){\small{$4$}};
+% 		\node at(10, -.3){\small{$1$}};
+% 		\node at(11, -.3){\small{$2$}};
+% 		\node at(12, -.3){\small{$3$}};
+% 		\node at(13, -.3){\small{$4$}};
 
-		\node at(-1, 3){\small{Row $1$}};
-		\node at(-1, 2){\small{Row $2$}};
-
-
-		\node at(4, 3){\small{Row $1$}};
-		\node at(4, 2){\small{Ghost Row $1$}};
-		\node at(4, 1.5){\small{Row $2$}};
+% 		\node at(-1, 3){\small{Row $1$}};
+% 		\node at(-1, 2){\small{Row $2$}};
 
 
-		\node at(9, 3.5){\small{Row $1$}};
-		\node at(9, 3){\small{Row $2$}};
-		\node at(9, 2){\small{Row $3$}};
-	\end{tikzpicture}
-	\caption{Three equivalent ladders. Leftmost and middle ladders are identical.}
-	\label{Fig:equivLadders}
-\end{figure}
+% 		\node at(4, 3){\small{Row $1$}};
+% 		\node at(4, 2){\small{Ghost Row $1$}};
+% 		\node at(4, 1.5){\small{Row $2$}};
 
 
-\subsection{Optimal Ladder Lotteries}
+% 		\node at(9, 3.5){\small{Row $1$}};
+% 		\node at(9, 3){\small{Row $2$}};
+% 		\node at(9, 2){\small{Row $3$}};
+% 	\end{tikzpicture}
+% 	\caption{Three equivalent ladders. Leftmost and middle ladders are identical.}
+% 	\label{Fig:equivLadders}
+% \end{figure}
+
+
+\section{Optimal Ladder Lotteries}
+Consider a permutation $\pi=(p_{1},p_{2}, \dots ,p_{n})$.
+A pair of elements, $p_{i}$ and $p_{j}$, form an \emph{inversion} if $p_{i}>p_{j}$ and $i<j$. 
+For example, given $\pi=(4,3,5,1,2)$, its inversions are $(4,3),(4,2),(4,1),(3,2),(3,1),(5,1),(5,2)$.
+A \emph{transposition} is a swap of two elements in $\pi$.
+An \emph{adjacent transposition} is defined as a swap of two adjacent elements in $\pi$.
+Given $\pi_{1}=(4,3,5,1,2)$ and $\pi_{2}=(3,4,5,1,2)$, they differ by the adjacent 
+transposition of the elements $(4,3)$.
 Let $k$ denote the number of inversions for some permutation.
 An \emph{optimal ladder lottery} is a special case of ladder 
-lottery, corresponding to $\pi$, in which there are $k$ bars in the ladder; one for each \emph{inversion} in $\pi$ such that each 
-bar uninverts a single inversion in $\pi$ exactly once~\cite{A1}.
+lottery, in which the number of bars equals the number of inversions in $\pi$. 
 An optimal ladder lottery sorts $\pi$ in ascending order using exactly $k$ bars by applying 
-$k$ adjacent transpositions on $k$ inversions in $\pi$.
+$k$ adjacent transpositions on $k$ inversions in $\pi$. When a permutation has $k$ inversions, each bar 
+transposes a single inversion in $\pi$ exactly once~\cite{A1}.
 For example, given $\pi=(4,3,5,1,2)$ an optimal ladder lottery associated with $\pi$ would have 
 seven bars; one for each inversion in $\pi$. For each bar, two elements in $\pi$ that form 
 an inversion cross the given bar. 
 Once all elements have crossed their respective bars, $\pi$ is sorted in ascending order. The number of bars in an optimal ladder lottery 
-is the lower bound for the number of bars in a ladder lottery required to sort $\pi$. 
+is the minimum number of bars in a ladder lottery required to sort $\pi$. 
 To see an example of two ladder lotteries associated with 
-$\pi=(4,3,5,1,2)$, one optimal and one non-optimal, please refer to Figure~\ref{fig:ab}.
+$\pi=(4,3,5,1,2)$, one optimal and one non-optimal, please refer to Figure~\ref{fig:ab}.\par
 \begin{figure}[h]
 	\begin{minipage}{0.4\textwidth}
 		\centering
@@ -286,16 +281,16 @@ $\pi=(4,3,5,1,2)$, one optimal and one non-optimal, please refer to Figure~\ref{
 	The bold  bars in the right ladder are redundant, thus the right ladder is non optimal.}
 	\label{fig:ab}
 \end{figure}
-Let $OptL\{\pi\}$ be defined as the set of optimal ladder lotteries that form an equivalence class, 
-insofar as all ladders in $OptL\{\pi\}$ sort $\pi$ in ascending order with the least number of bars. The first discussion of 
+Let $OptL\{\pi\}$ be defined as the set of optimal ladder lotteries for a specific $\pi$. The first discussion of 
 $OptL\{\pi\}$ is in the paper Efficient Enumeration of Ladder Lotteries and its Application~\cite{A1}.
-In this paper, the authors provide an algorithm known as {\sc FindAllChildren}
+In this paper, the authors provide an algorithm 
 which generates $OptL\{\pi\}$; the details of the algorithm are discussed in Chapter 2.
 To see $OptL\{(4,3,5,1,2)\}$ please refer to Figure \ref{Fig:OptL3421}.
 Given that there are $n!$ permutations of order $n$, each of them 
-have their own $OptL\{\pi\}$. In Table~\ref{table:KInvOptL} found in the appendix, 
-the number of ladders in each of the 120 $OptL\{\pi\}$ of order $5$ is presented.\pagebreak
-\begin{figure}[t]
+have their own $OptL\{\pi\}$. In Table~\ref{table:KInvOptL} found in the section A.1 of the Appendix, titled \textbf{Table of $OptL\{\pi\}$ for all $\pi$ of order $5$}, 
+the number of ladders in each $OptL\{\pi\}$ of order $5$ is presented. In general, 
+$|OptL\{(n,n-1, \dots, 2,1)\}|$ is maximal. When $n=5$, $|OptL\{(5,4,3,2,1)\}=62|$.
+\begin{figure}[h]
 	\centering
 	\begin{tikzpicture}
 		\draw(0,0) to (0,2);
@@ -359,208 +354,278 @@ the number of ladders in each of the 120 $OptL\{\pi\}$ of order $5$ is presented
 	\label{Fig:OptL3421}
 \end{figure}
 
-\subsection{Combinatorial Generation}
+\section{Combinatorial Generation}
 Our research on ladder lotteries pertains to research in \emph{combinatorial generation}. Combinatorial 
 generation is a subfield of theoretical computer science which lists all instances of  
-combinatorial objects such as permutations, combinations, sets, subsets, graphs, and ladder lotteries. Gray codes are a 
-special type of combinatorial generation in which a constant amount of constant change 
+combinatorial objects such as permutations, combinations, sets, subsets, graphs, and ladder lotteries~\cite{A42}. Knuth describes a number 
+of algorithms for listing such combinatorial objects in The Art of Computer Programming, volume 4~\cite{A37}. \emph{Gray codes} are a 
+special type of combinatorial generation in which a constant, minimal amount of change 
 is required to get from one object to the next. For example, a single swap operation,
 a single rotation, or a single bit flip is used to get from one object to the next. The term
-``Gray Code" comes from the Binary Reflected code for binary strings given by Frank Gray~\cite{A39}.
+``Gray code" comes from the Binary Reflected code given by Frank Gray~\cite{A39}. 
+In Figure, all 24 permutations of order $4$ are listed in Gray code order using the Steinhaus-Johnson-Trotter Gray code.\par
+\begin{figure}[ht]
+	\centering
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		1234 & 1243 & 1423 & 4123\\
+		\hline
+		4132 & 1432 & 1342 & 1324\\
+		\hline
+		3124 & 3142 & 3412 & 4312\\ 
+		\hline
+		4321 & 3421 & 3241 & 3214 \\
+		\hline
+		2314 & 2341 & 2431 & 4231 \\ 
+		\hline 
+		4213 & 2413 & 2143 & 2134 \\ 
+		\hline
+	\end{tabular}
+	\caption{$24$ permutations of order $4$ listed in Steinhaus-Johnson-Trotter Gray code order. Permutations are read 
+	left to right, top to bottom.}
+\end{figure} 
 There are many known algorithms for listing permutations of order $n$. Throughout the course of this thesis,
 a number of such algorithms were researched~\cite{A18,A19,A21,A24,A25,A26,A31,A34,A35,A36,A37}.
 Each of these algorithms will be reviewed in Chapter 2. 
-To see all $24$ ladders listed in lexicographic order please refer to Figure~\ref{Fig:TwentyFour}.
-\begin{figure}[!htp]
-	\centering
-	\begin{tikzpicture}
-	\draw(0.00,5.90) to (0.00,7.10);
-	\draw(0.20,5.90) to (0.20,7.10);
-	\draw(0.40,5.90) to (0.40,7.10);
-	\draw(0.60,5.90) to (0.60,7.10);
-	\draw(1.00,5.90) to (1.00,7.10);
-	\draw(1.20,5.90) to (1.20,7.10);
-	\draw(1.40,5.90) to (1.40,7.10);
-	\draw(1.60,5.90) to (1.60,7.10);
-	\draw(1.40, 7.00) to (1.60, 7.00);
-	\draw(2.00,5.90) to (2.00,7.10);
-	\draw(2.20,5.90) to (2.20,7.10);
-	\draw(2.40,5.90) to (2.40,7.10);
-	\draw(2.60,5.90) to (2.60,7.10);
-	\draw(2.20, 7.00) to (2.40, 7.00);
-	\draw(3.00,5.90) to (3.00,7.10);
-	\draw(3.20,5.90) to (3.20,7.10);
-	\draw(3.40,5.90) to (3.40,7.10);
-	\draw(3.60,5.90) to (3.60,7.10);
-	\draw(3.40, 7.00) to (3.60, 7.00);
-	\draw(3.20, 6.80) to (3.40, 6.80);
-	\draw(4.00,5.90) to (4.00,7.10);
-	\draw(4.20,5.90) to (4.20,7.10);
-	\draw(4.40,5.90) to (4.40,7.10);
-	\draw(4.60,5.90) to (4.60,7.10);
-	\draw(4.20, 7.00) to (4.40, 7.00);
-	\draw(4.40, 6.80) to (4.60, 6.80);
-	\draw(5.00,5.90) to (5.00,7.10);
-	\draw(5.20,5.90) to (5.20,7.10);
-	\draw(5.40,5.90) to (5.40,7.10);
-	\draw(5.60,5.90) to (5.60,7.10);
-	\draw(5.20, 7.00) to (5.40, 7.00);
-	\draw(5.40, 6.80) to (5.60, 6.80);
-	\draw(5.20, 6.60) to (5.40, 6.60);
-	
-	\draw(0.00,4.40) to (0.00,5.60);
-	\draw(0.20,4.40) to (0.20,5.60);
-	\draw(0.40,4.40) to (0.40,5.60);
-	\draw(0.60,4.40) to (0.60,5.60);
-	\draw(0.00, 5.50) to (0.20, 5.50);
-	\draw(1.00,4.40) to (1.00,5.60);
-	\draw(1.20,4.40) to (1.20,5.60);
-	\draw(1.40,4.40) to (1.40,5.60);
-	\draw(1.60,4.40) to (1.60,5.60);
-	\draw(1.00, 5.50) to (1.20, 5.50);
-	\draw(1.40, 5.50) to (1.60, 5.50);
-	\draw(2.00,4.40) to (2.00,5.60);
-	\draw(2.20,4.40) to (2.20,5.60);
-	\draw(2.40,4.40) to (2.40,5.60);
-	\draw(2.60,4.40) to (2.60,5.60);
-	\draw(2.20, 5.50) to (2.40, 5.50);
-	\draw(2.00, 5.30) to (2.20, 5.30);
-	\draw(3.00,4.40) to (3.00,5.60);
-	\draw(3.20,4.40) to (3.20,5.60);
-	\draw(3.40,4.40) to (3.40,5.60);
-	\draw(3.60,4.40) to (3.60,5.60);
-	\draw(3.40, 5.50) to (3.60, 5.50);
-	\draw(3.20, 5.30) to (3.40, 5.30);
-	\draw(3.00, 5.10) to (3.20, 5.10);
-	\draw(4.00,4.40) to (4.00,5.60);
-	\draw(4.20,4.40) to (4.20,5.60);
-	\draw(4.40,4.40) to (4.40,5.60);
-	\draw(4.60,4.40) to (4.60,5.60);
-	\draw(4.20, 5.50) to (4.40, 5.50);
-	\draw(4.00, 5.30) to (4.20, 5.30);
-	\draw(4.40, 5.30) to (4.60, 5.30);
-	\draw(5.00,4.40) to (5.00,5.60);
-	\draw(5.20,4.40) to (5.20,5.60);
-	\draw(5.40,4.40) to (5.40,5.60);
-	\draw(5.60,4.40) to (5.60,5.60);
-	\draw(5.20, 5.50) to (5.40, 5.50);
-	\draw(5.40, 5.30) to (5.60, 5.30);
-	\draw(5.20, 5.10) to (5.40, 5.10);
-	\draw(5.00, 4.90) to (5.20, 4.90);
-	
-	\draw(0.00,2.90) to (0.00,4.10);
-	\draw(0.20,2.90) to (0.20,4.10);
-	\draw(0.40,2.90) to (0.40,4.10);
-	\draw(0.60,2.90) to (0.60,4.10);
-	\draw(0.00, 4.00) to (0.20, 4.00);
-	\draw(0.20, 3.80) to (0.40, 3.80);
-	\draw(1.00,2.90) to (1.00,4.10);
-	\draw(1.20,2.90) to (1.20,4.10);
-	\draw(1.40,2.90) to (1.40,4.10);
-	\draw(1.60,2.90) to (1.60,4.10);
-	\draw(1.00, 4.00) to (1.20, 4.00);
-	\draw(1.40, 4.00) to (1.60, 4.00);
-	\draw(1.20, 3.80) to (1.40, 3.80);
-	\draw(2.00,2.90) to (2.00,4.10);
-	\draw(2.20,2.90) to (2.20,4.10);
-	\draw(2.40,2.90) to (2.40,4.10);
-	\draw(2.60,2.90) to (2.60,4.10);
-	\draw(2.00, 4.00) to (2.20, 4.00);
-	\draw(2.20, 3.80) to (2.40, 3.80);
-	\draw(2.00, 3.60) to (2.20, 3.60);
-	\draw(3.00,2.90) to (3.00,4.10);
-	\draw(3.20,2.90) to (3.20,4.10);
-	\draw(3.40,2.90) to (3.40,4.10);
-	\draw(3.60,2.90) to (3.60,4.10);
-	\draw(3.00, 4.00) to (3.20, 4.00);
-	\draw(3.40, 4.00) to (3.60, 4.00);
-	\draw(3.20, 3.80) to (3.40, 3.80);
-	\draw(3.00, 3.60) to (3.20, 3.60);
-	\draw(4.00,2.90) to (4.00,4.10);
-	\draw(4.20,2.90) to (4.20,4.10);
-	\draw(4.40,2.90) to (4.40,4.10);
-	\draw(4.60,2.90) to (4.60,4.10);
-	\draw(4.20, 4.00) to (4.40, 4.00);
-	\draw(4.00, 3.80) to (4.20, 3.80);
-	\draw(4.40, 3.80) to (4.60, 3.80);
-	\draw(4.20, 3.60) to (4.40, 3.60);
-	\draw(5.00,2.90) to (5.00,4.10);
-	\draw(5.20,2.90) to (5.20,4.10);
-	\draw(5.40,2.90) to (5.40,4.10);
-	\draw(5.60,2.90) to (5.60,4.10);
-	\draw(5.20, 4.00) to (5.40, 4.00);
-	\draw(5.00, 3.80) to (5.20, 3.80);
-	\draw(5.40, 3.80) to (5.60, 3.80);
-	\draw(5.20, 3.60) to (5.40, 3.60);
-	\draw(5.00, 3.40) to (5.20, 3.40);
-	
-	\draw(0.00,1.40) to (0.00,2.60);
-	\draw(0.20,1.40) to (0.20,2.60);
-	\draw(0.40,1.40) to (0.40,2.60);
-	\draw(0.60,1.40) to (0.60,2.60);
-	\draw(0.00, 2.50) to (0.20, 2.50);
-	\draw(0.20, 2.30) to (0.40, 2.30);
-	\draw(0.40, 2.10) to (0.60, 2.10);
-	\draw(1.00,1.40) to (1.00,2.60);
-	\draw(1.20,1.40) to (1.20,2.60);
-	\draw(1.40,1.40) to (1.40,2.60);
-	\draw(1.60,1.40) to (1.60,2.60);
-	\draw(1.00, 2.50) to (1.20, 2.50);
-	\draw(1.20, 2.30) to (1.40, 2.30);
-	\draw(1.40, 2.10) to (1.60, 2.10);
-	\draw(1.20, 1.90) to (1.40, 1.90);
-	\draw(2.00,1.40) to (2.00,2.60);
-	\draw(2.20,1.40) to (2.20,2.60);
-	\draw(2.40,1.40) to (2.40,2.60);
-	\draw(2.60,1.40) to (2.60,2.60);
-	\draw(2.00, 2.50) to (2.20, 2.50);
-	\draw(2.20, 2.30) to (2.40, 2.30);
-	\draw(2.00, 2.10) to (2.20, 2.10);
-	\draw(2.40, 2.10) to (2.60, 2.10);
-	\draw(3.00,1.40) to (3.00,2.60);
-	\draw(3.20,1.40) to (3.20,2.60);
-	\draw(3.40,1.40) to (3.40,2.60);
-	\draw(3.60,1.40) to (3.60,2.60);
-	\draw(3.00, 2.50) to (3.20, 2.50);
-	\draw(3.20, 2.30) to (3.40, 2.30);
-	\draw(3.40, 2.10) to (3.60, 2.10);
-	\draw(3.20, 1.90) to (3.40, 1.90);
-	\draw(3.00, 1.70) to (3.20, 1.70);
-	\draw(4.00,1.40) to (4.00,2.60);
-	\draw(4.20,1.40) to (4.20,2.60);
-	\draw(4.40,1.40) to (4.40,2.60);
-	\draw(4.60,1.40) to (4.60,2.60);
-	\draw(4.00, 2.50) to (4.20, 2.50);
-	\draw(4.20, 2.30) to (4.40, 2.30);
-	\draw(4.00, 2.10) to (4.20, 2.10);
-	\draw(4.40, 2.10) to (4.60, 2.10);
-	\draw(4.20, 1.90) to (4.40, 1.90);
-	\draw(5.00,1.40) to (5.00,2.60);
-	\draw(5.20,1.40) to (5.20,2.60);
-	\draw(5.40,1.40) to (5.40,2.60);
-	\draw(5.60,1.40) to (5.60,2.60);
-	\draw(5.00, 2.50) to (5.20, 2.50);
-	\draw(5.20, 2.30) to (5.40, 2.30);
-	\draw(5.00, 2.10) to (5.20, 2.10);
-	\draw(5.40, 2.10) to (5.60, 2.10);
-	\draw(5.20, 1.90) to (5.40, 1.90);
-	\draw(5.00, 1.70) to (5.20, 1.70);
-	
-	\end{tikzpicture}
-	\caption{All $24$ ladders listed in lexicographic order.}
-	\label{Fig:TwentyFour}
+To see all $24$ ladders listed in lexicographic order please refer to Figure~\ref{Fig:24ladders}; ladders are read left to right, top to bottom. 
+We note that the lexicographic ordering of ladders is not a Gray code order. For example, transitioning from ladder 6 to ladder 7 in Figure~\ref{Fig:24ladders} 
+requires four bars to be changed.\cleardoublepage
+
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\draw(0.00,1.00) to (0.00,2.60);
+\draw(0.50,1.00) to (0.50,2.60);
+\draw(1.00,1.00) to (1.00,2.60);
+\draw(1.50,1.00) to (1.50,2.60);
+\node at(0.00,2.70){\tiny{1}};\node at(0.50,2.70){\tiny{2}};\node at(1.00,2.70){\tiny{3}};\node at(1.50,2.70){\tiny{4}};
+
+\draw(4.00,1.00) to (4.00,2.60);
+\draw(4.50,1.00) to (4.50,2.60);
+\draw(5.00,1.00) to (5.00,2.60);
+\draw(5.50,1.00) to (5.50,2.60);
+\draw(5.00, 2.50) to (5.50, 2.50);
+\node at(4.00,2.70){\tiny{1}};\node at(4.50,2.70){\tiny{2}};\node at(5.00,2.70){\tiny{4}};\node at(5.50,2.70){\tiny{3}};
+
+\draw(8.00,1.00) to (8.00,2.60);
+\draw(8.50,1.00) to (8.50,2.60);
+\draw(9.00,1.00) to (9.00,2.60);
+\draw(9.50,1.00) to (9.50,2.60);
+\draw(8.50, 2.50) to (9.00, 2.50);
+\node at(8.00,2.70){\tiny{1}};\node at(8.50,2.70){\tiny{3}};\node at(9.00,2.70){\tiny{2}};\node at(9.50,2.70){\tiny{4}};
+
+\draw(12.00,1.00) to (12.00,2.60);
+\draw(12.50,1.00) to (12.50,2.60);
+\draw(13.00,1.00) to (13.00,2.60);
+\draw(13.50,1.00) to (13.50,2.60);
+\draw(13.00, 2.50) to (13.50, 2.50);
+\draw(12.50, 2.20) to (13.00, 2.20);
+\node at(12.00,2.70){\tiny{1}};\node at(12.50,2.70){\tiny{3}};\node at(13.00,2.70){\tiny{4}};\node at(13.50,2.70){\tiny{2}};
+
+\draw(0.00,-1.50) to (0.00,0.10);
+\draw(0.50,-1.50) to (0.50,0.10);
+\draw(1.00,-1.50) to (1.00,0.10);
+\draw(1.50,-1.50) to (1.50,0.10);
+\draw(0.50, 0.00) to (1.00, 0.00);
+\draw(1.00, -0.30) to (1.50, -0.30);
+\node at(0.00,0.20){\tiny{1}};\node at(0.50,0.20){\tiny{4}};\node at(1.00,0.20){\tiny{2}};\node at(1.50,0.20){\tiny{3}};
+
+\draw(4.00,-1.50) to (4.00,0.10);
+\draw(4.50,-1.50) to (4.50,0.10);
+\draw(5.00,-1.50) to (5.00,0.10);
+\draw(5.50,-1.50) to (5.50,0.10);
+\draw(4.50, 0.00) to (5.00, 0.00);
+\draw(5.00, -0.30) to (5.50, -0.30);
+\draw(4.50, -0.60) to (5.00, -0.60);
+\node at(4.00,0.20){\tiny{1}};\node at(4.50,0.20){\tiny{4}};\node at(5.00,0.20){\tiny{3}};\node at(5.50,0.20){\tiny{2}};
+
+\draw(8.00,-1.50) to (8.00,0.10);
+\draw(8.50,-1.50) to (8.50,0.10);
+\draw(9.00,-1.50) to (9.00,0.10);
+\draw(9.50,-1.50) to (9.50,0.10);
+\draw(8.00, 0.00) to (8.50, 0.00);
+\node at(8.00,0.20){\tiny{2}};\node at(8.50,0.20){\tiny{1}};\node at(9.00,0.20){\tiny{3}};\node at(9.50,0.20){\tiny{4}};
+
+\draw(12.00,-1.50) to (12.00,0.10);
+\draw(12.50,-1.50) to (12.50,0.10);
+\draw(13.00,-1.50) to (13.00,0.10);
+\draw(13.50,-1.50) to (13.50,0.10);
+\draw(12.00, 0.00) to (12.50, 0.00);
+\draw(13.00, 0.00) to (13.50, 0.00);
+\node at(12.00,0.20){\tiny{2}};\node at(12.50,0.20){\tiny{1}};\node at(13.00,0.20){\tiny{4}};\node at(13.50,0.20){\tiny{3}};
+
+\draw(0.00,-4.00) to (0.00,-2.40);
+\draw(0.50,-4.00) to (0.50,-2.40);
+\draw(1.00,-4.00) to (1.00,-2.40);
+\draw(1.50,-4.00) to (1.50,-2.40);
+\draw(0.50, -2.50) to (1.00, -2.50);
+\draw(0.00, -2.80) to (0.50, -2.80);
+\node at(0.00,-2.30){\tiny{2}};\node at(0.50,-2.30){\tiny{3}};\node at(1.00,-2.30){\tiny{1}};\node at(1.50,-2.30){\tiny{4}};
+
+\draw(4.00,-4.00) to (4.00,-2.40);
+\draw(4.50,-4.00) to (4.50,-2.40);
+\draw(5.00,-4.00) to (5.00,-2.40);
+\draw(5.50,-4.00) to (5.50,-2.40);
+\draw(5.00, -2.50) to (5.50, -2.50);
+\draw(4.50, -2.80) to (5.00, -2.80);
+\draw(4.00, -3.10) to (4.50, -3.10);
+\node at(4.00,-2.30){\tiny{2}};\node at(4.50,-2.30){\tiny{3}};\node at(5.00,-2.30){\tiny{4}};\node at(5.50,-2.30){\tiny{1}};
+
+\draw(8.00,-4.00) to (8.00,-2.40);
+\draw(8.50,-4.00) to (8.50,-2.40);
+\draw(9.00,-4.00) to (9.00,-2.40);
+\draw(9.50,-4.00) to (9.50,-2.40);
+\draw(8.50, -2.50) to (9.00, -2.50);
+\draw(8.00, -2.80) to (8.50, -2.80);
+\draw(9.00, -2.80) to (9.50, -2.80);
+\node at(8.00,-2.30){\tiny{2}};\node at(8.50,-2.30){\tiny{4}};\node at(9.00,-2.30){\tiny{1}};\node at(9.50,-2.30){\tiny{3}};
+
+\draw(12.00,-4.00) to (12.00,-2.40);
+\draw(12.50,-4.00) to (12.50,-2.40);
+\draw(13.00,-4.00) to (13.00,-2.40);
+\draw(13.50,-4.00) to (13.50,-2.40);
+\draw(12.50, -2.50) to (13.00, -2.50);
+\draw(13.00, -2.80) to (13.50, -2.80);
+\draw(12.50, -3.10) to (13.00, -3.10);
+\draw(12.00, -3.40) to (12.50, -3.40);
+\node at(12.00,-2.30){\tiny{2}};\node at(12.50,-2.30){\tiny{4}};\node at(13.00,-2.30){\tiny{3}};\node at(13.50,-2.30){\tiny{1}};
+
+\draw(0.00,-6.50) to (0.00,-4.90);
+\draw(0.50,-6.50) to (0.50,-4.90);
+\draw(1.00,-6.50) to (1.00,-4.90);
+\draw(1.50,-6.50) to (1.50,-4.90);
+\draw(0.00, -5.00) to (0.50, -5.00);
+\draw(0.50, -5.30) to (1.00, -5.30);
+\node at(0.00,-4.80){\tiny{3}};\node at(0.50,-4.80){\tiny{1}};\node at(1.00,-4.80){\tiny{2}};\node at(1.50,-4.80){\tiny{4}};
+
+\draw(4.00,-6.50) to (4.00,-4.90);
+\draw(4.50,-6.50) to (4.50,-4.90);
+\draw(5.00,-6.50) to (5.00,-4.90);
+\draw(5.50,-6.50) to (5.50,-4.90);
+\draw(4.00, -5.00) to (4.50, -5.00);
+\draw(5.00, -5.00) to (5.50, -5.00);
+\draw(4.50, -5.30) to (5.00, -5.30);
+\node at(4.00,-4.80){\tiny{3}};\node at(4.50,-4.80){\tiny{1}};\node at(5.00,-4.80){\tiny{4}};\node at(5.50,-4.80){\tiny{2}};
+
+\draw(8.00,-6.50) to (8.00,-4.90);
+\draw(8.50,-6.50) to (8.50,-4.90);
+\draw(9.00,-6.50) to (9.00,-4.90);
+\draw(9.50,-6.50) to (9.50,-4.90);
+\draw(8.00, -5.00) to (8.50, -5.00);
+\draw(8.50, -5.30) to (9.00, -5.30);
+\draw(8.00, -5.60) to (8.50, -5.60);
+\node at(8.00,-4.80){\tiny{3}};\node at(8.50,-4.80){\tiny{2}};\node at(9.00,-4.80){\tiny{1}};\node at(9.50,-4.80){\tiny{4}};
+
+\draw(12.00,-6.50) to (12.00,-4.90);
+\draw(12.50,-6.50) to (12.50,-4.90);
+\draw(13.00,-6.50) to (13.00,-4.90);
+\draw(13.50,-6.50) to (13.50,-4.90);
+\draw(12.00, -5.00) to (12.50, -5.00);
+\draw(13.00, -5.00) to (13.50, -5.00);
+\draw(12.50, -5.30) to (13.00, -5.30);
+\draw(12.00, -5.60) to (12.50, -5.60);
+\node at(12.00,-4.80){\tiny{3}};\node at(12.50,-4.80){\tiny{2}};\node at(13.00,-4.80){\tiny{4}};\node at(13.50,-4.80){\tiny{1}};
+
+\draw(0.00,-9.00) to (0.00,-7.40);
+\draw(0.50,-9.00) to (0.50,-7.40);
+\draw(1.00,-9.00) to (1.00,-7.40);
+\draw(1.50,-9.00) to (1.50,-7.40);
+\draw(0.50, -7.50) to (1.00, -7.50);
+\draw(0.00, -7.80) to (0.50, -7.80);
+\draw(1.00, -7.80) to (1.50, -7.80);
+\draw(0.50, -8.10) to (1.00, -8.10);
+\node at(0.00,-7.30){\tiny{3}};\node at(0.50,-7.30){\tiny{4}};\node at(1.00,-7.30){\tiny{1}};\node at(1.50,-7.30){\tiny{2}};
+
+\draw(4.00,-9.00) to (4.00,-7.40);
+\draw(4.50,-9.00) to (4.50,-7.40);
+\draw(5.00,-9.00) to (5.00,-7.40);
+\draw(5.50,-9.00) to (5.50,-7.40);
+\draw(4.50, -7.50) to (5.00, -7.50);
+\draw(4.00, -7.80) to (4.50, -7.80);
+\draw(5.00, -7.80) to (5.50, -7.80);
+\draw(4.50, -8.10) to (5.00, -8.10);
+\draw(4.00, -8.40) to (4.50, -8.40);
+\node at(4.00,-7.30){\tiny{3}};\node at(4.50,-7.30){\tiny{4}};\node at(5.00,-7.30){\tiny{2}};\node at(5.50,-7.30){\tiny{1}};
+
+\draw(8.00,-9.00) to (8.00,-7.40);
+\draw(8.50,-9.00) to (8.50,-7.40);
+\draw(9.00,-9.00) to (9.00,-7.40);
+\draw(9.50,-9.00) to (9.50,-7.40);
+\draw(8.00, -7.50) to (8.50, -7.50);
+\draw(8.50, -7.80) to (9.00, -7.80);
+\draw(9.00, -8.10) to (9.50, -8.10);
+\node at(8.00,-7.30){\tiny{4}};\node at(8.50,-7.30){\tiny{1}};\node at(9.00,-7.30){\tiny{2}};\node at(9.50,-7.30){\tiny{3}};
+
+\draw(12.00,-9.00) to (12.00,-7.40);
+\draw(12.50,-9.00) to (12.50,-7.40);
+\draw(13.00,-9.00) to (13.00,-7.40);
+\draw(13.50,-9.00) to (13.50,-7.40);
+\draw(12.00, -7.50) to (12.50, -7.50);
+\draw(12.50, -7.80) to (13.00, -7.80);
+\draw(13.00, -8.10) to (13.50, -8.10);
+\draw(12.50, -8.40) to (13.00, -8.40);
+\node at(12.00,-7.30){\tiny{4}};\node at(12.50,-7.30){\tiny{1}};\node at(13.00,-7.30){\tiny{3}};\node at(13.50,-7.30){\tiny{2}};
+
+\draw(0.00,-11.50) to (0.00,-9.90);
+\draw(0.50,-11.50) to (0.50,-9.90);
+\draw(1.00,-11.50) to (1.00,-9.90);
+\draw(1.50,-11.50) to (1.50,-9.90);
+\draw(0.00, -10.00) to (0.50, -10.00);
+\draw(0.50, -10.30) to (1.00, -10.30);
+\draw(0.00, -10.60) to (0.50, -10.60);
+\draw(1.00, -10.60) to (1.50, -10.60);
+\node at(0.00,-9.80){\tiny{4}};\node at(0.50,-9.80){\tiny{2}};\node at(1.00,-9.80){\tiny{1}};\node at(1.50,-9.80){\tiny{3}};
+
+\draw(4.00,-11.50) to (4.00,-9.90);
+\draw(4.50,-11.50) to (4.50,-9.90);
+\draw(5.00,-11.50) to (5.00,-9.90);
+\draw(5.50,-11.50) to (5.50,-9.90);
+\draw(4.00, -10.00) to (4.50, -10.00);
+\draw(4.50, -10.30) to (5.00, -10.30);
+\draw(5.00, -10.60) to (5.50, -10.60);
+\draw(4.50, -10.90) to (5.00, -10.90);
+\draw(4.00, -11.20) to (4.50, -11.20);
+\node at(4.00,-9.80){\tiny{4}};\node at(4.50,-9.80){\tiny{2}};\node at(5.00,-9.80){\tiny{3}};\node at(5.50,-9.80){\tiny{1}};
+
+\draw(8.00,-11.50) to (8.00,-9.90);
+\draw(8.50,-11.50) to (8.50,-9.90);
+\draw(9.00,-11.50) to (9.00,-9.90);
+\draw(9.50,-11.50) to (9.50,-9.90);
+\draw(8.00, -10.00) to (8.50, -10.00);
+\draw(8.50, -10.30) to (9.00, -10.30);
+\draw(8.00, -10.60) to (8.50, -10.60);
+\draw(9.00, -10.60) to (9.50, -10.60);
+\draw(8.50, -10.90) to (9.00, -10.90);
+\node at(8.00,-9.80){\tiny{4}};\node at(8.50,-9.80){\tiny{3}};\node at(9.00,-9.80){\tiny{1}};\node at(9.50,-9.80){\tiny{2}};
+
+\draw(12.00,-11.50) to (12.00,-9.90);
+\draw(12.50,-11.50) to (12.50,-9.90);
+\draw(13.00,-11.50) to (13.00,-9.90);
+\draw(13.50,-11.50) to (13.50,-9.90);
+\draw(12.00, -10.00) to (12.50, -10.00);
+\draw(12.50, -10.30) to (13.00, -10.30);
+\draw(12.00, -10.60) to (12.50, -10.60);
+\draw(13.00, -10.60) to (13.50, -10.60);
+\draw(12.50, -10.90) to (13.00, -10.90);
+\draw(12.00, -11.20) to (12.50, -11.20);
+\node at(12.00,-9.80){\tiny{4}};\node at(12.50,-9.80){\tiny{3}};\node at(13.00,-9.80){\tiny{2}};\node at(13.50,-9.80){\tiny{1}};
+
+\end{tikzpicture}
+\caption{All 24 ladders in lexicographic order. Ladders are read left to right, top to bottom. Note how lex order is not a Gray code}
+\label{Fig:24ladders}
 \end{figure}
 
 
 \section{Thesis Statement}
-  	This thesis considers a combinatorial generation problem related 
-    to ladder lotteries. The problem is the so called Canonical Ladder Listing Problem. 
-	This problem asks, given all $n!$ permutations of order $n$, is there an efficient algorithm for listing 
-	one optimal ladder per permutation? In other words, 
-	is there an easy way to transition from one ladder to the next until all $n!$ ladders 
-	have been listed? In this thesis, 'N' of the aforementioned permutation listing algorithms are modified in order to 
-	list $n!$ ladder lotteries, each of which corresponds to one of the $n!$ permutations of order $n$. 
-	The first of these algorithms is a modification of the Steinhaus-Johnson-Trotter algorithm; SJT for short~\cite{A25}. 
+ We define \emph{The Canonical Ladder Listing Problem} as follows: 
+Given integers $[1 \dots n]$, provide a listing of all $n!$ optimal ladders,
+one corresponding to each permutation of order $n$, in Gray code order whereby successive ladders differ by a \emph{minimal amount of change}. 
+First, we define \emph{minimal change} as either the addition  or removal of a bar. 
+Second, we define \emph{minimal change} as moving a bar; moving a bar is the same as removing one bar and adding a new bar. 
+We provide a canonical ladder representation of an optimal ladder from $OptL\{\pi\}$ in order to translate the ladder to a data structure. 
+By doing so, we allow for a number of efficient solutions to solve The Canonical Ladder Listing Problem in the form of novel equations, 
+algorithms, and Gray codes. 
 	
 	%%%Write a second part on ER if he decides you need it.
 
@@ -569,12 +634,17 @@ To see all $24$ ladders listed in lexicographic order please refer to Figure~\re
 	
 
 \section{Contributions}
-	For the Canonical Ladder Listing Problem, this thesis provides 
-	a number of algorithms for listing all $n!$ ladders. These algorithms are termed Algorithm~\ref{Alg:RootLadder} which 
-	can be found in Chapter 3, {\sc ModifiedSJT} which 
-	can be found in Chapter 3, Algorithm~\ref{Alg:ModSJT}, and {\sc CyclicBar} which can be found in Chapter 3 Algorithm~\ref{Alg:KInv}.
-	This thesis also provides a number of theorems and lemmas relating to The Canonical Ladder Listing Problem. Furthermore, we define the 
-	\emph{canonical representation of the root ladder} which can be found in Chapter 3.
+In this thesis we provide the following contributions:
+	\begin{enumerate}
+    \item Definition of the canonical ladder.
+    \item Definition of the data structure for the canonical ladder. 
+    \item Function to calculate the location of a bar 
+   in $O(1)$ time.
+    \item $O(n^2)$ algorithm to create the canonical ladder corresponding to a given permutation.
+    \item $O(1)$ amortized algorithm which lists $n!$ ladders where successive ladders differ by either a single  addition of a bar or a single removal of a bar.
+    \item Gray code for listing all ladders with $k$ bars for some arbitrary $k$ value between $[0 \leq k \leq {n \choose 2}]$. 
+    \item Gray code for listing all $n!$ ladders by $[0 \dots k \dots {n \choose 2}]$ bars. Successive ladders differ by the relocation of a bar.
+\end{enumerate}
 	
 
 \section{Summary of Past Known Results}
@@ -618,14 +688,8 @@ solved problems will be provided.
 \section{Overview of Thesis}
 This thesis is broken down into several sections. In Chapter 2, a literature
 review of ladder lotteries will be provided along with background information pertinent to this thesis. 
-In Chapter 3, The canonical configuration of the root ladder is provided. 
-Chapter 3 is broken down into four subsections. The first subsection is the introduction to the problem, 
-the second is a methodology subsection, the third is a results 
-subsection and the fourth is a conclusion/analysis subsection. 
-In Chapter 4, The {\sc ModifiedSJT} algorithm is provided. Chapter 4 is broken down into four subsections.
-The first subsection is the introduction to the algorithm, 
-the second is a methodology subsection, the third is a results 
-subsection and the fourth is a conclusion/analysis subsection. In Chapter 5, The {\sc K-Bar Generation} algorithms 
-are provided. The first subsection is the introduction to the algorithms, 
-the second is a methodology subsection, the third is a results 
-subsection and the fourth is a conclusion/analysis subsection. 
+In Chapter 3, a definition of the canonical ladder is provided 
+along with the algorithm {\sc CreateCanonical}. 
+In Chapter 4, an algorithm is provided which lists $n!$ in Gray code order, by adding or removing a bar between 
+successive ladders. In Chapter 5, an algorithm for listing all ladders with $k$ bars in Gray code is order provided. 
+Also in Chapter 5, we provide the algorithm for listing all $n!$ ladders by the number of bars, from $[0 \dots k \dots{n \choose 2}]$ bars. 

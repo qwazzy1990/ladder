@@ -50,20 +50,54 @@ int RX(int x, int* perm, int N)
 
 int main()
 {
-    int perm[7] = {3,1,4,6,2,7,5};
+    //int*  perm[7] = {3,1,4,6,2,7,5};
+    int* p= calloc(7, sizeof(int));
+    p[0] = 3;
+    p[1] = 1;
+    p[2] = 4;
+    p[3] = 6;
+    p[4] = 2;
+    p[5] = 7;
+    p[6] = 5;
     int N = 7;
+    int numRows = 2*(N-1)-1;
+    int numCols = N-1;
+    bool** matrix = newMatrix(numRows, numCols);
+    int n = N;
+    while(n > 1)
+    {
+        int x = n;
+        int posX = getPos(x, p, n);
+        for(int i = 0; i < n; i++)
+        {
+            if(p[i] == x)continue;
 
-    int x = max(perm[3], perm[4]);
+            int posY = getPos(p[i], p, n);
+            int* coordinates = getCoordinatesTwo(N, x, posX, posY);
+            printf("(%d %d),(%d %d)\n", x, p[i], coordinates[0], coordinates[1]);
+        }
+        p = cpyA(p, x, n);
+        n--;
 
-    int y = min(perm[3], perm[4]);
-    printf("x is %d y is %d\n", x, y);
-    int posX = getPos(x, perm, N);
-    int posY = getPos(y, perm, N);
-    int rX = RX(x, perm, N);
-    printf("%d\n", rX);
+    }
+    // for(int i = 0; i < N-1; i++)
+    // {
+    //     for(int j = i+1; j < N; j++)
+    //     {
+            
+    //         int x = max(perm[i], perm[j]);
+    //         int y = min(perm[i], perm[j]);
+    //         int posX = getPos(x, perm, N);
+    //         int posY = getPos(y, perm, N);
+    //         int* coordinates = getCoordinatesTwo(N, x, posX, posY);
+    //         printf("(%d %d),(%d %d)\n", x, y, coordinates[0], coordinates[1]);
+    //         if(x == perm[i])setMatrix(matrix, coordinates[0], coordinates[1], true);
+    //         else setMatrix(matrix, coordinates[0], coordinates[1], false);
+            
 
+    //     }
+    // }
 
-    int* coordinates = getBarCoordinates(N, x, y, posX, posY, &rX);
-    printf("(%d,%d)\n", coordinates[0], coordinates[1]);
+   //printMatrix(matrix, numRows, numCols);
 
 }

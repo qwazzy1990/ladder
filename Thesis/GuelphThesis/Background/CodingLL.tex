@@ -1,7 +1,6 @@
 \section{Coding Ladder Lotteries}
-In the paper Coding Ladder Lotteries, written by Aiuchi, Yamanaka, Hirayama and Nishitani, the authors provide three methods to encode ladder lotteries as 
-binary strings~\cite{A5}. Coding discrete objects as binary strings is an appealing theme because 
-it allows for compact representation of them for a computer~\cite{A5}.
+In the paper Coding Ladder Lotteries~\cite{A5}, written by Aiuchi, Yamanaka, Hirayama and Nishitani, the authors provide three methods to encode ladder lotteries as 
+binary strings. Coding ladder lotteries as binary strings allows for a compact, computer readable, representation of them.
 \subsection{Route Based Encoding}
 The first method is termed \emph{route based encoding method} in 
 which each route of an element in the permutation has a binary encoding. Let $RC(l)$ be the route encoding for 
@@ -41,7 +40,7 @@ belongs to $\mathcal{O}(n^{2})$.\par
         \end{tikzpicture}
     \end{center}
    
- \caption{The route encoding for the following ladder lottery is \newline 11\underline{00}01\underline{00}11\underline{00}01\underline{00}0000}
+ \caption{The route encoding for the given ladder lottery is \newline 11\underline{00}01\underline{00}11\underline{00}01\underline{00}0000}
  \label{fig:route-encoding}
 
 \end{figure}
@@ -52,51 +51,54 @@ on encoding the lines of the ladder lottery. Each line is represented
 as a sequence of endpoints of bars. Let $l$ be an optimal ladder lottery 
 with $n$ lines and $b$ bars, then for some arbitrary line, $i$, there 
 are zero or more right/left endpoints of bars that 
-come into contact with $i$~\cite{A5}. Let $LC(i)$ denote the line based encoding for line $i$.
+come into contact with $i$. Let $LC(i)$ denote the line based encoding for line $i$.
 Let $1$ denote a left end point that 
 comes into contact with line $i$ and let $0$ denote a right 
 end point that comes into contact with line $i$. Finally, append a $0$
 to line $i$ to denote the end of the line. Then line $i$ can be 
 encoded, from top to bottom, as a sequence of $1s$ and $0s$ that 
-terminates in a $0$~\cite{A5}.  
+terminates in a $0$.  
 Since each bar is encoded as two bits, and there are $n-1$ bits as terminating bits; 
 one for each line in $l$, then the number of bits required is $n + 2b -1$, where $n$
-is the number of lines and $B$ is the number of bars~\cite{A5}. Encoding and decoding can be 
-done in $\mathcal{O}(n+b)$ time~\cite{A5}. Clearly the line-based encoding 
+is the number of lines and $b$ is the number of bars. Encoding and decoding can be 
+done in $\mathcal{O}(n+b)$ time. Clearly the line-based encoding 
 trumps the route-based encoding in both time and space complexity.
 
-\subsection{Improved Line-Based Encoding}
+\subsection{Improved Line Based Encoding}
 Although the line-based encoding is better than the route based 
 encoding, it can still be further optimized. The authors provide 
-three improvements to the line-based encoding. These three improvements
-can be combined to really help improve the line based encoding's 
-space efficiency~\cite{A5}. Since the $nth$ line has only right endpoints attached to it, 
-then it actually does not need to be encoded. Right endpoints 
+three improvements to the line-based encoding.
+\begin{enumerate}
+\item The $nth$ line has only right endpoints attached to it, 
+therefore it actually does not need to be encoded. Right endpoints 
 are denoted as $0$ and left endpoints are encoded as $1$, therefore the number of right endpoints 
-for line $n$ is equal to the number of $1s$ in $LC(i=n-1)$~\cite{A5}.
-The second improvement is based off of the fact that for any two bars,
+for line $n$ is equal to the number of $1s$ in $LC(i=n-1)$.
+\item Given two bars,
 $x,y$, let $l_{x}$ denote the left endpoint of bar $x$, let 
 $l_{y}$ denote the left endpoint of bar $y$, let $r_{x}$ denote 
 the right end point of bar $x$ and let $r_{y}$ denote the right 
 end point of bar $y$. Let line $i$ be the line of $l_{x}$ and $l_{y}$
-and let line $i+1$ be the line of $r_{x}$ and $r_{y}$.
-There are three possible cases for the placement of $x$ and $y$ in some arbitrary ladder from $OptL\{\pi\}$. 
-The first case is that there 
-is at least one other bar, $z$, with a right end point, $r_{z}$ between $l_{x}$
-and $l_{y}$ on line $i$. The second case is that there is at least one other bar 
-$z$, with a left end point, $l_{z}$, between $r_{x}$ and $r_{y}$ on line $i+1$. 
-The third case is that there is at least one bar, $z$, with a right end point, 
-$r_{z}$, between $l_{x}$ and $l_{y}$ on line $i$ and there is at least one other bar, 
-$z\prime$ with a left end point, $l_{z\prime}$, between $r_{x}$ and $r_{y}$ on line $i+1$~\cite{A5}. 
-If $l_{x}$ and $l_{y}$ on line $i$ have no $r_{z}$ between them, 
-then there must be at least one $l_{z\prime}$ between $r_{x}$ and $r_{y}$ on line $i+1$.
-Since a left endpoint is encoded as a $1$ and a right endpoint is encoded as a $0$, 
-a $1$ can be omitted for the encoding of line $i+1$ if $l_{x}$ and $l_{y}$ have no $r_{z}$
-between them on line $i$~\cite{A5}. That is to say, if there is not a $0$ between 
+and let line $i+1$ be the line of $r_{x}$ and $r_{y}$. If there is not a $0$ between 
 the two  $1s$ for $l_{x}$, $l_{y}$ in $LC_{i}$, it is implied that there is at least one $1$ between 
 the two $0s$ for $r_{x}$, $r_{y}$ on $LC_{i+1}$. Hence, one of the $1s$ in $LC(i+1)$ can be omitted. 
-The line encoding with improvement two for the ladder in Figure~\ref{fig:line-encoding} is $11\underline{0}010\underline{0}00\underline{0}0$.
-Improvement three is based off of saving some bits for right 
+
+% There are three possible cases for the placement of $x$ and $y$ in some arbitrary ladder from $OptL\{\pi\}$. 
+% The first case is that there 
+% is at least one other bar, $z$, with a right end point, $r_{z}$ between $l_{x}$
+% and $l_{y}$ on line $i$. The second case is that there is at least one other bar 
+% $z$, with a left end point, $l_{z}$, between $r_{x}$ and $r_{y}$ on line $i+1$. 
+% The third case is that there is at least one bar, $z$, with a right end point, 
+% $r_{z}$, between $l_{x}$ and $l_{y}$ on line $i$ and there is at least one other bar, 
+% $z\prime$ with a left end point, $l_{z\prime}$, between $r_{x}$ and $r_{y}$ on line $i+1$~\cite{A5}. 
+% If $l_{x}$ and $l_{y}$ on line $i$ have no $r_{z}$ between them, 
+% then there must be at least one $l_{z\prime}$ between $r_{x}$ and $r_{y}$ on line $i+1$.
+% Since a left endpoint is encoded as a $1$ and a right endpoint is encoded as a $0$, 
+% a $1$ can be omitted for the encoding of line $i+1$ if $l_{x}$ and $l_{y}$ have no $r_{z}$
+% between them on line $i$~\cite{A5}. That is to say, if there is not a $0$ between 
+% the two  $1s$ for $l_{x}$, $l_{y}$ in $LC_{i}$, it is implied that there is at least one $1$ between 
+% the two $0s$ for $r_{x}$, $r_{y}$ on $LC_{i+1}$. Hence, one of the $1s$ in $LC(i+1)$ can be omitted. 
+% The line encoding with improvement two for the ladder in Figure~\ref{fig:line-encoding} is $11\underline{0}010\underline{0}00\underline{0}0$.
+\item Improvement three is based off of saving some bits for right 
 end points/$0s$ in $LC(i=n-1)$. Since line $n$ has no left end points,
 then there must be some right endpoints between any two 
 consecutive bars connecting lines $n-1$ and line $n$. Knowing this, then 
@@ -105,23 +107,23 @@ $n-1$ and $r_{x}$/$r_{y}$ on line $n$, there must be at least
 one bar, $z$, with its $r_{z}$ between $l_{x}$ and $l_{y}$
 on line $n-1$. Thus, for every $1$ in $LC(i=n-1)$ except the 
 last $1$ a $0$ must immediately proceed any $1$. 
-Since this $0$ is implied, it can be removed from $LC(i=n-1)$~\cite{A5}. 
+Since this $0$ is implied, it can be removed from $LC(i=n-1)$.
+\end{enumerate} 
+The line based encoding for the ladder in Figure~\ref{Fig:allthree} is $11\underline{0}101011\underline{0}0010101\underline{0}000$. 
 The combination of all three improvements can be done independently.\newline 
-Let $IC(l(4,2,3,1))$ be the \emph{improved line-based encoding} for $l(4,2,3,1)$ 
-by applying improvements 1-3 to $LC(l(4,2,3,1))$. Recall that $LC(l)$ denotes the line-based encoding for some ladder $l$.
-The $LC(l(4,2,3,1))$ for the ladder in Figure~\ref{fig:line-encoding} is $11\underline{0}10101\underline{0}0010101\underline{0}000$.
 By applying improvement one, we get $11\underline{0}101011\underline{0}0010101\underline{0}$. 
-Notice how the last three $0s$ from $LC(l(4,2,3,1))$ were removed because they represented $LC(i=n)$.
+Notice how the last three $0s$ were removed because they represented $LC(i=n)$.
 By applying improvement two to improvement one we get $11\underline{0}10011\underline{0}001001\underline{0}$.
 Notice how the second, and eighth $1$ were removed because they are implied by 
 the successive $0s$. By applying improvement three to the result of improvement 
 two we get $11\underline{0}10011\underline{0}00101\underline{0}$. Notice how the last $0$ 
 was removed from improvement two. This is because the $0$ is implied in $LC(i=n-1)$
-due to the configuration between of bars connecting lines $n-1$ and line $n$. The $IC(l(4,2,3,1))$ for the ladder in Figure~\ref{Fig:allthree} 
-is $IC(l(4,2,3,1))=11\underline{0}10011\underline{0}00101\underline{0}$.
+due to the configuration between of bars connecting lines $n-1$ and line $n$. The improved line based encoding 
+for the ladder in Figure~\ref{Fig:allthree} 
+is $11\underline{0}10011\underline{0}00101\underline{0}$.
 \begin{figure}[h]
-     \centering
-    \begin{tikzpicture}
+    \centering
+     \begin{tikzpicture}
          \draw(0, 0) to (0, 4);
              \node at (0, 4.3){\tiny{$line:n-3$}};
              \draw(0, 3.5) to (1.5, 3.5);
@@ -140,7 +142,6 @@ is $IC(l(4,2,3,1))=11\underline{0}10011\underline{0}00101\underline{0}$.
          \draw(4.5, 0) to (4.5, 4);
              \node at(4.5, 4.3){\tiny{$line:n$}};
      \end{tikzpicture}
-     \caption{A ladder used to illustrate all three improvements $IC(l)$. 
-     \newline $IC(l)=11\underline{0}10011\underline{0}00101\underline{0}$}
+     \caption{A ladder used to illustrate all three improvements. The improved line based encoding is $11\underline{0}10011\underline{0}00101\underline{0}$}
      \label{Fig:allthree}
 \end{figure}

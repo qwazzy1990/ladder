@@ -8,14 +8,15 @@
 #include "utilities.h"
 #include "LinkedListAPI.h"
 #include "HashMap.h"
+#include "lexicographic.h"
 #include "Color.h"
 
 //flags for the main
 bool DEBUG0 = false;
 bool DEBUG1 = false;
 bool DEBUG2 = false;
-bool DEBUGN = true;
-bool DEBUGM = false;
+bool DEBUGN = false;
+bool DEBUGM = true;
 
 //end flags
 
@@ -782,8 +783,9 @@ void printLadderTikz(int *perm, Ladder *l, float *cA, float *cB)
     double c2 = *cB;
     for (int i = 0; i <= l->numCols; i++)
     {
-        printf("\\draw(%.2f,%.2f) to (%.2f,%.2f);", c1, -.1, c1, c2 + .1);
-        c1 += 0.2;
+        printf("\\draw(%.2f,%.2f) to (%.2f,%.2f);", c1, c2-1.5, c1, c2 + .1);
+        printf("\n");
+        c1 += 0.5;
     }
     c1 = *cA;
     for (int i = 0; i <= l->depth; i++)
@@ -792,23 +794,25 @@ void printLadderTikz(int *perm, Ladder *l, float *cA, float *cB)
         {
             if (l->ladder[i][j] > 0)
             {
-                printf("\\draw(%.2f, %.2f) to (%.2f, %.2f);", c1, c2, c1 + .2, c2);
+                printf("\\draw(%.2f, %.2f) to (%.2f, %.2f);", c1, c2, c1 + .5, c2);
+                printf("\n");
             }
-            c1 += .2;
+            c1 += .5;
         }
-        c2 -= .2;
+        c2 -= .3;
         c1 = *cA;
     }
     c1 = *cA;
     forall(numDig)
     {
-        printf("\\node at(%.2f,%.2f){\\tiny{%d}};", c1, (*cB) + .4, perm[x]);
-        c1 += .2;
+        printf("\\node at(%.2f,%.2f){\\tiny{%d}};", c1, (*cB) + .2, perm[x]);
+        c1 += .5;
     }
+    printf("\n\n");
 
     //printf("\\end{tikzpicture}");
     //printf("\\end{figure}");
-    *cA += 5;
+    *cA += 4;
     //*cB += -1.5;
 }
 int main()
@@ -924,11 +928,45 @@ int main()
     }
     if (DEBUGM)
     {
-        int n = 6;
-        Ladder *l = newLadder(n);
-        initLadder(l);
-        l->depth = n;
-        minLadderReversePerm(l, n, 1, 0, n);
+        // int n = 6;
+        // Ladder *l = newLadder(n);
+        // initLadder(l);
+        // l->depth = n;
+        // minLadderReversePerm(l, n, 1, 0, n);
+        List *lexOrderPerms = initializeList(dummy_print, dummy_delete, dummy_compare);
+        int* perm = calloc(4, sizeof(int));
+        perm[0]=1;
+        perm[1]=2;
+        perm[2]=3;
+        perm[3]=4;
+        int n = 4;
+        int nFact = 24;
+        int count = 1;
+        orderedPerms(lexOrderPerms, perm, nFact, count, n);
+        count = 0;
+        float xCoordinate = 0.00;
+        float yCoordinate = 5.00;
+        numDig = n;
+
+        printf("\\begin{figure}[t]\n");
+        printf("\\centering\n");
+        printf("\\begin{tikzpicture}\n");
+        for(Node* node = lexOrderPerms->head; node != NULL; node = node->next){
+            Ladder* l = newLadder(n);
+            initLadder(l);
+            createRoot(l, node->data, n, 0);
+            if(count%4==0){
+                xCoordinate = 0.00;
+                yCoordinate -=2.50;
+            }
+            printLadderTikz(node->data, l, &xCoordinate, &yCoordinate);
+            count++;
+        }
+        printf("\\end{tikzpicture}\n");
+        printf("\\caption{All 24 ladders in lexicographic order. Ladders are read left to right, top to bottom. Note how lex order is not a Gray Code}\n");
+        printf("\\label{Fig:24ladders}\n");
+        printf("\\end{figure}\n");
+
     }
 
     return 0;

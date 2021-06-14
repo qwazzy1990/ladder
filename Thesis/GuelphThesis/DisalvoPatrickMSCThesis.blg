@@ -1,0 +1,57 @@
+This is BibTeX, Version 0.99d (TeX Live 2016/Debian)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: DisalvoPatrickMSCThesis.aux
+A level-1 auxiliary file: body.aux
+The style file: abbrv.bst
+A level-1 auxiliary file: appendix.aux
+Database file #1: mybib.bib
+Warning--entry type for "A30" isn't style-file defined
+--line 321 of file mybib.bib
+Warning--entry type for "A40" isn't style-file defined
+--line 409 of file mybib.bib
+Warning--entry type for "A42" isn't style-file defined
+--line 426 of file mybib.bib
+Warning--empty booktitle in A38
+Warning--empty booktitle in A34
+You've used 29 entries,
+            2118 wiz_defined-function locations,
+            689 strings with 7421 characters,
+and the built_in function-call counts, 8069 in all, are:
+= -- 757
+> -- 373
+< -- 4
++ -- 160
+- -- 120
+* -- 500
+:= -- 1400
+add.period$ -- 84
+call.type$ -- 29
+change.case$ -- 143
+chr.to.int$ -- 0
+cite$ -- 31
+duplicate$ -- 322
+empty$ -- 654
+format.name$ -- 120
+if$ -- 1672
+int.to.chr$ -- 0
+int.to.str$ -- 29
+missing$ -- 29
+newline$ -- 145
+num.names$ -- 58
+pop$ -- 156
+preamble$ -- 1
+purify$ -- 118
+quote$ -- 0
+skip$ -- 244
+stack$ -- 0
+substring$ -- 350
+swap$ -- 51
+text.length$ -- 4
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 108
+warning$ -- 2
+while$ -- 68
+width$ -- 31
+write$ -- 306
+(There were 5 warnings)

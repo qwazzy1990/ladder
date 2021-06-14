@@ -42,7 +42,7 @@ makemin: BIN INCLUDE SRC OBJ LIB
 	$(CC) $(CFLAGS) -Iinclude src/*.c test/MinLadder.c -lm -o bin/min
 
 runmin: makemin
-	cd bin; ./min > ../assets/MinLaddersPrint.txt
+	cd bin; ./min > ../assets/lexOrderLadders.txt
 
 min: runmin
 
@@ -50,7 +50,7 @@ min: runmin
 sjt: runsjt
 
 runsjt: makesjt
-	cd bin; ./sjt > ../Thesis/GuelphThesis/CanLSJT.txt
+	cd bin; ./sjt > ../assets/svgLadders.html
 
 makesjt: BIN INCLUDE SRC OBJ LIB
 	$(CC) $(CFLAGS) -Iinclude src/*.c test/SjtMain.c -lm -o bin/sjt

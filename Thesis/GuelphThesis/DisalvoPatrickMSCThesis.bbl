@@ -1,0 +1,157 @@
+\begin{thebibliography}{10}
+
+\bibitem{A36}
+J.~Arndt.
+\newblock {\em Matters {C}omputational: {I}deas, {A}lgorithms, {S}ource
+  {C}ode}.
+\newblock www.jjj.de, 2010.
+
+\bibitem{A27}
+K.~Batcher.
+\newblock Sorting {N}etworks and their {A}pplications.
+\newblock {\em Spring {J}oint {C}omputer {C}onference}, 1968.
+
+\bibitem{A19}
+B.~Bauslaugh and F.~Ruskey.
+\newblock Generating {A}lternating {P}ermutations {L}exicographically.
+\newblock {\em BIT}, 30:17--26, 1990.
+
+\bibitem{A21}
+C.~T. Djamengi and M.~Tchuente.
+\newblock A {C}ost-{O}ptimal {A}lgorithm for {P}ermutation {G}eneration in
+  {L}exicographic {O}rder.
+\newblock {\em Journal of {P}arallel and {D}istributed {C}omputing}, 1(44),
+  1997.
+
+\bibitem{A33}
+A.~Dumitrescu and R.~Mandal.
+\newblock New {L}ower {B}ounds for the {N}umber of {P}seudoline {A}rrangements.
+\newblock {\em arXiv:1809.03619 [math.CO]}, 2018.
+
+\bibitem{A26}
+S.~Effler and F.~Ruskey.
+\newblock A {CAT} {A}lgorithm for {G}enerating {P}ermutations with a {F}ixed
+  {N}umber of {I}nversions.
+\newblock {\em Information {P}rocessing {L}etters}, 86(2):107--112, 2002.
+
+\bibitem{A32}
+S.~Felser and P.~Valtr.
+\newblock Coding and {C}ounting {A}rrangements of {P}seudolines.
+\newblock {\em Discrete {C}omput {G}eom}, 46(405), 2011.
+
+\bibitem{A39}
+F.~Gray.
+\newblock {\em Pulse {C}ode {C}ommunication}.
+\newblock Bell Telephone Laboratories Incorporated, New {Y}ork {USA}, {S}erial
+  {NO} 785697 edition, 1953.
+
+\bibitem{A24}
+B.~R. Heap.
+\newblock Permutations by {I}nterchange.
+\newblock {\em The {C}omputer {J}ournal}, 3(6), 1963.
+
+\bibitem{A25}
+S.~M. Johnson.
+\newblock Generation of {P}ermutations by {A}djacent {T}ransposition.
+\newblock {\em {M}athematics of {C}omputation}, 17:282--285, 1963.
+
+\bibitem{A29}
+J.~Kawahara, T.~Saitoh, R.~Yoshinaka, and M.~Shin-{I}chi.
+\newblock Couting {P}rimitive {S}orting {N}etworks by $\mathbb{\pi}${DD}s.
+\newblock {\em {TCS-TR-A}}, 11(54), 2011.
+
+\bibitem{A37}
+D.~Knuth.
+\newblock {\em The {A}rt of {C}omputer {P}rogramming}, volume~4.
+\newblock Addison-{W}esley, 2011.
+
+\bibitem{A18}
+D.~E. Knuth.
+\newblock {\em The Art of Computer Programming, Volume 1 (3rd Ed.): Fundamental
+  Algorithms}.
+\newblock Addison Wesley Longman Publishing Co., Inc., USA, 1997.
+
+\bibitem{A0}
+Louis-Frédéric.
+\newblock {\em Japan encyclopedia}.
+\newblock Belknap, 2002.
+
+\bibitem{A28}
+J.~Owens, M.~Houston, D.~Luebke, S.~Green, J.~Stone, and J.~Phillips.
+\newblock Gpu {C}omputing.
+\newblock {\em Proceedings of the {IEEE}}, 5(96), 2008.
+
+\bibitem{A42}
+Ruskey, Mutze, Sawada, and Williams.
+\newblock The {C}ombinatorial {O}bject {S}erver, 2018.
+
+\bibitem{A35}
+C.~Savage.
+\newblock A {S}urvey of {C}ombinatorial {G}ray {C}odes.
+\newblock {\em {SIAM} {R}ev}, 39(4), 1997.
+
+\bibitem{A38}
+J.~Sawada and A.~Williams.
+\newblock A {H}amiltonian {P}ath for the {S}igma {T}au {P}roblem.
+\newblock pages 568--575, 2018.
+
+\bibitem{A40}
+N.~Sloane.
+\newblock The {O}n-line {E}ncyclopedia of {I}nteger {S}equences, 1964.
+
+\bibitem{A30}
+N.~Sloane.
+\newblock The {O}n-line {E}ncyclopedia of {I}nteger {S}equences, 1964.
+
+\bibitem{A41}
+T.~Walsh.
+\newblock Loop-free {S}equencing of {B}ounded {I}nteger {C}ompositions.
+\newblock {\em Journal of {C}ombinatorial {M}athematics and {C}ombinatorial
+  {C}omputing}, 33, 2000.
+
+\bibitem{A34}
+A.~Williams.
+\newblock The greedy gray code algorithm.
+\newblock volume 8037, pages 525--536, 08 2013.
+
+\bibitem{A5}
+K.~Yamanaka, T.~Aruchi, T.~Hiriyama, and Y.~Nishitani.
+\newblock Coding {L}adder {L}otteries.
+\newblock {\em AL-142}, 2012(10), 2012.
+
+\bibitem{A2}
+K.~Yamanaka, T.~Hiriyama, and K.~Wasa.
+\newblock Optimal {R}econfiguration of {O}ptimal {L}adder {L}otteries.
+\newblock {\em {P}roceedings of the 10th {J}apanese-{H}ungarian {S}ymposium on
+  {D}iscrete {M}athematics and {I}ts {A}pplications}, 2017.
+
+\bibitem{A3}
+K.~Yamanaka, T.~Horiyama, T.~Uno, and K.~Wasa.
+\newblock Ladder-{L}ottery {R}ealization.
+\newblock In {\em CCCG}, 2018.
+
+\bibitem{A4}
+K.~Yamanaka and N.~Shin-{I}chi.
+\newblock Efficient {E}numeration of all {L}adder {L}otteries with {K} {B}ars.
+\newblock {\em IEICE Transactions on Fundamentals of Electronics,
+  Communications and Computer Sciences}, E97.A:1163--1170, 06 2014.
+
+\bibitem{A6}
+K.~Yamanaka and N.~Shin-{I}chi.
+\newblock Enumeration, {C}ounting, and {R}andom {G}eneration of {L}adder
+  {L}otteries.
+\newblock {\em IEICE Transactions on Information and Systems},
+  E100.D(3):444--451, 2017.
+
+\bibitem{A1}
+K.~Yamanaka, N.~Shin-{I}chi, Y.~Matsui, R.~Uehara, and K.~Nakada.
+\newblock Efficient {E}numeration of all {L}adder {L}otteries and its
+  {A}pplication.
+\newblock {\em Theoretical Computer Science}, 411(16):1714 -- 1722, 2010.
+
+\bibitem{A31}
+S.~Zaks.
+\newblock A {N}ew {A}lgorithm for {G}eneration of {P}ermutations.
+\newblock {\em BIT {N}umerical {M}athematics}, 1(24), 1984.
+
+\end{thebibliography}

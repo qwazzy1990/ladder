@@ -1,0 +1,16 @@
+
+In summary, we have defined the canonical ladder, designed a representation of the canonical ladder along with equations to 
+calculate the coordinates of the bars in the representation, implemented an algorithm to create the canonical ladder, 
+implemented a constant amortized algorithm to list $L_{n}$ in Gray code order by adding or removing a bar, 
+designed a constant amortized algorithm to list $L_{n,k}$ in Gray code order, and designed a 
+constant amortized algorithm to list $L_{n}$ by listing $L_{n, 0} \dots L_{n, k} \dots L_{n, {n \choose 2}}$. 
+The algorithms can be used to list sorting network arrangements that correspond to the canonical ladders.\par 
+We are left with the following open problems:
+\begin{enumerate}
+    \item Proving Conjecture~\ref{Conjecture:ReverseOrdering}
+    \item Proving Conjecture~\ref{Conjecture:ReverseWalsh}
+    \item Implementing Algorithm~\ref{Alg:ListLNKReverse}, assuming Conjecture~\ref{Conjecture:ReverseWalsh} is true.
+    \item Implement Algorithm~\ref{Alg:LnByk}, assuming we can implement {\sc ListLNKReverse}.
+    \item Continuing to work on the counting problem for the number of ladders in $OptL\{\pi}\}$, specifically 
+    when $\pi=(n,n-1, \dots, 2,1)$.  
+\end{enumerate}

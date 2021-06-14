@@ -5,11 +5,12 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <time.h>
 #include "ladder.h"
 #include "utilities.h"
 #include "Color.h"
 #include "Sjt.h"
-#include "svg.h"
+
 #include "LinkedListAPI.h"
 
 bool _DEBUG1 = false;
@@ -21,9 +22,126 @@ int _C_ = -1;
 float xAxis = 0.0;
 float yAxis = 15.0;
 
-int myPerm[4]= {1,2,3,4};
+int yStart = 0;
+
+int myPerm[13]= {1,2,3,4,5,6,7,8,9,10,11,12,13};
 
 int rowCounter = 0;
+
+int getInputGrayCode( void );
+
+char* ladderToSvg(Ladder* l, int* perm);
+void htmlHeader( void );
+void htmlLadder(Ladder* l);
+void htmlHeader( void )
+{
+    printf("<head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\"></head>");
+}
+void htmlLadder(Ladder* l)
+{
+    char* s = calloc(1000, sizeof(char));
+    int n = 2*(l->numCols) + 1;
+   
+    int memSize = 1000;
+    int cols = 20;
+    int* gaps = calloc(l->numCols+1, sizeof(int));
+
+    forall(l->numCols+1)
+    {
+        memSize += 1000;
+        s = realloc(s, memSize*sizeof(char));
+        char* temp = calloc(50, sizeof(char));
+        gaps[x] = cols;
+        sprintf(temp, "%d", cols);
+        strcat(s, "<line x1=\"");
+        strcat(s, temp);
+        free(temp);
+        strcat(s, "\" ");
+        temp = calloc(50, sizeof(char));
+        sprintf(temp, "%d", yStart);
+        strcat(s, "y1=\"");
+        strcat(s, temp);
+        strcat(s, "\" ");
+        free(temp);
+        strcat(s, "x2=\"");
+        temp = calloc(50, sizeof(char));
+        sprintf(temp, "%d", cols);
+        strcat(s, temp);
+        free(temp);
+        strcat(s, "\" ");
+        temp = calloc(50, sizeof(char));
+        sprintf(temp,"%d", yStart + 100);
+        strcat(s, "y2=\"");
+        strcat(s, temp);
+        strcat(s, "\" ");
+        strcat(s, "style=\"stroke:rgb(255,0,0);stroke-width:2\"/>");
+        free(temp);
+        cols+=40;
+    }
+
+
+    int rowHeight = 5;
+     for (int i = 0; i <n; i++)
+    {
+        for (int j = 0; j < l->numCols; j++)
+        {
+            int val = l->ladder[i][j];
+            if (val > 0)
+            {
+                s = realloc(s, memSize+10000);
+                int x1 = gaps[j];
+                int x2 = x1+40;
+                int height = yStart + 2*i*rowHeight + 10;
+                char* temp = calloc(50, sizeof(char));
+                sprintf(temp, "%d", x1);
+                strcat(s, "<line x1=\"");
+                strcat(s, temp);
+                free(temp);
+                strcat(s, "\" ");
+                strcat(s, "y1=\"");
+                temp = calloc(50, sizeof(char));
+                sprintf(temp, "%d", height);
+                strcat(s, temp);
+                free(temp);
+                strcat(s, "\" ");
+                strcat(s, "x2=\"");
+                temp = calloc(50, sizeof(char));
+                sprintf(temp, "%d", x2);
+                strcat(s, temp);
+                free(temp);
+                strcat(s, "\" ");
+                strcat(s, "y2=\"");
+                temp = calloc(50, sizeof(char));
+                sprintf(temp, "%d", height);
+                strcat(s, temp);
+                free(temp);
+                strcat(s, "\" ");
+                strcat(s, "style=\"stroke:rgb(255,0,0);stroke-width:2\"/>");
+                memSize += 500;
+
+
+
+            }
+        }
+        
+    }
+    yStart+=110;
+    printf("y start is %d\n", yStart);
+    printf("%s", s);
+    free(s);
+}
+
+
+
+
+
+
+int getInputGrayCode( void ){
+    printf("Enter an n value\n");
+    int nValue;
+    fscanf(stdin, "%d", &nValue);
+    return nValue;
+}
 
 int calcOffset(Ladder *l);
 
@@ -44,6 +162,7 @@ int calcOffset(Ladder *l)
     return offset+1;
 
 }
+
 
 
 
@@ -160,7 +279,7 @@ void sjtMod(Ladder *l, int count, int n, bool *dir)
     {
         if(l->numBars == 0)
         {
-            printLadderTikz(l);
+           htmlLadder(l);
         }
         return;
     }
@@ -181,7 +300,7 @@ void sjtMod(Ladder *l, int count, int n, bool *dir)
                 l->ladder[row][col] = 1;
                 l->numBars++;
                
-                __swap(myPerm[count-1], myPerm[count-2]);
+               // __swap(myPerm[count-1], myPerm[count-2]);
             }
             //if removing a bar then go left to right
             else
@@ -190,10 +309,10 @@ void sjtMod(Ladder *l, int count, int n, bool *dir)
                 int row = 2 * (n - count) + (i);
                 l->ladder[row][col] = 0;
                 l->numBars--;
-                __swap(myPerm[count-1], myPerm[count]);
+                //__swap(myPerm[count-1], myPerm[count]);
             }
             //recursive call
-            printLadderTikz(l);
+            htmlLadder(l);
             sjtMod(l, count+1, n, dir);
         }
     }
@@ -312,7 +431,8 @@ int main()
     }
     if (DEBUG4)
     {
-        int n = 4;
+        int n = getInputGrayCode();
+        printf("n is %d", n);
         bool *dir = calloc(n, sizeof(bool));
         for (int i = 2; i <= n; i++)
         {
@@ -320,8 +440,29 @@ int main()
         }
         Ladder *l = newLadder(n);
         initLadder(l);
-        sjtMod(l, 2, n, dir);
-    }
+        // to store the execution time of code
+        double time_spent = 0.0;
+ 
+        clock_t begin = clock();
+ 
+    // do some stuff here
+        htmlHeader();
+        printf("<body>");
+    
+        printf("<svg height=%d width=%d/>", fact(n)*300, fact(n)*300);
+      
 
+        sjtMod(l, 2, n, dir);
+        printf("</svg>");
+        printf("</body>");
+        clock_t end = clock();
+    // calculate elapsed time by finding difference (end - begin) and
+    // dividing the difference by CLOCKS_PER_SEC to convert to seconds
+        time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
+ 
+        
+        printf("The elapsed time is %f seconds", time_spent);
+       
+    }
     return 0;
 }

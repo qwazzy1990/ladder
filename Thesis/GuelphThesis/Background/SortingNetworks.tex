@@ -53,25 +53,24 @@ To see a complete sorting network for $n=4$ please refer to Figure~\ref{Fig:Sort
     \label{Fig:SortNetwork}
 \end{figure}
 
-Sorting networks were first studied in 1954 by Armstrong, Nelson and O'Connor. 
-Sorting networks can be implemented either in hardware or in software~\cite{A18}.
+Sorting networks were first studied in 1954 by Armstrong, Nelson and O'Connor~\cite{A18}. 
 Donald Knuth describes how the comparators for binary integers can be implemented as simple, 
 three-state electronic devices~\cite{A18}. Batcher, in 1968, 
 suggested using them to construct switching networks for computer hardware, replacing 
-both buses and the faster, but more expensive, crossbar switches~\cite{A27}. Since the 2000s, sorting networks are used by the 
-\emph{general purpose graphics processing unit community}, which are a group of people who use 
-the GPU for non-graphical programming, for constructing sorting algorithms~\cite{A28}.\par 
-Sorting networks are intricately related to ladder-lotteries. Let a \emph{minimum sorting network} be defined 
+both buses and the faster, but more expensive, crossbar switches~\cite{A27}. Currently, sorting networks 
+are implemented in graphical processing units, GPUs, for faster sorting methods than traditional CPU sorting methods~\cite{A28}.\par  
+Let a \emph{minimum sorting network} be defined 
 as a sorting network such that for any arbitrary comparator, $c$, on wire $i$, $c$ connects to line $i+1$ or $i-1$. Furthermore, 
-the number of comparators in a minimum sorting network is equal to the number of inversions in $\pi$. Clearly there is a 
-one to one mapping from the comparators in a minimum sorting network to the bars in an optimal ladder lottery and there 
-is a one to one mapping from the wires in a minimum sorting network and the lines in a ladder lottery~\cite{A29}. 
+the number of comparators in a minimum sorting network is equal to the number of inversions in $\pi$. Clearly, there is a 
+bijection from comparators in a minimum sorting network to the bars in an optimal ladder lottery, and there 
+is a bijection from the wires in a minimum sorting network and the lines in a ladder lottery. 
 
 
  
 \subsection{The Integer Sequence Relating to the Reverse Permutation}
-Let $Rev(\pi)$ refer to the reverse permutation of $[1 \dots n]$. There is an integer sequence that counts the number of minimum sorting networks 
-for $Rev(\pi$). This integer sequence also counts $OptL\{Rev(\pi)\}$. This sequence grows very quickly, therefore $n=15$ 
+Let $\pi=(n,n-1, \dots 2,1)$ refer to the reverse permutation order $n$. 
+There is an integer sequence that counts the number of minimum sorting networks 
+for $\pi$. This integer sequence also counts $OptL\{(n,n-1, \dots 2,1)\}$. This sequence grows very quickly, therefore $n=15$ 
 is  the largest value this integer sequence has been calculated for. To refer to the table for this sequence 
 please refer to Table~\ref{Tab:IntSeq1}~\cite{A30}.
 \begin{table}[t]
@@ -118,22 +117,18 @@ please refer to Table~\ref{Tab:IntSeq1}~\cite{A30}.
     \caption{Number of minimum sorting networks and $|OptL\{Rev(\pi)\}|$}
     \label{Tab:IntSeq1}
 \end{table}\par
-According to Dumitrescu and Mandal, in their paper New Lower Bounds For The Number of Pseudoline Arrangements 
-published in 2018, they have devised the current best known lower bound for this sequence to be 
+Dumitrescu and Mandal, in their paper New Lower Bounds For The Number of Pseudoline Arrangements~\cite{A33}
+published in 2018, provide the current best known lower bound for this sequence as  
 $bn \geq cn^{2} - O(n log n)$ for some constant $c > 0.2083$. In particular, $bn \geq 0.2083 n^{2}$
-for large values of $n$~\cite{A33}. Where $bn$ is the bound for a given value $n$. In the paper, Coding 
-and Counting Arrangements of Pseudolines by Felsner and Valtr, written in 2011, the authors demonstrate 
-the best known upper bound for this sequence is $bn \leq 2^{0.657n^{2}}$~\cite{A32}.\par 
+for large values of $n$. Where $bn$ is the bound for a given value $n$. In the paper, Coding 
+and Counting Arrangements of Pseudolines~\cite{A32} by Felsner and Valtr, written in 2011, the authors demonstrate 
+the best known upper bound for this sequence is $bn \leq 2^{0.657n^{2}}$.\par 
 
 Seeing as there is yet to be a closed form solution for this sequence, new values of $n$ are counted by a variety of algorithms. 
-In the paper, Efficient Enumeration of all Ladder Lotteries and its Application, 
-the authors were the first to calculate the sequence for $n=11$ with the algorithm {\sc FindAllChildren}~\cite{A1}. 
-In the paper, Counting Primitive Sorting Networks by $\mathbb{\pi}$DDs, written by Kawahara, Minato, Saitoh and Yoshinaka, the authors
- were the first to calculate for $n=13$ with a data structure they have termed $\mathbb{\pi}$DD~\cite{A29}. 
- The data structure is a digraph that holds a 
-set of elementary permutations along with a number of operations that are applied to the elementary permutations~\cite{A29}.
-The data structure resembles a digraph with two sink nodes; one sink node is labelled the zero sink node and the other 
-is labelled the one sink node~\cite{A29}.
+In the paper, Efficient Enumeration of all Ladder Lotteries and its Application~\cite{A1}, 
+the authors were the first to calculate the sequence for $n=11$ with the algorithm {\sc FindAllChildren}. 
+In the paper, Counting Primitive Sorting Networks by $\mathbb{\pi}$DDs~\cite{A29}, written by Kawahara, Minato, Saitoh and Yoshinaka, the authors
+ were the first to calculate for $n=13$ with a data structure they have termed $\mathbb{\pi}$DD.
 \pagebreak
 
 

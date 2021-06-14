@@ -29,6 +29,17 @@ int *inverse(int *p, int N);
 
 bool parity(int *g, int idx, int N);
 
+void nextLadder(bool* increase, int* g, int* m, int, int w, Ladder* ladder)
+{
+	if(x == -1 && w == -1){
+		printLadderDisalvo(ladder);
+		return;
+	} 	
+}
+
+
+
+
 int min(int *g, int *m, int idx, int r, int N)
 {
     if (idx == 0)
@@ -309,57 +320,86 @@ void runSim(void)
     } while (pivot1 != -1 && pivot2 != -1);
 }
 
+
+int getSecondPivot(int* g, int* m, int pivot1, bool parity, int N, int r)
+{
+	int secondPivot = -1;
+	for(int i = pivot1-1; i>=0; i--)
+	{
+		if(parity == false && g[i] != min(g, m, i, r, N))
+		{
+			secondPivot = i;
+		}
+		if(parity == true && g[i] != max(g, m, i, r, N))
+		{
+			secondPivot = i;
+		}
+	}
+	return secondPivot;
+}
+
+
 void setPivots(int *g, int *m, int *pivot1, int *pivot2, int N, int r)
 {
     //to find pivot1 go from index 1 to N-1 in g
     bool paritY = false;
+    int secondPivot = -1;
     for (int i = 1; i < N; i++)
     {
         //the first value not at its max or min is the pivot
         paritY = parity(g, i, N);
         if (paritY && g[i] != max(g, m, i, r, N))
         {
-
-            *pivot2 = i;
+	    secondPivot = getSecondPivot(g, m, i, !paritY, N, r);
+	    if(secondPivot != -1){
+	    	*pivot2 = i;
+		*pivot1 = secondPivot;
+		break;
+	    }
            
-            break;
         } //end if
         if (!paritY && g[i] != min(g, m, i, r, N))
         {
-            *pivot2 = i;
+	    secondPivot = getSecondPivot(g, m, i, !paritY, N, r);
+	    if(secondPivot != -1){
+	    	*pivot2 = i;
+		*pivot1 = secondPivot;
+		break;
+	    }
             // g[i]--;
-            break;
         }
     } //end for
-    int j = 0;
+
+
+  /*  int j = 0;
+    int w = 0;
     //start at pivot i - 1 and go right to left
-    for (j = *pivot2-1; j >= 0; j--)
+    for (j = *pivot2-1; j > 0; j--)
     {
-        int mMax = mobileMax(g,j,r,N);
-        int mMin = mobileMin(g,j,r,N);
-        //printf("modile max[%d] = %d | mobile min[%d] = %d\n", j, mMax, j, mMin);
-        if(g[j] ==  mMax|| g[j] == mMin)
-        {
-            *pivot1 = j;
+        // if(g[j] != m[j] && paritY == true && g[j] != 0)
+        // {
+        //     *pivot1 = j;
+        //     break;
+        // }
+        // if(g[j] != m[j] && paritY == false && g[j] != 0)
+         bool maxFlag = false;
+         bool minFlag = false;
+         //for each element left of j
+         for(int k = j-1; k >= 0; k--)
+         {
+             if(g[k] == m[k])maxFlag = true;
+             if(g[k] == 0)minFlag = true;
         }
-        // bool maxFlag = false;
-        // bool minFlag = false;
-        // //for each element left of j
-        // for(int k = j-1; k >= 0; k--)
-        // {
-        //     if(g[k] == max(g, m, k, r, N))maxFlag = true;
-        //     if(g[k] == min(g,m,k,r,N))minFlag = true;
-        // }
-        // if(!maxFlag && minFlag)
-        // {
-        //     *pivot1 = j;
-        //     break;
-        // }
-        // if(!minFlag && maxFlag)
-        // {
-        //     *pivot1 = j;
-        //     break;
-        // }
+        if(!maxFlag && minFlag && paritY == true && g[j] != 0)
+        {
+             w = j;
+        }
+        if(!minFlag && maxFlag && paritY == false && g[j] != m[j])
+        {
+             w = j;
+        }
+        if(maxFlag == true && minFlag == true && paritY == true && g[j] != 0)w = j;
+        if(maxFlag == true && minFlag == true && paritY == false && g[j] != m[j])w = j;
 
         // if (paritY && g[j] != min(g, m, j, r, N))
         // {
@@ -371,16 +411,13 @@ void setPivots(int *g, int *m, int *pivot1, int *pivot2, int N, int r)
         //     *pivot1 = j;
         //     break;
         // }
-    }
+    }*/
 
     int i = *pivot2;
-    if(j == -1)
-    {
-        *pivot1 = 0;
-        j = *pivot1;
-    }
-  
+    *pivot1 = secondPivot;
+    int j = *pivot1;
 
+    if(secondPivot == -1)return;
     if (paritY)
     {
 

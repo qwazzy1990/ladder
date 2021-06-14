@@ -1908,7 +1908,6 @@ List *copyListOfLadders(List *ogList)
 int* getBarCoordinates(int N, int x, int y, int posX, int posY, int* pi, int* rX)
 {
     int* coordinates = calloc(2, sizeof(int));
-
     int row = 0;
     int col = 0;
 
@@ -1916,31 +1915,14 @@ int* getBarCoordinates(int N, int x, int y, int posX, int posY, int* pi, int* rX
     //therfore, the elements will be inverted. Therefore add a bar
     if(posX > posY)
     {
-
-        for(int i = posY + 1; i < posX - 1; i++)
-        {
-            int z = pi[i];
-            //case 1: z < y and z < x. 
-            //r[x] ++ , r[y] --
-        }
-
-        //Account for the first N-1 rows for element N
-        row = (N-2);
-        //get the offset of N and x
-        row += (N-x);
-        //subtract the number of rows already assoiated with the route of x
-        row -= *rX;
-
-        //the starting column for element x must be column x-2
-        col = (x-2);
-        //subtract away the number of columns 
-        //already occupied by bars associated with the route of x
-        col -= *rX;
-        //increment rX because we are adding a bar
-        printf("Adding a bar\n");
+        //Account for the first N-2 rows for element N
+        //account for the difference between N and x as an offset
+        //subtract the number of bars in the associated route of x, seeing as each bar in the associated part of x's route needs its own row
+        row = (N-2) + (N-x) - (*rX);
+        //col = (x-2) - the number of bars in the route of x = rX
+        col = (x-2)-(*rX);
+        //incremement rx by 1
         (*rX)++;
-
-
     }
     //else we are removing a bar 
     else 
@@ -1948,18 +1930,10 @@ int* getBarCoordinates(int N, int x, int y, int posX, int posY, int* pi, int* rX
         //decrement rX because we are removing a bar
         (*rX)--;
         //start column for the route of x is x-2
-        col = x-2;
-        //subtrat the rX value from the column + 1 becase we ar removing a bar, add a 1 back in 
-        //to offset the rX value. Would be the same as decrementing rX first, and then subtracting it away
-        col = (x-2) - *rX;
-
+        col = (x-2) - (*rX);
         //row 
           //Account for the first N-1 rows for element N
-        row = (N-2);
-        //get the offset of N and x
-        row += (N-x);
-        row -=*rX;
-        printf("Removing a bar\n");
+        row = (N-2) + (N-x) - (*rX);
 
         //decrement rX because we are removing a bar
         
@@ -1969,4 +1943,95 @@ int* getBarCoordinates(int N, int x, int y, int posX, int posY, int* pi, int* rX
     coordinates[0] = row;
     coordinates[1]  = col;
     return coordinates;
+}
+
+/**
+ * Get the coordinates of the row and column 
+ * for the bar/ghost bar for the elements x,y in some permutaion of order 'n'
+ * @pre n = max value in permutation
+ *      x = max of x,y in pi
+ *      y = min of x,y in pi
+ *  @post: 
+ *      the row and column of the bar or ghost bar in the ladder corresponding to elements x,y
+ * */
+int* getCoordinatesTwo(int n, int x, int posX, int posY)
+{
+
+    //variable to return containing row and column
+    int* coordinates = calloc(2, sizeof(int));
+    //the row for the bar or ghost bar of x,y
+    int row = 0;
+    //the column for the bar or ghost bar of x,y
+    int col = 0;
+
+    //if x and y form an inversion
+    if(posX < posY)
+    {
+        row = (2*n - x - 1) - (x-posY);
+        col = (x-1) - (x-posY);
+    }
+    //they don't form an inversion
+    else 
+    {
+        row = (2*n - x - 1) - (x-posY)+1;
+        col = (x-1) - (x-posY) + 1;
+       // col = (n-x) + (posY - 2);
+    }//end if
+    //set the coordinates with row and column
+    coordinates[0] = row;
+    coordinates[1] = col;
+
+    return coordinates;
+}
+
+int* cpyA(int* og, int x, int n)
+{
+    int* cp = calloc(n-1, sizeof(int));
+    int count = 0;
+    for(int i = 0; i < n; i++)
+    {
+        if(og[i] != x)
+        {
+            cp[count] = og[i];
+            count++;
+        }
+    }
+    return cp;
+}
+
+
+bool** newMatrix(int numRows, int numCols)
+{
+    bool** binMatrix = calloc(numRows, sizeof(bool*));
+    for(int i = 0; i < numRows; i++)
+    {
+        binMatrix[i] = calloc(numCols, sizeof(bool));
+        for(int j=0; j < numCols; j++)binMatrix[i][j] = false;
+    }
+    return binMatrix;
+}
+
+void setMatrix(bool** matrix, int row, int col, bool symbol)
+{
+    matrix[row][col] = symbol;
+}
+
+void printMatrix(bool** matrix, int numRows, int numCols)
+{
+
+    for(int i = 0; i < numRows; i++)
+    {
+        for(int j = 0; j < numCols; j++)
+        {
+            if(matrix[i][j] == true)
+            {
+                printf(" 1 ");
+            }
+            else 
+            {
+                printf(" 0 ");
+            }
+        }
+        printf("\n");
+    }
 }
