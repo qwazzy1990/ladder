@@ -2,7 +2,7 @@
 In this chapter we describe a canonical ladder for each $OptL\{\pi}\}$. We then provide a number of equations to calculate the 
 location of the bar in the canonical ladder; depending on the configuration of $\pi$, we use different 
 equations for calculating the location of the bar. We then define the data structure used to represent the canonical ladder. 
-Using the data structure, we provide an algorithm for creating the canonical ladder for any $\pi_{n}$. Lastly, 
+Using the data structure, we provide an algorithm for creating the canonical ladder for any $\pi$ of order $n$. Lastly, 
 we describe the listing problem in relation to the canonical ladder. To see the canonical ladder for $(3,5,4,1,2)$, 
 refer to Figure~\ref{Fig:Route}.
 \begin{figure}[h]
@@ -120,26 +120,26 @@ For an example of the associated diagonals for the ladder corresponding to $(3,4
 \end{figure}
 
 With the definition of the associated diagonal, we are now able to fully define the \emph{canonical ladder} as 
-the ladder such that for each element $2 \leq x \leq n$, each bar associated with $x$ exists 
+the ladder such that for each element $2 \leq x \leq n$, each bar, and absence of a bar, associated with $x$ exists 
 along the associated diagonal of $x$. %Given $\pi$, we construct $CL(\pi)$ by using equation~\ref{getCordEqn} found in section 
 %\textbf{Calculating the Location of a Bar for an Arbitrary $CL(\pi_{n})$}, 
 %and Algorithm~\ref{Alg:RootLadder} found in section \textbf{Algorithm: Create Canonical}. 
 We note that the two aforementioned figures, Figure~\ref{Fig:Route} and Figure~\ref{fig:my_label}, are the canonical ladders 
-corresponding to each of their respective permutations. We use $CL(\pi_{n})$ as shorthand notation for `the canonical ladder corresponding 
+corresponding to each of their respective permutations. We use $CL(\pi)$ as shorthand notation for `the canonical ladder corresponding 
 to a permutation of order $n$'. 
 
-\section{Locating the bar for a given inversion in an arbitrary $CL(\pi_{n})$}
+\section{Locating the Bar for a Given Inversion in an Arbitrary $CL(\pi)$}
 In this section, we provide an equation for locating the bar in the canonical ladder associated with a given inversion, 
 in an arbitrary permutation 
 of order $n$. As previously stated, every bar associated with some element $x$ exists along the associated diagonal of $x$ 
 within the canonical ladder. 
 We use Equation~\ref{getCordEqn}, to determine the row and column for the bar corresponding 
 to two elements, $x>y$, along the associated diagonal of $x$. 
-Let $\pi_{n}$ be an arbitrary permutation of order $n$. Let 
-$pos(x)$ be the index of $x \in \pi_{n}$. To calculate the row and column of the bar, or absence of a bar, for a pair of elements 
+Let $\pi$ be an arbitrary permutation of order $n$. Let 
+$pos(x)$ be the index of $x \in \pi$. To calculate the row and column of the bar, or absence of a bar, for a pair of elements 
 $x>y$, we first map $x$ to a new index termed $pos'(x)$. Let $pos'(x)$ equal $pos(x)$ minus the number of elements greater than $x$ and 
  to the left of $x$ in $\pi$. 
-For example, given $\pi_{n}=(3,2,7,4,8,5,6,9,1)$, 
+For example, given $\pi=(3,2,7,4,8,5,6,9,1)$, 
 suppose $x=6$, then $pos'(6)=pos(6)-2=5$. 
 Once we have calculated $pos'(x)$ we use a similar method to calculate $pos'(y)$. $pos'(y)$ equals 
 $pos(y)$ minus the number of elements greater than $y$ and to the left of $y$ excluding $x$. For example, suppose $x$ is $7$ and 
@@ -161,7 +161,7 @@ along the associated diagonal of $x$.
 Given the inversion $(7,5) \in (3,2,7,4,8,5,6,9,1)$, we calculate the row and column of the bar $(7,5)$ using the second case. We 
 get $row=(18 - 7 - 1) - (7 - 5)=8$ and $col=6-(7-5)=4$. To calculate $pos'(x)$ and $pos'(y)$, is linear amortized time. Once $pos'(x)$ 
 and $pos'(y)$ are calculated,  returns the location in $O(1)$ time. 
-We can use Equation~\ref{getCordEqn} to look up the location of any bar for a given $\pi_{n}$. 
+We can use Equation~\ref{getCordEqn} to look up the location of any bar for a given $\pi$. 
 In Figure~\ref{Fig:CanLArbitrary} we see $CL(3,2,7,4,8,5,6,9,1)$, where each row and column is calculated using Equation~\ref{getCordEqn}. 
 \pagebreak
 \begin{figure}[t]
@@ -248,16 +248,16 @@ In Figure~\ref{Fig:CanLArbitrary} we see $CL(3,2,7,4,8,5,6,9,1)$, where each row
 
 
 
-\section{Locating the bar for a given inversion in $CL(n,n-1, \dots 1)$}
+\section{Locating the Bar for a Given Inversion in $CL((n,n-1, \dots 1))$}
 In the previous section, we looked up a bar for a given inversion for some arbitrary permutation 
 in $O(n)$ time. Clearly this is less than ideal. However, if $\pi$ is an arbitrary permutation 
 of order $n$, we require linear time to calculate the location of a bar. 
-In this section, we calculate the location of a bar corresponding to an inversion for $CL(n,n-1, \dots, 1)$ 
+In this section, we calculate the location of a bar corresponding to an inversion for $CL((n,n-1, \dots, 1))$ 
 in $O(1)$ time. 
 Let  $\pi=(n,n-1,n-2,...,1)$, then each associated diagonal in $CL(\pi)$ is fully occupied by bars. 
 Let $x,y$ be a pair of elements in $\pi$ such that $x>y$ and $2 \leq x \leq n$. 
-We know there exists a bar, $(x,y)$, in $CL(n,n-1, \dots 1)$ along the associated diagonal of $x$.
-We compute the row and column of a bar $(x,y)$ in $CL(n,n-1, \dots 1)$ in $O(1)$ time using Equation~\ref{revCordEqn}. 
+We know there exists a bar, $(x,y)$, in $CL((n,n-1, \dots 1))$ along the associated diagonal of $x$.
+We compute the row and column of a bar $(x,y)$ in $CL((n,n-1, \dots 1))$ in $O(1)$ time using Equation~\ref{revCordEqn}. 
 \begin{equation} \label{revCordEqn}
 (row,column)=(2n-2x + (x-y), (x-y))
 \caption{GetCoordinatesReverse}
@@ -339,7 +339,7 @@ because the calculation time is $O(1)$ rather than $O(n)$.
 % in the corresponding $CL(\pi_{n})$. Further work is required to determine if removing bars from $CL(n,n-1, \dots, 1)$ 
 
 
-\section{Algorithm: Create Canonical}
+\section{Algorithm: {\sc CreateCanonical}}
 In this section we provide the data structure used to represent the canonical ladder in code. We then provide the algorithm for creating the canonical ladder corresponding to any permutation of 
 order $n$. 
 To create the canonical ladder 
@@ -351,8 +351,8 @@ veracity of the representation of the canonical ladder.
  \end{theorem}
  \begin{proof}
  	Let $\pi$ be the descending permutation of order $n$. Let $route(x)$ be the route of $n \geq x \geq 2 \in \pi$. We know that 
-     when $x=n$, $route(x)$ has $n-1$ bars, each requiring their own row. Thus, $CL(n,n-1, \dots, 1)$ requires at least $n-1$ rows. 
-     For each subsequent $x$ from $[n-1 \dots 2]$, each $route(x)$ requires one more row to be added to $CL(n, n-1, \dots 1)$. 
+     when $x=n$, $route(x)$ has $n-1$ bars, each requiring their own row. Thus, $CL((n,n-1, \dots, 1))$ requires at least $n-1$ rows. 
+     For each subsequent $x$ from $[n-1 \dots 2]$, each $route(x)$ requires one more row to be added to $CL((n, n-1, \dots 1))$. 
      We get an additional $n-2$ rows added to $CL$, one for each $route([n-1 \geq x \geq 2])$. Therefore, the total number of rows is 
      $(n-1)+(n-2)=2(n-1)-1$.
  \end{proof}
@@ -375,7 +375,7 @@ Using Theorem~\ref{Theorem:RootHeight} and Corollary~\ref{Corollary:RootHeight},
 we represent a canonical ladder as a binary matrix with $2(n-1)-1$ rows and $n-1$ columns. Let $matrix[row][col]=1$ 
 indicate a bar at the given row and column in the canonical ladder along an associated diagonal. Let $matrix[row][col]=0$ indicate the absence 
 of a bar at the given row and column in the canonical ladder along an associated diagonal. Let $matrix[row][col]=-$ indicate irrelevancy as to whether 
-a $1$ or $0$ is at the given row and column because the row and column does not lie on an associated diagonal. To see the canonical ladder for 
+a $1$ or $0$ is at the given row and column because the row and column do not lie on an associated diagonal. To see the canonical ladder for 
 $(4,2,1,3)$ and the corresponding binary matrix, refer to Figure~\ref{Fig:MatrixLadder}.
 \begin{figure}[ht]
     \begin{minipage}{.4\textwidth}
@@ -431,9 +431,9 @@ Equation~\ref{getCordEqn}.
                         
                         \State $(row, column) \gets${\sc GetCoordinates($x$, $pos(x), i$)}
                         \If{$pos(x)<i$}
-                            \State $ladder[row][col]:=1$
+                            \State $ladder[row][col] \gets 1$
                         \Else
-                            \State $ladder[row][col]:=0$
+                            \State $ladder[row][col] \gets 0$
                         \EndIf
                     \EndIf
                 \EndFor
@@ -448,18 +448,18 @@ Equation~\ref{getCordEqn}.
 \end{algorithm}
 
 On each iteration of the while loop, all $x-1$ $1s$ and $0s$  along the associated diagonal of the $xth$ 
-element are added to $ladder$ within the for-loop. {\sc GetCoordinates} returns the row and column coordinate 
-for the respective $1$ or $0$ for the pair of elements, $x>y$. Note that we call {\sc GetCoordinates} with 
+element are added to $ladder$ within the for-loop. {\sc GetCoordinates}, which refers to Equation~\ref{getCordEqn}, 
+returns the row and column coordinate for the respective $1$ or $0$ for the pair of elements, $x>y$. Note that we call {\sc GetCoordinates} with 
 the arguments $(x,pos(x),i)$. When referring to Equation~\ref{getCordEqn} the variables 
 are $(x,pos'(x),pos'(y))$. Prior to the next iteration of the while loop, 
 $x$ is removed from $\pi$ and all elements to the right of $x$ are moved to the left by one index. 
 Then, $x$ is decremented by $1$. The while loop continues until $x=1$. Determining $pos(x)$ 
-is done in $O(x)$ time. Removing $x$ from $\pi$ is done in $0(x)$ time. Calculating the row and column 
+is done in $O(x)$ time. Removing $x$ from $\pi$ is done in $O(x)$ time. Calculating the row and column 
 for each $(x,y)$ is done in $O(1)$ time. Overall, the algorithms complexity is $O(n^2)$.
 We also note that {\sc CreateCanonical} creates the ladder representation with clean level $1$.  
 Given three elements, $x>y>z$ and $pos(x) < pos(y) < pos(z)$, Equation~\ref{getCordEqn} returns a lesser row 
 for $(x,z)$ than for $(y,z)$. Therefore, {\sc CreateCanonical} creates a representation of a ladder with clean level $1$. 
-To see the resulting state of $ladder$ for each iteration of {\sc CreateCanonical} with $(5,7,3,4,1,2,6)$ please refer to Figure~\ref{Fig:CreateRoot}. 
+To see the resulting state of the ladder for each iteration of {\sc CreateCanonical} with $(5,7,3,4,1,2,6)$ please refer to Figure~\ref{Fig:CreateRoot}. 
 \begin{figure}[t]
     \centering 
     \begin{minipage}{.3\textwidth}
@@ -754,7 +754,7 @@ Let $L_{n}$ be the set of all $n!$ canonical ladders.
  Let $S_{n}$ be the set of all permutations of order $n$. We simply apply an ordering to list $S_{n}$. For each 
  permutation in $S_{n}$, we apply {\sc CreateCanonical}, thus listing $L_{n}$ in the same order as $S_{n}$.
 \end{proof}
-We create each $CL(\pi_{n})$ in $O(n^2)$ time using {\sc CreateCanonical}. However, using {\sc CreateCanonical} to list $L_{n}$ is inefficient, 
+We create each $CL(\pi)$ in $O(n^2)$ time using {\sc CreateCanonical}. However, using {\sc CreateCanonical} to list $L_{n}$ is inefficient, 
 seeing as each ladder is created in $O(n^2)$ time. 
 In chapters 4 and 5 we provide two Gray code listing algorithms, {\sc ModifiedSJT} and {\sc ListLnByKBars}, to list $L_{n}$ in constant amortized time. 
 The details of these algorithms are found in chapters 4 and 5 respectively.  

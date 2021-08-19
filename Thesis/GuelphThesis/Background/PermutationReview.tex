@@ -2,16 +2,15 @@
 Ladder lotteries and permutations are intricately related to each other. 
 The research for The Canonical Ladder Listing Problem is highly influenced 
 by permutation listing algorithms. Knuth describes a number of 
-permutation listing algorithms in The Art of Computer Programming~\cite{A18}. Since this book, many algorithms for 
-enumerating $n!$ permutations have been created. During the research for The Canonical Ladder Listing Problem, twelve of these 
-enumeration algorithms were investigated~\cite{A18,A19,A21,A24,A25,A26,A31,A34,A35,A36,A37}.\par 
+permutation listing algorithms in \emph{The Art of Computer Programming}~\cite{A18}. During the research for The Canonical Ladder Listing Problem, twelve of these 
+enumeration algorithms were investigated~\cite{A18,A19,A20,A24,A25,A26,A31,A34,A35,A36,A37}.\par 
 We define \emph{$S_{n}$} as the set of all $n!$ permutations of order $n$. 
 The first algorithm we looked at for listing $S_{n}$ is the lexicographic algorithm, which orders all $n!$ permutations from smallest to largest. The lexicographic 
-algorithm generates each permutation with an amortized time of $O(n^{2}log(n))$~\cite{A21}. The second of which is the 
+algorithm generates each permutation with an amortized time of $O(n^{2}log(n))$~\cite{A20}. The second of which is the 
 colexicographic algorithm which orders all $n!$ permutations from largest to smallest. The colexicographic 
 algorithm generates each permutation with an amortized time of $O(n^{2}log(n))$~\cite{A19}. The third of which is Zak's 
 algorithm which lists $S_{n}$ by reversing a suffix in one permutation to get to the next 
-permutation. The time complexity of Zak's algorithm is amortized time of $O(n^{2})$~\cite{A31}.
+permutation. The time complexity of Zak's algorithm constant amortized time~\cite{A31}.
 The fourth of which is Heap's algorithm which is a decrease and conquer algorithm.  
 The time complexity of Heap's algorithm is {\sc CAT}, constant amortized time of $O(1)$ per permutation~\cite{A24}.
 The fifth algorithm is the Steinhaus-Johnson-Trotter (SJT) algorithm which generates $S_{n}$ by performing adjacent swap operations 
@@ -30,7 +29,7 @@ listing algorithm hold. Furthermore, any two successive permutations differing b
 The tenth listing algorithm is found in Knuth's book. At each step, it either rotates the permutation to the left by one 
 or swaps the first two elements~\cite{A37}. The problem as to whether such a listing algorithm exists for all $n$ 
 is posed as an open problem in Knuth's book~\cite{A37}. It was solved by Sawada and Williams in their paper 
-A Hamiltonian Path for the Sigma-Tau Problem~\cite{A38}.
+\emph{A Hamiltonian Path for the Sigma-Tau Problem}~\cite{A38}.
 The eleventh algorithm is Corbett's algorithm which rotates a prefix of the first possible length in 
 $n$,$2$,$n-1$,$3$,$n-2$,$4$, etc.~\cite{A34}. 
 % The twelfth algorithm is Effler and Ruskey's algorithm which lists permutations by groups of $k$ inversions. %Their algorithm has 
@@ -38,10 +37,10 @@ $n$,$2$,$n-1$,$3$,$n-2$,$4$, etc.~\cite{A34}.
 %the time it takes to generate each permutation is bounded by a constant.
 %The algorithm is also a \emph{BEST} algorithm (backtracking ensures success at terminals), meaning that when the algorithm backtracks, 
 %the back-tracking leads to a successful result~\cite{A26}. 
-To see the listings for all the aforementioned algorithms, refer to Figure~\ref{Fig:11perms}~\cite{A42}.\par
+To see the listings for all the aforementioned algorithms, refer to Figure~\ref{Fig:11perms}\cite{A42}.\par
 \begin{figure} 
     \centering 
-    \resizebox{.5\textwidth}{!}{
+    \resizebox{.65\textwidth}{.3\textheight}{
             \includegraphics{11perms}
     }
     \caption{Eleven permutation listing algorithms}

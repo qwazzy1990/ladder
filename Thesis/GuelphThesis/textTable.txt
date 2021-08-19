@@ -1,7 +1,8 @@
 \renewcommand{\arraystretch}{0.33}
 
-\begin{longtable}{| l | l | l | l |}\\ \hline
-\small{Permutation & number & k & $|OptL\{\pi\}|$}\\ \hline 
+\begin{longtable}{|c|c|c|c|}\\ \hline
+\small{Permutation & number & k & $|OptL\{\pi\}|$}\\ 
+\hline 
 1 2 3 4 5  & 1 & 0 & 1\\ 
 1 2 3 5 4  & 2 & 1 & 1\\ 
 1 2 4 3 5  & 3 & 1 & 1\\ 

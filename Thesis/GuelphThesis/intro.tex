@@ -69,7 +69,7 @@ the Muromachi period, which spanned from
 players draw their names at the top of the lines, and at the bottom 
 of the lines were pieces of paper that had the amount the players
 were willing to bet. The pieces of paper were folded in the shape of 
-Amithaba's halo~\cite{A0}.
+Amithaba's halo~\cite{A0}. In Figure~\ref{Fig:Amida} a picture of Buddha Amithaba is provided.
 \begin{figure}[ht]
 	\centering 
 	\resizebox{.3\textwidth}{.3\textheight}{
@@ -82,12 +82,14 @@ Amithaba's halo~\cite{A0}.
 An interesting property about a ladder lottery is that it is  
 associated with a \emph{permutation}. A \emph{permutation} is a unique ordering of objects. 
 For the purposes of this thesis, the objects of a permutation are $1,2, \dots ,n$. 
-A ladder lottery corresponds to a unique permutation when:
+A ladder lottery corresponds to a unique permutation $\pi$ when:
 \begin{enumerate}
 	\item The $n$ elements of $\pi$ are listed at the top of the ladder lottery in the order that they appear in 
 	$\pi$; one element per line of the ladder lottery.
 	\item At the bottom of the ladder lottery are the $n$ elements of $\pi$ in strictly ascending order. For 
-	each element $x$ in $\pi$, $x$ goes down its path and ends up in the bottom $xth$ line. 
+	each element $x$ in $\pi$, $x$ goes down its path and ends up in the bottom $xth$ line.
+	\item Each bar in the ladder is given a \emph{label} defined by two unique elements in $\pi$, $x>y$, which interchange at that specific bar. We draw 
+	the label as $(x,y)$. 
 \end{enumerate} 
 
 % \begin{figure}[h]
@@ -287,9 +289,9 @@ In this paper, the authors provide an algorithm
 which generates $OptL\{\pi\}$; the details of the algorithm are discussed in Chapter 2.
 To see $OptL\{(4,3,5,1,2)\}$ please refer to Figure \ref{Fig:OptL3421}.
 Given that there are $n!$ permutations of order $n$, each of them 
-have their own $OptL\{\pi\}$. In Table~\ref{table:KInvOptL} found in the section A.1 of the Appendix, titled \textbf{Table of $OptL\{\pi\}$ for all $\pi$ of order $5$}, 
+have their own $OptL\{\pi\}$. In Table~\ref{table:KInvOptL} found in the section A.1 of the Appendix 
 the number of ladders in each $OptL\{\pi\}$ of order $5$ is presented. In general, 
-$|OptL\{(n,n-1, \dots, 2,1)\}|$ is maximal. When $n=5$, $|OptL\{(5,4,3,2,1)\}=62|$.
+$|OptL\{(n,n-1, \dots, 2,1)\}|$ is maximal with respect to a permutation of order $n$. When $n=5$, $|OptL\{(5,4,3,2,1)\}|=62$.
 \begin{figure}[h]
 	\centering
 	\begin{tikzpicture}
@@ -358,36 +360,148 @@ $|OptL\{(n,n-1, \dots, 2,1)\}|$ is maximal. When $n=5$, $|OptL\{(5,4,3,2,1)\}=62
 Our research on ladder lotteries pertains to research in \emph{combinatorial generation}. Combinatorial 
 generation is a subfield of theoretical computer science which lists all instances of  
 combinatorial objects such as permutations, combinations, sets, subsets, graphs, and ladder lotteries~\cite{A42}. Knuth describes a number 
-of algorithms for listing such combinatorial objects in The Art of Computer Programming, volume 4~\cite{A37}. \emph{Gray codes} are a 
+of algorithms for listing such combinatorial objects in The Art of Computer Programming, Volume 4~\cite{A37}. \emph{Gray codes} are a 
 special type of combinatorial generation in which a constant, minimal amount of change 
 is required to get from one object to the next. For example, a single swap operation,
 a single rotation, or a single bit flip is used to get from one object to the next. The term
 ``Gray code" comes from the Binary Reflected code given by Frank Gray~\cite{A39}. 
-In Figure, all 24 permutations of order $4$ are listed in Gray code order using the Steinhaus-Johnson-Trotter Gray code.\par
+In Figure~\ref{Fig:24Perms}, all 24 permutations of order $4$ are listed in Gray code order using the Steinhaus-Johnson-Trotter Gray code.\par
 \begin{figure}[ht]
 	\centering
-	\begin{tabular}{|c|c|c|c|}
-		\hline
-		1234 & 1243 & 1423 & 4123\\
-		\hline
-		4132 & 1432 & 1342 & 1324\\
-		\hline
-		3124 & 3142 & 3412 & 4312\\ 
-		\hline
-		4321 & 3421 & 3241 & 3214 \\
-		\hline
-		2314 & 2341 & 2431 & 4231 \\ 
-		\hline 
-		4213 & 2413 & 2143 & 2134 \\ 
-		\hline
-	\end{tabular}
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$1,2,\mathbf{3},\mathbf{4}$}};
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$1,\mathbf{2},\mathbf{4},3$}};
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$\mathbf{1},\mathbf{4},2,3$}};
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$4,1,\mathbf{2},\mathbf{3}$}};
+		\end{tikzpicture}
+	\end{minipage}
+
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$\mathbf{4},\mathbf{1},3,2$}};
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$1,\mathbf{4},\mathbf{3},2$}};
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$1,3,\mathbf{4},\mathbf{2}$}};
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$\mathbf{1},\mathbf{3},2,4$}};
+		\end{tikzpicture}
+	\end{minipage}
+
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$3,1,\mathbf{2},\mathbf{4}$}};
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$3,\mathbf{1},\mathbf{4},2$}};
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$\mathbf{3},\mathbf{4},1,2$}};
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$4,3,\mathbf{1},\mathbf{2}$}};
+		\end{tikzpicture}
+	\end{minipage}
+
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$\mathbf{4},\mathbf{3},2,1$}};
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$3,\mathbf{4},\mathbf{2},1$}};
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$3,2,\mathbf{4},\mathbf{1}$}};
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$\mathbf{3},\mathbf{2},1,4$}};
+		\end{tikzpicture}
+	\end{minipage}
+
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$2,3,\mathbf{1},\mathbf{4}$}};
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$2,\mathbf{3},\mathbf{4},1$}};
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$\mathbf{2},\mathbf{4},3,1$}};
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$4,2,\mathbf{3},\mathbf{1}$}};
+		\end{tikzpicture}
+	\end{minipage}
+
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$\mathbf{4},\mathbf{2},1,3$}};
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$2,\mathbf{4},\mathbf{1},3$}};
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$2,1,\mathbf{4},\mathbf{3}$}};
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}[t][2cm][c]{.15\textwidth}
+		\begin{tikzpicture}
+			\node at(0, 0){\small{$2,1,3,4$}};
+		\end{tikzpicture}
+	\end{minipage}
+	
 	\caption{$24$ permutations of order $4$ listed in Steinhaus-Johnson-Trotter Gray code order. Permutations are read 
 	left to right, top to bottom.}
+	\label{Fig:24Perms}
 \end{figure} 
 There are many known algorithms for listing permutations of order $n$. Throughout the course of this thesis,
-a number of such algorithms were researched~\cite{A18,A19,A21,A24,A25,A26,A31,A34,A35,A36,A37}.
+a number of such algorithms were researched~\cite{A18,A19,A20,A24,A25,A26,A31,A34,A35,A36,A37}.
 Each of these algorithms will be reviewed in Chapter 2. 
-To see all $24$ ladders listed in lexicographic order please refer to Figure~\ref{Fig:24ladders}; ladders are read left to right, top to bottom. 
+In Figure~\ref{Fig:24ladders}, one ladder per permutation is listed in lexicographic order; ladders are read left to right, top to bottom. 
 We note that the lexicographic ordering of ladders is not a Gray code order. For example, transitioning from ladder 6 to ladder 7 in Figure~\ref{Fig:24ladders} 
 requires four bars to be changed.\cleardoublepage
 
@@ -435,16 +549,16 @@ requires four bars to be changed.\cleardoublepage
 \draw(4.50,-1.50) to (4.50,0.10);
 \draw(5.00,-1.50) to (5.00,0.10);
 \draw(5.50,-1.50) to (5.50,0.10);
-\draw(4.50, 0.00) to (5.00, 0.00);
-\draw(5.00, -0.30) to (5.50, -0.30);
-\draw(4.50, -0.60) to (5.00, -0.60);
+\draw[line width=0.5mm, red](4.50, 0.00) to (5.00, 0.00);
+\draw[line width=0.5mm, red](5.00, -0.30) to (5.50, -0.30);
+\draw[line width=0.5mm, red](4.50, -0.60) to (5.00, -0.60);
 \node at(4.00,0.20){\tiny{1}};\node at(4.50,0.20){\tiny{4}};\node at(5.00,0.20){\tiny{3}};\node at(5.50,0.20){\tiny{2}};
 
 \draw(8.00,-1.50) to (8.00,0.10);
 \draw(8.50,-1.50) to (8.50,0.10);
 \draw(9.00,-1.50) to (9.00,0.10);
 \draw(9.50,-1.50) to (9.50,0.10);
-\draw(8.00, 0.00) to (8.50, 0.00);
+\draw[line width=.5mm, red](8.00, 0.00) to (8.50, 0.00);
 \node at(8.00,0.20){\tiny{2}};\node at(8.50,0.20){\tiny{1}};\node at(9.00,0.20){\tiny{3}};\node at(9.50,0.20){\tiny{4}};
 
 \draw(12.00,-1.50) to (12.00,0.10);
@@ -612,14 +726,14 @@ requires four bars to be changed.\cleardoublepage
 \node at(12.00,-9.80){\tiny{4}};\node at(12.50,-9.80){\tiny{3}};\node at(13.00,-9.80){\tiny{2}};\node at(13.50,-9.80){\tiny{1}};
 
 \end{tikzpicture}
-\caption{All 24 ladders in lexicographic order. Ladders are read left to right, top to bottom. Note how lex order is not a Gray code}
+\caption{All 24 permutations listed in lexicographic order with a corresponding optimal ladder. Ladders are read left to right, top to bottom. Note how lex order is not a Gray code}
 \label{Fig:24ladders}
 \end{figure}
 
 
 \section{Thesis Statement}
  We define \emph{The Canonical Ladder Listing Problem} as follows: 
-Given integers $[1 \dots n]$, provide a listing of all $n!$ optimal ladders,
+Given $n$, provide a listing of $n!$ optimal ladders,
 one corresponding to each permutation of order $n$, in Gray code order whereby successive ladders differ by a \emph{minimal amount of change}. 
 First, we define \emph{minimal change} as either the addition  or removal of a bar. 
 Second, we define \emph{minimal change} as moving a bar; moving a bar is the same as removing one bar and adding a new bar. 
@@ -642,8 +756,9 @@ In this thesis we provide the following contributions:
    in $O(1)$ time.
     \item $O(n^2)$ algorithm to create the canonical ladder corresponding to a given permutation.
     \item $O(1)$ amortized algorithm which lists $n!$ ladders where successive ladders differ by either a single  addition of a bar or a single removal of a bar.
-    \item Gray code for listing all ladders with $k$ bars for some arbitrary $k$ value between $[0 \leq k \leq {n \choose 2}]$. 
-    \item Gray code for listing all $n!$ ladders by $[0 \dots k \dots {n \choose 2}]$ bars. Successive ladders differ by the relocation of a bar.
+    \item Gray code for listing ladders with $n$ lines and $k$ bars for some arbitrary $k$ value between $[0 \leq k \leq {n \choose 2}]$. 
+    \item Gray code for listing $n!$ ladders ordered by the number of bars. Successive ladders differ by the relocation of a bar or by the 
+    addition of a bar when transitioning from $k$ to $k+1$ bars.
 \end{enumerate}
 	
 
@@ -656,6 +771,7 @@ the reader will find a table of solved problems related to ladder lotteries. In 
 solved problems will be provided.
 \begin{table}[h]
 	\centering
+	\caption{Table of known solutions for problems related to ladder lotteries}
 	\begin{tabular}{|p{4cm}||p{4cm}||p{4cm}|}
 		\hline 
 		\multicolumn{3}{|c|}{Table of Known Results Related to Ladder Lotteries}\\
@@ -676,12 +792,7 @@ solved problems will be provided.
 		\small{Counting and \newline Random Generation \newline Problem} & \small{Provides a solution for counting ladder lotteries of a given type as well as randomly generating a ladder lottery} &~\cite{A6} 2017\\ 
 		\hline
 		
-																
-
-
-
 	\end{tabular}
-	\caption{Table of known solutions for problems related to ladder lotteries}
 	\label{Table:KnownProblems}
 \end{table}
 
@@ -690,6 +801,7 @@ This thesis is broken down into several sections. In Chapter 2, a literature
 review of ladder lotteries will be provided along with background information pertinent to this thesis. 
 In Chapter 3, a definition of the canonical ladder is provided 
 along with the algorithm {\sc CreateCanonical}. 
-In Chapter 4, an algorithm is provided which lists $n!$ in Gray code order, by adding or removing a bar between 
-successive ladders. In Chapter 5, an algorithm for listing all ladders with $k$ bars in Gray code is order provided. 
-Also in Chapter 5, we provide the algorithm for listing all $n!$ ladders by the number of bars, from $[0 \dots k \dots{n \choose 2}]$ bars. 
+In Chapter 4, an algorithm is provided which lists one optimal ladder corresponding to each permutation of order $n$ in Gray code order; 
+a single bar is added or removed between successive ladders. 
+In Chapter 5, an algorithm for listing all ladders with $n$ lines and $k$ bars in Gray code order is provided. 
+Also in Chapter 5, we provide the algorithm for listing all $n!$ ladders ordered by the number of bars in Gray coder order. 

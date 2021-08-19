@@ -279,7 +279,7 @@ void sjtMod(Ladder *l, int count, int n, bool *dir)
     {
         if(l->numBars == 0)
         {
-           htmlLadder(l);
+            printLadderDisalvo(l);
         }
         return;
     }
@@ -312,7 +312,7 @@ void sjtMod(Ladder *l, int count, int n, bool *dir)
                 //__swap(myPerm[count-1], myPerm[count]);
             }
             //recursive call
-            htmlLadder(l);
+            printLadderDisalvo(l);
             sjtMod(l, count+1, n, dir);
         }
     }
@@ -446,15 +446,11 @@ int main()
         clock_t begin = clock();
  
     // do some stuff here
-        htmlHeader();
-        printf("<body>");
-    
-        printf("<svg height=%d width=%d/>", fact(n)*300, fact(n)*300);
+
       
 
         sjtMod(l, 2, n, dir);
-        printf("</svg>");
-        printf("</body>");
+
         clock_t end = clock();
     // calculate elapsed time by finding difference (end - begin) and
     // dividing the difference by CLOCKS_PER_SEC to convert to seconds

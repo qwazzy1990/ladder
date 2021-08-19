@@ -1,22 +1,21 @@
 In this chapter we provide a Gray code for listing all ladders with $k$ bars. 
 We define $L_{n,k}$ as the set of all canonical ladder lotteries with $n$ lines and exactly $k$ bars, where $0 \leq k \leq {n \choose 2}$. To list $L_{n,k}$, 
 we define a mapping from associated diagonals to 
-an inversion vector corresponding to $\pi$. We apply this mapping to a generate a Gray code for listing $L_{n,k}$. 
-We then provide an algorithm for listing $L_{n}$ ordered by the number of bars from $0 \leq k \leq {n \choose 2}$ in Gray code order. 
-We list $L_{n}$ by $k$ bars as follows - Let $k$ be the current number of bars in the ladder; $k$ is initialized to $0$ and terminates at ${n \choose 2}$. 
-We first list $L_{n,k}$ before we list the first ladder in $L_{n, k+1}$. When listing ladders by $k$ 
+an inversion vector corresponding to $\pi$. We apply this mapping to generate a Gray code for listing $L_{n,k}$. 
+We then provide an algorithm for listing $L_{n}$ ordered by the number of bars from $0 \leq k \leq {n \choose 2}$ in Gray code order. When listing ladders by $k$ 
 bars, we define minimal change as the relocation 
 of a bar; relocating a bar is equivalent to removing one bar and adding another bar.  
 
 
 
-\section{Listing all ladders with $n$ lines and $k$ bars in Gray code order}
+\section{Listing Ladders with $n$ Lines and $k$ Bars in Gray Code Order}
  In Chapter 2, we discussed Effler-Ruskey's algorithm and Walsh's Gray code for listing $S_{n,k}$. 
 In this section, we focus on Walsh's Gray code for listing $L_{n,k}$ by applying a minimal amount of change between subsequent ladders. We 
 relocate a bar to transition from one ladder in $L_{n,k}$ to the next ladder in $L_{n,k}$. Recall, relocating a bar is the same as 
 adding one bar and removing another bar.\par  
-An $n$ part composition of a non negative integer $k$, is an $n$ tuple $g=(g_{1}, g_{2}, \dots g_{n})$ whose sum adds to $k$. We 
-say $g$ is the \emph{bar vector of $CL(\pi_{n+1})$} when we map $g$ to a canonical ladder as follows - For each 
+An $n$ part composition of a non negative integer $k$, is an $n$ tuple $g=(g_{1}, g_{2}, \dots, g_{n})$ whose sum adds to $k$. We 
+say $g$ is the \emph{bar vector of $CL(\pi)$}, where $\pi$ is of order $n+1$, 
+when we map $g$ to a canonical ladder as follows. For each 
 index $x$ in $g$, $x$ is mapped to the associated diagonal of $((n+1)-x) + 1$. Furthermore, $g_{x}$ equals the number of bars along the associated 
 diagonal of element $((n+1)-x) + 1$. To see the mapping of $g$ to the associated diagonals, refer to Figure~\ref{Fig:gToLadder}.\par 
 \begin{figure}
@@ -60,7 +59,7 @@ diagonal of element $((n+1)-x) + 1$. To see the mapping of $g$ to the associated
   \caption{Mapping of the composition $(2,3,1,1)$ to the associated diagonals of $CL(4,2,5,3,1)$}
   \label{Fig:gToLadder}
 \end{figure}
-$g$ is $(m_{1}, \dots, m_{n})$ bounded, if for each $g_{x}$, $0 \leq g_{x} \leq m_{x}$ where $m_{x}=(n+1)-x$; 
+$g$ is $(m_{1}, \dots, m_{n})$ bounded if for each $g_{x}$, $0 \leq g_{x} \leq m_{x}$ where $m_{x}=(n+1)-x$; 
 we let $m_{x}$ be the fixed upper bound on $g$ such that $g_{x} \leq m_{x}$. 
 We let $0$ be the fixed lower bound on $g$ 
 such that $0 \leq g_{x}$. We let $k-(g_{x+1}+ \dots +g_{n})$ be the fluid upper bound on $g$ such that $g_{x} \leq k-(g_{x+1}+ \dots +g_{n})$. 
@@ -68,7 +67,7 @@ We let $k-(g_{x+1}+ \dots +g_{n}) - (m_{1} + \dots + m_{x-1})$ be the fluid lowe
 $k-(g_{x+1} + \dots + g_{n}) - (m_{1} + \dots + m_{x-1}) \leq g_{x}$. We let the maximum value of $g_{x}=min(m_{x}, k-(g_{x+1}+ \dots + g_{n}))$. 
 We let the minimum value of $g_{x}=max(0, k-(g_{x+1} + \dots +g_{n})-(m_{1} + \dots + m_{x-1}))$. For example, suppose $k=9$, $n=5$, $x=3$, $g=$(\underline{  },\underline{  },\underline{  },$1$)
  and $m=(4,3,2,1)$. The minimum value of $g_{3}=max(0, 9 - 1 - (4+3))$ and the maximum value of $g_{3}=min(2, 9-1)$. 
- Walsh's Gray Code for listing compositions is as follows follows - We start with the lexicographically largest composition $(k,0, \dots ,0)$. We define the 
+ Walsh's Gray code for listing compositions is as follows. We start with the lexicographically largest composition $(k,0, \dots ,0)$. We define the 
  \emph{last value of $g_{x}$} as either the max or min value of $g_{x}$ 
  depending on whether the suffix $(g_{x+1}+ \dots +g_{n})$ is odd or even. If the suffix is of odd parity, then the last value of $g_{x}$ is 
  equal to the $max(0, k-(g_{x+1} + \dots + g_{n})-(m_{1} + \dots + m_{x-1}))$. If the suffix is of even parity, then the last value of 
@@ -86,6 +85,7 @@ We let the minimum value of $g_{x}=max(0, k-(g_{x+1} + \dots +g_{n})-(m_{1} + \d
  Walsh's listing of $S_{5,2}$, and our listing of permutations of $S_{5,2}$, derived from our mapping of the bar vector to the canonical ladder. 
  \begin{table}[h]
   \centering
+  \caption{Table comparing the listing of permutations with the same composition}
   \begin{tabular}{|p{4cm}|p{4cm}|p{4cm}|}
     
     \hline 
@@ -112,12 +112,13 @@ We let the minimum value of $g_{x}=max(0, k-(g_{x+1} + \dots +g_{n})-(m_{1} + \d
     \hline 
 
   \end{tabular}
-  \caption{Table comparing the listing of permutations with the same composition}
   \label{Table:diffPermsSameComp}
  \end{table}
 We have claimed we can list compositions $g$ in such a way that we can list $L_{n+1,k}$ by mapping each $g_{x}$ to the number of bars along the associated diagonal 
 of $((n+1)-x)+1$. We have yet to demonstrate the details of this mapping. If $k>0$, we define \emph{the lexicographically largest ladder} as the 
-ladder such that the associated diagonal of any element $y>w$, the number of bars in $y's$ diagonal is the $min(m_{(n+1-y)+1}, k-\text{the number of bars along the associated diagonals of } n+1,n,\dots,y+1)$.
+ladder such that the number of bars along the associated diagonal of $x$ is the $min(m_{(n+1-x)+1}, k-\text{the number of bars along the associated diagonals of } x+1,\dots,n,n+1)$ 
+and the number of bars along the associated diagonal of any element less than $x$ is less than or equal to the number of bars along the 
+associated diagonal of $x$.
  We start with the lexicographically largest ladder and the corresponding lexicographically largest $g$. To list $g$, we use the same 
  sequencing rule as Walsh. To list $L_{n+1, k}$, we let $x'=(n+1)-x+1$ and we let $w'=(n+1)-w+1$, where $x \neq w$. We add or remove one bar from the associated diagonal of $x'$ and remove or add another bar 
  from the associated diagonal of $w'$; we always do the inverse operation on $x'$ and $w'$ in order to 
@@ -367,10 +368,10 @@ ladder such that the associated diagonal of any element $y>w$, the number of bar
   \label{Alg:NextLadderLnK}
 \end{algorithm}
 
-\begin{corollary}
+\begin{theorem}
   {\sc NextLadderNK} produces the next ladder in $L_{n+1, k}$ in $O(1)$ time.
 \end{corollary}
-\begin{proof}
+\begin{theorem}
   From Walsh's paper, we know that we can attain the first and second pivot in $O(1)$ time. We use these pivots, $x$ and $w$, to calculate the 
   row and column for the coordinates of the bar to add, and the coordinates of the bar to remove, in $O(1)$ time. 
 \end{proof}
@@ -389,13 +390,13 @@ else $increment$ is set to \textbf{false}.
     \Function{ListLNK}{$g$, $m$, $CL$, $k$}
       \State {\sc Print}($CL$)
       \State $increment \gets$ \textbf{true}
-      \While{$g_{1}<m_{1}$ \textbf{and} $g_{1}< k-(g_{2}+ \dots +g_{n-1})$}\Comment{while not at last composition}
+      \While{$g_{1}<m_{1}$ \textbf{and} $g_{1}< k-(g_{2}+ \dots +g_{n-1})$}\Comment{while not at last $g$}
         \State $(p1,p2) \gets ${\sc Walsh}$(g,m, \dots)$
         \If{$(g_{p1+1},+ \dots ,+g_{n-1})$ is even} $p1 \gets p1+1$, $p2 \gets p2-1$
         \Else $\: p1 \gets p1-1$, $p2 \gets p2+1$
         \EndIf
 
-        \If{$g_{1}>m_{1}$ \textbf{or} $g_{1}>k-(g_{2}+ \dots +g_{n-1})$}\Comment{surpassed last composition}
+        \If{$g_{1}>m_{1}$ \textbf{or} $g_{1}>k-(g_{2}+ \dots +g_{n-1})$}\Comment{surpassed last $g$}
           \State $g_{1} \gets g_{1}-1$
           \State $g_{p1} \gets g_{p1}+1$
           \State \textbf{return}
@@ -408,7 +409,7 @@ else $increment$ is set to \textbf{false}.
       \EndWhile
     \EndFunction
   \end{algorithmic}
-  \caption{Algorithm for listing $L{n,k}$}
+  \caption{Algorithm for listing $L_{n,k}$}
   \label{Alg:ListLNK}
 \end{algorithm} 
 
@@ -417,10 +418,10 @@ We note that line $6$ of the algorithm determines the parity of the suffix; Wals
 of the suffix can be determined in $O(1)$ time by maintaining a number of auxiliary data structures~\cite{A41}.  
 
 
-\section{Listing $L_{n}$ by $k$ bars}
+\section{Listing $L_{n}$ Ordered by $k$ Bars}
 In the previous section, we applied Walsh's Gray code for listing $L_{n,k}$. In this section, we further modify Walsh's Gray code 
 to list $L_{n}$ by way of listing $L_{n,0} \dots L_{n,k} \dots L_{n, {n \choose 2}}$ in Gray code order. 
-To reiterate, we list $L_{n}$ by way of $L_{n,k}$ by first listing all ladders with exactly $k$ bars before we list the first ladder with $k+1$ bars. In Figure~\ref{Fig:LnByk} we show the 
+We list $L_{n}$ by way of $L_{n,k}$ by first listing all ladders with exactly $k$ bars before we list the first ladder with $k+1$ bars. In Figure~\ref{Fig:LnByk} we show the 
 listing of $L_{4}$ by listing $L_{4,0} \dots L_{4, k} \dots L_{4, 6}$.\par 
 
 \begin{figure}[htp]
@@ -665,10 +666,12 @@ listing of $L_{4}$ by listing $L_{4,0} \dots L_{4, k} \dots L_{4, 6}$.\par
 \end{figure}
 
 
-We previously defined the lexicographically largest ladder as the ladder such 
-the associated diagonal of any element $y>w$, the number of bars in $y's$ diagonal is the $min(m_{(n+1-y)+1}, k-\text{the number of bars along the associated diagonals of } n+1,n,\dots,y+1)$. 
-We now define the \emph{terminating ladder} as follows - let the 
-first $k-1$ bars compose the sub-ladder along the associated diagonals from $3 \dots y \dots n$; this sub-ladder is the 
+We previously defined the lexicographically largest ladder as the 
+ladder such that the number of bars along the associated diagonal of $x$ is the $min(m_{(n+1-x)+1}, k-\text{the number of bars along the associated diagonals of } x+1,\dots,n,n+1)$ 
+and the number of bars along the associated diagonal of any element less than $x$ is less than or equal to the number of bars along the 
+associated diagonal of $x$.
+We now define the \emph{terminating ladder} as follows. Let the 
+first $k-1$ bars compose the sub-ladder along the associated diagonals from $3 \dots x \dots n$; this sub-ladder is the 
 lexicographically largest sub-ladder. Bar $k$ occupies the associated diagonal of $2$. For an example of the terminating ladder 
 for $L_{5, 6}$, please refer to Figure~\ref{Fig:TerminatingLadder}. We describe the corresponding $g$, termed 
 the \emph{terminating composition $g$}, as $(k-1, 0, \dots, 1)$. 
@@ -691,31 +694,27 @@ the \emph{terminating composition $g$}, as $(k-1, 0, \dots, 1)$.
   \label{Fig:TerminatingLadder}
 \end{figure}
 
-In order to list $L_{n}$ by way of $L_{n,k}$, we use Walsh's Gray code on composition $g$ when $k$ is odd. Recall, that 
-when $k$ is odd we start at the lexicographically largest $g$ and end at the terminating $g$. Therefore, our description of 
+In order to list $L_{n}$ by way of $L_{n,k}$, we use Walsh's Gray code on composition $g$ when $k$ is odd. 
+When $k$ is odd we start at the lexicographically largest $g$ and end at the terminating $g$. Therefore, our description of 
 listing $L_{n,k}$ by way of $g$ in the previous section still holds for odd values of $k$. However, when $k$ is even we 
-start with the terminating $g$ and we have to work backwards so to speak, ending at the lexicographically largest $g$.
-We assume by providing the inverse of Walsh's Gray code, we can list $g$ for even values of $k$. 
-We provide two conjectures, Conjecture~\ref{Conjecture:ReverseOrdering} and Conjecture~\ref{Conjecture:ReverseWalsh},
-that could allow for the algorithmic implementation of the reverse ordering of Walsh's Gray code. If 
-Conjecture~\ref{Conjecture:ReverseOrdering} is true, we have a sufficient condition for Conjecture~\ref{Conjecture:ReverseWalsh} being true. 
+start with the terminating $g$ and we have to work backwards so to speak, ending at the lexicographically largest $g$. 
+We could apply Walsh's algorithm to even instances of $k$ and then visit the listing in reverse order. However, doing so 
+is slow and takes up unnecessary space. Hence, we want to provide a CAT algorithm for listing 
+$g$ in the reverse of Walsh's ordering. We provide Conjecture~\ref{Conjecture:ReverseOrdering} which describes the 
+process that could allow for the algorithmic implementation of the reverse ordering of Walsh's Gray code in CAT.
 \begin{conjecture}
-  We refer to $x$ as $p1$ and $w$ as $p2$.
-  When listing $g$ in reverse order, we list $g$ as follows-starting from $g_{2}$, 
-  scan left to right until you find a $g_{x}$ not at its last value such that if $(g_{x+1}, + \dots + ,g_{n})$ is odd and there exists some minimum $1 \leq w \leq x-1$ 
-  such that $g_{w}$ that is not at its minimum value then increment $g_{p1}$ and decrement $g_{p2}$. If $(g_{x+1} + \dots +g_{n})$ is even and there 
-  exists some minimum $1 \leq w \leq x-1$ such that $g_{w}$ is not at its maximum value, decrement $g_{p1}$ and increment $g_{p2}$. 
+  The reverse of Walsh's Gray code can be generated in constant amortized time. 
+  When listing $g$ in reverse order we start from $g_{2}$, 
+  scan left to right until there exists a $g_{x}$ where if $(g_{x+1}, + \dots + ,g_{n})$ is odd and there exists some minimum $1 \leq w \leq x-1$ 
+  such that $g_{w}$ that is not at its minimum value then increment $g_{x}$ and decrement $g_{w}$. If $(g_{x+1} + \dots +g_{n})$ is even and there 
+  exists some minimum $1 \leq w \leq x-1$ such that $g_{w}$ is not at its maximum value, decrement $g_{x}$ and increment $g_{w}$. 
   \label{Conjecture:ReverseOrdering}
 \end{conjecture}
-Under the assumption Conjecture~\ref{Conjecture:ReverseOrdering} is true, we state Conjecture~\ref{Conjecture:ReverseWalsh}.
-\begin{conjecture}
-  Assuming ~\ref{Conjecture:ReverseOrdering} is true, by starting with the terminating composition of $g$ and ending at the 
-  lexicographically largest composition of $g$, we  
-  can implement the inverse of Walsh's algorithm for listing $g$ in reverse ordering with $O(1)$ time per instance of $g$. 
-  \label{Conjecture:ReverseWalsh}
-\end{conjecture}
+Assuming Conjecture~\ref{Conjecture:ReverseOrdering} is true, by starting with the terminating composition of $g$ and ending at the 
+lexicographically largest composition of $g$, we can implement the reverse of Walsh's algorithm for listing $g$ in reverse ordering with $O(1)$ time per instance of $g$. 
+We refer to this hypothetical algorithm as {\sc ReverseWalsh}. 
 In Figure~\ref{Fig:ReverseOrdering}, we apply Conjecture~\ref{Conjecture:ReverseOrdering}
-to provide the Gray code for the composition $g$ on $S_{5,4}$ in reverse order. We also give
+to provide the Gray code for the composition $g$ on $S_{5,4}$ in {\sc ReverseWalsh} order. We also give
  the Gray code for the permutations when we map $g$ to the associated diagonals of the canonical ladder. 
 We start with the terminating composition of $g$ 
 and the permutation corresponding to the terminating ladder. We end at the lexicographically largest composition and the permutation corresponding 
@@ -726,13 +725,13 @@ than the second pivot $p2$.\pagebreak
   \centering 
   \begin{tikzpicture}
     \node at (0, 50){Composition};                       \node at (5, 50){{Permutation}};
-    \node at (0, 49.5){$(\mathbf{3},0,0,\mathbf{1})$};   \node at (5, 49.5){$(2,5,1,3,4)$};  
+    \node at (0, 49.5){$(\mathbf{3},\mathbf{0},0,1)$};   \node at (5, 49.5){$(2,5,1,3,4)$};  
     \node at (0, 49){$(\mathbf{2},\mathbf{1},0,1)$};     \node at (5, 49){$(2,1,5,4,3)$};
     \node at (0, 48.5){$(\mathbf{1},\mathbf{2},0,1)$};   \node at (5, 48.5){$(2,4,1,5,3)$};
-    \node at (0, 48){$(\mathbf{0},\mathbf{3},0,1)$};     \node at (5, 48){$(4,2,1,3,5)$};
-    \node at (0, 47.5){$(\mathbf{0},2,\mathbf{1},1)$};   \node at (5, 47.5){$(2,4,3,1,5)$};
+    \node at (0, 48){$(0,\mathbf{3},\mathbf{0},1)$};     \node at (5, 48){$(4,2,1,3,5)$};
+    \node at (0, 47.5){$(\mathbf{0},\mathbf{2},1,1)$};   \node at (5, 47.5){$(2,4,3,1,5)$};
     \node at (0, 47){$(\mathbf{1},\mathbf{1},1,1)$};     \node at (5, 47){$(2,3,4,5,1)$};
-    \node at (0, 46.5){$(\mathbf{2},\mathbf{0},1,1)$};   \node at (5, 46.5){$(2,3,5,1,4)$};
+    \node at (0, 46.5){$(\mathbf{2},0,\mathbf{1},1)$};   \node at (5, 46.5){$(2,3,5,1,4)$};
     \node at (0, 46){$(\mathbf{1},0,\mathbf{2},1)$};     \node at (5, 46){$(3,2,1,5,4)$};
 
    \node at (0, 45.5){$(0,\mathbf{1},2,\mathbf{1})$};   \node at (5, 45.5){$(3,2,4,1,5)$};
@@ -771,35 +770,33 @@ than the second pivot $p2$.\pagebreak
 \end{figure}
 \pagebreak
 
-We use Conjecture~\ref{Conjecture:ReverseOrdering} and Conjecture~\ref{Conjecture:ReverseWalsh} to create Algorithm~\ref{Alg:ListLNKReverse}, 
+We use {\sc ReverseWalsh} to create Algorithm~\ref{Alg:ListLNKReverse}, 
 termed {\sc ListLNKReverse} to provide a reverse listing of all ladders of order $n$ with $k$ bars in Gray code order. 
-Let $k$ be the number of bars. Let $n$ be the number of lines in $CL$. 
-Let $g$ be initialized to the terminating composition; $(k-1,0, \dots, 1)$. Let $m$ be the bound on $g$. 
+Let $k$ be the number of bars, initialized to $0$. Let $n$ be the number of lines in $CL$. 
+Let $g$ be initialized to $(0, \dots, 0)$. Let $m$ be the bound on $g$. 
 We note that $g$ and $m$ are of order $n-1$.
 Let $CL$ be the canonical ladder data structure initialized as the lexicographically largest ladder. 
-Let $p1$ and $p2$ be pivot one and pivot two respectively. 
+Let $p1$ and $p2$ be pivot one and pivot two respectively returned by {\sc ReverseWalsh}. 
 Let $increment$ be a Boolean set to \textbf{true} if $p1$ is to be incremented and $p2$ is to be decremented, 
-else $increment$ is set to \textbf{false}. Let {\sc ReverseWalsh} be the hypothetical implementation of the inverse 
-of Walsh's algorithm, which is used as a subroutine to 
-return $p1$ and $p2$ in such a way that $g$ can be listed in reverse order. 
+else $increment$ is set to \textbf{false}.
 
 \begin{algorithm}
   \begin{algorithmic}[1]
     \Function{ListLNKReverse}{$g$, $m$, $CL$, $k$}
       \State {\sc Print}($CL$)
       \State $increment \gets$ \textbf{true}
-      \While{$g_{1}<m_{1}$ \textbf{and} $g_{1}< k-(g_{2}+ \dots +g_{n-1})$}\Comment{while not at lex. largest composition}
-        \State $(p1,p2) \gets ${\sc ReverseWalsh}$(g,m, \dots)$\Comment{Assuming Conjecture~\ref{Conjecture:ReverseWalsh} is correct}
+      \While{$g_{1}<m_{1}$ \textbf{and} $g_{1}< k-(g_{2}+ \dots +g_{n-1})$}
+        \State $(p1,p2) \gets ${\sc ReverseWalsh}$(g,m, \dots)$
         \If{$(g_{p1+1},+ \dots ,+g_{n-1})$ is odd} $p1 \gets p1+1$, $p2 \gets p2-1$
         \Else $\: p1 \gets p1-1$, $p2 \gets p2+1$
         \EndIf
 
-        \If{$g_{1}>m_{1}$ \textbf{or} $g_{1}>k-(g_{2} + \dots + g_{n-1})$}\Comment{surpassed lex. largest composition}
+        \If{$g_{1}>m_{1}$ \textbf{or} $g_{1}>k-(g_{2} + \dots + g_{n-1})$}
           \State $g_{1} \gets g_{1}-1$
           \State $g_{2} \gets g2_{+1}$
           \State \textbf{return}
         \EndIf
-        \If{$(g_{p1+1},+ \dots ,+g_{n-1})$ is odd} $increment \gets $ \textbf{true} \Comment{Assuming Conjecture~\ref{Conjecture:ReverseOrdering} is correct}
+        \If{$(g_{p1+1},+ \dots ,+g_{n-1})$ is odd} $increment \gets $ \textbf{true} 
         \Else $:\ increment \gets $ \textbf{false}
         \EndIf
         \State {\sc NextLadderNK}$(p1, p2, CL, increment)$
@@ -811,7 +808,8 @@ return $p1$ and $p2$ in such a way that $g$ can be listed in reverse order.
   \label{Alg:ListLNKReverse}
 \end{algorithm} 
 
-Assuming we implement the inverse of Walsh's algorithm, we would be able to list $L_{n,k}$  in constant amortized time in 
+Assuming Conjecture~\ref{Conjecture:ReverseOrdering} is true, 
+we would be able to list $L_{n,k}$  in constant amortized time in 
 the reverse ordering of Walsh's Gray code order.\par
 When we list $L_{n}$, if $k$ is odd, the first ladder listed in $L_{n,k}$ is the lexicographically 
 largest ladder and the last ladder listed is the terminating ladder. If $k$ is even, 
@@ -922,7 +920,7 @@ as subroutines, we ensure that {\sc UpdateMinX} is called as a subroutine in the
 is the smallest $x$ value not at its $m_{x}$ value. With the correct value for $MinX$, we 
 add a bar to the largest associated diagonal with 
 room for the incrementing bar. We know that the maximum number of bars is ${n \choose 2}$, therefore we terminate 
-recursion when $k$ exceeds ${n \choose 2}$. Assuming {\sc ReverseWalsh} is correct, {\sc ListLnByKBars} lists $L_{n}$ in constant amortized 
+recursion when $k$ exceeds ${n \choose 2}$. {\sc ListLnByKBars} lists $L_{n}$ in constant amortized 
 time and in Gray code order. 
 \begin{lemma}
   Each ladder produced by {\sc ListLnByKBars} is unique. 
@@ -930,19 +928,18 @@ time and in Gray code order.
 \end{lemma}
 \begin{proof}
   Walsh's Gray code lists all unique instances of $g$ when $k$ is odd. Each instance of $g$ 
-  corresponds to a unique ladder due to our mapping to the associated diagonals. We assume that the {\sc ReverseWalsh}
+  corresponds to a unique ladder due to our mapping to the associated diagonals. We assume that {\sc ReverseWalsh}
   produces the reverse ordering of Walsh's Gray code when applied to even values of $k$, making all ladders for even values of $k$ 
   unique. When we transition from $k$ to $k+1$ we add a bar, making the last ladder of $k$ and the first ladder of $k+1$ unique.
 \end{proof}
 \section{Chapter Conclusion}
-We have provided a theoretical algorithm for listing $L_{n}$ in Gray code order by $k$ bars. Furthermore, we would 
+We have provided a theoretical algorithm for listing $L_{n}$ in Gray code order by $L_{n,k}$. Furthermore, we would 
 be able to do so in constant amortized time. We have provided a second solution to The Canonical Ladder Listing Problem. 
 What makes this solution interesting is that we list $L_{n}$ ordered by the number of bars. Our future work is as follows:
 \begin{enumerate}
   \item Implement Walsh's loop free algorithm
+  \item Prove Conjecture~\ref{Conjecture:ReverseOrdering}
   \item Design and implement {\sc ReverseWalsh}
-  \item Prove Conjectures~\ref{Conjecture:ReverseOrdering} and~\ref{Conjecture:ReverseWalsh}
-  \item Develop applications for listing $L_{n}$ by $k$ bars
 \end{enumerate}
 
 

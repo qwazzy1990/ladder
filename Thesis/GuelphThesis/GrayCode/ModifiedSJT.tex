@@ -12,9 +12,9 @@ In the previous chapter, we described how
 we could list $L_{n}$ using the naive approach. However, using the naive approach is slow. In this chapter we seek to improve 
 the running time for listing $L_{n}$. In this section, we improve the running time by determining the location of a bar in $O(1)$ time for a pair of adjacent elements. 
 This allows us to take advantage of the Steinhaus-Johnson-Trotter algorithm, which applies adjacent transpositions to elements.\par  
-We define $r$, with respect to a permutation $\pi$, as a vector from $[1 \dots x \dots n]$ as follows: $r_{x}$ equals the number of elements less than $x$ and to the 
-right of $x$ in $\pi$. We note that $[0 \leq r_{x} \leq x-1]$. 
-For example, given $(3,4,1,5,6,2)$, $r_{1}=0$, $r_{2}=0$, $r_{3}=2$, $r_{4}=2$, $r_{5}=1{$ 
+We define $r$, with respect to a permutation $\pi$, as a vector of order $n$ as follows: $r_{x}$ equals the number of elements less than $x$ and to the 
+right of $x$ in $\pi$. We note that $0 \leq r_{x} \leq x-1$. 
+For example, given $(3,4,1,5,6,2)$, $r_{1}=0$, $r_{2}=0$, $r_{3}=2$, $r_{4}=2$, $r_{5}=1$ 
 and $r_{6}=1$. We use $r$ to define {\sc GetCoordinates2} found in equation~\ref{Eqn:GetCoordinates2}. Let $x>y$ be two elements in $\pi$ 
 such that $pos(x)=pos(y)+/-1$. We are going to apply an adjacent transposition to $x$ and $y$; we need to know where to 
 locate the $1$ or $0$ in the binary matrix corresponding to the elements $x,y$ in order to flip it from a $1$ to a $0$ 
@@ -34,9 +34,9 @@ or vice versa. Prior to the transposition
  \end{equation}
 
 Initially, if $pos(x)=pos(y)+1$, then when we apply an adjacent transposition between $x$ and $y$, 
-an inversion is induced in $\pi$. Therefore, $r_{x}$ is incremented by $1$, and the bar $(x,y)$ has been 
+an inversion is induced in $\pi$. Therefore, $r_{x}$ is incremented by $1$, and the bar $(x,y)$ gets 
 added to the canonical ladder. Initially, if $pos(x)=pos(y)-1$ then when we apply an adjacent 
-transposition between $x$ and $y$, an inversion is removed from $\pi$. Therefore, $r_{x}$
+transposition between $x$ and $y$, and an inversion gets removed from $\pi$. Therefore, $r_{x}$
 is decremented by $1$, indicating the bar 
 $(x,y)$ has been removed from the canonical ladder.
 One of the main results of this thesis is {\sc ModifiedSJT} produces $L_{n}$ in Gray code order in CAT. 
@@ -59,8 +59,9 @@ Let $n$ be the maximum element.
 Let $x$ be initialized to $2$; $x$ represents the current element. 
  On each recursive call 
 $x$ is incremented by $1$ from $2,3 \dots n,n+1$. 
-Let $direction$ be a one indexed array set to \textbf{false} for all indexes. $direction[x]=$\textsbf{false} implies the $xth$ is being adjacently transposed 
-from right to left. $direction[x]=$\textbf{true} implies the $xth$ is being transposed from 
+Let $direction$ be a one indexed array set to \textbf{false} for all indexes. $direction[x]=$\textsbf{false} implies the $xth$ element 
+is being adjacently transposed 
+from right to left. $direction[x]=$\textbf{true} implies the $xth$ element is being transposed from 
 left to right. Let $r$ be the inversion vector initialized at all indices to $0$; when $r$ is initialized 
 to all $0s$, this means that $r$ is the inversion vector for $\pi=(1,2, \dots, n-1,n)$.
 \begin{algorithm}
@@ -110,9 +111,9 @@ When $direction[x]$ equals \textbf{false} we use the first case from
 Given the current value of $x$, add or remove a bar for the route of $x$, then add or remove 
 all bars for route $x+1$. Once all bars for route $x+1$ have been added or removed, 
 proceed to add or remove the next bar from the route of $x$. Repeat until all $x-1$ bars have been added or removed from route $x$.
-If $direction[x]$ is $false$, then bars of $x$ will be added to 
+If $direction[x]$ is \textbf{false}, then bars of $x$ will be added to 
 $ladder$ from right to left, bottom to top, until no more bars to the route of $x$ can be added.
-If $direction[x]$ is $true$, then bars will be removed from $ladder$, left to right, top to bottom, until 
+If $direction[x]$ is \textbf{true}, then bars will be removed from $ladder$, left to right, top to bottom, until 
 no more bars from the route of $x$ can be removed. Once all the bars for the route of $x$ have 
 been added or removed, then $direction[x]$ is negated,
 indicating that the opposite operation will be applied to the bars of the route of $x$ when 
@@ -551,32 +552,33 @@ The runtimes from $n=9 \dots n=13$ are provided in Table~\ref{Table:ListingResul
  \begin{center}
     \begin{table}[ht]
       \centering
-    \resizebox{!}{0.2\textheight}{
-       \begin{tabular}{ |p{3cm}||p{3cm}|}
+      \caption{The table with the runtimes for listing $L_{n}$ using {\sc ModifiedSJT}.}
+
+    \resizebox{.75\textwidth}{0.2\textheight}{
+       \begin{tabular}{ |p{1cm}||p{5cm}|}
         \hline
         \multicolumn{2}{|c|}{Runtimes for generating $L_{n}$ in seconds} \\
         \hline
             $n$ & {\sc ModifiedSJT} Runtime\\
         \hline
-            9 &  0.00\\
+            \small{9} &  \small{0.00}\\
             \hline 
-            10 &  0.03\\
+            \small{10} &  \small{0.03}\\
             \hline
-            11 &  0.25\\
+            \small{11} &  \small{0.25}\\
             \hline 
-            12 &  2.78\\
+            \small{12} &  \small{2.78}\\
             \hline 
-            13 & 66.97\\
+            \small{13} & \small{66.97}\\
         \hline
     \end{tabular}}
-    \caption{The table with the runtimes for listing $L_{n}$ using {\sc ModifiedSJT}.}
     \label{Table:ListingResults}
     \end{table}
   \end{center}
 
 
   \section{Chapter Conclusion}
-  We have provided an algorithm for listing $L_{n}$ with CAT time per ladder by adding or removing a bar. By doing so, we 
+  We have provided a CAT algorithm for listing $L_{n}$ by adding or removing a bar. By doing so, we 
   have provided a solution to The Canonical Ladder Listing Problem. We use Equation~\ref{Eqn:GetCoordinates2} and modified the 
   Steinhaus-Johnson-Trotter algorithm in order to create Algorithm~\ref{Alg:ModSJT}. We computed the location of a bar corresponding 
   to any pair of adjacent elements in $O(1)$ time.\par 

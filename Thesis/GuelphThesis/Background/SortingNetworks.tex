@@ -3,7 +3,7 @@
 %Intro subsection
 \section{Sorting Networks}
 Let a \emph{wire} be a horizontal line. Let a \emph{comparator} be a vertical line connecting two wires. A 
-\emph{sorting network} is a device consisting of $[1 \dots n]$ wires and $[0 \dots m]$  
+\emph{sorting network} is a device consisting of $n$ wires and $m$  
 comparators such that the sorting network sorts a permutation of $n$ elements into ascending order. The 
 $n$ elements are first listed to the left of each wire in the network. The elements travel across their respective wires 
 at the same time. When a pair of elements, traveling through a pair of wires, 
@@ -49,7 +49,7 @@ To see a complete sorting network for $n=4$ please refer to Figure~\ref{Fig:Sort
 
 
     \end{tikzpicture}
-    \caption{Complete Sorting Network for $n=4$.}
+    \caption{Complete sorting network for $n=4$.}
     \label{Fig:SortNetwork}
 \end{figure}
 
@@ -70,21 +70,22 @@ is a bijection from the wires in a minimum sorting network and the lines in a la
 \subsection{The Integer Sequence Relating to the Reverse Permutation}
 Let $\pi=(n,n-1, \dots 2,1)$ refer to the reverse permutation order $n$. 
 There is an integer sequence that counts the number of minimum sorting networks 
-for $\pi$. This integer sequence also counts $OptL\{(n,n-1, \dots 2,1)\}$. This sequence grows very quickly, therefore $n=15$ 
+for $\pi$. This integer sequence also counts $OptL\{(n,n-1, \dots ,1)\}$. This sequence grows very quickly, therefore $n=15$ 
 is  the largest value this integer sequence has been calculated for. To refer to the table for this sequence 
 please refer to Table~\ref{Tab:IntSeq1}~\cite{A30}.
 \begin{table}[t]
     \begin{center}
-
-    \begin{tabular}{|p{2cm}||p{8cm}|}
+    \caption{Number of minimum sorting networks and $|OptL\{(n,n-1, \dots, 1)\}|$}        
+    \label{Tab:IntSeq1}
+    \begin{tabular}{|p{2cm}||p{7cm}|}
         \hline
-        \multicolumn{2}{|c|}{Number of minimum sorting networks/$|OptL\{Rev(\pi)\}|$}\\
+        \multicolumn{2}{|c|}{Number of minimum sorting networks and $|OptL\{(n,n-1, \dots, 1)\}|$}\\
         \hline
-        n & Count \\ 
+        $N$ & Count \\ 
         \hline 
-        1 & 1 \\
+        1 & 1\\
         \hline 
-        2 & 1 \\
+        2 & 1\\
         \hline 
         3 & 2 \\
         \hline 
@@ -114,12 +115,10 @@ please refer to Table~\ref{Tab:IntSeq1}~\cite{A30}.
         \hline 
     \end{tabular}
     \end{center}
-    \caption{Number of minimum sorting networks and $|OptL\{Rev(\pi)\}|$}
-    \label{Tab:IntSeq1}
 \end{table}\par
 Dumitrescu and Mandal, in their paper New Lower Bounds For The Number of Pseudoline Arrangements~\cite{A33}
 published in 2018, provide the current best known lower bound for this sequence as  
-$bn \geq cn^{2} - O(n log n)$ for some constant $c > 0.2083$. In particular, $bn \geq 0.2083 n^{2}$
+$T_{bn} \in O(n^{2} - n\log{}n)$. In particular, $bn \geq 0.2083 n^{2}$
 for large values of $n$. Where $bn$ is the bound for a given value $n$. In the paper, Coding 
 and Counting Arrangements of Pseudolines~\cite{A32} by Felsner and Valtr, written in 2011, the authors demonstrate 
 the best known upper bound for this sequence is $bn \leq 2^{0.657n^{2}}$.\par 

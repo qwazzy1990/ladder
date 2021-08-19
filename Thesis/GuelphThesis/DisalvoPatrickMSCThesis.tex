@@ -30,6 +30,7 @@
 \usepackage{titlesec}
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage{longtable}
+\usepackage{url}
 
 
 %\usepackage{algorithm2e}
@@ -155,7 +156,7 @@
 \begin{document}
 
 %--- TITLE PAGE   --------------------------
-\title{Amidakuji: Algorithms, Gray Codes and Equations for Listing Ladder Lotteries}
+\title{Amidakuji: Gray Code Algorithms and Equations for Listing Ladder Lotteries}
 
 \author{Patrick Di Salvo}
 
@@ -182,16 +183,15 @@
 
 \begin{abstract}
 
-We provide a Gray Code for listing ladder lotteries in which successive ladders differ by the addition/removal of a single bar or 
+We provide a Gray code for listing ladder lotteries in which successive ladders differ by the addition/removal of a single bar or 
 the relocation of a bar. Ladder lotteries are an abstract mathematical object which correspond to permutations. They are a network of vertical lines 
-and horizontal bars, which induce transpositions on elements in a specific permutation. 
-Ladder lotteries are of interest to the field of theoretical computer science because of their similarities to other 
+and horizontal bars, which induce transpositions on elements in a specific permutation when the lines cross. 
+Ladder lotteries are of interest to the field of theoretical computer science because of their relationship with other 
 mathematical objects such as primitive sorting networks. 
 To list ladder lotteries, we define a function that calculates the location for any bar in the data structure in $O(1)$ time. We provide an $O(n^2)$ amortized 
 algorithm for creating a specific ladder corresponding to a specific permutation. We provide an $O(1)$ amortized algorithm for listing 
-all $n!$ canonical ladders by adding or removing a bar. We also provide a Gray code for listing all $n!$ ladders by $[0 \dots k \dots {n \choose 2}]$ bars. 
-Ladder lotteries are of interest to the field of theoretical computer science because of their similarities to other 
-mathematical objects such as primitive sorting networks.
+ $n!$ canonical ladders by adding or removing a bar. Finally, we provide a Gray code for listing $n!$ ladders ordered by 
+ the number of bars. 
 
 \medskip
 

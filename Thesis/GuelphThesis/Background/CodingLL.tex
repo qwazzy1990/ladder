@@ -1,13 +1,16 @@
 \section{Coding Ladder Lotteries}
-In the paper Coding Ladder Lotteries~\cite{A5}, written by Aiuchi, Yamanaka, Hirayama and Nishitani, the authors provide three methods to encode ladder lotteries as 
-binary strings. Coding ladder lotteries as binary strings allows for a compact, computer readable, representation of them.
+In \emph{Coding Ladder Lotteries}~\cite{A5}, written by Aiuchi, Yamanaka, Hirayama and Nishitani, the authors provide three methods to encode ladder lotteries as 
+binary strings. Coding ladder lotteries as binary strings allows for a compact, computer readable, representation of them. Although we do not 
+apply the encodings to the results of this thesis, we include them for completeness.
 \subsection{Route Based Encoding}
 The first method is termed \emph{route based encoding method} in 
 which each route of an element in the permutation has a binary encoding. Let $RC(l)$ be the route encoding for 
-some arbitrary ladder in $OptL\{\pi\}$. 
+some arbitrary ladder in $OptL\{\pi\}$. We encode $RC(l)$ by encoding the route of each $p_{i}$ in $\pi$. Let a $1$ 
+for the encoding of $p_{i}$ indicate that $p_{i}$ is travelling left to right. Let a $0$ in the encoding of $p_{i}$ indicate 
+that $p_{i}$ is travelling right to left. Then, append zero to $n-1$ $0s$ to the end of the encoding of $p_{i}$ so that the length 
+of the encoding is $n-1$. Then, combine the encodings for each $p_{i}$ to produce $RC(l)$.   
 For an example of the route encoding for the root ladder of $(3,2,5,4,1)$ refer to 
-Figure~\ref{fig:route-encoding}. The number of bits needed for $RC(l)$ 
-belongs to $\mathcal{O}(n^{2})$.\par 
+Figure~\ref{fig:route-encoding}; underlined $0s$ indicate appended $0s$. The number of bits needed for $RC(l)$ is $\mathcal{O}(n^{2})$.\par 
 \begin{figure}[!htp]
     \begin{center}
         \begin{tikzpicture}
@@ -55,14 +58,40 @@ come into contact with $i$. Let $LC(i)$ denote the line based encoding for line 
 Let $1$ denote a left end point that 
 comes into contact with line $i$ and let $0$ denote a right 
 end point that comes into contact with line $i$. Finally, append a $0$
-to line $i$ to denote the end of the line. Then line $i$ can be 
+to line $i$ to denote the end of the encoding for that line. Then line $i$ can be 
 encoded, from top to bottom, as a sequence of $1s$ and $0s$ that 
 terminates in a $0$.  
-Since each bar is encoded as two bits, and there are $n-1$ bits as terminating bits; 
+Since each bar is encoded as two bits, and there are $n-1$ bits as terminating bits, 
 one for each line in $l$, then the number of bits required is $n + 2b -1$, where $n$
 is the number of lines and $b$ is the number of bars. Encoding and decoding can be 
-done in $\mathcal{O}(n+b)$ time. Clearly the line-based encoding 
-trumps the route-based encoding in both time and space complexity.
+done in $O(n+b)$ time. Clearly the line-based encoding 
+trumps the route-based encoding in both time and space complexity. To see an example 
+of the line based encoding, refer to Figure~\ref{Fig:LineBasedEncoding}. Terminating $0s$ 
+are underlined.
+\begin{figure}[ht]
+    \centering
+    \begin{tikzpicture}
+        \draw(0, 0) to (0, 4);
+            \draw(0, 3.5) to (2, 3.5);
+            \draw(0, 1.5) to (2, 1.5);
+        \draw(2, 0) to (2, 4);
+            \draw(2, 2.5) to (4, 2.5);
+        \draw(4, 0) to (4, 4);
+            \draw(4, 3.5) to (6, 3.5);
+        \draw(6, 0) to (6, 4);
+        \node at(0, 4.2){$3$};
+        \node at(2, 4.2){$2$};
+        \node at(4, 4.2){$4$};
+        \node at(6, 4.2){$1$};
+       
+        \node at(0, -.2){$1$};
+        \node at(2, -.2){$2$};
+        \node at(4, -.2){$3$};
+        \node at(6, -.2){$4$};
+    \end{tikzpicture}
+    \caption{The line based encoding for the given ladder lottery is $11\underline{0}010\underline{0}10\underline{0}0$}
+    \label{Fig:LineBasedEncoding}
+\end{figure}
 
 \subsection{Improved Line Based Encoding}
 Although the line-based encoding is better than the route based 
@@ -110,10 +139,9 @@ last $1$ a $0$ must immediately proceed any $1$.
 Since this $0$ is implied, it can be removed from $LC(i=n-1)$.
 \end{enumerate} 
 The line based encoding for the ladder in Figure~\ref{Fig:allthree} is $11\underline{0}101011\underline{0}0010101\underline{0}000$. 
-The combination of all three improvements can be done independently.\newline 
-By applying improvement one, we get $11\underline{0}101011\underline{0}0010101\underline{0}$. 
-Notice how the last three $0s$ were removed because they represented $LC(i=n)$.
-By applying improvement two to improvement one we get $11\underline{0}10011\underline{0}001001\underline{0}$.
+The application of all three improvements can be done independently.\newline 
+By applying improvement one, we get $11\underline{0}101011\underline{0}0010101\underline{0}$. Notice how the last three $0s$ were removed because they represented $LC(i=n)$.
+By applying improvement two to we get $11\underline{0}10011\underline{0}001001\underline{0}$.
 Notice how the second, and eighth $1$ were removed because they are implied by 
 the successive $0s$. By applying improvement three to the result of improvement 
 two we get $11\underline{0}10011\underline{0}00101\underline{0}$. Notice how the last $0$ 
@@ -125,23 +153,26 @@ is $11\underline{0}10011\underline{0}00101\underline{0}$.
     \centering
      \begin{tikzpicture}
          \draw(0, 0) to (0, 4);
-             \node at (0, 4.3){\tiny{$line:n-3$}};
+             \node at (0, 4.3){\small{$2$}};
              \draw(0, 3.5) to (1.5, 3.5);
              \draw(0, 2.5) to (1.5, 2.5);
          \draw(1.5, 0) to (1.5, 4);
-             \node at (1.5, 4.3){\tiny{$line:n-2$}};
+             \node at (1.5, 4.3){\small{$1$}};
              \draw(1.5, 3) to (3, 3);
              \draw(1.5, 3.8) to (3, 3.8);
              \draw(1.5, 2) to (3, 2);
              \draw(1.5, 1) to (3, 1);
          \draw(3, 0) to (3, 4);
-             \node at(3, 4.3){\tiny{$line:n-1$}};
+             \node at(3, 4.3){\small{$3$}};
              \draw(3, 2.5) to (4.5, 2.5);
              \draw(3, 1.5) to (4.5, 1.5);
              \draw(3, 0.5) to (4.5, 0.5);
          \draw(4.5, 0) to (4.5, 4);
-             \node at(4.5, 4.3){\tiny{$line:n$}};
+             \node at(4.5, 4.3){\small{$4$}};
      \end{tikzpicture}
      \caption{A ladder used to illustrate all three improvements. The improved line based encoding is $11\underline{0}10011\underline{0}00101\underline{0}$}
      \label{Fig:allthree}
 \end{figure}
+
+We see that the improved line based encoding for the ladder in Figure~\ref{Fig:allthree} is 15 bits whereas the line based encoding for the 
+same ladder is 21 bits. This is an improvement of roughly $28.5\%$.  

@@ -1,8 +1,19 @@
 
 \section{Optimal Reconfiguration of Optimal Ladder Lotteries}
-In Optimal Reconfiguration of Optimal Ladder Lotteries~\cite{A2}, written by Horiyama, Wasa and Yamanaka,
+A local swap operation, corresponding to a braid relation in algebra, is a local modification of a ladder lottery 
+demonstrated in Figure~\ref{Fig:LocalSwap}~\cite{A1}.
+\begin{figure}[h]
+    \centering 
+    \resizebox{!}{.3\textheight}{
+            \includegraphics{LocalSwapOperation}
+    }
+    \caption{A local swap operation}
+    \label{Fig:LocalSwap}
+\end{figure}
+
+In \emph{Optimal Reconfiguration of Optimal Ladder Lotteries}~\cite{A2}, written by Horiyama, Wasa and Yamanaka,
 the authors provide a polynomial solution to the 
-\emph{minimal reconfiguration problem} which asks, given 
+Minimal Reconfiguration Problem which asks, given 
 two ladders, $L_{i}$ and  $L_{m}$, what is the minimal number of 
 swap operations to perform that will transition from $L_{i}$ to $L_{m}$? A \emph{reverse triple} 
 is a relation between three bars, $x,y,z$ in two arbitrary ladders, $L_{i}, L_{m}$, such that if $x,y,x$
@@ -23,9 +34,9 @@ is equal to the number of improving triples required to remove all reverse tripl
 The second contribution of this paper is that it provides a closed form formula for the 
 upper bound for the minimal length reconfiguration sequence for any permutation 
 of size $n$. That is to say, given some arbitrary $\pi$ of order $n$, what is the maximum 
-length of the minimal length reconfiguration sequence between two ladders in $OptL\{\pi\}$?
+number of swaps required for the minimal length reconfiguration sequence between any two ladders in $OptL\{\pi\}$?
 The authors prove that there are two unique ladders in $OptL\{(n, n-1, \dots, 1)\}$ that 
 have the upper bound for the minimal length reconfiguration sequence. These ladders are the root ladder and \emph{final ladder} 
 which is defined as the unique ladder in $OptL\{\pi\}$ such that $\forall z < y < x: (y,z) \text{ is above } (x,z) \in l$. 
 The length of the reconfiguration sequence 
-between the root ladder and final ladder in $OptL\{(n, n-1, \dots, 1)\}$ is $n{(n-1)~\choose 2}$. 
+between the root ladder and final ladder in $OptL\{(n, n-1, \dots, 1)\}$ is $n{n-1~\choose 2}$. 

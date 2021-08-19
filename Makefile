@@ -50,7 +50,7 @@ min: runmin
 sjt: runsjt
 
 runsjt: makesjt
-	cd bin; ./sjt > ../assets/svgLadders.html
+	cd bin; ./sjt 
 
 makesjt: BIN INCLUDE SRC OBJ LIB
 	$(CC) $(CFLAGS) -Iinclude src/*.c test/SjtMain.c -lm -o bin/sjt
