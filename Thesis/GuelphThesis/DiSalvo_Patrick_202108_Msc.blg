@@ -1,0 +1,51 @@
+This is BibTeX, Version 0.99d (TeX Live 2016/Debian)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: DiSalvo_Patrick_202108_Msc.aux
+A level-1 auxiliary file: body.aux
+The style file: abbrv.bst
+A level-1 auxiliary file: appendix.aux
+Database file #1: mybib.bib
+Warning--empty booktitle in A33
+Warning--empty booktitle in A34
+You've used 29 entries,
+            2118 wiz_defined-function locations,
+            711 strings with 7704 characters,
+and the built_in function-call counts, 9648 in all, are:
+= -- 964
+> -- 373
+< -- 8
++ -- 160
+- -- 120
+* -- 634
+:= -- 1556
+add.period$ -- 89
+call.type$ -- 29
+change.case$ -- 142
+chr.to.int$ -- 0
+cite$ -- 31
+duplicate$ -- 381
+empty$ -- 808
+format.name$ -- 120
+if$ -- 2068
+int.to.chr$ -- 0
+int.to.str$ -- 29
+missing$ -- 30
+newline$ -- 148
+num.names$ -- 58
+pop$ -- 157
+preamble$ -- 1
+purify$ -- 118
+quote$ -- 0
+skip$ -- 289
+stack$ -- 0
+substring$ -- 683
+swap$ -- 91
+text.length$ -- 8
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 106
+warning$ -- 2
+while$ -- 94
+width$ -- 31
+write$ -- 320
+(There were 2 warnings)
